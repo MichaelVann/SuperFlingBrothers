@@ -5,10 +5,11 @@ using UnityEngine;
 public class Player : Damageable
 {
     Camera m_cameraRef;
+    GameHandler m_gameHandlerRef;
 
     bool m_frozen = false;
     float m_freezeTimer;
-    const float m_freezeTimerMax = 2f;
+    float m_freezeTimerMax;
     bool m_freezing = false;
     float m_freezingTimer = 0f;
     const float m_freezingTimerMax = 0.2f;
@@ -17,13 +18,15 @@ public class Player : Damageable
     bool m_flinging = false;
     Vector3 m_originalFlingPos;
     const float m_maxFlingLength = 1f;
-    const float m_flingStrength = 250f;//actual should be 250-ish
+    const float m_flingStrength = 500f;//actual should be 250-ish
 
     LineRenderer m_flingLine;
 
     public override void Awake()
     {
         base.Awake();
+        m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        m_freezeTimerMax = m_gameHandlerRef.m_turnInterval;
         m_freezeTimer = m_freezeTimerMax;
         m_flingLine = GetComponent<LineRenderer>();
         m_flingLine.startColor = Color.red;

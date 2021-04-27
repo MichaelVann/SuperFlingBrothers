@@ -7,9 +7,13 @@ public class Enemy : Damageable
     float m_duplicationTimer = 0f;
     float m_duplicationTimerMax = 3f;
 
+    GameHandler m_gameHandlerRef;
+    private float m_scoreValue = 1f;
+
     public override void Awake()
     {
         base.Awake();
+        m_gameHandlerRef = FindObjectOfType<GameHandler>();
     }
 
     public void Copy(Damageable a_ref)
@@ -18,6 +22,8 @@ public class Enemy : Damageable
         m_maximumHealth = a_ref.m_maximumHealth;
         m_originalMass = a_ref.m_originalMass;
         m_originalColor = a_ref.m_originalColor;
+        //m_gameHandlerRef = FindObjectOfType<GameHandler>();
+
     }
 
     void Duplicate()
@@ -41,6 +47,12 @@ public class Enemy : Damageable
             }
             m_duplicationTimer = 0.0f;
         }
+    }
+
+    public override void Die()
+    {
+        m_gameHandlerRef.ChangeScore(m_scoreValue);
+        base.Die();
     }
 
     public override void Update()

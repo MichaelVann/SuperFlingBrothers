@@ -51,7 +51,7 @@ public class Damageable : BaseObject
         UpdateHealthColor();
     }
 
-    void Die()
+    public virtual void Die()
     {
         Instantiate(m_explosionTemplate,transform.position, new Quaternion());
         Destroy(gameObject);
