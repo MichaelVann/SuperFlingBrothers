@@ -5,21 +5,22 @@ using UnityEngine;
 public class Enemy : Damageable
 {
     float m_duplicationTimer = 0f;
-    float m_duplicationTimerMax = 3f;
+    float m_duplicationTimerMax = 12f;
 
-    GameHandler m_gameHandlerRef;
+    BattleManager m_battleManagerHandlerRef;
     private float m_scoreValue = 1f;
 
     public override void Awake()
     {
         base.Awake();
-        m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        m_battleManagerHandlerRef = FindObjectOfType<BattleManager>();
+        m_battleManagerHandlerRef.ChangeEnemyCount(1);
     }
 
     public void Copy(Damageable a_ref)
     {
         m_health = a_ref.m_health;
-        m_maximumHealth = a_ref.m_maximumHealth;
+        //m_maximumHealth = a_ref.m_maximumHealth;
         m_originalMass = a_ref.m_originalMass;
         m_originalColor = a_ref.m_originalColor;
         //m_gameHandlerRef = FindObjectOfType<GameHandler>();
@@ -51,8 +52,18 @@ public class Enemy : Damageable
 
     public override void Die()
     {
-        m_gameHandlerRef.ChangeScore(m_scoreValue);
+        m_battleManagerHandlerRef.ChangeScore(m_scoreValue);
+        m_battleManagerHandlerRef.ChangeEnemyCount(-1);
         base.Die();
+    }
+
+    public override void OnCollisionEnter2D(Collision2D a_collision)
+    {
+        base.OnCollisionEnter2D(a_collision);
+        if (a_collision.gameObject.GetComponent<Pocket>())
+        {
+            Die();
+        }
     }
 
     public override void Update()

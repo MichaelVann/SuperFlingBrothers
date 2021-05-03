@@ -1,11 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Damageable : BaseObject
 {
     public float m_health = 4f;
-    public float m_maximumHealth = 4f;
+    public const float m_maximumHealth = 4f;
+    protected const float m_minimumHealth = 1f;
 
     public float m_lastVelocityMagnitude = 0f;
 
@@ -13,6 +15,9 @@ public class Damageable : BaseObject
     public Color m_originalColor;
 
     public GameObject m_explosionTemplate;
+    public GameObject m_collisionSparkTemplate;
+
+    static Func<int, Collision2D> CollisionFuncPTR = null;
 
     public float GetHealthPercentage() { return m_health / m_maximumHealth; }
 
@@ -41,14 +46,21 @@ public class Damageable : BaseObject
         m_spriteRenderer.color = new Color(m_originalColor.r * divider, m_originalColor.g * divider, m_originalColor.b * divider, m_originalColor.a);
     }
 
-    public void Damage()
+    public void Damage(float a_damage)
     {
-        if (m_health >= 2f)
+        if (m_health > m_minimumHealth)
         {
-            m_health -= 1f;
+            m_health -= a_damage;
+            m_health = Mathf.Clamp(m_health, m_minimumHealth, m_maximumHealth);
+            Instantiate(m_collisionSparkTemplate, transform.position, new Quaternion(), transform);
         }
         UpdateMass();
         UpdateHealthColor();
+    }
+
+    public void Damage()
+    {
+        Damage(1f);
     }
 
     public virtual void Die()
@@ -67,9 +79,9 @@ public class Damageable : BaseObject
                 Damage();
             }
         }
-        else if(a_collision.gameObject.GetComponent<Pocket>())
-        {
-            Die();
-        }
+        //else if(a_collision.gameObject.GetComponent<Pocket>())
+        //{
+        //    Die();
+        //}
     }
 }

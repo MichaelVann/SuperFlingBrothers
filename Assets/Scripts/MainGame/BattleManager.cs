@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameHandler : MonoBehaviour
+public class BattleManager : MonoBehaviour
 {
     UIHandler m_uiHandlerRef;
-
 
     public int m_turnsRemaining;
     public float m_turnInterval;

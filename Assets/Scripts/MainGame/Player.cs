@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : Damageable
 {
     Camera m_cameraRef;
-    GameHandler m_gameHandlerRef;
+    BattleManager m_battleManagerRef;
 
     bool m_frozen = false;
     float m_freezeTimer;
@@ -25,8 +25,8 @@ public class Player : Damageable
     public override void Awake()
     {
         base.Awake();
-        m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_freezeTimerMax = m_gameHandlerRef.m_turnInterval;
+        m_battleManagerRef = FindObjectOfType<BattleManager>();
+        m_freezeTimerMax = m_battleManagerRef.m_turnInterval;
         m_freezeTimer = m_freezeTimerMax;
         m_flingLine = GetComponent<LineRenderer>();
         m_flingLine.startColor = Color.red;
@@ -94,7 +94,7 @@ public class Player : Damageable
 
     void UpdateFreezeTimer()
     {
-        if (!m_frozen)
+        if (!m_frozen && !m_battleManagerRef.m_endingGame)
         {
             m_freezeTimer += Time.deltaTime;
             if (m_freezeTimer >= m_freezeTimerMax)
@@ -117,9 +117,35 @@ public class Player : Damageable
         }
     }
 
-    public override void OnCollisionEnter2D(Collision2D a_collision)
+    public override void Die()
     {
 
+        base.Die();
+        m_battleManagerRef.StartEndingGame(false);
+    }
+
+    public override void OnCollisionEnter2D(Collision2D a_collision)
+    {
+        switch (m_battleManagerRef.m_currentGameMode)
+        {
+            case BattleManager.eGameMode.TurnLimit:
+                break;
+            case BattleManager.eGameMode.Health:
+                base.OnCollisionEnter2D(a_collision);
+                break;
+            case BattleManager.eGameMode.Pockets:
+                if (a_collision.gameObject.GetComponent<Pocket>())
+                {
+                    Damage();
+                    if (m_health <= m_minimumHealth)
+                    {
+                        Die();
+                    }
+                }
+                break;
+            default:
+                break;
+        }
     }
 
     public override void Update()
