@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_rigidBody: {fileID: 0}
   m_health: 4
-  m_maximumHealth: 4
   m_lastVelocityMagnitude: 0
   m_originalMass: 0
   m_originalColor: {r: 0, g: 0, b: 0, a: 0}
@@ -99,6 +98,11 @@ PrefabInstance:
       propertyPath: m_Color.b
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5746228213475887061, guid: 688cedeb614fed54b951ebf40cfa3a62,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 7831611080130965359, guid: 688cedeb614fed54b951ebf40cfa3a62,
         type: 3}
       propertyPath: m_Name
@@ -129,6 +133,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: DamageRipple
+      objectReference: {fileID: 0}
+    - target: {fileID: 642075507915386428, guid: 701d59365f6923142a73aa42776dc4f4,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8994751741047879267, guid: 701d59365f6923142a73aa42776dc4f4,
         type: 3}

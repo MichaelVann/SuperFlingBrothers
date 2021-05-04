@@ -25,6 +25,8 @@ public class VelocityIndicator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        m_lineRendererRef.enabled = m_rigidBodyRef.velocity.magnitude <= 0.3f ? false : true;
+
         m_linePositions[0] = m_rigidBodyRef.transform.position;
         m_linePositions[1] = m_rigidBodyRef.transform.position + new Vector3(m_rigidBodyRef.velocity.x, m_rigidBodyRef.velocity.y, 0.0f) / m_lineDivider;
         m_lineRendererRef.SetPositions(m_linePositions);

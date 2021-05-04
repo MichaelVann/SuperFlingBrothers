@@ -136,11 +136,11 @@ public class Player : Damageable
             case BattleManager.eGameMode.Pockets:
                 if (a_collision.gameObject.GetComponent<Pocket>())
                 {
-                    Damage();
                     if (m_health <= m_minimumHealth)
                     {
                         Die();
                     }
+                    Damage();
                 }
                 break;
             default:

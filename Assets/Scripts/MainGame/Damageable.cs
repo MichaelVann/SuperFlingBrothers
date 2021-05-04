@@ -11,6 +11,7 @@ public class Damageable : BaseObject
 
     public float m_lastVelocityMagnitude = 0f;
 
+    const float m_massDivider = 2f;
     public float m_originalMass;
     public Color m_originalColor;
 
@@ -18,6 +19,8 @@ public class Damageable : BaseObject
     public GameObject m_collisionSparkTemplate;
 
     static Func<int, Collision2D> CollisionFuncPTR = null;
+
+    Color[] m_healthColours;
 
     public float GetHealthPercentage() { return m_health / m_maximumHealth; }
 
@@ -27,6 +30,9 @@ public class Damageable : BaseObject
         m_originalMass = m_rigidBody.mass;
         m_originalColor = m_spriteRenderer.color;
         m_health = m_maximumHealth;
+
+        m_healthColours = new Color[]{Color.red, Color.yellow,Color.green,Color.blue};
+        UpdateHealthColor();
     }
 
     public override void Update()
@@ -37,11 +43,12 @@ public class Damageable : BaseObject
 
     void UpdateMass()
     {
-        m_rigidBody.mass = m_originalMass *= (GetHealthPercentage());
+        m_rigidBody.mass = m_originalMass * (GetHealthPercentage());
     }
 
-    void UpdateHealthColor()
+    protected void UpdateHealthColor()
     {
+        //m_spriteRenderer.color = m_healthColours[(int)(m_health-1f)];
         float divider = GetHealthPercentage();
         m_spriteRenderer.color = new Color(m_originalColor.r * divider, m_originalColor.g * divider, m_originalColor.b * divider, m_originalColor.a);
     }

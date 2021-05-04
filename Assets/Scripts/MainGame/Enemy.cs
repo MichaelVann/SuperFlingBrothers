@@ -23,6 +23,7 @@ public class Enemy : Damageable
         //m_maximumHealth = a_ref.m_maximumHealth;
         m_originalMass = a_ref.m_originalMass;
         m_originalColor = a_ref.m_originalColor;
+        UpdateHealthColor();
         //m_gameHandlerRef = FindObjectOfType<GameHandler>();
 
     }
