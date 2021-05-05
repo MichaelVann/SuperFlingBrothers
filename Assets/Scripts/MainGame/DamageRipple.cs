@@ -13,12 +13,16 @@ public class DamageRipple : MonoBehaviour
     float m_frameLength = 0.07f;
     int m_spriteIndex = 0;
 
+    Color[] m_healthColours;
+
     // Start is called before the first frame update
     void Start()
     {
         m_spriteRenderer = GetComponent<SpriteRenderer>();
         m_spriteRenderer.sprite = m_sprites[0];
         m_damageableRef = GetComponentInParent<Damageable>();
+        m_healthColours = new Color[] { Color.red, Color.yellow, Color.green};
+
     }
 
     // Update is called once per frame
@@ -32,13 +36,43 @@ public class DamageRipple : MonoBehaviour
             m_spriteRenderer.sprite = m_sprites[m_spriteIndex];
         }
         float healthPerc = m_damageableRef.GetHealthPercentage();
-        float colorFactor = 1f - 0.4f * m_damageableRef.GetHealthPercentage();
+        float colorFactor = 1f - healthPerc;//1f - 0.4f * m_damageableRef.GetHealthPercentage();
 
         if (healthPerc >= 1f)
         {
             colorFactor = 0f;
         }
 
-        m_spriteRenderer.color = new Color(colorFactor, 0f, 0f, colorFactor);
+        float redFactor = 0f;
+        //redFactor = Mathf.Clamp((4f*healthPerc), 0f, 1f);
+
+
+        if (healthPerc <= 0.25f)
+        {
+            redFactor = 1f;
+        }
+        else
+        {
+            redFactor = Mathf.Clamp(1f - (4f*(healthPerc -0.25f)),0f,1f);
+        }
+
+        float greenFactor = 0f;
+
+        if (healthPerc > 0.5f)
+        {
+            greenFactor = Mathf.Clamp(1f - (4f * (healthPerc - 0.5f)), 0f, 1f);
+        }
+        else if (healthPerc <= 0.25f)
+        {
+            greenFactor = Mathf.Clamp(4f * (healthPerc), 0f, 1f);
+        }
+        else
+        {
+            greenFactor = 1f;// - ((healthPerc-0.25f)/0.5f);// healthPerc / 0.75f;
+        }
+
+        //float greenFactor = 1f - Mathf.Abs(healthPerc - 0.5f) * 2f;
+
+        m_spriteRenderer.color = new Color(redFactor, greenFactor, 0f, colorFactor);
     }
 }
