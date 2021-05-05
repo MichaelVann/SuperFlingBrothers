@@ -7,9 +7,10 @@ public class Damageable : BaseObject
 {
     public float m_health = 4f;
     public const float m_maximumHealth = 4f;
-    protected const float m_minimumHealth = 1f;
+    protected const float m_minimumHealth = 0f;
 
     public float m_lastVelocityMagnitude = 0f;
+    float m_damagePerSpeedDivider = 8f;
 
     const float m_massDivider = 2f;
     public float m_originalMass;
@@ -43,13 +44,13 @@ public class Damageable : BaseObject
 
     void UpdateMass()
     {
-        m_rigidBody.mass = m_originalMass * (GetHealthPercentage());
+        m_rigidBody.mass = m_originalMass * 0.33f + (GetHealthPercentage() * 0.77f);
     }
 
     protected void UpdateHealthColor()
     {
         //m_spriteRenderer.color = m_healthColours[(int)(m_health-1f)];
-        float divider = GetHealthPercentage();
+        float divider = 0.25f + 0.75f*GetHealthPercentage();
         m_spriteRenderer.color = new Color(m_originalColor.r * divider, m_originalColor.g * divider, m_originalColor.b * divider, m_originalColor.a);
     }
 
@@ -83,7 +84,7 @@ public class Damageable : BaseObject
         {
             if (oppDamageable.m_lastVelocityMagnitude >= m_lastVelocityMagnitude)
             {
-                Damage();
+                Damage(oppDamageable.m_lastVelocityMagnitude/ m_damagePerSpeedDivider);
             }
         }
         //else if(a_collision.gameObject.GetComponent<Pocket>())

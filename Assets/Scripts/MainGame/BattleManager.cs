@@ -72,10 +72,12 @@ public class BattleManager : MonoBehaviour
 
     public void StartEndingGame(bool a_won)
     {
-        m_endingGame = true;
-        //Time.timeScale = 0;
-        m_uiHandlerRef.StartEnding(a_won);
-
+        if (!m_endingGame)
+        {
+            m_endingGame = true;
+            //Time.timeScale = 0;
+            m_uiHandlerRef.StartEnding(a_won);
+        }
     }
 
     void UpdateGameEnding()
