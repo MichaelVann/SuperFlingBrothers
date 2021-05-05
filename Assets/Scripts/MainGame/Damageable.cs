@@ -73,7 +73,7 @@ public class Damageable : BaseObject
 
     public virtual void Die()
     {
-        Instantiate(m_explosionTemplate,transform.position, new Quaternion());
+        Instantiate(m_explosionTemplate, transform.position, new Quaternion());
         Destroy(gameObject);
     }
 

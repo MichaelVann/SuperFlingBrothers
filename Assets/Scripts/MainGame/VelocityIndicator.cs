@@ -7,15 +7,15 @@ public class VelocityIndicator : MonoBehaviour
     Rigidbody2D m_rigidBodyRef;
     LineRenderer m_lineRendererRef;
     Vector3[] m_linePositions;
-    float m_lineDivider = 4f;
+    float m_lineDivider = 8f;
     // Start is called before the first frame update
 
     void Start()
     {
         m_rigidBodyRef = GetComponentInParent<Rigidbody2D>();
         m_lineRendererRef = GetComponent<LineRenderer>();
-        m_lineRendererRef.startColor = Color.green;
-        m_lineRendererRef.endColor = Color.clear;
+        //m_lineRendererRef.startColor = Color.green;
+        //m_lineRendererRef.endColor = Color.green;
         m_lineRendererRef.startWidth = 0.05f;
         m_lineRendererRef.endWidth = 0.02f;
 

@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : Damageable
 {
     Camera m_cameraRef;
+    GameHandler m_gameHandlerRef;
     BattleManager m_battleManagerRef;
 
     bool m_frozen = false;
@@ -25,6 +26,7 @@ public class Player : Damageable
     public override void Awake()
     {
         base.Awake();
+        m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_battleManagerRef = FindObjectOfType<BattleManager>();
         m_freezeTimerMax = m_battleManagerRef.m_turnInterval;
         m_freezeTimer = m_freezeTimerMax;
@@ -126,14 +128,14 @@ public class Player : Damageable
 
     public override void OnCollisionEnter2D(Collision2D a_collision)
     {
-        switch (m_battleManagerRef.m_currentGameMode)
+        switch (m_gameHandlerRef.m_currentGameMode)
         {
-            case BattleManager.eGameMode.TurnLimit:
+            case GameHandler.eGameMode.TurnLimit:
                 break;
-            case BattleManager.eGameMode.Health:
+            case GameHandler.eGameMode.Health:
                 base.OnCollisionEnter2D(a_collision);
                 break;
-            case BattleManager.eGameMode.Pockets:
+            case GameHandler.eGameMode.Pockets:
                 if (a_collision.gameObject.GetComponent<Pocket>())
                 {
                     if (m_health <= m_minimumHealth)

@@ -44,8 +44,6 @@ public class DamageRipple : MonoBehaviour
         }
 
         float redFactor = 0f;
-        //redFactor = Mathf.Clamp((4f*healthPerc), 0f, 1f);
-
 
         if (healthPerc <= 0.25f)
         {
@@ -71,8 +69,18 @@ public class DamageRipple : MonoBehaviour
             greenFactor = 1f;// - ((healthPerc-0.25f)/0.5f);// healthPerc / 0.75f;
         }
 
-        //float greenFactor = 1f - Mathf.Abs(healthPerc - 0.5f) * 2f;
+        float blueFactor = 0f;
 
-        m_spriteRenderer.color = new Color(redFactor, greenFactor, 0f, colorFactor);
+        if (healthPerc >= 0.5f)
+        {
+            blueFactor = Mathf.Clamp(1f - (4f * (healthPerc - 0.75f)), 0f, 1f);
+        }
+        else
+        {
+            blueFactor = Mathf.Clamp(1f + (4f * (healthPerc - 0.75f)), 0f, 1f);
+        }
+
+
+        m_spriteRenderer.color = new Color(redFactor, greenFactor, blueFactor, colorFactor);
     }
 }

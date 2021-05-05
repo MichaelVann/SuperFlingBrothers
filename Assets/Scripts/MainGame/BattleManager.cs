@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class BattleManager : MonoBehaviour
 {
+    GameHandler m_gameHandlerRef;
     UIHandler m_uiHandlerRef;
 
     public int m_turnsRemaining;
@@ -20,14 +21,6 @@ public class BattleManager : MonoBehaviour
 
     public int m_enemyCount = 0;
 
-    public enum eGameMode
-    {
-        TurnLimit,
-        Health,
-        Pockets
-    }
-    public eGameMode m_currentGameMode;
-
     public float GetMaxGameEndTimer()
     {
         return m_maxGameEndTimer;
@@ -36,6 +29,7 @@ public class BattleManager : MonoBehaviour
     void Awake()
     {
         m_uiHandlerRef = GetComponent<UIHandler>();
+        m_gameHandlerRef = FindObjectOfType<GameHandler>();
     }
 
     public void ChangeScore(float a_change) { m_score += a_change; }
@@ -93,14 +87,14 @@ public class BattleManager : MonoBehaviour
     {
         if (!m_endingGame)
         {
-            switch (m_currentGameMode)
+            switch (m_gameHandlerRef.m_currentGameMode)
             {
-                case eGameMode.TurnLimit:
+                case GameHandler.eGameMode.TurnLimit:
                     UpdateTurns();
                     break;
-                case eGameMode.Health:
+                case GameHandler.eGameMode.Health:
                     break;
-                case eGameMode.Pockets:
+                case GameHandler.eGameMode.Pockets:
                     break;
                 default:
                     break;
