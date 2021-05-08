@@ -12,9 +12,17 @@ public class BattleManager : MonoBehaviour
     public float m_turnInterval;
     float m_turnsTimer = 0f;
 
+    public bool m_frozen = false;
+    float m_freezeTimer;
+    float m_freezeTimerMax;
+    bool m_freezing = false;
+    float m_freezingTimer = 0f;
+    const float m_freezingTimerMax = 0.2f;
+    const float m_slowableTime = 0.8f;
+
     public bool m_endingGame = false;
     public float m_gameEndTimer = 0f;
-    public const float m_maxGameEndTimer = 3f;
+    public const float m_maxGameEndTimer = 1f;
     public bool m_victory;
 
     public float m_score = 0f;
@@ -26,10 +34,18 @@ public class BattleManager : MonoBehaviour
         return m_maxGameEndTimer;
     }
 
+    public void SetFrozen(bool a_frozen)
+    {
+        m_frozen = a_frozen;
+        Time.timeScale = a_frozen ? 0.0f : 1.0f;
+    }
+
     void Awake()
     {
         m_uiHandlerRef = GetComponent<UIHandler>();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        m_freezeTimerMax = m_turnInterval;
+        m_freezeTimer = m_freezeTimerMax;
     }
 
     public void ChangeScore(float a_change) { m_score += a_change; }
@@ -58,6 +74,31 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    void UpdateFreezeTimer()
+    {
+        if (!m_frozen && !m_endingGame)
+        {
+            m_freezeTimer += Time.deltaTime;
+            if (m_freezeTimer >= m_freezeTimerMax)
+            {
+                m_freezing = true;
+                m_freezeTimer = 0f;
+            }
+
+            if (m_freezing)
+            {
+                m_freezingTimer += Time.deltaTime;
+                Time.timeScale = 1f - m_slowableTime * m_freezingTimer / m_freezingTimerMax;
+                if (m_freezingTimer >= m_freezingTimerMax)
+                {
+                    m_freezingTimer = 0f;
+                    m_freezing = false;
+                    SetFrozen(true);
+                }
+            }
+        }
+    }
+
     void FinishGame()
     {
         //Go to post game screen
@@ -69,8 +110,9 @@ public class BattleManager : MonoBehaviour
         if (!m_endingGame)
         {
             m_endingGame = true;
-            //Time.timeScale = 0;
+            Time.timeScale = 0.25f;
             m_uiHandlerRef.StartEnding(a_won);
+            
         }
     }
 
@@ -104,6 +146,7 @@ public class BattleManager : MonoBehaviour
             {
                 StartEndingGame(true);
             }
+            UpdateFreezeTimer();
         }
         else
         {

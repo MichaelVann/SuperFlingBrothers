@@ -39,7 +39,7 @@ public class UIHandler : MonoBehaviour
 
     public void PlayEnding()
     {
-        float textScale = Mathf.Pow(m_battleManagerRef.m_gameEndTimer, 2f); //;Mathf.Pow((m_gamehandlerRef.m_gameEndTimer / m_gamehandlerRef.GetMaxGameEndTimer()),2f);
+        float textScale = Mathf.Pow(m_battleManagerRef.m_gameEndTimer, 1f); //;Mathf.Pow((m_gamehandlerRef.m_gameEndTimer / m_gamehandlerRef.GetMaxGameEndTimer()),2f);
         if (textScale > 1f)
         {
             textScale = 1f;

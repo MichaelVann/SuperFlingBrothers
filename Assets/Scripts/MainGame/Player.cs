@@ -8,14 +8,6 @@ public class Player : Damageable
     GameHandler m_gameHandlerRef;
     BattleManager m_battleManagerRef;
 
-    bool m_frozen = false;
-    float m_freezeTimer;
-    float m_freezeTimerMax;
-    bool m_freezing = false;
-    float m_freezingTimer = 0f;
-    const float m_freezingTimerMax = 0.2f;
-    const float m_slowableTime = 0.8f;
-
     bool m_flinging = false;
     Vector3 m_originalFlingPos;
     const float m_maxFlingLength = 1f;
@@ -28,8 +20,6 @@ public class Player : Damageable
         base.Awake();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_battleManagerRef = FindObjectOfType<BattleManager>();
-        m_freezeTimerMax = m_battleManagerRef.m_turnInterval;
-        m_freezeTimer = m_freezeTimerMax;
         m_flingLine = GetComponent<LineRenderer>();
         m_flingLine.startColor = Color.red;
         m_flingLine.endColor = Color.white;
@@ -44,7 +34,7 @@ public class Player : Damageable
         //m_rigidBodyRef.velocity = new Vector3();
         m_rigidBody.AddForce(a_flingVector * m_flingStrength);
         m_flinging = false;
-        SetFrozen(false);
+        m_battleManagerRef.SetFrozen(false);
     }
 
     void HandleFlinging()
@@ -53,7 +43,7 @@ public class Player : Damageable
         {
             m_flingLine.enabled = false;
 
-            if (m_frozen && Input.GetMouseButton(0))
+            if (m_battleManagerRef.m_frozen && Input.GetMouseButton(0))
             {
                 m_originalFlingPos = m_cameraRef.ScreenToWorldPoint(Input.mousePosition);
 
@@ -88,36 +78,6 @@ public class Player : Damageable
 
     }
 
-    void SetFrozen(bool a_frozen)
-    {
-        m_frozen = a_frozen;
-        Time.timeScale = a_frozen ? 0.0f : 1.0f;
-    }
-
-    void UpdateFreezeTimer()
-    {
-        if (!m_frozen && !m_battleManagerRef.m_endingGame)
-        {
-            m_freezeTimer += Time.deltaTime;
-            if (m_freezeTimer >= m_freezeTimerMax)
-            {
-                m_freezing = true;
-                m_freezeTimer = 0f;
-            }
-
-            if (m_freezing)
-            {
-                m_freezingTimer += Time.deltaTime;
-                Time.timeScale = 1f - m_slowableTime * m_freezingTimer / m_freezingTimerMax;
-                if (m_freezingTimer >= m_freezingTimerMax)
-                {
-                    m_freezingTimer = 0f;
-                    m_freezing = false;
-                    SetFrozen(true);
-                }
-            }
-        }
-    }
 
     public override void Die()
     {
@@ -153,7 +113,6 @@ public class Player : Damageable
     public override void Update()
     {
         base.Update();
-        UpdateFreezeTimer();
         HandleFlinging();
     }
 }
