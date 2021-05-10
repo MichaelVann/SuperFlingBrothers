@@ -19,6 +19,9 @@ public class Damageable : BaseObject
     public GameObject m_explosionTemplate;
     public GameObject m_collisionSparkTemplate;
 
+    public GameObject m_risingFadingTextTemplate;
+    float m_damageTextYOffset = 0.2f;
+
     static Func<int, Collision2D> CollisionFuncPTR = null;
 
     Color[] m_healthColours;
@@ -42,6 +45,11 @@ public class Damageable : BaseObject
         m_lastVelocityMagnitude = m_rigidBody.velocity.magnitude;
     }
 
+    void BoundsCheck()
+    {
+
+    }
+
     void UpdateMass()
     {
         m_rigidBody.mass = m_originalMass * 0.33f + (GetHealthPercentage() * 0.77f);
@@ -49,7 +57,6 @@ public class Damageable : BaseObject
 
     protected void UpdateHealthColor()
     {
-        //m_spriteRenderer.color = m_healthColours[(int)(m_health-1f)];
         float divider = 0.25f + 0.75f*GetHealthPercentage();
         m_spriteRenderer.color = new Color(m_originalColor.r * divider, m_originalColor.g * divider, m_originalColor.b * divider, m_originalColor.a);
     }
@@ -61,6 +68,9 @@ public class Damageable : BaseObject
             m_health -= a_damage;
             m_health = Mathf.Clamp(m_health, m_minimumHealth, m_maximumHealth);
             Instantiate(m_collisionSparkTemplate, transform.position, new Quaternion(), transform);
+            RisingFadingText damageText = Instantiate(m_risingFadingTextTemplate, transform.position + new Vector3(0f, m_damageTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
+            damageText.SetTextContent(a_damage);
+            damageText.SetOriginalColor(Color.red);
         }
         UpdateMass();
         UpdateHealthColor();

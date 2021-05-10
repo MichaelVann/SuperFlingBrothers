@@ -28,7 +28,7 @@ public class PreBattleManager : MonoBehaviour
 
     public void Play()
     {
-        SceneManager.LoadScene("Main Scene");
+        SceneManager.LoadScene("Battle");
     }
 
     // Update is called once per frame

@@ -2194,10 +2194,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf28b4b7ffd40fb4f8e13a72dae7b128, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_gameHandlerRef: {fileID: 0}
   m_turnsRemaining: 10
   m_turnInterval: 2
   m_frozen: 0
   m_endingGame: 0
+  m_gameEndSlowdownFactor: 0.25
   m_gameEndTimer: 0
   m_victory: 0
   m_score: 0

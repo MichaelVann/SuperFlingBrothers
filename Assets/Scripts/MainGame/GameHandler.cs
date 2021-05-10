@@ -19,13 +19,13 @@ public class GameHandler : MonoBehaviour
     public eGameMode m_currentGameMode;
 
     public void ChangeScore(float a_change) { m_score += a_change; }
+    public void SetGameMode(eGameMode a_gameMode) { m_currentGameMode = a_gameMode; }
 
     void Awake()
     {
-        //m_uiHandlerRef = GetComponent<UIHandler>();
         DontDestroyOnLoad(this);
-        int x = (int)(m_currentGameMode + 5) + (int)(eGameMode.ModeCount);
     }
+
 
     int SafeMod(int a_value, int a_mod)
     {

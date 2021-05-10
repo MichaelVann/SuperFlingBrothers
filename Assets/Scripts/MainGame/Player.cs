@@ -18,8 +18,6 @@ public class Player : Damageable
     public override void Awake()
     {
         base.Awake();
-        m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_battleManagerRef = FindObjectOfType<BattleManager>();
         m_flingLine = GetComponent<LineRenderer>();
         m_flingLine.startColor = Color.red;
         m_flingLine.endColor = Color.white;
@@ -27,6 +25,12 @@ public class Player : Damageable
         m_flingLine.endWidth = 0.02f;
 
         m_cameraRef = FindObjectOfType<Camera>();
+    }
+
+    public void Start()
+    {
+        m_battleManagerRef = FindObjectOfType<BattleManager>();
+        m_gameHandlerRef = m_battleManagerRef.m_gameHandlerRef;
     }
 
     void Fling(Vector3 a_flingVector)
@@ -56,7 +60,7 @@ public class Player : Damageable
         {
             m_flingLine.enabled = true;
             Vector3 worldMousePoint = m_cameraRef.ScreenToWorldPoint(Input.mousePosition);
-            Vector3 deltaMousePos = worldMousePoint - m_originalFlingPos;
+            Vector3 deltaMousePos = m_originalFlingPos - worldMousePoint;
             Debug.Log(deltaMousePos.magnitude);
             if (deltaMousePos.magnitude > m_maxFlingLength)
             {

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class BattleManager : MonoBehaviour
 {
-    GameHandler m_gameHandlerRef;
+    public GameHandler m_gameHandlerRef;
     UIHandler m_uiHandlerRef;
 
     public int m_turnsRemaining;
@@ -21,6 +21,7 @@ public class BattleManager : MonoBehaviour
     const float m_slowableTime = 0.8f;
 
     public bool m_endingGame = false;
+    public float m_gameEndSlowdownFactor = 0.25f;
     public float m_gameEndTimer = 0f;
     public const float m_maxGameEndTimer = 1f;
     public bool m_victory;
@@ -44,6 +45,11 @@ public class BattleManager : MonoBehaviour
     {
         m_uiHandlerRef = GetComponent<UIHandler>();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        if (!m_gameHandlerRef)
+        {
+            m_gameHandlerRef = new GameHandler();
+            m_gameHandlerRef.SetGameMode(GameHandler.eGameMode.Pockets);
+        }
         m_freezeTimerMax = m_turnInterval;
         m_freezeTimer = m_freezeTimerMax;
     }
@@ -110,7 +116,7 @@ public class BattleManager : MonoBehaviour
         if (!m_endingGame)
         {
             m_endingGame = true;
-            Time.timeScale = 0.25f;
+            Time.timeScale = m_gameEndSlowdownFactor;
             m_uiHandlerRef.StartEnding(a_won);
             
         }

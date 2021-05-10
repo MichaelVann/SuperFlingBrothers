@@ -199,6 +199,8 @@ MonoBehaviour:
     type: 3}
   m_collisionSparkTemplate: {fileID: 6944767100431712336, guid: 4f654a616ba98a343a0d9c56bd0d51d2,
     type: 3}
+  m_risingFadingTextTemplate: {fileID: 4912411465336466117, guid: 0a8ab97e9f7b7ef47acb17384c63233a,
+    type: 3}
 --- !u!1001 &31348959847795400
 PrefabInstance:
   m_ObjectHideFlags: 0
