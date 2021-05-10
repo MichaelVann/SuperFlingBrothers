@@ -8,6 +8,8 @@ public class GameHandler : MonoBehaviour
     //UIHandler m_uiHandlerRef;
 
     public float m_score = 0f;
+    public int m_XP = 0;
+    public int m_maxXP = 100;
 
     public enum eGameMode
     {
@@ -26,17 +28,14 @@ public class GameHandler : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
-
-    int SafeMod(int a_value, int a_mod)
-    {
-        return (a_value % a_mod + a_mod) % a_mod;
-    }
-
     public void ChangeGameMode(int a_change)
     {
-        m_currentGameMode = (eGameMode)SafeMod((int)(m_currentGameMode + a_change),(int)(eGameMode.ModeCount));
+        m_currentGameMode = (eGameMode)VLib.SafeMod((int)(m_currentGameMode + a_change),(int)(eGameMode.ModeCount));
     }
-
+    public void ChangeXP(int a_xpReward)
+    {
+        m_XP += a_xpReward;
+    }
 
     void Update()
     {

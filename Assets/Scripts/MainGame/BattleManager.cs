@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -6,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class BattleManager : MonoBehaviour
 {
     public GameHandler m_gameHandlerRef;
+    public GameObject m_gameHandlerTemplate;
     UIHandler m_uiHandlerRef;
 
     public int m_turnsRemaining;
@@ -41,20 +43,20 @@ public class BattleManager : MonoBehaviour
         Time.timeScale = a_frozen ? 0.0f : 1.0f;
     }
 
+    public void ChangeScore(float a_change) { m_score += a_change; }
+
     void Awake()
     {
         m_uiHandlerRef = GetComponent<UIHandler>();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         if (!m_gameHandlerRef)
         {
-            m_gameHandlerRef = new GameHandler();
+            m_gameHandlerRef = Instantiate(m_gameHandlerTemplate).GetComponent<GameHandler>();
             m_gameHandlerRef.SetGameMode(GameHandler.eGameMode.Pockets);
         }
         m_freezeTimerMax = m_turnInterval;
         m_freezeTimer = m_freezeTimerMax;
     }
-
-    public void ChangeScore(float a_change) { m_score += a_change; }
 
     public void ChangeEnemyCount(int a_change)
     {

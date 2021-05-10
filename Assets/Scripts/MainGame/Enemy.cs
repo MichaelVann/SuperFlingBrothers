@@ -4,28 +4,33 @@ using UnityEngine;
 
 public class Enemy : Damageable
 {
+    BattleManager m_battleManagerRef;
+    GameHandler m_gameHandlerRef;
+
     float m_duplicationTimer = 0f;
     float m_duplicationTimerMax = 12f;
 
-    BattleManager m_battleManagerHandlerRef;
     private float m_scoreValue = 1f;
+    int m_xpReward = 5;
 
     public override void Awake()
     {
         base.Awake();
-        m_battleManagerHandlerRef = FindObjectOfType<BattleManager>();
-        m_battleManagerHandlerRef.ChangeEnemyCount(1);
+        m_battleManagerRef = FindObjectOfType<BattleManager>();
+        m_battleManagerRef.ChangeEnemyCount(1);
+    }
+
+    public void Start()
+    {
+        m_gameHandlerRef = FindObjectOfType<GameHandler>();
     }
 
     public void Copy(Damageable a_ref)
     {
         m_health = a_ref.m_health;
-        //m_maximumHealth = a_ref.m_maximumHealth;
         m_originalMass = a_ref.m_originalMass;
         m_originalColor = a_ref.m_originalColor;
         UpdateHealthColor();
-        //m_gameHandlerRef = FindObjectOfType<GameHandler>();
-
     }
 
     void Duplicate()
@@ -53,8 +58,9 @@ public class Enemy : Damageable
 
     public override void Die()
     {
-        m_battleManagerHandlerRef.ChangeScore(m_scoreValue);
-        m_battleManagerHandlerRef.ChangeEnemyCount(-1);
+        m_battleManagerRef.ChangeScore(m_scoreValue);
+        m_gameHandlerRef.ChangeXP(m_xpReward);
+        m_battleManagerRef.ChangeEnemyCount(-1);
         base.Die();
     }
 
