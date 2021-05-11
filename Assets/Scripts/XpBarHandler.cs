@@ -1,14 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class XpBarHandler : MonoBehaviour
 {
+    GameHandler m_gameHandlerRef;
+
     float m_xpBarLength = 650f;
     float m_xpBarHeight = 25f;
 
     public RectTransform m_XPBarMaskTransform;
-    GameHandler m_gameHandlerRef;
+    public Text m_XPBarValueText;
 
     // Start is called before the first frame update
     void Start()
@@ -20,5 +23,7 @@ public class XpBarHandler : MonoBehaviour
     void Update()
     {
         m_XPBarMaskTransform.sizeDelta = new Vector2(m_xpBarLength * ((float)m_gameHandlerRef.m_XP / (float)m_gameHandlerRef.m_maxXP), m_xpBarHeight);
+
+        m_XPBarValueText.text = "" + m_gameHandlerRef.m_XP + " / " + m_gameHandlerRef.m_maxXP;
     }
 }

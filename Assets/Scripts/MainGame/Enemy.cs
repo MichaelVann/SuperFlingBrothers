@@ -13,6 +13,8 @@ public class Enemy : Damageable
     private float m_scoreValue = 1f;
     int m_xpReward = 5;
 
+    float m_xpTextYOffset = 0.2f;
+
     public override void Awake()
     {
         base.Awake();
@@ -60,6 +62,11 @@ public class Enemy : Damageable
     {
         m_battleManagerRef.ChangeScore(m_scoreValue);
         m_gameHandlerRef.ChangeXP(m_xpReward);
+
+        RisingFadingText xpText = Instantiate(m_risingFadingTextTemplate, transform.position + new Vector3(0f, m_xpTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
+        xpText.SetTextContent("XP +" + m_xpReward);
+        xpText.SetOriginalColor(Color.cyan);
+
         m_battleManagerRef.ChangeEnemyCount(-1);
         base.Die();
     }
