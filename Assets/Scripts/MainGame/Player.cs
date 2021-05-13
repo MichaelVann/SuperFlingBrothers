@@ -11,7 +11,6 @@ public class Player : Damageable
     bool m_flinging = false;
     Vector3 m_originalFlingPos;
     const float m_maxFlingLength = 1f;
-    const float m_flingStrength = 500f;//actual should be 250-ish
 
     LineRenderer m_flingLine;
 
@@ -32,11 +31,9 @@ public class Player : Damageable
         m_battleManagerRef = FindObjectOfType<BattleManager>();
         m_gameHandlerRef = m_battleManagerRef.m_gameHandlerRef;
     }
-
-    void Fling(Vector3 a_flingVector)
+    public override void Fling(Vector3 a_flingVector, float a_flingStrength)
     {
-        //m_rigidBodyRef.velocity = new Vector3();
-        m_rigidBody.AddForce(a_flingVector * m_flingStrength);
+        base.Fling(a_flingVector, a_flingStrength);
         m_flinging = false;
         m_battleManagerRef.SetFrozen(false);
     }
@@ -52,7 +49,6 @@ public class Player : Damageable
                 m_originalFlingPos = m_cameraRef.ScreenToWorldPoint(Input.mousePosition);
 
                 m_flinging = true;
-
             }
 
         }
@@ -76,7 +72,7 @@ public class Player : Damageable
 
             if (!Input.GetMouseButton(0))
             {
-                Fling(deltaMousePos);
+                Fling(deltaMousePos, m_flingStrength);
             }
         }
 

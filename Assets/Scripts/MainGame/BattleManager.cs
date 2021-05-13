@@ -111,6 +111,7 @@ public class BattleManager : MonoBehaviour
                     m_freezingTimer = 0f;
                     m_freezing = false;
                     SetFrozen(true);
+                    
                 }
             }
         }

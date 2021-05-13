@@ -13,11 +13,14 @@ public class GameHandler : MonoBehaviour
     public int m_maxXP = 83;
     public int m_playerLevel = 1;
 
+
+
     public enum eGameMode
     {
         TurnLimit,
         Health,
         Pockets,
+        Hunger,
         ModeCount
     }
     public eGameMode m_currentGameMode;
