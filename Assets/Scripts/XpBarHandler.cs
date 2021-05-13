@@ -12,6 +12,7 @@ public class XpBarHandler : MonoBehaviour
 
     public RectTransform m_XPBarMaskTransform;
     public Text m_XPBarValueText;
+    public Text m_levelText;
 
     // Start is called before the first frame update
     void Start()
@@ -25,5 +26,6 @@ public class XpBarHandler : MonoBehaviour
         m_XPBarMaskTransform.sizeDelta = new Vector2(m_xpBarLength * ((float)m_gameHandlerRef.m_XP / (float)m_gameHandlerRef.m_maxXP), m_xpBarHeight);
 
         m_XPBarValueText.text = "" + m_gameHandlerRef.m_XP + " / " + m_gameHandlerRef.m_maxXP;
+        m_levelText.text = "Level " + m_gameHandlerRef.m_playerLevel;
     }
 }

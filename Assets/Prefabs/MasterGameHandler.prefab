@@ -45,5 +45,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_score: 0
   m_XP: 0
-  m_maxXP: 100
+  m_maxXP: 83
+  m_playerLevel: 1
   m_currentGameMode: 2

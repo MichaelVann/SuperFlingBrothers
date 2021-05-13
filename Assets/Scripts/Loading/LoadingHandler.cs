@@ -5,13 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class LoadingHandler : MonoBehaviour
 {
-    // Start is called before the first frame update
     void Start()
     {
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene("Main Menu");
     }
 
-    // Update is called once per frame
     void Update()
     {
         

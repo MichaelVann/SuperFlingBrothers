@@ -35,6 +35,8 @@ public class UIHandler : MonoBehaviour
         m_gameOver = true;
         m_playingEnding = true;
         m_endingText.SetActive(true);
+
+        m_battleManagerRef.CalculateFinishedGame();
     }
 
     public void PlayEnding()

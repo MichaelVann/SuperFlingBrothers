@@ -32,6 +32,10 @@ public class BattleManager : MonoBehaviour
 
     public int m_enemyCount = 0;
 
+    //Post game
+    float m_scoreGained = 0f;
+    float m_bonusTimeScoreGained = 0f;
+
     public float GetMaxGameEndTimer()
     {
         return m_maxGameEndTimer;
@@ -44,6 +48,11 @@ public class BattleManager : MonoBehaviour
     }
 
     public void ChangeScore(float a_change) { m_score += a_change; }
+
+    public void CalculateFinishedGame()
+    {
+        m_gameHandlerRef.CalculateFinishedGame();
+    }
 
     void Awake()
     {
