@@ -5,9 +5,7 @@ using UnityEngine;
 
 public class Damageable : BaseObject
 {
-    public float m_health = 4f;
-    public const float m_maximumHealth = 4f;
-    protected const float m_minimumHealth = 0f;
+
 
     public float m_lastVelocityMagnitude = 0f;
     float m_damagePerSpeedDivider = 8f;
@@ -26,26 +24,38 @@ public class Damageable : BaseObject
 
     Color[] m_healthColours;
 
-    protected float m_flingStrength = 259f;//actual should be 250-ish
     bool m_secondFling = true;
     float m_bumpFlingStrengthMult = 0.25f;
     float m_flingTimer = 0f;
-    float m_flingTimerMax = 0.1f;
+    float m_flingTimerMax = 0.09f;
     Vector3 m_storedFlingVector;
     float m_storedFlingStrength = 0f;
 
     bool m_clearVelocityOption = true;
 
-    public float GetHealthPercentage() { return m_health / m_maximumHealth; }
+    public struct DamageableStats
+    {
+        public float m_flingStrength;
+        public float health;
+        public float m_maximumHealth;
+        public const float m_minimumHealth = 0f;
+    }
+    public DamageableStats m_stats;
+
+    public float GetHealthPercentage() { return m_stats.health / m_stats.m_maximumHealth; }
 
     public override void Awake()
     {
         base.Awake();
         m_originalMass = m_rigidBody.mass;
         m_originalColor = m_spriteRenderer.color;
-        m_health = m_maximumHealth;
 
-        m_healthColours = new Color[]{Color.red, Color.yellow,Color.green,Color.blue};
+        //Stats
+        m_stats.m_flingStrength = 259f;//actual should be 250-ish
+        m_stats.m_maximumHealth = 4f;
+        m_stats.health = m_stats.m_maximumHealth;
+
+        m_healthColours = new Color[] { Color.red, Color.yellow, Color.green, Color.blue };
         UpdateHealthColor();
     }
 
@@ -101,14 +111,14 @@ public class Damageable : BaseObject
 
     public void Damage(float a_damage)
     {
-        if (m_health > m_minimumHealth)
+        if (m_stats.health > DamageableStats.m_minimumHealth)
         {
-            m_health -= a_damage;
-            m_health = Mathf.Clamp(m_health, m_minimumHealth, m_maximumHealth);
+            m_stats.health -= a_damage;
+            m_stats.health = Mathf.Clamp(m_stats.health, DamageableStats.m_minimumHealth, m_stats.m_maximumHealth);
             Instantiate(m_collisionSparkTemplate, transform.position, new Quaternion(), transform);
             RisingFadingText damageText = Instantiate(m_risingFadingTextTemplate, transform.position + new Vector3(0f, m_damageTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
             damageText.SetTextContent(a_damage);
-            damageText.SetOriginalColor(Color.red);
+            damageText.SetOriginalColor(Color.white);
         }
         UpdateMass();
         UpdateHealthColor();

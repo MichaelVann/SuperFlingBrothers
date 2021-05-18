@@ -14,6 +14,13 @@ public class Player : Damageable
 
     LineRenderer m_flingLine;
 
+    bool m_hitSlowdownActive = false;
+    float m_enemyHitTimer;
+    float m_enemyHitTimerMax = 0.3f;
+    bool invertedTime = false;
+
+    float m_hitTimeSlowdownRate = 0.05f;
+
     public override void Awake()
     {
         base.Awake();
@@ -24,6 +31,7 @@ public class Player : Damageable
         m_flingLine.endWidth = 0.02f;
 
         m_cameraRef = FindObjectOfType<Camera>();
+        m_stats.m_flingStrength = 500f;
     }
 
     public void Start()
@@ -72,7 +80,7 @@ public class Player : Damageable
 
             if (!Input.GetMouseButton(0))
             {
-                Fling(deltaMousePos, m_flingStrength);
+                Fling(deltaMousePos, m_stats.m_flingStrength);
             }
         }
 
@@ -81,13 +89,21 @@ public class Player : Damageable
 
     public override void Die()
     {
-
         base.Die();
         m_battleManagerRef.StartEndingGame(false);
     }
 
     public override void OnCollisionEnter2D(Collision2D a_collision)
     {
+        Enemy enemy = a_collision.gameObject.GetComponent<Enemy>();
+        if (enemy)
+        {
+            if (m_stats.health <= 1f)// || enemy.m_stats.health <= 1f)
+            {
+                m_hitSlowdownActive = true;
+                Time.timeScale = m_hitTimeSlowdownRate;
+            }
+        }
         switch (m_gameHandlerRef.m_currentGameMode)
         {
             case GameHandler.eGameMode.TurnLimit:
@@ -98,7 +114,7 @@ public class Player : Damageable
             case GameHandler.eGameMode.Pockets:
                 if (a_collision.gameObject.GetComponent<Pocket>())
                 {
-                    if (m_health <= m_minimumHealth)
+                    if (m_stats.health <= DamageableStats.m_minimumHealth)
                     {
                         Die();
                     }
@@ -114,5 +130,16 @@ public class Player : Damageable
     {
         base.Update();
         HandleFlinging();
+        if (m_hitSlowdownActive)
+        {
+            m_enemyHitTimer += Time.deltaTime/m_hitTimeSlowdownRate;
+            if (m_enemyHitTimer >= m_enemyHitTimerMax)
+            {
+                m_hitSlowdownActive = false;
+                m_enemyHitTimer = 0f;
+                Time.timeScale = 1f;
+
+            }
+        }
     }
 }

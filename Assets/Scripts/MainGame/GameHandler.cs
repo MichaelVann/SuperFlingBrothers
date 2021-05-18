@@ -10,10 +10,8 @@ public class GameHandler : MonoBehaviour
 
     public float m_score = 0f;
     public int m_XP = 0;
-    public int m_maxXP = 83;
+    public int m_maxXP = 83/4;
     public int m_playerLevel = 1;
-
-
 
     public enum eGameMode
     {
@@ -51,7 +49,7 @@ public class GameHandler : MonoBehaviour
             m_XP -= m_maxXP;
             int levelPlusOne = m_playerLevel + 1;
             int firstPass = (int)(levelPlusOne + 300 * Mathf.Pow(2f, (float)(levelPlusOne) / 7f));
-            m_maxXP += (int)((firstPass)/4f);
+            m_maxXP += (int)((firstPass)/12f);
             m_playerLevel++;
         }
     }

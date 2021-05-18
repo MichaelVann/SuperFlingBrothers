@@ -24,9 +24,11 @@ public class Enemy : Damageable
 
     float m_xpTextYOffset = 0.2f;
 
-    float m_sightRadius = 1.25f;
+    float m_sightRadius = 4f;
     float m_flingTimer = 0f;
-    float m_flingTimerMax = 1.5f;
+    float m_flingTimerMax = 3f;
+
+    float m_flingAccuracy = 20f;
 
     bool m_flinging;
 
@@ -41,12 +43,13 @@ public class Enemy : Damageable
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_playerRef = FindObjectOfType<Player>();
-        m_flingStrength = 100f;
+        //m_stats.m_flingStrength = 100f;
+        m_flingTimer -= UnityEngine.Random.Range(0f, 0.3f);
     }
 
     public void Copy(Damageable a_ref)
     {
-        m_health = a_ref.m_health;
+        m_stats.health = a_ref.m_stats.health;
         m_originalMass = a_ref.m_originalMass;
         m_originalColor = a_ref.m_originalColor;
         UpdateHealthColor();
@@ -103,6 +106,21 @@ public class Enemy : Damageable
         base.Die();
     }
 
+    public void Fling()
+    {
+        Vector3 playerPos = m_playerRef.transform.position;
+
+        if ((playerPos - transform.position).magnitude <= m_sightRadius)
+        {
+
+            Vector3 inaccurateFlingVector = (playerPos - transform.position).normalized;
+
+            Vector3 aimDisturbance = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, m_flingAccuracy) - m_flingAccuracy / 2f, Vector3.forward) * inaccurateFlingVector;
+
+            Fling(aimDisturbance, m_stats.m_flingStrength);
+        }
+    }
+
     //AI
     private void AIUpdate()
     {
@@ -113,12 +131,7 @@ public class Enemy : Damageable
             {
                 m_flingTimer -= m_flingTimerMax;
 
-                Vector3 playerPos = m_playerRef.transform.position;
-
-                if ((playerPos - transform.position).magnitude <= m_sightRadius)
-                {
-                    Fling((playerPos - transform.position).normalized, m_flingStrength * 0.5f);
-                }
+                Fling();
             }
             return;
         }
@@ -135,7 +148,7 @@ public class Enemy : Damageable
 
                 if ((playerPos - transform.position).magnitude <= m_sightRadius)
                 {
-                    Fling((playerPos - transform.position).normalized, m_flingStrength);
+                    Fling((playerPos - transform.position).normalized, m_stats.m_flingStrength);
                 }
             }
         }
