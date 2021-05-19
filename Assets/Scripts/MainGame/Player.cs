@@ -5,8 +5,6 @@ using UnityEngine;
 public class Player : Damageable
 {
     Camera m_cameraRef;
-    GameHandler m_gameHandlerRef;
-    BattleManager m_battleManagerRef;
 
     bool m_flinging = false;
     Vector3 m_originalFlingPos;
@@ -32,15 +30,17 @@ public class Player : Damageable
 
         m_cameraRef = FindObjectOfType<Camera>();
         m_stats.m_flingStrength = 500f;
+
     }
 
-    public void Start()
+    public override void Start()
     {
-        m_battleManagerRef = FindObjectOfType<BattleManager>();
-        m_gameHandlerRef = m_battleManagerRef.m_gameHandlerRef;
+        base.Start();
     }
+
     public override void Fling(Vector3 a_flingVector, float a_flingStrength)
     {
+        Debug.Log(a_flingStrength);
         base.Fling(a_flingVector, a_flingStrength);
         m_flinging = false;
         m_battleManagerRef.SetFrozen(false);
@@ -65,7 +65,6 @@ public class Player : Damageable
             m_flingLine.enabled = true;
             Vector3 worldMousePoint = m_cameraRef.ScreenToWorldPoint(Input.mousePosition);
             Vector3 deltaMousePos = m_originalFlingPos - worldMousePoint;
-            Debug.Log(deltaMousePos.magnitude);
             if (deltaMousePos.magnitude > m_maxFlingLength)
             {
                 deltaMousePos = deltaMousePos.normalized * m_maxFlingLength;
@@ -100,8 +99,11 @@ public class Player : Damageable
         {
             if (m_stats.health <= 1f)// || enemy.m_stats.health <= 1f)
             {
-                m_hitSlowdownActive = true;
-                Time.timeScale = m_hitTimeSlowdownRate;
+                if (!m_battleManagerRef.m_endingGame)
+                {
+                    m_hitSlowdownActive = true;
+                    Time.timeScale = m_hitTimeSlowdownRate;
+                }
             }
         }
         switch (m_gameHandlerRef.m_currentGameMode)
@@ -110,11 +112,15 @@ public class Player : Damageable
                 break;
             case GameHandler.eGameMode.Health:
                 base.OnCollisionEnter2D(a_collision);
+                if (a_collision.gameObject.GetComponent<Pocket>())
+                {
+                    Damage(m_battleManagerRef.m_pocketDamage);
+                }
                 break;
             case GameHandler.eGameMode.Pockets:
                 if (a_collision.gameObject.GetComponent<Pocket>())
                 {
-                    if (m_stats.health <= DamageableStats.m_minimumHealth)
+                    if (m_stats.health <= DamageableStats.minHealth)
                     {
                         Die();
                     }

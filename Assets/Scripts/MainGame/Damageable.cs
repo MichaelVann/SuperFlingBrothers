@@ -5,9 +5,10 @@ using UnityEngine;
 
 public class Damageable : BaseObject
 {
+    protected GameHandler m_gameHandlerRef;
+    protected BattleManager m_battleManagerRef;
 
-
-    public float m_lastVelocityMagnitude = 0f;
+    public float m_lastMomentumMagnitude = 0f;
     float m_damagePerSpeedDivider = 8f;
 
     const float m_massDivider = 2f;
@@ -22,7 +23,7 @@ public class Damageable : BaseObject
 
     static Func<int, Collision2D> CollisionFuncPTR = null;
 
-    Color[] m_healthColours;
+    public ProgressBar m_healthBarRef;
 
     bool m_secondFling = true;
     float m_bumpFlingStrengthMult = 0.25f;
@@ -33,30 +34,40 @@ public class Damageable : BaseObject
 
     bool m_clearVelocityOption = true;
 
+
     public struct DamageableStats
     {
         public float m_flingStrength;
         public float health;
-        public float m_maximumHealth;
-        public const float m_minimumHealth = 0f;
+        public float maxHealth;
+        public const float minHealth = 0f;
     }
     public DamageableStats m_stats;
 
-    public float GetHealthPercentage() { return m_stats.health / m_stats.m_maximumHealth; }
+    public float GetHealthPercentage() { return m_stats.health / m_stats.maxHealth; }
 
     public override void Awake()
     {
         base.Awake();
+
+
         m_originalMass = m_rigidBody.mass;
         m_originalColor = m_spriteRenderer.color;
 
         //Stats
         m_stats.m_flingStrength = 259f;//actual should be 250-ish
-        m_stats.m_maximumHealth = 4f;
-        m_stats.health = m_stats.m_maximumHealth;
+        m_stats.maxHealth = 4f;
+        m_stats.health = m_stats.maxHealth;
 
-        m_healthColours = new Color[] { Color.red, Color.yellow, Color.green, Color.blue };
         UpdateHealthColor();
+
+        m_healthBarRef.SetMaxProgressValue(m_stats.maxHealth);
+    }
+
+    public virtual void Start()
+    {
+        m_battleManagerRef = FindObjectOfType<BattleManager>();
+        m_gameHandlerRef = m_battleManagerRef.m_gameHandlerRef;
     }
 
     void BoundsCheck()
@@ -111,14 +122,21 @@ public class Damageable : BaseObject
 
     public void Damage(float a_damage)
     {
-        if (m_stats.health > DamageableStats.m_minimumHealth)
+        if (m_stats.health > DamageableStats.minHealth)
         {
             m_stats.health -= a_damage;
-            m_stats.health = Mathf.Clamp(m_stats.health, DamageableStats.m_minimumHealth, m_stats.m_maximumHealth);
+            m_stats.health = Mathf.Clamp(m_stats.health, DamageableStats.minHealth, m_stats.maxHealth);
             Instantiate(m_collisionSparkTemplate, transform.position, new Quaternion(), transform);
             RisingFadingText damageText = Instantiate(m_risingFadingTextTemplate, transform.position + new Vector3(0f, m_damageTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
             damageText.SetTextContent(a_damage);
             damageText.SetOriginalColor(Color.white);
+        }
+        if(m_stats.health <= DamageableStats.minHealth)
+        {
+            if (m_gameHandlerRef.m_currentGameMode == GameHandler.eGameMode.Health)
+            {
+                Die();
+            }
         }
         UpdateMass();
         UpdateHealthColor();
@@ -140,9 +158,9 @@ public class Damageable : BaseObject
         Damageable oppDamageable = a_collision.gameObject.GetComponent<Damageable>();
         if (oppDamageable)
         {
-            if (oppDamageable.m_lastVelocityMagnitude >= m_lastVelocityMagnitude)
+            if (oppDamageable.m_lastMomentumMagnitude >= m_lastMomentumMagnitude)
             {
-                Damage(oppDamageable.m_lastVelocityMagnitude/ m_damagePerSpeedDivider);
+                Damage(oppDamageable.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
             }
         }
     }
@@ -150,7 +168,10 @@ public class Damageable : BaseObject
     public override void Update()
     {
         base.Update();
-        m_lastVelocityMagnitude = m_rigidBody.velocity.magnitude;
+        m_lastMomentumMagnitude = m_rigidBody.velocity.magnitude * m_rigidBody.mass;
         SecondFlingUpdate();
+
+        if (m_healthBarRef) { m_healthBarRef.SetProgressValue(m_stats.health); }
+        
     }
 }

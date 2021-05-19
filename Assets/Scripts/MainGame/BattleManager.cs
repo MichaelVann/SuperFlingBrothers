@@ -32,6 +32,8 @@ public class BattleManager : MonoBehaviour
 
     public int m_enemyCount = 0;
 
+    public float m_pocketDamage = 2f;
+
     //Post game
     float m_scoreGained = 0f;
     float m_bonusTimeScoreGained = 0f;
@@ -61,7 +63,7 @@ public class BattleManager : MonoBehaviour
         if (!m_gameHandlerRef)
         {
             m_gameHandlerRef = Instantiate(m_gameHandlerTemplate).GetComponent<GameHandler>();
-            m_gameHandlerRef.SetGameMode(GameHandler.eGameMode.Pockets);
+            m_gameHandlerRef.SetGameMode(GameHandler.eGameMode.Health);
         }
         m_freezeTimerMax = m_turnInterval;
         m_freezeTimer = m_freezeTimerMax;

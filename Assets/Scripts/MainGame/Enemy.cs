@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class Enemy : Damageable
 {
-    BattleManager m_battleManagerRef;
-    GameHandler m_gameHandlerRef;
     Player m_playerRef;
 
     enum EnemyType
@@ -35,15 +33,13 @@ public class Enemy : Damageable
     public override void Awake()
     {
         base.Awake();
-        m_battleManagerRef = FindObjectOfType<BattleManager>();
-        m_battleManagerRef.ChangeEnemyCount(1);
     }
 
-    public void Start()
+    public override void Start()
     {
-        m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        base.Start();
+        m_battleManagerRef.ChangeEnemyCount(1);
         m_playerRef = FindObjectOfType<Player>();
-        //m_stats.m_flingStrength = 100f;
         m_flingTimer -= UnityEngine.Random.Range(0f, 0.3f);
     }
 
@@ -83,7 +79,23 @@ public class Enemy : Damageable
         base.OnCollisionEnter2D(a_collision);
         if (a_collision.gameObject.GetComponent<Pocket>())
         {
-            Die();
+            switch (m_gameHandlerRef.m_currentGameMode)
+            {
+                case GameHandler.eGameMode.TurnLimit:
+                    break;
+                case GameHandler.eGameMode.Health:
+                    Damage(m_battleManagerRef.m_pocketDamage);
+                    break;
+                case GameHandler.eGameMode.Pockets:
+                    Die();
+                    break;
+                case GameHandler.eGameMode.Hunger:
+                    break;
+                case GameHandler.eGameMode.ModeCount:
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -108,17 +120,21 @@ public class Enemy : Damageable
 
     public void Fling()
     {
-        Vector3 playerPos = m_playerRef.transform.position;
-
-        if ((playerPos - transform.position).magnitude <= m_sightRadius)
+        if (m_playerRef)
         {
+            Vector3 playerPos = m_playerRef.transform.position;
 
-            Vector3 inaccurateFlingVector = (playerPos - transform.position).normalized;
+            if ((playerPos - transform.position).magnitude <= m_sightRadius)
+            {
 
-            Vector3 aimDisturbance = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, m_flingAccuracy) - m_flingAccuracy / 2f, Vector3.forward) * inaccurateFlingVector;
+                Vector3 inaccurateFlingVector = (playerPos - transform.position).normalized;
 
-            Fling(aimDisturbance, m_stats.m_flingStrength);
+                Vector3 aimDisturbance = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, m_flingAccuracy) - m_flingAccuracy / 2f, Vector3.forward) * inaccurateFlingVector;
+
+                Fling(aimDisturbance, m_stats.m_flingStrength);
+            }
         }
+       
     }
 
     //AI
@@ -162,7 +178,8 @@ public class Enemy : Damageable
 
     public override void Fling(Vector3 a_flingVector, float a_flingStrength)
     {
-        m_rigidBody.AddForce(a_flingVector * a_flingStrength);
+        base.Fling(a_flingVector, a_flingStrength);
+        //m_rigidBody.AddForce(a_flingVector * a_flingStrength);
         //m_battleManagerRef.SetFrozen(false);
     }
 
