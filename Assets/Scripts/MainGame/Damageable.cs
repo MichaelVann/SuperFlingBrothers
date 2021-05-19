@@ -37,10 +37,12 @@ public class Damageable : BaseObject
 
     public struct DamageableStats
     {
-        public float m_flingStrength;
+        public float flingStrength;
         public float health;
         public float maxHealth;
         public const float minHealth = 0f;
+
+        public float strength;
     }
     public DamageableStats m_stats;
 
@@ -55,9 +57,10 @@ public class Damageable : BaseObject
         m_originalColor = m_spriteRenderer.color;
 
         //Stats
-        m_stats.m_flingStrength = 259f;//actual should be 250-ish
+        m_stats.flingStrength = 259f;//actual should be 250-ish
         m_stats.maxHealth = 4f;
         m_stats.health = m_stats.maxHealth;
+        m_stats.strength = 1f;
 
         UpdateHealthColor();
 
@@ -160,7 +163,7 @@ public class Damageable : BaseObject
         {
             if (oppDamageable.m_lastMomentumMagnitude >= m_lastMomentumMagnitude)
             {
-                Damage(oppDamageable.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
+                Damage(oppDamageable.m_stats.strength * oppDamageable.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
             }
         }
     }

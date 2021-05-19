@@ -132,7 +132,7 @@ public class BattleManager : MonoBehaviour
             m_endingGame = true;
             Time.timeScale = m_gameEndSlowdownFactor;
             m_uiHandlerRef.StartEnding(a_won);
-            
+            m_victory = true;
         }
     }
 

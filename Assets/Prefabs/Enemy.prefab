@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_rigidBody: {fileID: 0}
-  m_lastVelocityMagnitude: 0
+  m_lastMomentumMagnitude: 0
   m_originalMass: 0
   m_originalColor: {r: 0, g: 0, b: 0, a: 0}
   m_explosionTemplate: {fileID: 8455903170808272189, guid: c2dfda481e8668a48b2f4f8b329a630b,
@@ -23,6 +23,8 @@ MonoBehaviour:
   m_risingFadingTextTemplate: {fileID: 4912411465336466117, guid: 0a8ab97e9f7b7ef47acb17384c63233a,
     type: 3}
   m_healthBarRef: {fileID: 8361980861345683902}
+  m_coinPrefab: {fileID: 1486472118298862903, guid: 7b827df0a9bc5b04992891f0df28e3f1,
+    type: 3}
 --- !u!1001 &4734021104761705739
 PrefabInstance:
   m_ObjectHideFlags: 0

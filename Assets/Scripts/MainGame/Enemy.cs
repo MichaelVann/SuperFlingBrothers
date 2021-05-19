@@ -6,7 +6,7 @@ using UnityEngine;
 public class Enemy : Damageable
 {
     Player m_playerRef;
-
+    public GameObject m_coinPrefab;
     enum EnemyType
     {
         Idlers,
@@ -29,6 +29,10 @@ public class Enemy : Damageable
     float m_flingAccuracy = 20f;
 
     bool m_flinging;
+
+    float m_coinSpawnOffset = 0.3f;
+    int m_coinsToSpawn = 3;
+    float m_closestCoinSpawnAngle = 15f;
 
     public override void Awake()
     {
@@ -115,6 +119,29 @@ public class Enemy : Damageable
         xpText.SetOriginalColor(Color.cyan);
 
         m_battleManagerRef.ChangeEnemyCount(-1);
+
+        float[] spawnDirection;
+
+        for (int i = 0; i < m_coinsToSpawn; i++)
+        {
+            spawnDirection = new float[m_coinsToSpawn];
+
+            spawnDirection[i] = UnityEngine.Random.Range(0f, 360f);
+            for (int j = 0; j < i; j++)
+            {
+                if ((spawnDirection[i] - spawnDirection[j] <= m_closestCoinSpawnAngle) || (spawnDirection[i] - spawnDirection[j] >= 360f - m_closestCoinSpawnAngle))
+                {
+                    spawnDirection[i] = UnityEngine.Random.Range(0f, 360f);
+                    j--;
+                }
+            }
+            Vector3 spawnLocation = new Vector3(m_coinSpawnOffset, 0f, 0f);
+            spawnLocation = Quaternion.AngleAxis(spawnDirection[i], Vector3.forward) * spawnLocation;
+            Instantiate<GameObject>(m_coinPrefab, transform.position + spawnLocation, new Quaternion());
+        }
+
+
+
         base.Die();
     }
 
@@ -131,7 +158,7 @@ public class Enemy : Damageable
 
                 Vector3 aimDisturbance = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, m_flingAccuracy) - m_flingAccuracy / 2f, Vector3.forward) * inaccurateFlingVector;
 
-                Fling(aimDisturbance, m_stats.m_flingStrength);
+                Fling(aimDisturbance, m_stats.flingStrength);
             }
         }
        
@@ -164,7 +191,7 @@ public class Enemy : Damageable
 
                 if ((playerPos - transform.position).magnitude <= m_sightRadius)
                 {
-                    Fling((playerPos - transform.position).normalized, m_stats.m_flingStrength);
+                    Fling((playerPos - transform.position).normalized, m_stats.flingStrength);
                 }
             }
         }

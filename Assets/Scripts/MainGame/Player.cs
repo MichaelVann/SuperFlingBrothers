@@ -19,6 +19,10 @@ public class Player : Damageable
 
     float m_hitTimeSlowdownRate = 0.05f;
 
+    float m_upperLowerFlingPositionBounds = 3.7f;
+
+    public SpriteRenderer m_invalidFlingCross;
+
     public override void Awake()
     {
         base.Awake();
@@ -29,8 +33,8 @@ public class Player : Damageable
         m_flingLine.endWidth = 0.02f;
 
         m_cameraRef = FindObjectOfType<Camera>();
-        m_stats.m_flingStrength = 500f;
-
+        m_stats.flingStrength = 500f;
+        m_stats.strength = 100f;
     }
 
     public override void Start()
@@ -40,7 +44,6 @@ public class Player : Damageable
 
     public override void Fling(Vector3 a_flingVector, float a_flingStrength)
     {
-        Debug.Log(a_flingStrength);
         base.Fling(a_flingVector, a_flingStrength);
         m_flinging = false;
         m_battleManagerRef.SetFrozen(false);
@@ -48,6 +51,7 @@ public class Player : Damageable
 
     void HandleFlinging()
     {
+        m_invalidFlingCross.enabled = false;
         if (!m_flinging)
         {
             m_flingLine.enabled = false;
@@ -58,12 +62,22 @@ public class Player : Damageable
 
                 m_flinging = true;
             }
-
         }
         else
         {
             m_flingLine.enabled = true;
             Vector3 worldMousePoint = m_cameraRef.ScreenToWorldPoint(Input.mousePosition);
+
+            if (worldMousePoint.y >= m_upperLowerFlingPositionBounds || worldMousePoint.y <= -m_upperLowerFlingPositionBounds)
+            {
+                m_invalidFlingCross.enabled = true;
+                m_invalidFlingCross.gameObject.transform.position = new Vector3(worldMousePoint.x, worldMousePoint.y);
+            }
+            else
+            {
+                m_invalidFlingCross.enabled = false;
+            }
+
             Vector3 deltaMousePos = m_originalFlingPos - worldMousePoint;
             if (deltaMousePos.magnitude > m_maxFlingLength)
             {
@@ -76,10 +90,18 @@ public class Player : Damageable
             linePositions[1] = transform.position - deltaMousePos;
 
             m_flingLine.SetPositions(linePositions);
+            //If the release point is outside the map, cancel the shot
 
             if (!Input.GetMouseButton(0))
             {
-                Fling(deltaMousePos, m_stats.m_flingStrength);
+                if (worldMousePoint.y < m_upperLowerFlingPositionBounds && worldMousePoint.y > -m_upperLowerFlingPositionBounds)
+                {
+                    Fling(deltaMousePos, m_stats.flingStrength);
+                }
+                else
+                {
+                    m_flinging = false;
+                }
             }
         }
 
@@ -88,8 +110,11 @@ public class Player : Damageable
 
     public override void Die()
     {
-        base.Die();
-        m_battleManagerRef.StartEndingGame(false);
+        if (!m_battleManagerRef.m_endingGame)
+        {
+            base.Die();
+            m_battleManagerRef.StartEndingGame(false);
+        }
     }
 
     public override void OnCollisionEnter2D(Collision2D a_collision)
