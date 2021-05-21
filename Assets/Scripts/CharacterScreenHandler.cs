@@ -16,6 +16,6 @@ public class CharacterScreenHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        m_strengthCounterRef.SetString("" + m_gameHandlerRef.m_playerStats[(int)GameHandler.eStatIndices.strength].value);
+        m_strengthCounterRef.SetString("" + m_gameHandlerRef.m_playerStatHandler.m_stats[(int)eStatIndices.strength].value);
     }
 }

@@ -49,7 +49,7 @@ public class Enemy : Damageable
 
     public void Copy(Damageable a_ref)
     {
-        m_stats[(int)GameHandler.eStatIndices.health].value = a_ref.m_stats[(int)GameHandler.eStatIndices.health].value;
+        m_stats[(int)eStatIndices.health].value = a_ref.m_stats[(int)eStatIndices.health].value;
         m_originalMass = a_ref.m_originalMass;
         m_originalColor = a_ref.m_originalColor;
         UpdateHealthColor();
@@ -112,7 +112,7 @@ public class Enemy : Damageable
     public override void Die()
     {
         m_battleManagerRef.ChangeScore(m_scoreValue);
-        m_gameHandlerRef.ChangeXP(m_xpReward);
+        m_gameHandlerRef.m_playerStatHandler.ChangeXP(m_xpReward);
 
         RisingFadingText xpText = Instantiate(m_risingFadingTextTemplate, transform.position + new Vector3(0f, m_xpTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
         xpText.SetTextContent("XP +" + m_xpReward);
@@ -158,7 +158,7 @@ public class Enemy : Damageable
 
                 Vector3 aimDisturbance = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, m_flingAccuracy) - m_flingAccuracy / 2f, Vector3.forward) * inaccurateFlingVector;
 
-                Fling(aimDisturbance, m_stats[(int)GameHandler.eStatIndices.flingStrength].value);
+                Fling(aimDisturbance, m_stats[(int)eStatIndices.flingStrength].value);
             }
         }
        

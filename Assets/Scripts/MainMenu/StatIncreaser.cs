@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class StatIncreaser : MonoBehaviour
 {
-    public GameHandler.eStatIndices m_statIndex;
+    public eStatIndices m_statIndex;
     GameHandler m_gameHandlerRef;
     public Counter m_statCounter;
     float m_statValue;
@@ -19,13 +19,13 @@ public class StatIncreaser : MonoBehaviour
 
     public void AttemptIncrease()
     {
-        m_gameHandlerRef.AttemptToIncreaseStat(m_statIndex);
+        m_gameHandlerRef.m_playerStatHandler.AttemptToIncreaseStat(m_statIndex);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (m_gameHandlerRef.m_XP >= m_costValue)
+        if (m_gameHandlerRef.m_playerStatHandler.m_XP >= m_costValue)
         {
             m_costCounter.m_text.color = Color.green;
         }
@@ -34,9 +34,9 @@ public class StatIncreaser : MonoBehaviour
             m_costCounter.m_text.color = Color.red;
         }
 
-        m_costCounter.m_text.text = "" + m_gameHandlerRef.m_playerStats[(int)m_statIndex].cost;
+        m_costCounter.m_text.text = "" + m_gameHandlerRef.m_playerStatHandler.m_stats[(int)m_statIndex].cost;
 
-        m_statCounter.m_text.text = "" + m_gameHandlerRef.m_playerStats[(int)m_statIndex].value;
+        m_statCounter.m_text.text = "" + m_gameHandlerRef.m_playerStatHandler.m_stats[(int)m_statIndex].value;
     }
 
 

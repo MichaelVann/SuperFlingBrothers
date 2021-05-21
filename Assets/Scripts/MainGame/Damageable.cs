@@ -34,13 +34,14 @@ public class Damageable : BaseObject
 
     bool m_clearVelocityOption = true;
 
-    public GameHandler.Stat[] m_stats;
+    public Stat[] m_stats;
 
-    public float GetHealthPercentage() { return m_stats[(int)GameHandler.eStatIndices.health].value / m_stats[(int)GameHandler.eStatIndices.maxHealth].value; }
+    public float GetHealthPercentage() { return m_stats[(int)eStatIndices.health].value / m_stats[(int)eStatIndices.maxHealth].value; }
 
     public override void Awake()
     {
         base.Awake();
+        m_stats = new Stat[(int)eStatIndices.count];
 
         m_originalMass = m_rigidBody.mass;
         m_originalColor = m_spriteRenderer.color;
@@ -51,11 +52,10 @@ public class Damageable : BaseObject
         m_battleManagerRef = FindObjectOfType<BattleManager>();
         m_gameHandlerRef = m_battleManagerRef.m_gameHandlerRef;
 
-        m_stats = new GameHandler.Stat[(int)GameHandler.eStatIndices.count];
-        m_gameHandlerRef.SetDefaultStats(ref m_stats);
+        m_gameHandlerRef.m_playerStatHandler.SetDefaultStats(ref m_stats);
 
         UpdateHealthColor();
-        m_healthBarRef.SetMaxProgressValue(m_stats[(int)GameHandler.eStatIndices.maxHealth].value);
+        m_healthBarRef.SetMaxProgressValue(m_stats[(int)eStatIndices.maxHealth].value);
 
     }
 
@@ -111,16 +111,16 @@ public class Damageable : BaseObject
 
     public void Damage(float a_damage)
     {
-        if (m_stats[(int)GameHandler.eStatIndices.health].value > m_stats[(int)GameHandler.eStatIndices.minHealth].value)
+        if (m_stats[(int)eStatIndices.health].value > m_stats[(int)eStatIndices.minHealth].value)
         {
-            m_stats[(int)GameHandler.eStatIndices.health].value -= a_damage;
-            m_stats[(int)GameHandler.eStatIndices.health].value = Mathf.Clamp(m_stats[(int)GameHandler.eStatIndices.health].value, m_stats[(int)GameHandler.eStatIndices.minHealth].value, m_stats[(int)GameHandler.eStatIndices.maxHealth].value);
+            m_stats[(int)eStatIndices.health].value -= a_damage;
+            m_stats[(int)eStatIndices.health].value = Mathf.Clamp(m_stats[(int)eStatIndices.health].value, m_stats[(int)eStatIndices.minHealth].value, m_stats[(int)eStatIndices.maxHealth].value);
             Instantiate(m_collisionSparkTemplate, transform.position, new Quaternion(), transform);
             RisingFadingText damageText = Instantiate(m_risingFadingTextTemplate, transform.position + new Vector3(0f, m_damageTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
             damageText.SetTextContent(a_damage);
             damageText.SetOriginalColor(Color.white);
         }
-        if(m_stats[(int)GameHandler.eStatIndices.health].value <= m_stats[(int)GameHandler.eStatIndices.minHealth].value)
+        if(m_stats[(int)eStatIndices.health].value <= m_stats[(int)eStatIndices.minHealth].value)
         {
             if (m_gameHandlerRef.m_currentGameMode == GameHandler.eGameMode.Health)
             {
@@ -149,7 +149,7 @@ public class Damageable : BaseObject
         {
             if (oppDamageable.m_lastMomentumMagnitude >= m_lastMomentumMagnitude)
             {
-                Damage(oppDamageable.m_stats[(int)GameHandler.eStatIndices.strength].value * oppDamageable.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
+                Damage(oppDamageable.m_stats[(int)eStatIndices.strength].value * oppDamageable.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
             }
         }
     }
@@ -160,7 +160,7 @@ public class Damageable : BaseObject
         m_lastMomentumMagnitude = m_rigidBody.velocity.magnitude * m_rigidBody.mass;
         SecondFlingUpdate();
 
-        if (m_healthBarRef) { m_healthBarRef.SetProgressValue(m_stats[(int)GameHandler.eStatIndices.health].value); }
+        if (m_healthBarRef) { m_healthBarRef.SetProgressValue(m_stats[(int)eStatIndices.health].value); }
         
     }
 }

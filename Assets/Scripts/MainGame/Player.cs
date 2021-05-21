@@ -39,8 +39,8 @@ public class Player : Damageable
     public override void Start()
     {
         base.Start();
-        m_stats[(int)GameHandler.eStatIndices.health].value = m_stats[(int)GameHandler.eStatIndices.maxHealth].value;
-        m_stats = m_gameHandlerRef.m_playerStats;
+        m_stats[(int)eStatIndices.health].value = m_stats[(int)eStatIndices.maxHealth].value;
+        m_stats = m_gameHandlerRef.m_playerStatHandler.m_stats;
     }
 
     public override void Fling(Vector3 a_flingVector, float a_flingStrength)
@@ -97,7 +97,7 @@ public class Player : Damageable
             {
                 if (worldMousePoint.y < m_upperLowerFlingPositionBounds && worldMousePoint.y > -m_upperLowerFlingPositionBounds)
                 {
-                    Fling(deltaMousePos, m_stats[(int)GameHandler.eStatIndices.flingStrength].value);
+                    Fling(deltaMousePos, m_stats[(int)eStatIndices.flingStrength].value);
                 }
                 else
                 {
@@ -122,7 +122,7 @@ public class Player : Damageable
         Enemy enemy = a_collision.gameObject.GetComponent<Enemy>();
         if (enemy)
         {
-            if (m_stats[(int)GameHandler.eStatIndices.health].value <= 1f)// || enemy.m_stats.health <= 1f)
+            if (m_stats[(int)eStatIndices.health].value <= 1f)// || enemy.m_stats.health <= 1f)
             {
                 if (!m_battleManagerRef.m_endingGame)
                 {
@@ -145,7 +145,7 @@ public class Player : Damageable
             case GameHandler.eGameMode.Pockets:
                 if (a_collision.gameObject.GetComponent<Pocket>())
                 {
-                    if (m_stats[(int)GameHandler.eStatIndices.health].value <= m_stats[(int)GameHandler.eStatIndices.minHealth].value)
+                    if (m_stats[(int)eStatIndices.health].value <= m_stats[(int)eStatIndices.minHealth].value)
                     {
                         Die();
                     }
