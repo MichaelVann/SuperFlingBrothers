@@ -49,7 +49,7 @@ public class Enemy : Damageable
 
     public void Copy(Damageable a_ref)
     {
-        m_stats.health = a_ref.m_stats.health;
+        m_stats[(int)GameHandler.eStatIndices.health].value = a_ref.m_stats[(int)GameHandler.eStatIndices.health].value;
         m_originalMass = a_ref.m_originalMass;
         m_originalColor = a_ref.m_originalColor;
         UpdateHealthColor();
@@ -158,7 +158,7 @@ public class Enemy : Damageable
 
                 Vector3 aimDisturbance = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, m_flingAccuracy) - m_flingAccuracy / 2f, Vector3.forward) * inaccurateFlingVector;
 
-                Fling(aimDisturbance, m_stats.flingStrength);
+                Fling(aimDisturbance, m_stats[(int)GameHandler.eStatIndices.flingStrength].value);
             }
         }
        
@@ -180,25 +180,25 @@ public class Enemy : Damageable
         }
 
         //m_flingTimer += Time.deltaTime;
-        if (m_battleManagerRef.m_frozen)//m_flingTimer >= m_flingTimerMax)
-        {
-            //m_flingTimer -= m_flingTimerMax;
-            if (!m_flinging)
-            {
-                m_flinging = true;
+        //if (m_battleManagerRef.m_frozen)//m_flingTimer >= m_flingTimerMax)
+        //{
+        //    m_flingTimer -= m_flingTimerMax;
+        //    if (!m_flinging)
+        //    {
+        //        m_flinging = true;
 
-                Vector3 playerPos = m_playerRef.transform.position;
+        //        Vector3 playerPos = m_playerRef.transform.position;
 
-                if ((playerPos - transform.position).magnitude <= m_sightRadius)
-                {
-                    Fling((playerPos - transform.position).normalized, m_stats.flingStrength);
-                }
-            }
-        }
-        else
-        {
-            m_flinging = false;
-        }
+        //        if ((playerPos - transform.position).magnitude <= m_sightRadius)
+        //        {
+        //            Fling((playerPos - transform.position).normalized, m_stats.flingStrength);
+        //        }
+        //    }
+        //}
+        //else
+        //{
+        //    m_flinging = false;
+        //}
 
 
     }

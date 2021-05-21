@@ -46,7 +46,10 @@ public class BattleManager : MonoBehaviour
     public void SetFrozen(bool a_frozen)
     {
         m_frozen = a_frozen;
-        Time.timeScale = a_frozen ? 0.0f : 1.0f;
+        if (!m_endingGame)
+        {
+            Time.timeScale = a_frozen ? 0.0f : 1.0f;
+        }
     }
 
     public void ChangeScore(float a_change) { m_score += a_change; }
@@ -60,11 +63,6 @@ public class BattleManager : MonoBehaviour
     {
         m_uiHandlerRef = GetComponent<UIHandler>();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        if (!m_gameHandlerRef)
-        {
-            m_gameHandlerRef = Instantiate(m_gameHandlerTemplate).GetComponent<GameHandler>();
-            m_gameHandlerRef.SetGameMode(GameHandler.eGameMode.Health);
-        }
         m_freezeTimerMax = m_turnInterval;
         m_freezeTimer = m_freezeTimerMax;
     }
@@ -132,7 +130,7 @@ public class BattleManager : MonoBehaviour
             m_endingGame = true;
             Time.timeScale = m_gameEndSlowdownFactor;
             m_uiHandlerRef.StartEnding(a_won);
-            m_victory = true;
+            m_victory = a_won;
         }
     }
 
