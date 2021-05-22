@@ -39,8 +39,8 @@ public class Player : Damageable
     public override void Start()
     {
         base.Start();
-        m_stats[(int)eStatIndices.health].value = m_stats[(int)eStatIndices.maxHealth].value;
         m_stats = m_gameHandlerRef.m_playerStatHandler.m_stats;
+        m_stats[(int)eStatIndices.health].value = m_stats[(int)eStatIndices.maxHealth].value;
     }
 
     public override void Fling(Vector3 a_flingVector, float a_flingStrength)

@@ -1,15 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StatIncreaser : MonoBehaviour
 {
     public eStatIndices m_statIndex;
     GameHandler m_gameHandlerRef;
     public Counter m_statCounter;
+    public Button m_increaseButton;
     float m_statValue;
-    public Counter m_costCounter;
-    float m_costValue;
 
     // Start is called before the first frame update
     void Start()
@@ -25,16 +25,7 @@ public class StatIncreaser : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_gameHandlerRef.m_playerStatHandler.m_XP >= m_costValue)
-        {
-            m_costCounter.m_text.color = Color.green;
-        }
-        else
-        {
-            m_costCounter.m_text.color = Color.red;
-        }
-
-        m_costCounter.m_text.text = "" + m_gameHandlerRef.m_playerStatHandler.m_stats[(int)m_statIndex].cost;
+        m_increaseButton.interactable = m_gameHandlerRef.m_playerStatHandler.m_allocationPoints > 0 ? true : false;
 
         m_statCounter.m_text.text = "" + m_gameHandlerRef.m_playerStatHandler.m_stats[(int)m_statIndex].value;
     }
