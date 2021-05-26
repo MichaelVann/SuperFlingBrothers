@@ -17,8 +17,10 @@ public class GameHandler : MonoBehaviour
     public eGameMode m_currentGameMode;
 
     public StatHandler m_playerStatHandler;
+    public int m_cash = 0;
 
     public void SetGameMode(eGameMode a_gameMode) { m_currentGameMode = a_gameMode; }
+    public void ChangeCash(int a_score) { m_cash += a_score; }
 
     void Awake()
     {
@@ -26,6 +28,7 @@ public class GameHandler : MonoBehaviour
         m_playerStatHandler = gameObject.GetComponent<StatHandler>();
         m_playerStatHandler.Init();
         m_playerStatHandler.SetStatValue(eStatIndices.flingStrength,2f);
+        m_playerStatHandler.SetStatValue(eStatIndices.constitution,2f);
         m_playerStatHandler.m_stats[(int)eStatIndices.strength].effectiveValue = 1f;
     }
 

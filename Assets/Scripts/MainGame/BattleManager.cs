@@ -119,6 +119,7 @@ public class BattleManager : MonoBehaviour
 
     void FinishGame()
     {
+        m_gameHandlerRef.ChangeCash((int)m_score);
         //Go to post game screen
         SceneManager.LoadScene("Main Menu");
     }

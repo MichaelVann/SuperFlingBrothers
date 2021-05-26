@@ -41,6 +41,7 @@ public class Player : Damageable
         base.Start();
         m_statHandler = m_gameHandlerRef.m_playerStatHandler;
         m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue = m_statHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue;
+        m_healthBarRef.SetMaxProgressValue(m_statHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue);
     }
 
     public override void Fling(Vector3 a_flingVector, float a_flingStrength)

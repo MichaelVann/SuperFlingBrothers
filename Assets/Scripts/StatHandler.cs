@@ -40,6 +40,8 @@ public class StatHandler : MonoBehaviour
 
     public Stat[] m_stats;
 
+    const float m_baseHealthScale = 4f;
+
     public float GetStatValue(int a_index)
     {
         return m_stats[a_index].effectiveValue;
@@ -62,11 +64,39 @@ public class StatHandler : MonoBehaviour
     {
         m_stats[(int)a_index].value = a_value;
         UpdateEffectiveStat(a_index);
+
+        switch (a_index)
+        {
+            case eStatIndices.strength:
+                break;
+            case eStatIndices.dexterity:
+                break;
+            case eStatIndices.constitution:
+                SetStatScale(eStatIndices.maxHealth, m_baseHealthScale * a_value);
+                break;
+            case eStatIndices.flingStrength:
+                break;
+            case eStatIndices.health:
+                break;
+            case eStatIndices.maxHealth:
+                break;
+            case eStatIndices.minHealth:
+                break;
+            case eStatIndices.count:
+                break;
+            default:
+                break;
+        }
     }
 
     public void ChangeStatValue(eStatIndices a_index, float a_change)
     {
-        m_stats[(int)a_index].value += a_change;
+        SetStatValue(a_index, m_stats[(int)a_index].value + a_change);
+    }
+
+    public void SetStatScale(eStatIndices a_index, float a_value)
+    {
+        m_stats[(int)a_index].scale = a_value;
         UpdateEffectiveStat(a_index);
     }
 
@@ -74,7 +104,7 @@ public class StatHandler : MonoBehaviour
     {
         for (int i = 0; i < (int)eStatIndices.count; i++)
         {
-            m_stats[i].scale = 1f;
+            SetStatScale((eStatIndices)i,1f);
             SetStatValue((eStatIndices)i, 1f);
             m_stats[i].originalCost = 10f;
             m_stats[i].cost = m_stats[i].originalCost;
@@ -82,9 +112,9 @@ public class StatHandler : MonoBehaviour
             m_stats[i].postAddedValue = 0f;
         }
 
-        m_stats[(int)eStatIndices.flingStrength].scale = 20f;
         m_stats[(int)eStatIndices.flingStrength].postAddedValue = 259f;
-        SetStatValue(eStatIndices.flingStrength, 1f);
+        SetStatScale(eStatIndices.flingStrength, 20f);
+
 
         m_stats[(int)eStatIndices.health].scale = m_stats[(int)eStatIndices.maxHealth].scale = 4f;
         SetStatValue(eStatIndices.maxHealth, 1f);
