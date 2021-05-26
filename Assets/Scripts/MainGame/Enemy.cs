@@ -49,7 +49,7 @@ public class Enemy : Damageable
 
     public void Copy(Damageable a_ref)
     {
-        m_stats[(int)eStatIndices.health].value = a_ref.m_stats[(int)eStatIndices.health].value;
+        m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue = a_ref.m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue;
         m_originalMass = a_ref.m_originalMass;
         m_originalColor = a_ref.m_originalColor;
         UpdateHealthColor();
@@ -158,7 +158,7 @@ public class Enemy : Damageable
 
                 Vector3 aimDisturbance = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, m_flingAccuracy) - m_flingAccuracy / 2f, Vector3.forward) * inaccurateFlingVector;
 
-                Fling(aimDisturbance, m_stats[(int)eStatIndices.flingStrength].value);
+                Fling(aimDisturbance, m_statHandler.m_stats[(int)eStatIndices.flingStrength].effectiveValue);
             }
         }
        

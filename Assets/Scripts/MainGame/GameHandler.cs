@@ -6,11 +6,6 @@ using UnityEngine.SceneManagement;
 
 public class GameHandler : MonoBehaviour
 {
-    //UIHandler m_uiHandlerRef;
-
-    public float m_score = 0f;
-
-
     public enum eGameMode
     {
         TurnLimit,
@@ -23,13 +18,15 @@ public class GameHandler : MonoBehaviour
 
     public StatHandler m_playerStatHandler;
 
-    public void ChangeScore(float a_change) { m_score += a_change; }
     public void SetGameMode(eGameMode a_gameMode) { m_currentGameMode = a_gameMode; }
 
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
         m_playerStatHandler = gameObject.GetComponent<StatHandler>();
+        m_playerStatHandler.Init();
+        m_playerStatHandler.SetStatValue(eStatIndices.flingStrength,2f);
+        m_playerStatHandler.m_stats[(int)eStatIndices.strength].effectiveValue = 1f;
     }
 
 

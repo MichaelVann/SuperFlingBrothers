@@ -34,15 +34,15 @@ public class Damageable : BaseObject
 
     bool m_clearVelocityOption = true;
 
-    public Stat[] m_stats;
+    public StatHandler m_statHandler;
 
-    public float GetHealthPercentage() { return m_stats[(int)eStatIndices.health].value / m_stats[(int)eStatIndices.maxHealth].value; }
+    public float GetHealthPercentage() { return m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue / m_statHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue; }
 
     public override void Awake()
     {
         base.Awake();
-        m_stats = new Stat[(int)eStatIndices.count];
-
+        m_statHandler = new StatHandler();
+        m_statHandler.Init();
         m_originalMass = m_rigidBody.mass;
         m_originalColor = m_spriteRenderer.color;
     }
@@ -52,10 +52,8 @@ public class Damageable : BaseObject
         m_battleManagerRef = FindObjectOfType<BattleManager>();
         m_gameHandlerRef = m_battleManagerRef.m_gameHandlerRef;
 
-        m_gameHandlerRef.m_playerStatHandler.SetDefaultStats(ref m_stats);
-
         UpdateHealthColor();
-        m_healthBarRef.SetMaxProgressValue(m_stats[(int)eStatIndices.maxHealth].value);
+        m_healthBarRef.SetMaxProgressValue(m_statHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue);
 
     }
 
@@ -111,16 +109,16 @@ public class Damageable : BaseObject
 
     public void Damage(float a_damage)
     {
-        if (m_stats[(int)eStatIndices.health].value > m_stats[(int)eStatIndices.minHealth].value)
+        if (m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue > m_statHandler.m_stats[(int)eStatIndices.minHealth].effectiveValue)
         {
-            m_stats[(int)eStatIndices.health].value -= a_damage;
-            m_stats[(int)eStatIndices.health].value = Mathf.Clamp(m_stats[(int)eStatIndices.health].value, m_stats[(int)eStatIndices.minHealth].value, m_stats[(int)eStatIndices.maxHealth].value);
+            m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue -= a_damage;
+            m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue = Mathf.Clamp(m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue, m_statHandler.m_stats[(int)eStatIndices.minHealth].effectiveValue, m_statHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue);
             Instantiate(m_collisionSparkTemplate, transform.position, new Quaternion(), transform);
             RisingFadingText damageText = Instantiate(m_risingFadingTextTemplate, transform.position + new Vector3(0f, m_damageTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
             damageText.SetTextContent(a_damage);
             damageText.SetOriginalColor(Color.white);
         }
-        if(m_stats[(int)eStatIndices.health].value <= m_stats[(int)eStatIndices.minHealth].value)
+        if(m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue <= m_statHandler.m_stats[(int)eStatIndices.minHealth].effectiveValue)
         {
             if (m_gameHandlerRef.m_currentGameMode == GameHandler.eGameMode.Health)
             {
@@ -149,7 +147,7 @@ public class Damageable : BaseObject
         {
             if (oppDamageable.m_lastMomentumMagnitude >= m_lastMomentumMagnitude)
             {
-                Damage(oppDamageable.m_stats[(int)eStatIndices.strength].value * oppDamageable.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
+                Damage(oppDamageable.m_statHandler.m_stats[(int)eStatIndices.strength].effectiveValue * oppDamageable.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
             }
         }
     }
@@ -160,7 +158,8 @@ public class Damageable : BaseObject
         m_lastMomentumMagnitude = m_rigidBody.velocity.magnitude * m_rigidBody.mass;
         SecondFlingUpdate();
 
-        if (m_healthBarRef) { m_healthBarRef.SetProgressValue(m_stats[(int)eStatIndices.health].value); }
+        Debug.Log(m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue);
+        if (m_healthBarRef) { m_healthBarRef.SetProgressValue(m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue); }
         
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,10 +15,14 @@ public enum eStatIndices
     count
 }
 
+
 public struct Stat
 {
     public string name;
     public float value;
+    public float scale;
+    public float postAddedValue;
+    public float effectiveValue;
     public float originalCost;
     public float cost;
     public float costIncreaseRate;
@@ -31,44 +36,60 @@ public class StatHandler : MonoBehaviour
     public int m_level = 1;
     public int m_allocationPoints = 0;
 
+    public int m_DNA = 0;
 
     public Stat[] m_stats;
 
-
     public float GetStatValue(int a_index)
     {
-        return m_stats[a_index].value;
+        return m_stats[a_index].effectiveValue;
     }
+
+    public void ChangeScore(int a_change) { m_DNA += a_change; }
 
     // Start is called before the first frame update
-    void Start()
+    public void Init()
     {
         m_stats = new Stat[(int)eStatIndices.count];
-        SetDefaultStats(ref m_stats);
-
-        m_stats[(int)eStatIndices.flingStrength].value = 500f;
-        m_stats[(int)eStatIndices.strength].value = 1f;
+        SetDefaultStats();
+    }
+    public void UpdateEffectiveStat(eStatIndices a_index)
+    {
+        m_stats[(int)a_index].effectiveValue = (m_stats[(int)a_index].value * m_stats[(int)a_index].scale) + m_stats[(int)a_index].postAddedValue;
     }
 
-    public void SetDefaultStats(ref Stat[] a_stats)
+    public void SetStatValue(eStatIndices a_index, float a_value)
     {
-
-        a_stats[(int)eStatIndices.flingStrength].value = 259f;
-        a_stats[(int)eStatIndices.maxHealth].value = 4f;
-        a_stats[(int)eStatIndices.health].value = a_stats[(int)eStatIndices.maxHealth].value;
-        a_stats[(int)eStatIndices.strength].value = 1f;
-
-        for (int i = 0; i < (int)eStatIndices.count; i++)
-        {
-            a_stats[i].originalCost = 10f;
-            a_stats[i].cost = a_stats[i].originalCost;
-            a_stats[i].costIncreaseRate = 1.8f;
-        }
+        m_stats[(int)a_index].value = a_value;
+        UpdateEffectiveStat(a_index);
     }
 
     public void ChangeStatValue(eStatIndices a_index, float a_change)
     {
         m_stats[(int)a_index].value += a_change;
+        UpdateEffectiveStat(a_index);
+    }
+
+    public void SetDefaultStats()
+    {
+        for (int i = 0; i < (int)eStatIndices.count; i++)
+        {
+            m_stats[i].scale = 1f;
+            SetStatValue((eStatIndices)i, 1f);
+            m_stats[i].originalCost = 10f;
+            m_stats[i].cost = m_stats[i].originalCost;
+            m_stats[i].costIncreaseRate = 1.8f;
+            m_stats[i].postAddedValue = 0f;
+        }
+
+        m_stats[(int)eStatIndices.flingStrength].scale = 20f;
+        m_stats[(int)eStatIndices.flingStrength].postAddedValue = 259f;
+        SetStatValue(eStatIndices.flingStrength, 1f);
+
+        m_stats[(int)eStatIndices.health].scale = m_stats[(int)eStatIndices.maxHealth].scale = 4f;
+        SetStatValue(eStatIndices.maxHealth, 1f);
+        SetStatValue(eStatIndices.health, m_stats[(int)eStatIndices.maxHealth].value);
+        SetStatValue(eStatIndices.strength, 1f);
     }
 
     public void AttemptToIncreaseStat(eStatIndices a_index)
