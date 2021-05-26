@@ -19,6 +19,10 @@ public class GameHandler : MonoBehaviour
     public StatHandler m_playerStatHandler;
     public int m_cash = 0;
 
+    public bool m_wonLastGame = false;
+
+    public void SetLastGameResult(bool a_value) { m_wonLastGame = a_value; }
+
     public void SetGameMode(eGameMode a_gameMode) { m_currentGameMode = a_gameMode; }
     public void ChangeCash(int a_score) { m_cash += a_score; }
 

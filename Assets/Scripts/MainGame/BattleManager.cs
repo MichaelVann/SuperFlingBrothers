@@ -136,7 +136,7 @@ public class BattleManager : MonoBehaviour
     {
         m_gameHandlerRef.ChangeCash((int)m_score);
         //Go to post game screen
-        SceneManager.LoadScene("Main Menu");
+        SceneManager.LoadScene("Post Battle");
     }
 
     public void StartEndingGame(bool a_won)
@@ -144,6 +144,7 @@ public class BattleManager : MonoBehaviour
         if (!m_endingGame)
         {
             m_endingGame = true;
+            m_gameHandlerRef.SetLastGameResult(a_won);
             Time.timeScale = m_gameEndSlowdownFactor;
             m_uiHandlerRef.StartEnding(a_won);
             m_victory = a_won;

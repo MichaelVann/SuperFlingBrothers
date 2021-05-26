@@ -27,8 +27,8 @@ public class Damageable : BaseObject
 
     bool m_secondFling = true;
     float m_bumpFlingStrengthMult = 0.25f;
-    float m_flingTimer = 0f;
-    float m_flingTimerMax = 0.09f;
+    float m_secondFlingTimer = 0f;
+    float m_secondFlingTimerMax = 0.09f;
     Vector3 m_storedFlingVector;
     float m_storedFlingStrength = 0f;
 
@@ -77,10 +77,10 @@ public class Damageable : BaseObject
     {
         if (!m_secondFling)
         {
-            m_flingTimer += Time.deltaTime;
-            if (m_flingTimer >= m_flingTimerMax)
+            m_secondFlingTimer += Time.deltaTime;
+            if (m_secondFlingTimer >= m_secondFlingTimerMax)
             {
-                m_flingTimer = 0f;
+                m_secondFlingTimer = 0f;
                 Fling(m_storedFlingVector, m_storedFlingStrength);
                 m_secondFling = true;
             }
