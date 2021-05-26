@@ -158,7 +158,6 @@ public class Damageable : BaseObject
         m_lastMomentumMagnitude = m_rigidBody.velocity.magnitude * m_rigidBody.mass;
         SecondFlingUpdate();
 
-        Debug.Log(m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue);
         if (m_healthBarRef) { m_healthBarRef.SetProgressValue(m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue); }
         
     }
