@@ -100,6 +100,12 @@ public class StatHandler : MonoBehaviour
         UpdateEffectiveStat(a_index);
     }
 
+    public void SetStatPostAddedValue(eStatIndices a_index, float a_value)
+    {
+        m_stats[(int)a_index].postAddedValue = a_value;
+        UpdateEffectiveStat(a_index);
+    }
+
     public void SetDefaultStats()
     {
         for (int i = 0; i < (int)eStatIndices.count; i++)
@@ -112,14 +118,14 @@ public class StatHandler : MonoBehaviour
             m_stats[i].postAddedValue = 0f;
         }
 
-        m_stats[(int)eStatIndices.flingStrength].postAddedValue = 259f;
+        SetStatPostAddedValue(eStatIndices.flingStrength, 259f);
         SetStatScale(eStatIndices.flingStrength, 20f);
-
 
         m_stats[(int)eStatIndices.health].scale = m_stats[(int)eStatIndices.maxHealth].scale = 4f;
         SetStatValue(eStatIndices.maxHealth, 1f);
         SetStatValue(eStatIndices.health, m_stats[(int)eStatIndices.maxHealth].value);
-        SetStatValue(eStatIndices.strength, 1f);
+        SetStatScale(eStatIndices.strength, 0.1f);
+        SetStatPostAddedValue(eStatIndices.strength, 1f);
     }
 
     public void AttemptToIncreaseStat(eStatIndices a_index)

@@ -67,6 +67,14 @@ public class BattleManager : MonoBehaviour
         m_freezeTimer = m_freezeTimerMax;
     }
 
+    public void Start()
+    {
+        if (m_gameHandlerRef.m_currentGameMode != GameHandler.eGameMode.TurnLimit)
+        {
+            m_turnsRemaining = 0;
+        }
+    }
+
     public void ChangeEnemyCount(int a_change)
     {
         m_enemyCount += a_change;
@@ -82,13 +90,20 @@ public class BattleManager : MonoBehaviour
         if (m_turnsTimer >= m_turnInterval)
         {
             m_turnsTimer -= m_turnInterval;
-            m_turnsRemaining--;
-
-            if (m_turnsRemaining <= 0)
+            if (m_gameHandlerRef.m_currentGameMode == GameHandler.eGameMode.TurnLimit)
             {
-                StartEndingGame(false);
+                m_turnsRemaining--;
+                if (m_turnsRemaining <= 0)
+                {
+                    StartEndingGame(false);
+                }
+            }
+            else
+            {
+                m_turnsRemaining++;
             }
         }
+
     }
 
     void UpdateFreezeTimer()
@@ -148,10 +163,10 @@ public class BattleManager : MonoBehaviour
     {
         if (!m_endingGame)
         {
+            UpdateTurns();
             switch (m_gameHandlerRef.m_currentGameMode)
             {
                 case GameHandler.eGameMode.TurnLimit:
-                    UpdateTurns();
                     break;
                 case GameHandler.eGameMode.Health:
                     break;
