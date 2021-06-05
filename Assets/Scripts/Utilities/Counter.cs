@@ -12,6 +12,7 @@ public class Counter : MonoBehaviour
     public void SetString(string a_string)
     {
         m_string = a_string;
+        m_text.text = a_string;
     }
 
     // Start is called before the first frame update
