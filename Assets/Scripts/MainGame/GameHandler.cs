@@ -19,7 +19,10 @@ public class GameHandler : MonoBehaviour
     public StatHandler m_playerStatHandler;
     public int m_cash = 0;
 
+    //Last Game
     public bool m_wonLastGame = false;
+    public float m_xpEarnedLastGame = 0f;
+    public float m_goldEarnedLastGame = 0f;
 
     public void SetLastGameResult(bool a_value) { m_wonLastGame = a_value; }
 

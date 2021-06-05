@@ -135,7 +135,9 @@ public class BattleManager : MonoBehaviour
     void FinishGame()
     {
         m_gameHandlerRef.ChangeCash((int)m_score);
+        m_gameHandlerRef.m_goldEarnedLastGame = m_score;
         //Go to post game screen
+        Time.timeScale = 1f;
         SceneManager.LoadScene("Post Battle");
     }
 
