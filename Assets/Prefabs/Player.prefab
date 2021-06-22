@@ -201,6 +201,7 @@ MonoBehaviour:
   m_risingFadingTextTemplate: {fileID: 4912411465336466117, guid: 0a8ab97e9f7b7ef47acb17384c63233a,
     type: 3}
   m_healthBarRef: {fileID: 8534694074675028641}
+  m_statHandler: {fileID: 0}
   m_invalidFlingCross: {fileID: 56368311167889690}
 --- !u!1 &4917926080148449389
 GameObject:
@@ -434,6 +435,12 @@ PrefabInstance:
       propertyPath: m_Color.b
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3853683323552886618, guid: 688cedeb614fed54b951ebf40cfa3a62,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: ed2d780efb5c7d74c9f3369c10e8e8ad,
+        type: 3}
     - target: {fileID: 3871167508993658042, guid: 688cedeb614fed54b951ebf40cfa3a62,
         type: 3}
       propertyPath: m_RootOrder

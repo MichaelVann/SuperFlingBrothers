@@ -81,6 +81,6 @@ public class DamageRipple : MonoBehaviour
         }
 
 
-        m_spriteRenderer.color = new Color(redFactor, greenFactor, blueFactor, colorFactor);
+        m_spriteRenderer.color = new Color(redFactor, 0f, 0f, colorFactor);
     }
 }

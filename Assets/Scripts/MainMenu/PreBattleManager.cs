@@ -31,6 +31,12 @@ public class PreBattleManager : MonoBehaviour
         SceneManager.LoadScene("Battle");
     }
 
+    public void Back()
+    {
+        SceneManager.LoadScene("Main Menu");
+
+    }
+
     // Update is called once per frame
     void Update()
     {

@@ -23,8 +23,8 @@ public class Enemy : Damageable
     float m_xpTextYOffset = 0.2f;
 
     float m_sightRadius = 4f;
-    float m_flingTimer = 0f;
-    float m_flingTimerMax = 3f;
+    public float m_flingTimer = 0f;
+    public float m_flingTimerMax = 3f;
 
     float m_flingAccuracy = 20f;
 
@@ -113,6 +113,7 @@ public class Enemy : Damageable
     {
         m_battleManagerRef.ChangeScore(m_scoreValue);
         m_gameHandlerRef.m_playerStatHandler.ChangeXP(m_xpReward);
+        m_battleManagerRef.ChangeXp(m_xpReward);
 
         RisingFadingText xpText = Instantiate(m_risingFadingTextTemplate, transform.position + new Vector3(0f, m_xpTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
         xpText.SetTextContent("XP +" + m_xpReward);
@@ -135,6 +136,7 @@ public class Enemy : Damageable
                     j--;
                 }
             }
+
             Vector3 spawnLocation = new Vector3(m_coinSpawnOffset, 0f, 0f);
             spawnLocation = Quaternion.AngleAxis(spawnDirection[i], Vector3.forward) * spawnLocation;
             Instantiate<GameObject>(m_coinPrefab, transform.position + spawnLocation, new Quaternion());
@@ -167,17 +169,23 @@ public class Enemy : Damageable
     //AI
     private void AIUpdate()
     {
-        if(true)
+        if (m_playerRef)
         {
-            m_flingTimer += Time.deltaTime;
-            if (m_flingTimer >= m_flingTimerMax)
-            {
-                m_flingTimer -= m_flingTimerMax;
+            Vector3 playerPos = m_playerRef.transform.position;
 
-                Fling();
+            if ((playerPos - transform.position).magnitude <= m_sightRadius)
+            {
+                m_flingTimer += Time.deltaTime;
+                if (m_flingTimer >= m_flingTimerMax)
+                {
+                    m_flingTimer -= m_flingTimerMax;
+
+                    Fling();
+                }
+                return;
             }
-            return;
         }
+        
 
         //m_flingTimer += Time.deltaTime;
         //if (m_battleManagerRef.m_frozen)//m_flingTimer >= m_flingTimerMax)

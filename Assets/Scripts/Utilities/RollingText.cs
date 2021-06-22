@@ -18,10 +18,16 @@ public class RollingText : MonoBehaviour
         m_desiredValue = a_value;
     }
 
+    public void SetCurrentValue(int a_value)
+    {
+        m_currentValue = a_value;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
         m_localTextRef = GetComponent<Text>();
+        m_localTextRef.text = "" + m_currentValue;
     }
 
     // Update is called once per frame

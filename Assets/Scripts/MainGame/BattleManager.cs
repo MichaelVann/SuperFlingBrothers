@@ -29,6 +29,7 @@ public class BattleManager : MonoBehaviour
     public bool m_victory;
 
     public float m_score = 0f;
+    public float m_xpEarned = 0f;
 
     public int m_enemyCount = 0;
 
@@ -53,6 +54,7 @@ public class BattleManager : MonoBehaviour
     }
 
     public void ChangeScore(float a_change) { m_score += a_change; }
+    public void ChangeXp(float a_change) { m_xpEarned += a_change; }
 
     public void CalculateFinishedGame()
     {
@@ -134,8 +136,8 @@ public class BattleManager : MonoBehaviour
 
     void FinishGame()
     {
-        m_gameHandlerRef.ChangeCash((int)m_score);
         m_gameHandlerRef.m_goldEarnedLastGame = m_score;
+        m_gameHandlerRef.m_xpEarnedLastGame = m_score;
         //Go to post game screen
         Time.timeScale = 1f;
         SceneManager.LoadScene("Post Battle");
