@@ -7,6 +7,9 @@ public class Enemy : Damageable
 {
     Player m_playerRef;
     public GameObject m_coinPrefab;
+
+    public GameObject[] m_exclamationMarkRefs;
+
     enum EnemyType
     {
         Idlers,
@@ -139,10 +142,29 @@ public class Enemy : Damageable
 
             Vector3 spawnLocation = new Vector3(m_coinSpawnOffset, 0f, 0f);
             spawnLocation = Quaternion.AngleAxis(spawnDirection[i], Vector3.forward) * spawnLocation;
-            Instantiate<GameObject>(m_coinPrefab, transform.position + spawnLocation, new Quaternion());
+            spawnLocation = transform.position + spawnLocation;
+
+            
+            float xClamp = 2.1f;
+            float yClamp = 3.52f;
+            float xClampYCutoff = 3.148f;
+            float yClampXCutoff = 1.527f;
+
+            //Make sure the coins dont spawn inside the pockets
+            if (spawnLocation.y > xClampYCutoff)
+            {
+                float sin = Mathf.Sin(((spawnLocation.y - xClampYCutoff) / (yClamp - xClampYCutoff)) * Mathf.PI / 2f);
+                xClamp = yClampXCutoff + (1f-sin) * (xClamp-yClampXCutoff); 
+            }
+            else if (spawnLocation.y < -xClampYCutoff)
+            {
+                float sin = Mathf.Sin((spawnLocation.y + xClampYCutoff) / (-yClamp + xClampYCutoff) * Mathf.PI / 2f);
+                xClamp = yClampXCutoff + (1f-sin) * (xClamp - yClampXCutoff);
+            }
+
+            spawnLocation = new Vector3(Mathf.Clamp(spawnLocation.x, -xClamp, xClamp), Mathf.Clamp(spawnLocation.y, -3.52f, 3.52f), spawnLocation.z);
+            Instantiate<GameObject>(m_coinPrefab, spawnLocation, new Quaternion());
         }
-
-
 
         base.Die();
     }
@@ -175,6 +197,10 @@ public class Enemy : Damageable
 
             if ((playerPos - transform.position).magnitude <= m_sightRadius)
             {
+                for (int i = 0; i < m_exclamationMarkRefs.Length; i++)
+                {
+                    m_exclamationMarkRefs[i].SetActive(true);
+                }
                 m_flingTimer += Time.deltaTime;
                 if (m_flingTimer >= m_flingTimerMax)
                 {
@@ -183,6 +209,13 @@ public class Enemy : Damageable
                     Fling();
                 }
                 return;
+            }
+            else
+            {
+                for (int i = 0; i < m_exclamationMarkRefs.Length; i++)
+                {
+                    m_exclamationMarkRefs[i].SetActive(false);
+                }
             }
         }
         

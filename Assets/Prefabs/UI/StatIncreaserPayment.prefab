@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 4187126127657771569}
   - component: {fileID: 4187126127657771568}
   m_Layer: 5
-  m_Name: StatIncreaser 1
+  m_Name: StatIncreaserPayment
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -133,7 +133,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_statIndex: 4
   m_statCounter: {fileID: 4187126126971744415}
-  m_costCounter: {fileID: 4576391679364503169}
+  m_increaseButton: {fileID: 4187126127777350747}
 --- !u!1 &4187126127777350745
 GameObject:
   m_ObjectHideFlags: 0
@@ -511,18 +511,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 4187126126853851568}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4576391679364503169 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 403409697349214001, guid: e5d81fb0af312674dbe6927966774517,
-    type: 3}
-  m_PrefabInstance: {fileID: 4187126126853851568}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e90279b8852aacd4a95a00ad179fb755, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &4576391679314685870
 PrefabInstance:
   m_ObjectHideFlags: 0

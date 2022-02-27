@@ -8,6 +8,7 @@ public class MainMenuHandler : MonoBehaviour
     GameHandler m_gameHandlerRef;
     public GameObject m_titleMenuRef;
     public GameObject m_characterMenuRef;
+    public GameObject m_upgradeMenuRef;
 
     // Start is called before the first frame update
     void Start()
@@ -30,12 +31,20 @@ public class MainMenuHandler : MonoBehaviour
     {
         m_titleMenuRef.SetActive(true);
         m_characterMenuRef.SetActive(false);
+        m_upgradeMenuRef.SetActive(false);
     }
 
     public void CharacterPressed()
     {
         m_titleMenuRef.SetActive(false);
         m_characterMenuRef.SetActive(true);
+
+    }
+    public void UpgradePressed()
+    {
+        m_titleMenuRef.SetActive(false);
+        m_characterMenuRef.SetActive(false);
+        m_upgradeMenuRef.SetActive(true);
 
     }
 }

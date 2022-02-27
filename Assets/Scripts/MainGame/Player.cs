@@ -92,8 +92,8 @@ public class Player : Damageable
             linePositions[1] = transform.position - deltaMousePos;
 
             m_flingLine.SetPositions(linePositions);
+            
             //If the release point is outside the map, cancel the shot
-
             if (!Input.GetMouseButton(0))
             {
                 if (worldMousePoint.y < m_upperLowerFlingPositionBounds && worldMousePoint.y > -m_upperLowerFlingPositionBounds)
@@ -121,9 +121,9 @@ public class Player : Damageable
     public override void OnCollisionEnter2D(Collision2D a_collision)
     {
         Enemy enemy = a_collision.gameObject.GetComponent<Enemy>();
-        if (enemy)
+        if (enemy)//If collided with an enemy
         {
-            if (m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue <= 1f)// || enemy.m_stats.health <= 1f)
+            if (m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue <= m_statHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue/3f)//
             {
                 if (!m_battleManagerRef.m_endingGame)
                 {
@@ -132,6 +132,7 @@ public class Player : Damageable
                 }
             }
         }
+
         switch (m_gameHandlerRef.m_currentGameMode)
         {
             case GameHandler.eGameMode.TurnLimit:
@@ -156,6 +157,12 @@ public class Player : Damageable
             default:
                 break;
         }
+    }
+
+    public override void Damage(float a_damage)
+    {
+        base.Damage(a_damage);
+        m_battleManagerRef.m_healthBarRef.SetBarValue(m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue);
     }
 
     public override void Update()

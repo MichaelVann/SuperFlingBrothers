@@ -3,12 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class BattleManager : MonoBehaviour
 {
     public GameHandler m_gameHandlerRef;
     public GameObject m_gameHandlerTemplate;
     UIHandler m_uiHandlerRef;
+
+    public Image m_fadeToBlackRef;
+
+    public UIBar m_healthBarRef;
 
     public int m_turnsRemaining;
     public float m_turnInterval;
@@ -25,7 +30,7 @@ public class BattleManager : MonoBehaviour
     public bool m_endingGame = false;
     public float m_gameEndSlowdownFactor = 0.25f;
     public float m_gameEndTimer = 0f;
-    public const float m_maxGameEndTimer = 1f;
+    public const float m_maxGameEndTimer = 0.55f;
     public bool m_victory;
 
     public float m_score = 0f;
@@ -75,6 +80,8 @@ public class BattleManager : MonoBehaviour
         {
             m_turnsRemaining = 0;
         }
+
+        m_healthBarRef.Init(m_gameHandlerRef.m_playerStatHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue, m_gameHandlerRef.m_playerStatHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue);
     }
 
     public void ChangeEnemyCount(int a_change)
@@ -158,6 +165,7 @@ public class BattleManager : MonoBehaviour
     void UpdateGameEnding()
     {
         m_gameEndTimer += Time.deltaTime;
+        m_fadeToBlackRef.color = new Color(0f, 0f, 0f, m_gameEndTimer / m_maxGameEndTimer);
         if (m_gameEndTimer >= m_maxGameEndTimer)
         {
             FinishGame();

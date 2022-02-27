@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class VelocityIndicator : MonoBehaviour
 {
+
+    struct MyStruct
+    {
+
+    }
+
     Rigidbody2D m_rigidBodyRef;
     LineRenderer m_lineRendererRef;
     Vector3[] m_linePositions;
