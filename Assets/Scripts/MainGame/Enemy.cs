@@ -119,6 +119,9 @@ public class Enemy : Damageable
         m_battleManagerRef.ChangeXp(m_xpReward);
 
         RisingFadingText xpText = Instantiate(m_risingFadingTextTemplate, transform.position + new Vector3(0f, m_xpTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
+        xpText.SetGravityAffected(false);
+        xpText.SetHorizontalSpeed(0f);
+        xpText.SetLifeTimerMax(1.25f);
         xpText.SetTextContent("XP +" + m_xpReward);
         xpText.SetOriginalColor(Color.cyan);
 

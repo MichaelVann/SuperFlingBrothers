@@ -115,6 +115,7 @@ public class Damageable : BaseObject
             m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue = Mathf.Clamp(m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue, m_statHandler.m_stats[(int)eStatIndices.minHealth].effectiveValue, m_statHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue);
             Instantiate(m_collisionSparkTemplate, transform.position, new Quaternion(), transform);
             RisingFadingText damageText = Instantiate(m_risingFadingTextTemplate, transform.position + new Vector3(0f, m_damageTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
+            damageText.SetGravityAffected(true);
             damageText.SetTextContent(a_damage);
             damageText.SetOriginalColor(Color.white);
         }
