@@ -23,8 +23,8 @@ public class RisingFadingText : MonoBehaviour
     {
         m_originalColor = GetComponent<Text>().color;
         m_originalPosition = transform.position;
-        m_horizontalSpeed = UnityEngine.Random.Range(-0.3f, 0.3f);
-        m_risingSpeed = UnityEngine.Random.Range(0.25f, 0.3f);
+        m_horizontalSpeed = Random.Range(-0.3f, 0.3f);
+        m_risingSpeed = Random.Range(0.25f, 0.3f);
     }
 
     public void SetOriginalColor(Color a_color)
