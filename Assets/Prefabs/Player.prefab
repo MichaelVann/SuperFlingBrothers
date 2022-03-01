@@ -81,6 +81,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!58 &4759356070379259121
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3415713774475346299}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1.21
 --- !u!120 &715010997725247709
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -194,11 +210,11 @@ MonoBehaviour:
   m_lastMomentumMagnitude: 0
   m_originalMass: 0
   m_originalColor: {r: 0, g: 0, b: 0, a: 0}
-  m_explosionTemplate: {fileID: 8455903170808272189, guid: c2dfda481e8668a48b2f4f8b329a630b,
+  m_explosionPrefab: {fileID: 8455903170808272189, guid: c2dfda481e8668a48b2f4f8b329a630b,
     type: 3}
-  m_collisionSparkTemplate: {fileID: 6944767100431712336, guid: 4f654a616ba98a343a0d9c56bd0d51d2,
+  m_collisionSparkPrefab: {fileID: 6944767100431712336, guid: 4f654a616ba98a343a0d9c56bd0d51d2,
     type: 3}
-  m_risingFadingTextTemplate: {fileID: 4912411465336466117, guid: 0a8ab97e9f7b7ef47acb17384c63233a,
+  m_risingFadingTextPrefab: {fileID: 4912411465336466117, guid: 0a8ab97e9f7b7ef47acb17384c63233a,
     type: 3}
   m_healthBarRef: {fileID: 8534694074675028641}
   m_statHandler: {fileID: 0}

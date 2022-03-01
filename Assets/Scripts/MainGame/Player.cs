@@ -5,6 +5,8 @@ using UnityEngine;
 public class Player : Damageable
 {
     Camera m_cameraRef;
+    BattleManager m_battleManagerRef;
+
 
     bool m_flinging = false;
     Vector3 m_originalFlingPos;
@@ -23,6 +25,13 @@ public class Player : Damageable
 
     public SpriteRenderer m_invalidFlingCross;
 
+    //Coins
+    float m_damageTextYOffset = 0.2f;
+    float m_cumulativeCoinValue = 0f;
+    float m_coinPickupTimeout = 0;
+    float m_coinPickupTimeoutMax = 1.3f;
+    RisingFadingText m_coinValueText;
+
     public override void Awake()
     {
         base.Awake();
@@ -31,9 +40,7 @@ public class Player : Damageable
         m_flingLine.endColor = Color.white;
         m_flingLine.startWidth = 0.05f;
         m_flingLine.endWidth = 0.02f;
-
         m_cameraRef = FindObjectOfType<Camera>();
-
     }
 
     public override void Start()
@@ -42,6 +49,8 @@ public class Player : Damageable
         m_statHandler = m_gameHandlerRef.m_playerStatHandler;
         m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue = m_statHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue;
         m_healthBarRef.SetMaxProgressValue(m_statHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue);
+        m_battleManagerRef = FindObjectOfType<BattleManager>();
+        m_damageTextColor = Color.red;
     }
 
     public override void Fling(Vector3 a_flingVector, float a_flingStrength)
@@ -138,10 +147,13 @@ public class Player : Damageable
             case GameHandler.eGameMode.TurnLimit:
                 break;
             case GameHandler.eGameMode.Health:
-                base.OnCollisionEnter2D(a_collision);
                 if (a_collision.gameObject.GetComponent<Pocket>())
                 {
                     Damage(m_battleManagerRef.m_pocketDamage);
+                }
+                else
+                {
+                    base.OnCollisionEnter2D(a_collision);
                 }
                 break;
             case GameHandler.eGameMode.Pockets:
@@ -156,6 +168,32 @@ public class Player : Damageable
                 break;
             default:
                 break;
+        }
+    }
+    public void OnTriggerEnter2D(Collider2D a_collider)
+    {
+        if (a_collider.gameObject.GetComponent<Coin>())
+        {
+            m_battleManagerRef.ChangeScore(m_battleManagerRef.m_coinValue);
+
+            if (m_coinValueText == null)
+            {
+                m_coinValueText = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(0f, m_damageTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
+                m_cumulativeCoinValue = 0f;
+                m_coinValueText.SetImageEnabled(true);
+                m_coinValueText.SetOriginalColor(Color.magenta);
+                m_coinValueText.SetOriginalScale(1.2f);
+                m_coinValueText.SetLifeTimerMax(1.35f);
+            }
+            else
+            {
+                m_coinValueText.SetLifeTimer(0f);
+                m_coinValueText.SetOriginalPosition(transform.position + new Vector3(0f, m_damageTextYOffset));
+            }
+            m_cumulativeCoinValue += m_battleManagerRef.m_coinValue;
+
+            m_coinValueText.SetTextContent("+" + m_cumulativeCoinValue);
+            Destroy(a_collider.gameObject);
         }
     }
 
@@ -177,7 +215,6 @@ public class Player : Damageable
                 m_hitSlowdownActive = false;
                 m_enemyHitTimer = 0f;
                 Time.timeScale = 1f;
-
             }
         }
     }

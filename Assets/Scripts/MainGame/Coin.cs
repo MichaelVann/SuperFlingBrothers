@@ -6,12 +6,12 @@ public class Coin : MonoBehaviour
 {
     BattleManager m_battleManagerRef;
     Player m_playerRef;
-    float m_coinValue = 1f;
+    //float m_coinValue = 1f;
 
     float m_speed = 5f;
 
-    public GameObject m_risingTextPrefab;
-    float m_damageTextYOffset = 0.2f;
+    //public GameObject m_risingTextPrefab;
+    //float m_damageTextYOffset = 0.2f;
 
     // Start is called before the first frame update
     void Start()
@@ -34,11 +34,6 @@ public class Coin : MonoBehaviour
     {
         if (a_collider.gameObject.GetComponent<Player>())
         {
-            FindObjectOfType<BattleManager>().ChangeScore(m_coinValue);
-
-            RisingFadingText valueText = Instantiate(m_risingTextPrefab, transform.position + new Vector3(0f, m_damageTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
-            valueText.SetTextContent("+" + m_coinValue);
-            valueText.SetOriginalColor(Color.yellow);
             Destroy(this.gameObject);
         }
     }

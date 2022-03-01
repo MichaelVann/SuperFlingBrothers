@@ -48,6 +48,7 @@ public class Enemy : Damageable
         m_battleManagerRef.ChangeEnemyCount(1);
         m_playerRef = FindObjectOfType<Player>();
         m_flingTimer -= UnityEngine.Random.Range(0f, 0.3f);
+        m_damageTextColor = Color.yellow;
     }
 
     public void Copy(Damageable a_ref)
@@ -118,12 +119,14 @@ public class Enemy : Damageable
         m_gameHandlerRef.m_playerStatHandler.ChangeXP(m_xpReward);
         m_battleManagerRef.ChangeXp(m_xpReward);
 
-        RisingFadingText xpText = Instantiate(m_risingFadingTextTemplate, transform.position + new Vector3(0f, m_xpTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
+        RisingFadingText xpText = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(0f, m_xpTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
+        xpText.SetImageEnabled(false);
         xpText.SetGravityAffected(false);
         xpText.SetHorizontalSpeed(0f);
-        xpText.SetLifeTimerMax(1.25f);
+        xpText.SetLifeTimerMax(1.35f);
         xpText.SetTextContent("XP +" + m_xpReward);
         xpText.SetOriginalColor(Color.cyan);
+        xpText.SetOriginalScale(1.2f);
 
         m_battleManagerRef.ChangeEnemyCount(-1);
 

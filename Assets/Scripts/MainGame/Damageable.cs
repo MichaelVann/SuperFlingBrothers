@@ -15,11 +15,12 @@ public class Damageable : BaseObject
     public float m_originalMass;
     public Color m_originalColor;
 
-    public GameObject m_explosionTemplate;
-    public GameObject m_collisionSparkTemplate;
+    public GameObject m_explosionPrefab;
+    public GameObject m_collisionSparkPrefab;
 
-    public GameObject m_risingFadingTextTemplate;
+    public GameObject m_risingFadingTextPrefab;
     float m_damageTextYOffset = 0.2f;
+    protected Color m_damageTextColor = Color.yellow;
 
     static Func<int, Collision2D> CollisionFuncPTR = null;
 
@@ -35,6 +36,7 @@ public class Damageable : BaseObject
     bool m_clearVelocityOption = true;
 
     public StatHandler m_statHandler;
+    int m_tempCount = 0;
 
     public float GetHealthPercentage() { return m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue / m_statHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue; }
 
@@ -113,11 +115,12 @@ public class Damageable : BaseObject
         {
             m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue -= a_damage;
             m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue = Mathf.Clamp(m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue, m_statHandler.m_stats[(int)eStatIndices.minHealth].effectiveValue, m_statHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue);
-            Instantiate(m_collisionSparkTemplate, transform.position, new Quaternion(), transform);
-            RisingFadingText damageText = Instantiate(m_risingFadingTextTemplate, transform.position + new Vector3(0f, m_damageTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
+            Instantiate(m_collisionSparkPrefab, transform.position, new Quaternion(), transform);
+            RisingFadingText damageText = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(0f, m_damageTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
+            damageText.SetImageEnabled(false);
             damageText.SetGravityAffected(true);
             damageText.SetTextContent(a_damage);
-            damageText.SetOriginalColor(Color.white);
+            damageText.SetOriginalColor(m_damageTextColor);
         }
         if(m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue <= m_statHandler.m_stats[(int)eStatIndices.minHealth].effectiveValue)
         {
@@ -137,7 +140,7 @@ public class Damageable : BaseObject
 
     public virtual void Die()
     {
-        Instantiate(m_explosionTemplate, transform.position, new Quaternion());
+        Instantiate(m_explosionPrefab, transform.position, new Quaternion());
         Destroy(gameObject);
     }
 
@@ -155,6 +158,7 @@ public class Damageable : BaseObject
 
     public override void Update()
     {
+        m_tempCount++;
         base.Update();
         m_lastMomentumMagnitude = m_rigidBody.velocity.magnitude * m_rigidBody.mass;
         SecondFlingUpdate();

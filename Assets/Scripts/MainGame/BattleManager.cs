@@ -44,6 +44,8 @@ public class BattleManager : MonoBehaviour
     float m_scoreGained = 0f;
     float m_bonusTimeScoreGained = 0f;
 
+    public float m_coinValue = 1f;
+
     public float GetMaxGameEndTimer()
     {
         return m_maxGameEndTimer;

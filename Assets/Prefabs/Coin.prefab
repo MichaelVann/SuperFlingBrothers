@@ -96,8 +96,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9873a433e5751740af70a73fe8ac4ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_risingTextPrefab: {fileID: 4912411465336466117, guid: 0a8ab97e9f7b7ef47acb17384c63233a,
-    type: 3}
 --- !u!58 &5526571407082575671
 CircleCollider2D:
   m_ObjectHideFlags: 0
