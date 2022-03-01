@@ -109,6 +109,7 @@ public class Damageable : BaseObject
         }
     }
 
+    //Damages the damageable
     public virtual void Damage(float a_damage)
     {
         if (m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue > m_statHandler.m_stats[(int)eStatIndices.minHealth].effectiveValue)
