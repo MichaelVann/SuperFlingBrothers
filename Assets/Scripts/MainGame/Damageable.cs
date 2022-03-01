@@ -112,17 +112,25 @@ public class Damageable : BaseObject
     //Damages the damageable
     public virtual void Damage(float a_damage)
     {
+        //If the damageables health is above it's minimum health
         if (m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue > m_statHandler.m_stats[(int)eStatIndices.minHealth].effectiveValue)
         {
+            //Damage it
             m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue -= a_damage;
             m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue = Mathf.Clamp(m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue, m_statHandler.m_stats[(int)eStatIndices.minHealth].effectiveValue, m_statHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue);
+
+            //Spawn collision sparks
             Instantiate(m_collisionSparkPrefab, transform.position, new Quaternion(), transform);
+
+            //Spawn damage text
             RisingFadingText damageText = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(0f, m_damageTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
             damageText.SetImageEnabled(false);
             damageText.SetGravityAffected(true);
             damageText.SetTextContent(a_damage);
             damageText.SetOriginalColor(m_damageTextColor);
         }
+
+        //If the dmgble is below minimum health
         if(m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue <= m_statHandler.m_stats[(int)eStatIndices.minHealth].effectiveValue)
         {
             if (m_gameHandlerRef.m_currentGameMode == GameHandler.eGameMode.Health)
