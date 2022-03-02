@@ -6,12 +6,8 @@ public class Coin : MonoBehaviour
 {
     BattleManager m_battleManagerRef;
     Player m_playerRef;
-    //float m_coinValue = 1f;
 
     float m_speed = 5f;
-
-    //public GameObject m_risingTextPrefab;
-    //float m_damageTextYOffset = 0.2f;
 
     // Start is called before the first frame update
     void Start()
@@ -23,8 +19,10 @@ public class Coin : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //If the player has won the game
         if (m_battleManagerRef.m_endingGame && m_battleManagerRef.m_victory)
         {
+            //Fly the coin towards the player
             transform.position += (m_playerRef.transform.position - transform.position).normalized * m_speed * Time.deltaTime;
             m_speed = Mathf.Pow(m_speed, 1.003f);
         }
@@ -32,8 +30,10 @@ public class Coin : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D a_collider)
     {
+        //If the coin collides with the player
         if (a_collider.gameObject.GetComponent<Player>())
         {
+            //Destroy the coin
             Destroy(this.gameObject);
         }
     }

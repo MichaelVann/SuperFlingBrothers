@@ -22,19 +22,11 @@ public class DamageRipple : MonoBehaviour
         m_spriteRenderer.sprite = m_sprites[0];
         m_damageableRef = GetComponentInParent<Damageable>();
         m_healthColours = new Color[] { Color.red, Color.yellow, Color.green};
-
     }
 
-    // Update is called once per frame
-    void Update()
+    //Updates the color of the ripple depending on the health of it's associated damageable
+    void ColorUpdate()
     {
-        m_animationTimer += Time.deltaTime;
-        if (m_animationTimer >= m_frameLength)
-        {
-            m_animationTimer = 0f;
-            m_spriteIndex = (m_spriteIndex + 1) % m_sprites.Length;
-            m_spriteRenderer.sprite = m_sprites[m_spriteIndex];
-        }
         float healthPerc = m_damageableRef.GetHealthPercentage();
         float colorFactor = 1f - healthPerc;//1f - 0.4f * m_damageableRef.GetHealthPercentage();
 
@@ -51,7 +43,7 @@ public class DamageRipple : MonoBehaviour
         }
         else
         {
-            redFactor = Mathf.Clamp(1f - (4f*(healthPerc -0.25f)),0f,1f);
+            redFactor = Mathf.Clamp(1f - (4f * (healthPerc - 0.25f)), 0f, 1f);
         }
 
         float greenFactor = 0f;
@@ -80,7 +72,22 @@ public class DamageRipple : MonoBehaviour
             blueFactor = Mathf.Clamp(1f + (4f * (healthPerc - 0.75f)), 0f, 1f);
         }
 
-
         m_spriteRenderer.color = new Color(redFactor, 0f, 0f, colorFactor);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        m_animationTimer += Time.deltaTime;
+        float scale = 0.5f + 1f * (m_animationTimer * m_frameLength);
+        transform.localScale = new Vector3(scale,scale,1f);
+
+        if (m_animationTimer >= m_frameLength)
+        {
+            m_animationTimer = 0f;
+            m_spriteIndex = (m_spriteIndex + 1) % m_sprites.Length;
+            m_spriteRenderer.sprite = m_sprites[m_spriteIndex];
+        }
+        ColorUpdate();
     }
 }

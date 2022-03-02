@@ -59,6 +59,7 @@ public class Enemy : Damageable
         UpdateHealthColor();
     }
 
+    //Duplicates a new enemy heading in the opposite direction
     void Duplicate()
     {
         Vector3 normalisedVelocity = m_rigidBody.velocity.normalized;
@@ -68,6 +69,7 @@ public class Enemy : Damageable
         clonedEnemy.m_rigidBody.velocity = -m_rigidBody.velocity;
         clonedEnemy.Copy(this);
     }
+
 
     void DuplicationUpdate()
     {
@@ -132,6 +134,7 @@ public class Enemy : Damageable
 
         float[] spawnDirection;
 
+        //Spawn coins
         for (int i = 0; i < m_coinsToSpawn; i++)
         {
             spawnDirection = new float[m_coinsToSpawn];
