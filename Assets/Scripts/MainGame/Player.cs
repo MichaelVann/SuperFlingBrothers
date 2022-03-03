@@ -47,8 +47,8 @@ public class Player : Damageable
     {
         base.Start();
         m_statHandler = m_gameHandlerRef.m_playerStatHandler;
-        m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue = m_statHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue;
-        m_healthBarRef.SetMaxProgressValue(m_statHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue);
+        m_health = m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue;
+        m_healthBarRef.SetMaxProgressValue(m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue);
         m_battleManagerRef = FindObjectOfType<BattleManager>();
         m_damageTextColor = Color.red;
     }
@@ -107,7 +107,7 @@ public class Player : Damageable
             {
                 if (worldMousePoint.y < m_upperLowerFlingPositionBounds && worldMousePoint.y > -m_upperLowerFlingPositionBounds)
                 {
-                    Fling(deltaMousePos, m_statHandler.m_stats[(int)eStatIndices.flingStrength].effectiveValue);
+                    Fling(deltaMousePos, m_statHandler.m_stats[(int)eStatIndices.dexterity].finalValue);
                 }
                 else
                 {
@@ -132,7 +132,7 @@ public class Player : Damageable
         Enemy enemy = a_collision.gameObject.GetComponent<Enemy>();
         if (enemy)//If collided with an enemy
         {
-            if (m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue <= m_statHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue/3f)//
+            if (m_health <= m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue / 3f)//
             {
                 if (!m_battleManagerRef.m_endingGame)
                 {
@@ -159,7 +159,7 @@ public class Player : Damageable
             case GameHandler.eGameMode.Pockets:
                 if (a_collision.gameObject.GetComponent<Pocket>())
                 {
-                    if (m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue <= m_statHandler.m_stats[(int)eStatIndices.minHealth].effectiveValue)
+                    if (m_health <= 0f)
                     {
                         Die();
                     }
@@ -200,7 +200,7 @@ public class Player : Damageable
     public override void Damage(float a_damage)
     {
         base.Damage(a_damage);
-        m_battleManagerRef.m_healthBarRef.SetBarValue(m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue);
+        m_battleManagerRef.m_healthBarRef.SetBarValue(m_health);
     }
 
     public override void Update()

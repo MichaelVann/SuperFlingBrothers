@@ -8,10 +8,6 @@ public enum eStatIndices
     strength,
     dexterity,
     constitution,
-    flingStrength,
-    health,
-    maxHealth,
-    minHealth,
     count
 }
 
@@ -23,6 +19,7 @@ public struct Stat
     public float scale;
     public float postAddedValue;
     public float effectiveValue;
+    public float finalValue;
     public float originalCost;
     public float cost;
     public float costIncreaseRate;
@@ -31,10 +28,10 @@ public struct Stat
 
 public class StatHandler : MonoBehaviour
 {
-    public int m_XP = 0;
-    public int m_maxXP = 83 / 4;
-    public int m_level = 1;
-    public int m_allocationPoints = 0;
+    internal int m_XP = 0;
+    internal int m_maxXP = 83 / 4;
+    internal int m_level = 1;
+    internal int m_allocationPoints = 0;
 
     public int m_DNA = 0;
 
@@ -42,9 +39,9 @@ public class StatHandler : MonoBehaviour
 
     const float m_baseHealthScale = 4f;
 
-    public float GetStatValue(int a_index)
+    public float GetStatFinalValue(int a_index)
     {
-        return m_stats[a_index].effectiveValue;
+        return m_stats[a_index].finalValue;
     }
 
     public void ChangeScore(int a_change) { m_DNA += a_change; }
@@ -55,15 +52,18 @@ public class StatHandler : MonoBehaviour
         m_stats = new Stat[(int)eStatIndices.count];
         SetDefaultStats();
     }
-    public void UpdateEffectiveStat(eStatIndices a_index)
+    public void UpdateStat(eStatIndices a_index)
     {
-        m_stats[(int)a_index].effectiveValue = (m_stats[(int)a_index].value * m_stats[(int)a_index].scale) + m_stats[(int)a_index].postAddedValue;
+        Stat stat = m_stats[(int)a_index];
+        stat.effectiveValue = ((stat.value-1f) * stat.scale);
+        stat.finalValue = stat.effectiveValue + stat.postAddedValue;
+        m_stats[(int)a_index] = stat;
     }
 
     public void SetStatValue(eStatIndices a_index, float a_value)
     {
         m_stats[(int)a_index].value = a_value;
-        UpdateEffectiveStat(a_index);
+        UpdateStat(a_index);
 
         switch (a_index)
         {
@@ -72,15 +72,7 @@ public class StatHandler : MonoBehaviour
             case eStatIndices.dexterity:
                 break;
             case eStatIndices.constitution:
-                SetStatScale(eStatIndices.maxHealth, m_baseHealthScale * a_value);
-                break;
-            case eStatIndices.flingStrength:
-                break;
-            case eStatIndices.health:
-                break;
-            case eStatIndices.maxHealth:
-                break;
-            case eStatIndices.minHealth:
+                SetStatScale(eStatIndices.constitution, m_baseHealthScale * a_value);
                 break;
             case eStatIndices.count:
                 break;
@@ -97,13 +89,13 @@ public class StatHandler : MonoBehaviour
     public void SetStatScale(eStatIndices a_index, float a_value)
     {
         m_stats[(int)a_index].scale = a_value;
-        UpdateEffectiveStat(a_index);
+        UpdateStat(a_index);
     }
 
     public void SetStatPostAddedValue(eStatIndices a_index, float a_value)
     {
         m_stats[(int)a_index].postAddedValue = a_value;
-        UpdateEffectiveStat(a_index);
+        UpdateStat(a_index);
     }
 
     public void SetDefaultStats()
@@ -118,14 +110,13 @@ public class StatHandler : MonoBehaviour
             m_stats[i].postAddedValue = 0f;
         }
 
-        SetStatPostAddedValue(eStatIndices.flingStrength, 259f);
-        SetStatScale(eStatIndices.flingStrength, 20f);
+        SetStatPostAddedValue(eStatIndices.dexterity, 259f);
+        SetStatScale(eStatIndices.dexterity, 4f);
 
-        m_stats[(int)eStatIndices.health].scale = m_stats[(int)eStatIndices.maxHealth].scale = 4f;
-        SetStatValue(eStatIndices.maxHealth, 1f);
-        SetStatValue(eStatIndices.health, m_stats[(int)eStatIndices.maxHealth].value);
-        SetStatScale(eStatIndices.strength, 0.1f);
-        SetStatPostAddedValue(eStatIndices.strength, 1f);
+        m_stats[(int)eStatIndices.constitution].scale = 4f;
+        SetStatPostAddedValue(eStatIndices.constitution, 10f);
+        SetStatScale(eStatIndices.strength, 2f);
+        SetStatPostAddedValue(eStatIndices.strength, 3f);
     }
 
     public void AttemptToIncreaseStat(eStatIndices a_index)

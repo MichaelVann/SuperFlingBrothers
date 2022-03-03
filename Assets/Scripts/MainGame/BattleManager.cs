@@ -83,7 +83,7 @@ public class BattleManager : MonoBehaviour
             m_turnsRemaining = 0;
         }
 
-        m_healthBarRef.Init(m_gameHandlerRef.m_playerStatHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue, m_gameHandlerRef.m_playerStatHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue);
+        m_healthBarRef.Init(m_gameHandlerRef.m_playerStatHandler.m_stats[(int)eStatIndices.constitution].finalValue, m_gameHandlerRef.m_playerStatHandler.m_stats[(int)eStatIndices.constitution].finalValue);
     }
 
     public void ChangeEnemyCount(int a_change)

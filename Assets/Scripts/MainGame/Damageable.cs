@@ -36,15 +36,16 @@ public class Damageable : BaseObject
     bool m_clearVelocityOption = true;
 
     public StatHandler m_statHandler;
-    int m_tempCount = 0;
+    internal float m_health;
 
-    public float GetHealthPercentage() { return m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue / m_statHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue; }
+    public float GetHealthPercentage() { return m_health / m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue; }
 
     public override void Awake()
     {
         base.Awake();
         m_statHandler = new StatHandler();
         m_statHandler.Init();
+        m_health = m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue;
         m_originalMass = m_rigidBody.mass;
         m_originalColor = m_spriteRenderer.color;
     }
@@ -55,7 +56,7 @@ public class Damageable : BaseObject
         m_gameHandlerRef = m_battleManagerRef.m_gameHandlerRef;
 
         UpdateHealthColor();
-        m_healthBarRef.SetMaxProgressValue(m_statHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue);
+        m_healthBarRef.SetMaxProgressValue(m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue);
 
     }
 
@@ -113,11 +114,11 @@ public class Damageable : BaseObject
     public virtual void Damage(float a_damage)
     {
         //If the damageables health is above it's minimum health
-        if (m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue > m_statHandler.m_stats[(int)eStatIndices.minHealth].effectiveValue)
+        if (m_health > 0f)
         {
             //Damage it
-            m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue -= a_damage;
-            m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue = Mathf.Clamp(m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue, m_statHandler.m_stats[(int)eStatIndices.minHealth].effectiveValue, m_statHandler.m_stats[(int)eStatIndices.maxHealth].effectiveValue);
+            m_health -= a_damage;
+            m_health = Mathf.Clamp(m_health, 0f, m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue);
 
             //Spawn collision sparks
             Instantiate(m_collisionSparkPrefab, transform.position, new Quaternion(), transform);
@@ -131,7 +132,7 @@ public class Damageable : BaseObject
         }
 
         //If the dmgble is below minimum health
-        if(m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue <= m_statHandler.m_stats[(int)eStatIndices.minHealth].effectiveValue)
+        if(m_health <= 0f)
         {
             if (m_gameHandlerRef.m_currentGameMode == GameHandler.eGameMode.Health)
             {
@@ -160,19 +161,18 @@ public class Damageable : BaseObject
         {
             if (oppDamageable.m_lastMomentumMagnitude >= m_lastMomentumMagnitude)
             {
-                Damage(oppDamageable.m_statHandler.m_stats[(int)eStatIndices.strength].effectiveValue * oppDamageable.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
+                Damage(oppDamageable.m_statHandler.m_stats[(int)eStatIndices.strength].finalValue * oppDamageable.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
             }
         }
     }
 
     public override void Update()
     {
-        m_tempCount++;
         base.Update();
         m_lastMomentumMagnitude = m_rigidBody.velocity.magnitude * m_rigidBody.mass;
         SecondFlingUpdate();
 
-        if (m_healthBarRef) { m_healthBarRef.SetProgressValue(m_statHandler.m_stats[(int)eStatIndices.health].effectiveValue); }
+        if (m_healthBarRef) { m_healthBarRef.SetProgressValue(m_health); }
         
     }
 }

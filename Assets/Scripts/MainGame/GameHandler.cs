@@ -34,9 +34,7 @@ public class GameHandler : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         m_playerStatHandler = gameObject.GetComponent<StatHandler>();
         m_playerStatHandler.Init();
-        m_playerStatHandler.SetStatValue(eStatIndices.flingStrength,2f);
-        m_playerStatHandler.SetStatValue(eStatIndices.constitution,2f);
-        m_playerStatHandler.m_stats[(int)eStatIndices.strength].effectiveValue = 1f;
+        //m_playerStatHandler.m_stats[(int)eStatIndices.strength].effectiveValue = 1f;
     }
 
 
