@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -14,15 +16,23 @@ public class GameHandler : MonoBehaviour
         Hunger,
         ModeCount
     }
+
     public eGameMode m_currentGameMode;
 
-    public StatHandler m_playerStatHandler;
+    internal StatHandler m_playerStatHandler;
     public int m_cash = 0;
 
     //Last Game
     public bool m_wonLastGame = false;
     public float m_xpEarnedLastGame = 0f;
     public float m_goldEarnedLastGame = 0f;
+
+    struct SaveData
+    {
+        public StatHandler statHandler;
+    }
+
+    
 
     public void SetLastGameResult(bool a_value) { m_wonLastGame = a_value; }
 
@@ -32,7 +42,8 @@ public class GameHandler : MonoBehaviour
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
-        m_playerStatHandler = gameObject.GetComponent<StatHandler>();
+        //m_playerStatHandler = gameObject.GetComponent<StatHandler>();
+        m_playerStatHandler = new StatHandler();
         m_playerStatHandler.Init();
         //m_playerStatHandler.m_stats[(int)eStatIndices.strength].effectiveValue = 1f;
     }
@@ -55,5 +66,38 @@ public class GameHandler : MonoBehaviour
         {
             m_playerStatHandler.ChangeXP(1);
         }
+        if (Input.GetKeyUp(KeyCode.S))
+        {
+            SaveGame();
+        }
+        if (Input.GetKeyUp(KeyCode.L))
+        {
+            LoadGame();
+        }
     }
+
+    public void SaveGame()
+    {
+        string path = Application.persistentDataPath + "/Data.txt";
+        //File.Create(path);
+        File.WriteAllText(path, JsonUtility.ToJson(m_playerStatHandler));
+
+        //SaveData data = new SaveData();
+        //data.statHandler = m_playerStatHandler;
+
+        //BinaryFormatter bf = new BinaryFormatter();
+        //FileStream file = File.Create(Application.persistentDataPath + "/BrainData.dat");
+        //bf.Serialize(file, data);
+        //file.Close();
+    }
+    public void LoadGame()
+    {
+        string path = Application.persistentDataPath + "/Data.txt";
+        
+        //m_playerStatHandler = JsonUtility.<StatHandler>(File.ReadAllText(path));
+        string loadedString = File.ReadAllText(path);
+        m_playerStatHandler = JsonUtility.FromJson<StatHandler>(loadedString);
+        //m_playerStatHandler = JsonUtility.FromJson<StatHandler>(File.ReadAllText(path));
+    }
+
 }

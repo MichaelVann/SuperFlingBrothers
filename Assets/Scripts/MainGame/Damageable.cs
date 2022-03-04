@@ -35,7 +35,7 @@ public class Damageable : BaseObject
 
     bool m_clearVelocityOption = true;
 
-    public StatHandler m_statHandler;
+    internal StatHandler m_statHandler;
     internal float m_health;
 
     public float GetHealthPercentage() { return m_health / m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue; }

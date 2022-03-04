@@ -7,7 +7,6 @@ public class Player : Damageable
     Camera m_cameraRef;
     BattleManager m_battleManagerRef;
 
-
     bool m_flinging = false;
     Vector3 m_originalFlingPos;
     const float m_maxFlingLength = 1f;

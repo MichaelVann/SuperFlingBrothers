@@ -11,7 +11,7 @@ public enum eStatIndices
     count
 }
 
-
+[Serializable]
 public struct Stat
 {
     public string name;
@@ -25,13 +25,13 @@ public struct Stat
     public float costIncreaseRate;
 }
 
-
-public class StatHandler : MonoBehaviour
+[Serializable]
+public class StatHandler
 {
-    internal int m_XP = 0;
-    internal int m_maxXP = 83 / 4;
-    internal int m_level = 1;
-    internal int m_allocationPoints = 0;
+    public int m_XP = 0;
+    public int m_maxXP = 83 / 4;
+    public int m_level = 1;
+    public int m_allocationPoints = 0;
 
     public int m_DNA = 0;
 
@@ -116,7 +116,7 @@ public class StatHandler : MonoBehaviour
         m_stats[(int)eStatIndices.constitution].scale = 4f;
         SetStatPostAddedValue(eStatIndices.constitution, 10f);
         SetStatScale(eStatIndices.strength, 2f);
-        SetStatPostAddedValue(eStatIndices.strength, 3f);
+        SetStatPostAddedValue(eStatIndices.strength, 5f);
     }
 
     public void AttemptToIncreaseStat(eStatIndices a_index)
