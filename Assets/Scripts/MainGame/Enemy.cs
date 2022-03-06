@@ -172,7 +172,8 @@ public class Enemy : Damageable
             }
 
             spawnLocation = new Vector3(Mathf.Clamp(spawnLocation.x, -xClamp, xClamp), Mathf.Clamp(spawnLocation.y, -3.52f, 3.52f), spawnLocation.z);
-            Instantiate<GameObject>(m_coinPrefab, spawnLocation, new Quaternion());
+            GameObject coin =Instantiate<GameObject>(m_coinPrefab, transform.position, new Quaternion());
+            coin.GetComponent<Coin>().Init(spawnLocation);
         }
 
         base.Die();

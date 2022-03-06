@@ -79,25 +79,13 @@ public class GameHandler : MonoBehaviour
     public void SaveGame()
     {
         string path = Application.persistentDataPath + "/Data.txt";
-        //File.Create(path);
         File.WriteAllText(path, JsonUtility.ToJson(m_playerStatHandler));
-
-        //SaveData data = new SaveData();
-        //data.statHandler = m_playerStatHandler;
-
-        //BinaryFormatter bf = new BinaryFormatter();
-        //FileStream file = File.Create(Application.persistentDataPath + "/BrainData.dat");
-        //bf.Serialize(file, data);
-        //file.Close();
     }
     public void LoadGame()
     {
         string path = Application.persistentDataPath + "/Data.txt";
-        
-        //m_playerStatHandler = JsonUtility.<StatHandler>(File.ReadAllText(path));
         string loadedString = File.ReadAllText(path);
         m_playerStatHandler = JsonUtility.FromJson<StatHandler>(loadedString);
-        //m_playerStatHandler = JsonUtility.FromJson<StatHandler>(File.ReadAllText(path));
     }
 
 }
