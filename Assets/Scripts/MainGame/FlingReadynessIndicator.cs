@@ -22,7 +22,6 @@ public class FlingReadynessIndicator : MonoBehaviour
         m_spriteRenderer.sprite = m_sprites[0];
         m_enemyRef = GetComponentInParent<Enemy>();
         m_healthColours = new Color[] { Color.red, Color.yellow, Color.green };
-
     }
 
     // Update is called once per frame
@@ -41,7 +40,5 @@ public class FlingReadynessIndicator : MonoBehaviour
         float colorFactor = Mathf.Pow(flingPercentage, 5f);
 
         m_spriteRenderer.color = new Color(colorFactor, colorFactor / 1.7f, 0f, 1f);
-
-
     }
 }

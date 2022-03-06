@@ -15,7 +15,6 @@ public static class VLib
         return truncatedFloat;
     }
 
-
     public static int SafeMod(int a_value, int a_mod)
     {
         return (a_value % a_mod + a_mod) % a_mod;

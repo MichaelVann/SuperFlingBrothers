@@ -32,7 +32,7 @@ public class GameHandler : MonoBehaviour
         public StatHandler statHandler;
     }
 
-    
+    //UpgradeItem
 
     public void SetLastGameResult(bool a_value) { m_wonLastGame = a_value; }
 
