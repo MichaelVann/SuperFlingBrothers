@@ -1,0 +1,81 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class UpgradeItemPanel : MonoBehaviour
+{
+    // Start is called before the first frame update
+    GameHandler m_gameHandlerRef;
+    UpgradesScreenHandler m_upgradeScreenHandler;
+    UpgradeItem m_upgradeRef;
+    public int m_upgradeID;
+
+    public Text m_nameTextRef;
+    public Text m_descriptionTextRef;
+    public Text m_costTextRef;
+    public Image m_imageRef;
+    public Button m_buyButtonRef;
+    public Text m_buyButtonTextRef;
+
+    void Start()
+    {
+
+    }
+
+    public void Init(int a_id)
+    {
+        m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        m_upgradeScreenHandler = FindObjectOfType<UpgradesScreenHandler>();
+
+        m_upgradeID = a_id;
+        m_upgradeRef = m_gameHandlerRef.m_upgrades[m_upgradeID];
+
+        Refresh();
+
+
+    }
+
+    public void Refresh()
+    {
+        m_imageRef.sprite = m_upgradeScreenHandler.m_upgradeSprites[m_upgradeID];
+        m_nameTextRef.text = m_upgradeRef.m_name;
+        m_descriptionTextRef.text = m_upgradeRef.m_description;
+        m_costTextRef.text = "Cost: " + m_upgradeRef.m_cost;
+
+        if (m_upgradeRef.m_owned)
+        {
+            SetBuyButtonToOwnedStatus();
+        }
+        else if (m_upgradeRef.m_cost > m_gameHandlerRef.m_cash)
+        {
+            DisableBuyButton();
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    void DisableBuyButton()
+    {
+        m_buyButtonRef.interactable = false;
+    }
+
+    void SetBuyButtonToOwnedStatus()
+    {
+        m_buyButtonRef.interactable = false;
+        m_buyButtonTextRef.text = "Owned";
+    }
+
+    public void AttemptToBuy()
+    {
+        if (m_upgradeScreenHandler.AttemptToBuyUpgrade(m_upgradeID))
+        {
+            SetBuyButtonToOwnedStatus();
+        }
+        
+    }
+}

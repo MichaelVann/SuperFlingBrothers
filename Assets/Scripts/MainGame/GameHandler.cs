@@ -32,8 +32,9 @@ public class GameHandler : MonoBehaviour
         public StatHandler statHandler;
     }
 
-    public UpgradeItem m_enemyVectorsUpgrade;
     public UpgradeItem[] m_upgrades;
+    public UpgradeItem m_enemyVectorsUpgrade;
+    public UpgradeItem m_shieldUpgrade;
 
     public void SetLastGameResult(bool a_value) { m_wonLastGame = a_value; }
 
@@ -48,14 +49,24 @@ public class GameHandler : MonoBehaviour
         m_playerStatHandler.Init();
         //m_playerStatHandler.m_stats[(int)eStatIndices.strength].effectiveValue = 1f;
 
-        m_upgrades = new UpgradeItem[1];
+        SetupUpgrades();
+    }
+
+    void SetupUpgrades()
+    {
+        m_upgrades = new UpgradeItem[2];
 
         m_enemyVectorsUpgrade = new UpgradeItem();
         m_enemyVectorsUpgrade.SetName("Enemy Vectors");
         m_enemyVectorsUpgrade.SetDescription("Shows the direction of all enemies movement");
-
         m_enemyVectorsUpgrade.SetCost(50);
         m_upgrades[0] = m_enemyVectorsUpgrade;
+
+        m_shieldUpgrade = new UpgradeItem();
+        m_shieldUpgrade.SetName("Shield");
+        m_shieldUpgrade.SetDescription("Enables a shield that protects the user from a limited amount of damage");
+        m_shieldUpgrade.SetCost(100);
+        m_upgrades[1] = m_shieldUpgrade;
     }
 
     internal bool AttemptToBuyUpgrade(int m_upgradeID)

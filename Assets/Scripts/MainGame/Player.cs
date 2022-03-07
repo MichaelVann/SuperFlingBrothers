@@ -31,6 +31,8 @@ public class Player : Damageable
     float m_coinPickupTimeoutMax = 1.3f;
     RisingFadingText m_coinValueText;
 
+    public Sprite m_shieldSprite;
+
     public override void Awake()
     {
         base.Awake();
