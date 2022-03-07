@@ -47,9 +47,9 @@ public class UpgradeItemPanel : MonoBehaviour
         {
             SetBuyButtonToOwnedStatus();
         }
-        else if (m_upgradeRef.m_cost > m_gameHandlerRef.m_cash)
+        else
         {
-            DisableBuyButton();
+            SetBuyButtonEnabled(m_gameHandlerRef.m_cash >= m_upgradeRef.m_cost);
         }
     }
 
@@ -59,9 +59,9 @@ public class UpgradeItemPanel : MonoBehaviour
 
     }
 
-    void DisableBuyButton()
+    void SetBuyButtonEnabled(bool a_enabled)
     {
-        m_buyButtonRef.interactable = false;
+        m_buyButtonRef.interactable = a_enabled;
     }
 
     void SetBuyButtonToOwnedStatus()

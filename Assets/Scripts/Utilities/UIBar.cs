@@ -32,11 +32,17 @@ public class UIBar : MonoBehaviour
 
     }
 
-    public void Init(float a_minValue, float a_maxValue)
+    public void Init(float a_currentValue, float a_maxValue)
     {
-        m_value = a_minValue;
+        m_value = a_currentValue;
         m_maxValue = a_maxValue;
         UpdateBarSprite();
+    }
+
+    //Sets the current and max of the bar to the value
+    public void Init(float a_maxValue)
+    {
+        Init(a_maxValue, a_maxValue);
     }
 
     public void SetBarValue(float a_value)

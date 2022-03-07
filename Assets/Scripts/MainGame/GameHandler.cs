@@ -36,6 +36,16 @@ public class GameHandler : MonoBehaviour
     public UpgradeItem m_enemyVectorsUpgrade;
     public UpgradeItem m_shieldUpgrade;
 
+    public struct Shield
+    {
+        public float delay;
+        public float rechargeRate;
+        public float capacity;
+
+        public float value;
+        public float delayTimer;
+    } public Shield m_playerShield;
+
     public void SetLastGameResult(bool a_value) { m_wonLastGame = a_value; }
 
     public void SetGameMode(eGameMode a_gameMode) { m_currentGameMode = a_gameMode; }
@@ -50,6 +60,14 @@ public class GameHandler : MonoBehaviour
         //m_playerStatHandler.m_stats[(int)eStatIndices.strength].effectiveValue = 1f;
 
         SetupUpgrades();
+        SetupShield();
+    }
+
+    private void SetupShield()
+    {
+        m_playerShield.capacity = 5f;
+        m_playerShield.delay = 3f;
+        m_playerShield.rechargeRate = 1.6f;
     }
 
     void SetupUpgrades()

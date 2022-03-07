@@ -218,7 +218,7 @@ MonoBehaviour:
     type: 3}
   m_healthBarRef: {fileID: 8534694074675028641}
   m_invalidFlingCross: {fileID: 56368311167889690}
-  m_shieldSprite: {fileID: 0}
+  m_shieldSpriteRenderer: {fileID: 5964736507153317789}
 --- !u!1 &4917926080148449389
 GameObject:
   m_ObjectHideFlags: 0
@@ -450,6 +450,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1074167542950006065, guid: 688cedeb614fed54b951ebf40cfa3a62,
+        type: 3}
+      propertyPath: m_Name
+      value: Shield
+      objectReference: {fileID: 0}
     - target: {fileID: 1229329987146240393, guid: 688cedeb614fed54b951ebf40cfa3a62,
         type: 3}
       propertyPath: m_SortingLayerID
@@ -459,6 +464,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SortingLayer
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1229329987146240393, guid: 688cedeb614fed54b951ebf40cfa3a62,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.6392157
       objectReference: {fileID: 0}
     - target: {fileID: 3853683323552886618, guid: 688cedeb614fed54b951ebf40cfa3a62,
         type: 3}
@@ -542,6 +552,12 @@ GameObject:
 --- !u!4 &5751040312361293848 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 866865883518350860, guid: 688cedeb614fed54b951ebf40cfa3a62,
+    type: 3}
+  m_PrefabInstance: {fileID: 4884282833951731220}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &5964736507153317789 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 1229329987146240393, guid: 688cedeb614fed54b951ebf40cfa3a62,
     type: 3}
   m_PrefabInstance: {fileID: 4884282833951731220}
   m_PrefabAsset: {fileID: 0}

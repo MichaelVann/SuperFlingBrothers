@@ -5,7 +5,6 @@ using UnityEngine;
 public class Player : Damageable
 {
     Camera m_cameraRef;
-    BattleManager m_battleManagerRef;
 
     bool m_flinging = false;
     Vector3 m_originalFlingPos;
@@ -31,7 +30,10 @@ public class Player : Damageable
     float m_coinPickupTimeoutMax = 1.3f;
     RisingFadingText m_coinValueText;
 
-    public Sprite m_shieldSprite;
+    public SpriteRenderer m_shieldSpriteRenderer;
+    bool m_shieldEnabled = false;
+    GameHandler.Shield m_shieldRef;
+    float m_maxShieldOpactiy = 0.64f;
 
     public override void Awake()
     {
@@ -52,6 +54,19 @@ public class Player : Damageable
         m_healthBarRef.SetMaxProgressValue(m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue);
         m_battleManagerRef = FindObjectOfType<BattleManager>();
         m_damageTextColor = Color.red;
+        SetupShield();
+    }
+
+    void SetupShield()
+    {
+        m_shieldRef = m_gameHandlerRef.m_playerShield;
+        if (m_gameHandlerRef.m_shieldUpgrade.m_owned)
+        {
+            m_shieldEnabled = true;
+            m_shieldRef.delayTimer = 0f;
+            m_shieldRef.value = m_gameHandlerRef.m_playerShield.capacity;
+        }
+        m_shieldSpriteRenderer.gameObject.SetActive(m_gameHandlerRef.m_shieldUpgrade.m_owned);
     }
 
     public override void Fling(Vector3 a_flingVector, float a_flingStrength)
@@ -200,8 +215,49 @@ public class Player : Damageable
 
     public override void Damage(float a_damage)
     {
-        base.Damage(a_damage);
+        float damage = a_damage;
+        if (m_shieldEnabled)
+        {
+            if (m_shieldRef.value >= damage)
+            {
+                m_shieldRef.value -= damage;
+                damage = 0f;
+            }
+            else
+            {
+                damage -= m_shieldRef.value;
+                m_shieldRef.value = 0f;
+            }
+            m_shieldRef.delayTimer = 0f;
+        }
+        base.Damage(damage);
         m_battleManagerRef.m_healthBarRef.SetBarValue(m_health);
+    }
+
+    void UpdateShieldOpacity()
+    {
+        Color shieldColor = m_shieldSpriteRenderer.color;
+        shieldColor.a = m_maxShieldOpactiy * m_shieldRef.value/m_shieldRef.capacity;
+        m_shieldSpriteRenderer.color = shieldColor;
+    }
+
+
+
+    void ShieldUpdate()
+    {
+        if (m_shieldEnabled)
+        {
+            if (m_shieldRef.delayTimer <= m_shieldRef.delay)
+            {
+                m_shieldRef.delayTimer += Time.deltaTime;
+            }
+            else if (m_shieldRef.capacity >= m_shieldRef.value)
+            {
+                m_shieldRef.value = Mathf.Clamp(m_shieldRef.value + m_shieldRef.rechargeRate * Time.deltaTime, 0f, m_shieldRef.capacity);
+            }
+            UpdateShieldOpacity();
+            m_battleManagerRef.m_shieldBarRef.SetBarValue(m_shieldRef.value);
+        }
     }
 
     public override void Update()
@@ -218,5 +274,6 @@ public class Player : Damageable
                 Time.timeScale = 1f;
             }
         }
+        ShieldUpdate();
     }
 }

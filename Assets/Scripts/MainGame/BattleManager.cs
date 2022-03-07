@@ -13,6 +13,7 @@ public class BattleManager : MonoBehaviour
 
     public Image m_fadeToBlackRef;
 
+    public UIBar m_shieldBarRef;
     public UIBar m_healthBarRef;
 
     public int m_turnsRemaining;
@@ -45,6 +46,8 @@ public class BattleManager : MonoBehaviour
     float m_bonusTimeScoreGained = 0f;
 
     public float m_coinValue = 1f;
+
+    float m_healthbarMainPos = 0f;
 
     public float GetMaxGameEndTimer()
     {
@@ -84,6 +87,16 @@ public class BattleManager : MonoBehaviour
         }
 
         m_healthBarRef.Init(m_gameHandlerRef.m_playerStatHandler.m_stats[(int)eStatIndices.constitution].finalValue, m_gameHandlerRef.m_playerStatHandler.m_stats[(int)eStatIndices.constitution].finalValue);
+
+        if (m_gameHandlerRef.m_shieldUpgrade.m_owned)
+        {
+            m_shieldBarRef.Init(m_gameHandlerRef.m_playerShield.capacity);
+        }
+        else
+        {
+            m_healthBarRef.gameObject.transform.localPosition = new Vector3(0f, m_healthbarMainPos, 0f);
+            m_shieldBarRef.gameObject.SetActive(false);
+        }
     }
 
     public void ChangeEnemyCount(int a_change)
