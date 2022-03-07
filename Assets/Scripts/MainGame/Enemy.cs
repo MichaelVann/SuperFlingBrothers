@@ -10,6 +10,8 @@ public class Enemy : Damageable
 
     public GameObject[] m_exclamationMarkRefs;
 
+    public GameObject m_velocityIndicatorRef;
+
     enum EnemyType
     {
         Idlers,
@@ -49,6 +51,10 @@ public class Enemy : Damageable
         m_playerRef = FindObjectOfType<Player>();
         m_flingTimer -= UnityEngine.Random.Range(0f, 0.3f);
         m_damageTextColor = Color.yellow;
+        if (!m_gameHandlerRef.m_enemyVectorsUpgrade.m_owned)
+        {
+            m_velocityIndicatorRef.SetActive(false);
+        }
     }
 
     public void Copy(Damageable a_ref)
@@ -228,37 +234,11 @@ public class Enemy : Damageable
                 }
             }
         }
-        
-
-        //m_flingTimer += Time.deltaTime;
-        //if (m_battleManagerRef.m_frozen)//m_flingTimer >= m_flingTimerMax)
-        //{
-        //    m_flingTimer -= m_flingTimerMax;
-        //    if (!m_flinging)
-        //    {
-        //        m_flinging = true;
-
-        //        Vector3 playerPos = m_playerRef.transform.position;
-
-        //        if ((playerPos - transform.position).magnitude <= m_sightRadius)
-        //        {
-        //            Fling((playerPos - transform.position).normalized, m_stats.flingStrength);
-        //        }
-        //    }
-        //}
-        //else
-        //{
-        //    m_flinging = false;
-        //}
-
-
     }
 
     public override void Fling(Vector3 a_flingVector, float a_flingStrength)
     {
         base.Fling(a_flingVector, a_flingStrength);
-        //m_rigidBody.AddForce(a_flingVector * a_flingStrength);
-        //m_battleManagerRef.SetFrozen(false);
     }
 
 

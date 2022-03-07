@@ -38,7 +38,7 @@ public class MainMenuHandler : MonoBehaviour
     {
         m_titleMenuRef.SetActive(false);
         m_characterMenuRef.SetActive(true);
-
+        m_upgradeMenuRef.SetActive(false);
     }
     public void UpgradePressed()
     {

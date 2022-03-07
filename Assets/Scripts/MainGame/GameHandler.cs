@@ -32,7 +32,8 @@ public class GameHandler : MonoBehaviour
         public StatHandler statHandler;
     }
 
-    //UpgradeItem
+    public UpgradeItem m_enemyVectorsUpgrade;
+    public UpgradeItem[] m_upgrades;
 
     public void SetLastGameResult(bool a_value) { m_wonLastGame = a_value; }
 
@@ -46,8 +47,28 @@ public class GameHandler : MonoBehaviour
         m_playerStatHandler = new StatHandler();
         m_playerStatHandler.Init();
         //m_playerStatHandler.m_stats[(int)eStatIndices.strength].effectiveValue = 1f;
+
+        m_upgrades = new UpgradeItem[1];
+
+        m_enemyVectorsUpgrade = new UpgradeItem();
+        m_enemyVectorsUpgrade.SetName("Enemy Vectors");
+        m_enemyVectorsUpgrade.SetDescription("Shows the direction of all enemies movement");
+
+        m_enemyVectorsUpgrade.SetCost(50);
+        m_upgrades[0] = m_enemyVectorsUpgrade;
     }
 
+    internal bool AttemptToBuyUpgrade(int m_upgradeID)
+    {
+        UpgradeItem upgrade = m_upgrades[m_upgradeID];
+        if (upgrade.m_cost <= m_cash)
+        {
+            m_cash -= upgrade.m_cost;
+            upgrade.SetOwned(true);
+            return true;
+        }
+        return false;
+    }
 
     public void ChangeGameMode(int a_change)
     {
@@ -65,6 +86,10 @@ public class GameHandler : MonoBehaviour
         if (Input.GetKey(KeyCode.K))
         {
             m_playerStatHandler.ChangeXP(1);
+        }
+        if (Input.GetKey(KeyCode.J))
+        {
+            m_cash += 1;
         }
         if (Input.GetKeyUp(KeyCode.S))
         {

@@ -4,12 +4,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-class UpgradeItem
+public class UpgradeItem
 {
-    string m_name;
-    string m_description;
+    public string m_name;
+    public string m_description;
 
- 
+    public int m_cost;
+    public bool m_owned = false;
+
+    public void SetName(string a_string) { m_name = a_string; }
+    public void SetDescription(string a_string) { m_description = a_string; }
+    public void SetCost(int a_cost) { m_cost = a_cost; }
+
+    public void SetOwned(bool a_value) { m_owned = a_value; }
+
     public UpgradeItem()
     {
 

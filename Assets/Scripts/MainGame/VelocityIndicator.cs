@@ -4,17 +4,13 @@ using UnityEngine;
 
 public class VelocityIndicator : MonoBehaviour
 {
-
-    struct MyStruct
-    {
-
-    }
-
     Rigidbody2D m_rigidBodyRef;
     LineRenderer m_lineRendererRef;
     Vector3[] m_linePositions;
     float m_lineDivider = 8f;
     // Start is called before the first frame update
+
+    bool m_enabled = true;
 
     void Start()
     {
@@ -31,10 +27,6 @@ public class VelocityIndicator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        m_lineRendererRef.enabled = m_rigidBodyRef.velocity.magnitude <= 0.3f ? false : true;
 
-        m_linePositions[0] = m_rigidBodyRef.transform.position;
-        m_linePositions[1] = m_rigidBodyRef.transform.position + new Vector3(m_rigidBodyRef.velocity.x, m_rigidBodyRef.velocity.y, 0.0f) / m_lineDivider;
-        m_lineRendererRef.SetPositions(m_linePositions);
     }
 }

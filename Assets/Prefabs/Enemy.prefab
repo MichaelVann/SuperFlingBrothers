@@ -104,13 +104,13 @@ MonoBehaviour:
   m_risingFadingTextPrefab: {fileID: 4912411465336466117, guid: 0a8ab97e9f7b7ef47acb17384c63233a,
     type: 3}
   m_healthBarRef: {fileID: 8361980861345683902}
-  m_statHandler: {fileID: 0}
   m_coinPrefab: {fileID: 1486472118298862903, guid: 7b827df0a9bc5b04992891f0df28e3f1,
     type: 3}
   m_exclamationMarkRefs:
   - {fileID: 8748797080785600610}
   - {fileID: 7249526844949174227}
   - {fileID: 803595846732859215}
+  m_velocityIndicatorRef: {fileID: 1467332499506325743}
   m_flingTimer: 0
   m_flingTimerMax: 3
 --- !u!1 &7249526844949174227
@@ -463,6 +463,12 @@ GameObject:
 --- !u!4 &5599424530306179847 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 866865883518350860, guid: 688cedeb614fed54b951ebf40cfa3a62,
+    type: 3}
+  m_PrefabInstance: {fileID: 4734021104761705739}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1467332499506325743 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6192339805795515876, guid: 688cedeb614fed54b951ebf40cfa3a62,
     type: 3}
   m_PrefabInstance: {fileID: 4734021104761705739}
   m_PrefabAsset: {fileID: 0}
