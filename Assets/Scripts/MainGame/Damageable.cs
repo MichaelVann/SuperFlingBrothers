@@ -43,6 +43,7 @@ public class Damageable : BaseObject
     public override void Awake()
     {
         base.Awake();
+        m_battleManagerRef = FindObjectOfType<BattleManager>();
         m_statHandler = new StatHandler();
         m_statHandler.Init();
         m_health = m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue;
@@ -52,7 +53,6 @@ public class Damageable : BaseObject
 
     public virtual void Start()
     {
-        m_battleManagerRef = FindObjectOfType<BattleManager>();
         m_gameHandlerRef = m_battleManagerRef.m_gameHandlerRef;
 
         UpdateHealthColor();

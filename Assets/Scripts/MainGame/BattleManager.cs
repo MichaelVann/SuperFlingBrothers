@@ -9,7 +9,11 @@ public class BattleManager : MonoBehaviour
 {
     public GameHandler m_gameHandlerRef;
     public GameObject m_gameHandlerTemplate;
+    public GameObject m_enemyTemplate;
+    public GameObject m_gameViewRef;
     UIHandler m_uiHandlerRef;
+
+    public Text m_enemyCountText;
 
     public Image m_fadeToBlackRef;
 
@@ -49,6 +53,10 @@ public class BattleManager : MonoBehaviour
 
     float m_healthbarMainPos = 0f;
 
+    internal int m_enemiesToSpawn = 3;
+    float m_enemySpawnGap = 0.4f;
+    Vector3 m_coreEnemySpawnLocation;
+
     public float GetMaxGameEndTimer()
     {
         return m_maxGameEndTimer;
@@ -77,6 +85,7 @@ public class BattleManager : MonoBehaviour
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_freezeTimerMax = m_turnInterval;
         m_freezeTimer = m_freezeTimerMax;
+        m_coreEnemySpawnLocation = new Vector3(0f, -1.6f, 0f);
     }
 
     public void Start()
@@ -96,6 +105,67 @@ public class BattleManager : MonoBehaviour
         {
             m_healthBarRef.gameObject.transform.localPosition = new Vector3(0f, m_healthbarMainPos, 0f);
             m_shieldBarRef.gameObject.SetActive(false);
+        }
+
+        SpawnEnemies();
+    }
+
+    public void SpawnEnemy(Vector3 a_spawnLocation)
+    {
+        GameObject enemy = Instantiate<GameObject>(m_enemyTemplate, a_spawnLocation, Quaternion.identity, m_gameViewRef.transform);
+    }
+
+    public void SpawnEnemies()
+    {
+        for (int i = 0; i < m_enemiesToSpawn; i++)
+        {
+            float x = 0f;
+            float y = 0f;
+            switch (i)
+            {
+                case 0:
+                case 1:
+                    x = 0f;
+                    break;
+                case 2:
+                case 4:
+                case 6:
+                    x = -m_enemySpawnGap;
+                    break;
+                case 3:
+                case 5:
+                case 7:
+                    x = m_enemySpawnGap;
+                    break;
+                default:
+                    break;
+            }
+
+            switch (i)
+            {
+                case 0:
+                    y = m_enemySpawnGap/2f;
+                    break;
+                case 1:
+                    y = -m_enemySpawnGap/2f;
+                    break;
+                case 2:
+                case 3:
+                    y = 0f;
+                    break;
+                case 4:
+                case 7:
+                    y = m_enemySpawnGap;
+                    break;
+                case 5:
+                case 6:
+                    y = -m_enemySpawnGap;
+                    break;
+                default:
+                    break;
+            }
+            Vector3 spawnLocation = new Vector3(x, y, 0f) + m_coreEnemySpawnLocation;
+            SpawnEnemy(spawnLocation);
         }
     }
 
@@ -127,7 +197,6 @@ public class BattleManager : MonoBehaviour
                 m_turnsRemaining++;
             }
         }
-
     }
 
     void UpdateFreezeTimer()
@@ -140,7 +209,6 @@ public class BattleManager : MonoBehaviour
                 m_freezing = true;
                 m_freezeTimer = 0f;
             }
-
             if (m_freezing)
             {
                 m_freezingTimer += Time.deltaTime;
@@ -150,7 +218,6 @@ public class BattleManager : MonoBehaviour
                     m_freezingTimer = 0f;
                     m_freezing = false;
                     SetFrozen(true);
-                    
                 }
             }
         }
@@ -189,6 +256,7 @@ public class BattleManager : MonoBehaviour
 
     void Update()
     {
+        m_enemyCountText.text = "Enemy Count: " + m_enemyCount;
         if (!m_endingGame)
         {
             UpdateTurns();
@@ -204,6 +272,7 @@ public class BattleManager : MonoBehaviour
                     break;
             }
 
+
             if (m_enemyCount <= 0)
             {
                 StartEndingGame(true);
@@ -214,6 +283,5 @@ public class BattleManager : MonoBehaviour
         {
             UpdateGameEnding();
         }
-
     }
 }

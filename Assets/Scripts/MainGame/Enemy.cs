@@ -42,12 +42,12 @@ public class Enemy : Damageable
     public override void Awake()
     {
         base.Awake();
+        m_battleManagerRef.ChangeEnemyCount(1);
     }
 
     public override void Start()
     {
         base.Start();
-        m_battleManagerRef.ChangeEnemyCount(1);
         m_playerRef = FindObjectOfType<Player>();
         m_flingTimer -= UnityEngine.Random.Range(0f, 0.3f);
         m_damageTextColor = Color.yellow;

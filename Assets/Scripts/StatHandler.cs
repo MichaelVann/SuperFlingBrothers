@@ -31,7 +31,7 @@ public class StatHandler
     public int m_XP = 0;
     public int m_maxXP = 83 / 4;
     public int m_level = 1;
-    public int m_allocationPoints = 10000;
+    public int m_allocationPoints = 0;
 
     public int m_DNA = 0;
 
