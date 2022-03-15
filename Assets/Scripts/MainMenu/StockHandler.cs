@@ -20,7 +20,7 @@ public class StockHandler : MonoBehaviour
 
     private void UpdateGraph()
     {
-        m_graphRef.AddValue(m_referencedStock.GetCurrentValue());
+        m_graphRef.Refresh();
     }
 
     // Update is called once per frame

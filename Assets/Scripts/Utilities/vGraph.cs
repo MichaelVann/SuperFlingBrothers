@@ -76,19 +76,7 @@ public class vGraph : MonoBehaviour
 
     public void Init(float[] a_trackedNumbers)
     {
-        for (int i = 0; i < m_trackedValues.Length; i++)
-        {
-            m_trackedValues[i] = a_trackedNumbers[i];
-        }
-        Refresh();
-    }
-
-    public void Init(List<float> a_trackedNumbers)
-    {
-        for (int i = 0; i < a_trackedNumbers.Count; i++)
-        {
-            m_trackedValues[i] = (a_trackedNumbers[i]);
-        }
+        m_trackedValues = a_trackedNumbers;
         Refresh();
     }
 
@@ -116,21 +104,11 @@ public class vGraph : MonoBehaviour
         SetupVerticalDelineations();
     }
 
-    private void Refresh()
+    public void Refresh()
     {
         UpdateYScale();
         UpdateDotsAndLine();
         m_currentValueTextRef.text = "Current Value: " + m_trackedValues[0];
-    }
-
-    public void AddValue(float a_value)
-    {
-        for (int i = m_trackedValues.Length - 1; i > 0; i--)
-        {
-            m_trackedValues[i] = m_trackedValues[i - 1];
-        }
-        m_trackedValues[0] = a_value;
-        Refresh();
     }
 
     private void SetupVerticalDelineations()
@@ -146,11 +124,35 @@ public class vGraph : MonoBehaviour
         }
     }
 
+    private void SetupDotsAndLine()
+    {
+        for (int i = 1; i < m_dots.Length; i++)
+        {
+            if (m_dots[i] != null)
+            {
+                Destroy(m_dots[i]);
+            }
+        }
+        m_dots = new GameObject[m_trackedValues.Length];
+        m_dots[0] = m_dotRef;
+        for (int i = 1; i < m_dots.Length; i++)
+        {
+            m_dots[i] = Instantiate<GameObject>(m_dotRef, m_graphBackgroundRef.transform);
+        }
+        m_lineRenderer.positionCount = m_dots.Length;
+
+    }
+
     private void UpdateDotsAndLine()
     {
         float xGap = m_bgWidth / (m_trackedValues.Length + 2);
 
         Vector3[] linePositions = new Vector3[m_trackedValues.Length];
+
+        if (m_dots.Length != m_trackedValues.Length)
+        {
+            SetupDotsAndLine();
+        }
 
         for (int i = 0; i < m_trackedValues.Length; i++)
         {

@@ -21,7 +21,7 @@ public class Stock
 
     vTimer m_priceShiftTimer;
 
-    const int m_defaultvaluesTracked = 10;
+    const int m_defaultvaluesTracked = 15;
     const float m_defaultNormalValue = 100f;
 
     public float GetCurrentValue() { return m_currentValue; }
