@@ -5,20 +5,31 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
+[Serializable]
 public class Stock
 {
+    [SerializeField]
     string m_name;
+    [SerializeField]
     float[] m_values;
+    [SerializeField]
     float m_currentValue;
+    [SerializeField]
     int m_valuesTracked;
+    [SerializeField]
     float m_normalValue;
+    [SerializeField]
     float m_trendNormalValue;
 
+    [SerializeField]
     float m_deviationMultiplicityRange;
+    [SerializeField]
     float m_volatility;
 
-    float m_stability = 2f;
+    [SerializeField]
+    float m_stability;
 
+    [SerializeField]
     vTimer m_priceShiftTimer;
 
     const int m_defaultvaluesTracked = 15;
@@ -26,6 +37,7 @@ public class Stock
 
     public float GetCurrentValue() { return m_currentValue; }
     public float[] GetTrackedValues() { return m_values; }
+    public string GetName() { return m_name; }
 
     private void Init(string a_name, int a_valuesTracked, float a_normalValue, float a_deviationMultiplicityRange, float a_volatility, float a_stability)
     {
@@ -47,6 +59,11 @@ public class Stock
     public Stock(string a_name, float a_normalValue, float a_deviationMultiplicityRange, float a_volatility, float a_stability)
     {
         Init(a_name, m_defaultvaluesTracked, a_normalValue, a_deviationMultiplicityRange, a_volatility, a_stability);
+    }
+
+    public Stock(string a_name)
+    {
+        Init(a_name, m_defaultvaluesTracked, m_defaultNormalValue, 1f, 0.1f, 2f);
     }
 
     public Stock()

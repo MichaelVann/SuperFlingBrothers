@@ -2271,6 +2271,7 @@ MonoBehaviour:
   m_horizontalMarkRef: {fileID: 112967338}
   m_dotRef: {fileID: 1966537396}
   m_currentValueTextRef: {fileID: 1448622668}
+  m_titleTextRef: {fileID: 53164783}
   m_verticalAxisDelineations: 0
   m_horizontalAxisDelineations: 0
   m_graphBackgroundRef: {fileID: 1576137919}
@@ -4354,6 +4355,7 @@ GameObject:
   - component: {fileID: 1576137922}
   - component: {fileID: 1576137921}
   - component: {fileID: 1576137923}
+  - component: {fileID: 1576137924}
   m_Layer: 5
   m_Name: GraphBG
   m_TagString: Untagged
@@ -4434,6 +4436,19 @@ MonoBehaviour:
   m_EffectColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
   m_EffectDistance: {x: 2, y: 2}
   m_UseGraphicAlpha: 1
+--- !u!114 &1576137924
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1576137919}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ShowMaskGraphic: 1
 --- !u!1 &1579849644
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,7 +15,7 @@ public class StockHandler : MonoBehaviour
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_referencedStock = m_gameHandlerRef.m_stockList[m_graphDisplayedStockID];
         m_gameHandlerRef.m_StocksUpdatedPtr = new GameHandler.StocksUpdatedPtr(UpdateGraph);
-        m_graphRef.Init(m_referencedStock.GetTrackedValues());
+        m_graphRef.Init(m_referencedStock.GetTrackedValues(), m_referencedStock.GetName());
     }
 
     private void UpdateGraph()

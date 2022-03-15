@@ -9,6 +9,7 @@ public class vGraph : MonoBehaviour
     public GameObject m_horizontalMarkRef;
     public GameObject m_dotRef;
     public Text m_currentValueTextRef;
+    public Text m_titleTextRef;
 
     List<GameObject> m_verticalAxisTextList;
     List<GameObject> m_horizontalAxisTextList;
@@ -74,9 +75,10 @@ public class vGraph : MonoBehaviour
 
     }
 
-    public void Init(float[] a_trackedNumbers)
+    public void Init(float[] a_trackedNumbers, string a_name)
     {
         m_trackedValues = a_trackedNumbers;
+        m_titleTextRef.text = a_name;
         Refresh();
     }
 
@@ -119,8 +121,9 @@ public class vGraph : MonoBehaviour
         {
             float yPos = m_graphVerticalPadding  + i * markGap;
             yPos -= m_bgHeight / 2f;
-            m_verticalAxisTextList[i].transform.localPosition = new Vector3(-m_bgWidth / 2f - 65f, yPos);
+            m_verticalAxisTextList[i].transform.localPosition = new Vector3(-m_bgWidth / 2f - 20f, yPos);
             m_verticalAxisTextList[i].GetComponent<Text>().text = "" + VLib.TruncateFloatsDecimalPlaces((yScale / (float)(m_verticalAxisTextList.Count - 1)) * i, 2);
+            m_verticalAxisTextList[i].transform.SetParent(this.transform);
         }
     }
 
@@ -145,7 +148,7 @@ public class vGraph : MonoBehaviour
 
     private void UpdateDotsAndLine()
     {
-        float xGap = m_bgWidth / (m_trackedValues.Length + 2);
+        float xGap = m_bgWidth / (m_trackedValues.Length);
 
         Vector3[] linePositions = new Vector3[m_trackedValues.Length];
 

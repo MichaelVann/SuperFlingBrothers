@@ -16,7 +16,6 @@ public class GameHandler : MonoBehaviour
         postBattle
     }
 
-
     public enum eGameMode
     {
         TurnLimit,
@@ -25,7 +24,6 @@ public class GameHandler : MonoBehaviour
         Hunger,
         ModeCount
     }
-
     public eGameMode m_currentGameMode;
 
     internal StatHandler m_playerStatHandler;
@@ -36,14 +34,11 @@ public class GameHandler : MonoBehaviour
     public float m_xpEarnedLastGame = 0f;
     public float m_goldEarnedLastGame = 0f;
 
-    struct SaveData
-    {
-        public StatHandler statHandler;
-    } SaveData m_saveData;
-
     public UpgradeItem[] m_upgrades;
     public UpgradeItem m_enemyVectorsUpgrade;
     public UpgradeItem m_shieldUpgrade;
+
+    eScene m_currentScene;
 
     public struct Shield
     {
@@ -62,6 +57,15 @@ public class GameHandler : MonoBehaviour
     public delegate void StocksUpdatedPtr();
     public StocksUpdatedPtr m_StocksUpdatedPtr;
 
+    [Serializable]
+    struct SaveData
+    {
+        public StatHandler statHandler;
+        public List<Stock> stockList;
+    }
+    SaveData m_saveData;
+    bool m_autoLoadDataOnLaunch = true;
+
     public void SetLastGameResult(bool a_value) { m_wonLastGame = a_value; }
 
     public void SetGameMode(eGameMode a_gameMode) { m_currentGameMode = a_gameMode; }
@@ -73,18 +77,21 @@ public class GameHandler : MonoBehaviour
         //m_playerStatHandler = gameObject.GetComponent<StatHandler>();
         m_playerStatHandler = new StatHandler();
         m_playerStatHandler.Init();
-        m_saveData.statHandler = m_playerStatHandler;
         //m_playerStatHandler.m_stats[(int)eStatIndices.strength].effectiveValue = 1f;
 
         SetupUpgrades();
         SetupShield();
         SetupStocks();
+        if (m_autoLoadDataOnLaunch)
+        {
+            LoadGame();
+        }
     }
 
     private void SetupStocks()
     {
         m_stockList = new List<Stock>();
-        m_stockList.Add(new Stock());
+        m_stockList.Add(new Stock(VLib.GenerateName()));
         m_stockUpdateTimer = new vTimer(1f);
     }
 
@@ -179,6 +186,7 @@ public class GameHandler : MonoBehaviour
 
     public void ChangeScene(eScene a_scene)
     {
+        m_currentScene = a_scene;
         switch (a_scene)
         {
             case eScene.mainMenu:
@@ -201,16 +209,20 @@ public class GameHandler : MonoBehaviour
 
     public void SaveGame()
     {
+        m_saveData.statHandler = m_playerStatHandler;
+        m_saveData.stockList = m_stockList;
+
         string path = Application.persistentDataPath + "/Data.txt";
-        File.WriteAllText(path, JsonUtility.ToJson(m_saveData));
+        string json = JsonUtility.ToJson(m_saveData);
+        File.WriteAllText(path, json);
     }
     public void LoadGame()
     {
-
         string path = Application.persistentDataPath + "/Data.txt";
         string loadedString = File.ReadAllText(path);
         m_saveData = JsonUtility.FromJson<SaveData>(loadedString);
         m_playerStatHandler = m_saveData.statHandler;
+        m_stockList = m_saveData.stockList;
     }
 
 }
