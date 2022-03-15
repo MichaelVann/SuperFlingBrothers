@@ -18,7 +18,8 @@ public class MainMenuHandler : MonoBehaviour
 
     public void Play()
     {
-        SceneManager.LoadScene("Pre Battle");
+        FindObjectOfType<GameHandler>().ChangeScene(GameHandler.eScene.preBattle);
+
     }
 
     // Update is called once per frame

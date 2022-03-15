@@ -229,7 +229,7 @@ public class BattleManager : MonoBehaviour
         m_gameHandlerRef.m_xpEarnedLastGame = m_score;
         //Go to post game screen
         Time.timeScale = 1f;
-        SceneManager.LoadScene("Post Battle");
+        FindObjectOfType<GameHandler>().ChangeScene(GameHandler.eScene.postBattle);
     }
 
     public void StartEndingGame(bool a_won)

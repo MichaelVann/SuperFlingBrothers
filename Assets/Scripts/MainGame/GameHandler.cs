@@ -8,6 +8,15 @@ using UnityEngine.SceneManagement;
 
 public class GameHandler : MonoBehaviour
 {
+    public enum eScene
+    {
+        mainMenu,
+        preBattle,
+        battle,
+        postBattle
+    }
+
+
     public enum eGameMode
     {
         TurnLimit,
@@ -30,7 +39,7 @@ public class GameHandler : MonoBehaviour
     struct SaveData
     {
         public StatHandler statHandler;
-    }
+    } SaveData m_saveData;
 
     public UpgradeItem[] m_upgrades;
     public UpgradeItem m_enemyVectorsUpgrade;
@@ -46,6 +55,13 @@ public class GameHandler : MonoBehaviour
         public float delayTimer;
     } public Shield m_playerShield;
 
+
+    //Stocks//
+    internal List<Stock> m_stockList;
+    vTimer m_stockUpdateTimer;
+    public delegate void StocksUpdatedPtr();
+    public StocksUpdatedPtr m_StocksUpdatedPtr;
+
     public void SetLastGameResult(bool a_value) { m_wonLastGame = a_value; }
 
     public void SetGameMode(eGameMode a_gameMode) { m_currentGameMode = a_gameMode; }
@@ -57,10 +73,19 @@ public class GameHandler : MonoBehaviour
         //m_playerStatHandler = gameObject.GetComponent<StatHandler>();
         m_playerStatHandler = new StatHandler();
         m_playerStatHandler.Init();
+        m_saveData.statHandler = m_playerStatHandler;
         //m_playerStatHandler.m_stats[(int)eStatIndices.strength].effectiveValue = 1f;
 
         SetupUpgrades();
         SetupShield();
+        SetupStocks();
+    }
+
+    private void SetupStocks()
+    {
+        m_stockList = new List<Stock>();
+        m_stockList.Add(new Stock());
+        m_stockUpdateTimer = new vTimer(1f);
     }
 
     private void SetupShield()
@@ -128,18 +153,64 @@ public class GameHandler : MonoBehaviour
         {
             LoadGame();
         }
+        if (Input.GetKeyUp(KeyCode.O))
+        {
+            m_playerStatHandler = new StatHandler();
+            m_playerStatHandler.Init();
+        }
+
+        UpdateStocks();
+    }
+
+    private void UpdateStocks()
+    {
+        if (m_stockUpdateTimer.Update())
+        {
+            for (int i = 0; i < m_stockList.Count; i++)
+            {
+                m_stockList[i].PredictNewValue();
+            }
+            if (m_StocksUpdatedPtr != null)
+            {
+                m_StocksUpdatedPtr.Invoke();
+            }
+        }
+    }
+
+    public void ChangeScene(eScene a_scene)
+    {
+        switch (a_scene)
+        {
+            case eScene.mainMenu:
+                SceneManager.LoadScene("Main Menu");
+                break;
+            case eScene.preBattle:
+                SceneManager.LoadScene("Pre Battle");
+                m_StocksUpdatedPtr = null;
+                break;
+            case eScene.battle:
+                SceneManager.LoadScene("Battle");
+                break;
+            case eScene.postBattle:
+                SceneManager.LoadScene("Post Battle");
+                break;
+            default:
+                break;
+        }
     }
 
     public void SaveGame()
     {
         string path = Application.persistentDataPath + "/Data.txt";
-        File.WriteAllText(path, JsonUtility.ToJson(m_playerStatHandler));
+        File.WriteAllText(path, JsonUtility.ToJson(m_saveData));
     }
     public void LoadGame()
     {
+
         string path = Application.persistentDataPath + "/Data.txt";
         string loadedString = File.ReadAllText(path);
-        m_playerStatHandler = JsonUtility.FromJson<StatHandler>(loadedString);
+        m_saveData = JsonUtility.FromJson<SaveData>(loadedString);
+        m_playerStatHandler = m_saveData.statHandler;
     }
 
 }

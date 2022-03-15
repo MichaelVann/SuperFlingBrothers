@@ -15,7 +15,7 @@ public class PostBattleHandler : MonoBehaviour
 
     public void ContinuePressed()
     {
-        SceneManager.LoadScene("Main Menu");
+        FindObjectOfType<GameHandler>().ChangeScene(GameHandler.eScene.mainMenu);
     }
 
     private void Awake()

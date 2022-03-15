@@ -25,6 +25,7 @@ public class Stock
     const float m_defaultNormalValue = 100f;
 
     public float GetCurrentValue() { return m_currentValue; }
+    public float[] GetTrackedValues() { return m_values; }
 
     private void Init(string a_name, int a_valuesTracked, float a_normalValue, float a_deviationMultiplicityRange, float a_volatility, float a_stability)
     {
@@ -53,25 +54,14 @@ public class Stock
         Init("Stock", m_defaultvaluesTracked, m_defaultNormalValue, 1f, 0.1f, 2f);
     }
 
-    public void PredictNewValueOld()
+    private void PushBackValue(float a_value)
     {
-        if (m_priceShiftTimer.Update())
+        for (int i = m_values.Length - 1; i > 0; i--)
         {
-            m_trendNormalValue = m_normalValue * UnityEngine.Random.Range(1 / m_stability, m_stability);
+            m_values[i] = m_values[i - 1];
         }
-
-        float deltaNormal = m_trendNormalValue - m_currentValue;
-        float deltaNormalFactor = m_volatility * Mathf.Pow((deltaNormal / m_trendNormalValue * m_deviationMultiplicityRange), 1f);
-        float randomAddition = UnityEngine.Random.Range(-m_volatility + deltaNormalFactor, m_volatility + deltaNormalFactor);
-        float newValue = m_currentValue * (1f + randomAddition);
-
-        m_currentValue = newValue;
-        //Debug.Log("newValue:" + newValue);
-        //Debug.Log("deltaNormal:" + deltaNormal);
-        //Debug.Log("deltaNormalFactor:" + deltaNormalFactor);
-        //Debug.Log("m_internalTrendInertia:" + m_internalTrendInertia);
-        //Debug.Log("m_internalTrend:" + m_internalTrend);
-        Debug.Log("deltaNormalFactor:" + deltaNormalFactor);
+        m_values[0] = a_value;
+        m_currentValue = m_values[0];
     }
 
     public void PredictNewValue()
@@ -96,7 +86,7 @@ public class Stock
         float randomAddition = UnityEngine.Random.Range(-m_volatility + deltaNormalFactor, m_volatility + deltaNormalFactor);
         float newValue = m_currentValue * (1f + randomAddition);
 
-        m_currentValue = newValue;
+        PushBackValue(newValue);
         //Debug.Log("newValue:" + newValue);
         //Debug.Log("deltaNormal:" + deltaNormal);
         //Debug.Log("deltaNormalFactor:" + deltaNormalFactor);

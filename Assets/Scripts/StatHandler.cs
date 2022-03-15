@@ -119,6 +119,7 @@ public class StatHandler
         SetStatPostAddedValue(eStatIndices.strength, 5f);
     }
 
+
     public void AttemptToIncreaseStat(eStatIndices a_index)
     {
         if (m_allocationPoints >= 1)

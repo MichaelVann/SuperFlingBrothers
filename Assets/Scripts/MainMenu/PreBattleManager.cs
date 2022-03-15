@@ -28,13 +28,12 @@ public class PreBattleManager : MonoBehaviour
 
     public void Play()
     {
-        SceneManager.LoadScene("Battle");
+        FindObjectOfType<GameHandler>().ChangeScene(GameHandler.eScene.battle);
     }
 
     public void Back()
     {
-        SceneManager.LoadScene("Main Menu");
-
+        FindObjectOfType<GameHandler>().ChangeScene(GameHandler.eScene.mainMenu);
     }
 
     // Update is called once per frame

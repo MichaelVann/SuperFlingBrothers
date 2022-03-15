@@ -33,17 +33,12 @@ public class vGraph : MonoBehaviour
 
     private void Awake()
     {
-        
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
         m_bgWidth = m_graphBackgroundRef.GetComponent<RectTransform>().rect.width;
         m_bgHeight = m_graphBackgroundRef.GetComponent<RectTransform>().rect.height;
 
         m_trackedValues = new float[10];
         m_dots = new GameObject[m_trackedValues.Length];
+
         m_dots[0] = m_dotRef;
         for (int i = 1; i < m_dots.Length; i++)
         {
@@ -72,9 +67,20 @@ public class vGraph : MonoBehaviour
         UpdateDotsAndLine();
     }
 
+    // Start is called before the first frame update
+    void Start()
+    {
+
+
+    }
+
     public void Init(float[] a_trackedNumbers)
     {
-        m_trackedValues = a_trackedNumbers;
+        for (int i = 0; i < m_trackedValues.Length; i++)
+        {
+            m_trackedValues[i] = a_trackedNumbers[i];
+        }
+        Refresh();
     }
 
     public void Init(List<float> a_trackedNumbers)
@@ -83,6 +89,7 @@ public class vGraph : MonoBehaviour
         {
             m_trackedValues[i] = (a_trackedNumbers[i]);
         }
+        Refresh();
     }
 
     private void UpdateYScale()
@@ -109,6 +116,13 @@ public class vGraph : MonoBehaviour
         SetupVerticalDelineations();
     }
 
+    private void Refresh()
+    {
+        UpdateYScale();
+        UpdateDotsAndLine();
+        m_currentValueTextRef.text = "Current Value: " + m_trackedValues[0];
+    }
+
     public void AddValue(float a_value)
     {
         for (int i = m_trackedValues.Length - 1; i > 0; i--)
@@ -116,9 +130,7 @@ public class vGraph : MonoBehaviour
             m_trackedValues[i] = m_trackedValues[i - 1];
         }
         m_trackedValues[0] = a_value;
-        UpdateYScale();
-        UpdateDotsAndLine();
-        m_currentValueTextRef.text = "Current Value: " + m_trackedValues[0];
+        Refresh();
     }
 
     private void SetupVerticalDelineations()
