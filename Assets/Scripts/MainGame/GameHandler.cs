@@ -27,7 +27,7 @@ public class GameHandler : MonoBehaviour
     public eGameMode m_currentGameMode;
 
     internal StatHandler m_playerStatHandler;
-    public int m_cash = 0;
+    private float m_cash = 0;
 
     //Last Game
     public bool m_wonLastGame = false;
@@ -50,12 +50,7 @@ public class GameHandler : MonoBehaviour
         public float delayTimer;
     } public Shield m_playerShield;
 
-
-    //Stocks//
-    internal List<Stock> m_stockList;
-    vTimer m_stockUpdateTimer;
-    public delegate void StocksUpdatedPtr();
-    public StocksUpdatedPtr m_StocksUpdatedPtr;
+    StockHandler m_stockHandler;
 
     [Serializable]
     struct SaveData
@@ -64,12 +59,16 @@ public class GameHandler : MonoBehaviour
         public List<Stock> stockList;
     }
     SaveData m_saveData;
-    bool m_autoLoadDataOnLaunch = true;
+    bool m_autoLoadDataOnLaunch = false;
 
     public void SetLastGameResult(bool a_value) { m_wonLastGame = a_value; }
 
     public void SetGameMode(eGameMode a_gameMode) { m_currentGameMode = a_gameMode; }
-    public void ChangeCash(int a_score) { m_cash += a_score; }
+    public void ChangeCash(float a_change) { m_cash += a_change; }
+
+    public float GetCurrentCash() { return m_cash; }
+
+    internal StockHandler GetStockHandlerRef() { return m_stockHandler; }
 
     void Awake()
     {
@@ -78,22 +77,15 @@ public class GameHandler : MonoBehaviour
         m_playerStatHandler = new StatHandler();
         m_playerStatHandler.Init();
         //m_playerStatHandler.m_stats[(int)eStatIndices.strength].effectiveValue = 1f;
-
+        m_stockHandler = new StockHandler(this);
         SetupUpgrades();
         SetupShield();
-        SetupStocks();
         if (m_autoLoadDataOnLaunch)
         {
             LoadGame();
         }
     }
 
-    private void SetupStocks()
-    {
-        m_stockList = new List<Stock>();
-        m_stockList.Add(new Stock(VLib.GenerateName()));
-        m_stockUpdateTimer = new vTimer(1f);
-    }
 
     private void SetupShield()
     {
@@ -135,7 +127,6 @@ public class GameHandler : MonoBehaviour
     {
         m_currentGameMode = (eGameMode)VLib.SafeMod((int)(m_currentGameMode + a_change),(int)(eGameMode.ModeCount));
     }
-
   
     public void CalculateFinishedGame()
     {
@@ -150,7 +141,7 @@ public class GameHandler : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.J))
         {
-            m_cash += 1;
+            m_cash += 1f;
         }
         if (Input.GetKeyUp(KeyCode.S))
         {
@@ -165,24 +156,10 @@ public class GameHandler : MonoBehaviour
             m_playerStatHandler = new StatHandler();
             m_playerStatHandler.Init();
         }
-
-        UpdateStocks();
+        m_stockHandler.Update();
     }
 
-    private void UpdateStocks()
-    {
-        if (m_stockUpdateTimer.Update())
-        {
-            for (int i = 0; i < m_stockList.Count; i++)
-            {
-                m_stockList[i].PredictNewValue();
-            }
-            if (m_StocksUpdatedPtr != null)
-            {
-                m_StocksUpdatedPtr.Invoke();
-            }
-        }
-    }
+
 
     public void ChangeScene(eScene a_scene)
     {
@@ -194,7 +171,7 @@ public class GameHandler : MonoBehaviour
                 break;
             case eScene.preBattle:
                 SceneManager.LoadScene("Pre Battle");
-                m_StocksUpdatedPtr = null;
+                m_stockHandler.m_StocksUpdatedPtr = null;
                 break;
             case eScene.battle:
                 SceneManager.LoadScene("Battle");
@@ -210,7 +187,7 @@ public class GameHandler : MonoBehaviour
     public void SaveGame()
     {
         m_saveData.statHandler = m_playerStatHandler;
-        m_saveData.stockList = m_stockList;
+        m_saveData.stockList = m_stockHandler.m_stockList;
 
         string path = Application.persistentDataPath + "/Data.txt";
         string json = JsonUtility.ToJson(m_saveData);
@@ -222,7 +199,7 @@ public class GameHandler : MonoBehaviour
         string loadedString = File.ReadAllText(path);
         m_saveData = JsonUtility.FromJson<SaveData>(loadedString);
         m_playerStatHandler = m_saveData.statHandler;
-        m_stockList = m_saveData.stockList;
+        m_stockHandler.m_stockList = m_saveData.stockList;
     }
 
 }

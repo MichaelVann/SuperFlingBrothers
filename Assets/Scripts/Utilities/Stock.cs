@@ -11,6 +11,8 @@ public class Stock
     [SerializeField]
     string m_name;
     [SerializeField]
+    int m_amountOwned;
+    [SerializeField]
     float[] m_values;
     [SerializeField]
     float m_currentValue;
@@ -32,16 +34,22 @@ public class Stock
     [SerializeField]
     vTimer m_priceShiftTimer;
 
+    //Defaults
     const int m_defaultvaluesTracked = 15;
     const float m_defaultNormalValue = 100f;
+    float m_defaultDeviationMultiplicityRange = 1f;
+    float m_defaultVolatility = 0.1f;
+    float m_defaultStability = 2f;
 
     public float GetCurrentValue() { return m_currentValue; }
+    public float GetAmountOwned() { return m_amountOwned; }
     public float[] GetTrackedValues() { return m_values; }
     public string GetName() { return m_name; }
 
     private void Init(string a_name, int a_valuesTracked, float a_normalValue, float a_deviationMultiplicityRange, float a_volatility, float a_stability)
     {
         m_name = a_name;
+        m_amountOwned = 0;
         m_values = new float[a_valuesTracked];
         m_valuesTracked = a_valuesTracked;
         m_values[0] = m_currentValue = m_normalValue = m_trendNormalValue = a_normalValue;
@@ -63,12 +71,12 @@ public class Stock
 
     public Stock(string a_name)
     {
-        Init(a_name, m_defaultvaluesTracked, m_defaultNormalValue, 1f, 0.1f, 2f);
+        Init(a_name, m_defaultvaluesTracked, m_defaultNormalValue, m_defaultDeviationMultiplicityRange, m_defaultVolatility, m_defaultStability);
     }
 
     public Stock()
     {
-        Init("Stock", m_defaultvaluesTracked, m_defaultNormalValue, 1f, 0.1f, 2f);
+        Init("Stock", m_defaultvaluesTracked, m_defaultNormalValue, m_defaultDeviationMultiplicityRange, m_defaultVolatility, m_defaultStability);
     }
 
     private void PushBackValue(float a_value)
@@ -108,5 +116,10 @@ public class Stock
         //Debug.Log("deltaNormal:" + deltaNormal);
         //Debug.Log("deltaNormalFactor:" + deltaNormalFactor);
         Debug.Log("m_trendNormalValue:" + m_trendNormalValue);
+    }
+
+    public void TradeStock(int a_amountTraded)
+    {
+        m_amountOwned += a_amountTraded;
     }
 }

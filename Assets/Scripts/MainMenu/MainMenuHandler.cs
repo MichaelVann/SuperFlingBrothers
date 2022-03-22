@@ -6,9 +6,12 @@ using UnityEngine.SceneManagement;
 public class MainMenuHandler : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
-    public GameObject m_titleMenuRef;
-    public GameObject m_characterMenuRef;
-    public GameObject m_upgradeMenuRef;
+    GameObject m_titleMenuRef;
+    GameObject m_characterMenuRef;
+    GameObject m_upgradeMenuRef;
+    GameObject m_stockMenuRef;
+
+    public List<GameObject> m_menuList;
 
     // Start is called before the first frame update
     void Start()
@@ -19,7 +22,6 @@ public class MainMenuHandler : MonoBehaviour
     public void Play()
     {
         FindObjectOfType<GameHandler>().ChangeScene(GameHandler.eScene.preBattle);
-
     }
 
     // Update is called once per frame
@@ -28,24 +30,12 @@ public class MainMenuHandler : MonoBehaviour
         
     }
 
-    public void MainMenuPressed()
-    {
-        m_titleMenuRef.SetActive(true);
-        m_characterMenuRef.SetActive(false);
-        m_upgradeMenuRef.SetActive(false);
-    }
 
-    public void CharacterPressed()
+    public void OpenMenu(int a_index)
     {
-        m_titleMenuRef.SetActive(false);
-        m_characterMenuRef.SetActive(true);
-        m_upgradeMenuRef.SetActive(false);
-    }
-    public void UpgradePressed()
-    {
-        m_titleMenuRef.SetActive(false);
-        m_characterMenuRef.SetActive(false);
-        m_upgradeMenuRef.SetActive(true);
-
+        for (int i = 0; i < m_menuList.Count; i++)
+        {
+            m_menuList[i].SetActive(a_index == i);
+        }
     }
 }

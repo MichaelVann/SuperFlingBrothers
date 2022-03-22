@@ -23,14 +23,14 @@ public class UpgradesScreenHandler : MonoBehaviour
         for (int i = 0; i < m_gameHandlerRef.m_upgrades.Length; i++)
         {
             UpgradeItemPanel upgradeItemPanel = Instantiate<GameObject>(m_upgradeItemPanelTemplate, m_contentRef.transform).GetComponent<UpgradeItemPanel>();
-            upgradeItemPanel.Init(i);
+            upgradeItemPanel.Init(i, this);
             m_upgradeItemPanels.Add(upgradeItemPanel);
         }
     }
 
     public void Refresh()
     {
-        m_cashCounterTextRef.text = "" + m_gameHandlerRef.m_cash;
+        m_cashCounterTextRef.text = "" + VLib.TruncateFloatsDecimalPlaces(m_gameHandlerRef.GetCurrentCash(),2);
         for (int i = 0; i < m_upgradeItemPanels.Count; i++)
         {
             m_upgradeItemPanels[i].Refresh();

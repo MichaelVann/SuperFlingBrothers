@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class UpgradeItemPanel : MonoBehaviour
 {
-    // Start is called before the first frame update
     GameHandler m_gameHandlerRef;
     UpgradesScreenHandler m_upgradeScreenHandler;
     UpgradeItem m_upgradeRef;
@@ -23,17 +22,15 @@ public class UpgradeItemPanel : MonoBehaviour
 
     }
 
-    public void Init(int a_id)
+    public void Init(int a_id, UpgradesScreenHandler a_upgradesScreenHandler)
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_upgradeScreenHandler = FindObjectOfType<UpgradesScreenHandler>();
+        m_upgradeScreenHandler = a_upgradesScreenHandler;
 
         m_upgradeID = a_id;
         m_upgradeRef = m_gameHandlerRef.m_upgrades[m_upgradeID];
 
         Refresh();
-
-
     }
 
     public void Refresh()
@@ -49,7 +46,7 @@ public class UpgradeItemPanel : MonoBehaviour
         }
         else
         {
-            SetBuyButtonEnabled(m_gameHandlerRef.m_cash >= m_upgradeRef.m_cost);
+            SetBuyButtonEnabled(m_gameHandlerRef.GetCurrentCash() >= m_upgradeRef.m_cost);
         }
     }
 

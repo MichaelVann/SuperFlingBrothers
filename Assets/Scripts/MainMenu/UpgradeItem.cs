@@ -9,12 +9,12 @@ public class UpgradeItem
     public string m_name;
     public string m_description;
 
-    public int m_cost;
+    public float m_cost;
     public bool m_owned = false;
 
     public void SetName(string a_string) { m_name = a_string; }
     public void SetDescription(string a_string) { m_description = a_string; }
-    public void SetCost(int a_cost) { m_cost = a_cost; }
+    public void SetCost(float a_cost) { m_cost = a_cost; }
 
     public void SetOwned(bool a_value) { m_owned = a_value; }
 
