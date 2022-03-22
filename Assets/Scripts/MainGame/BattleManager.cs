@@ -49,7 +49,7 @@ public class BattleManager : MonoBehaviour
     float m_scoreGained = 0f;
     float m_bonusTimeScoreGained = 0f;
 
-    public float m_coinValue = 1f;
+    internal float m_coinValue = 100.27f;
 
     float m_healthbarMainPos = 0f;
 
@@ -86,6 +86,7 @@ public class BattleManager : MonoBehaviour
         m_freezeTimerMax = m_turnInterval;
         m_freezeTimer = m_freezeTimerMax;
         m_coreEnemySpawnLocation = new Vector3(0f, -1.6f, 0f);
+        
     }
 
     public void Start()

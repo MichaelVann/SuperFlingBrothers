@@ -29,11 +29,11 @@ public class PostBattleHandler : MonoBehaviour
         
         m_winResult = m_gameHandlerRef.m_wonLastGame;
         m_resultTextRef.text = m_winResult ? "Victory!" : "Defeat!";
-        m_goldCollectedTextRef.text = "" + (int)m_gameHandlerRef.m_goldEarnedLastGame;
+        m_goldCollectedTextRef.text = "" + (float)m_gameHandlerRef.m_goldEarnedLastGame;
         //m_goldCollectedTextRef.SetDesiredValue(0);
-        m_totalGoldTextRef.SetCurrentValue((int)m_gameHandlerRef.GetCurrentCash());
+        m_totalGoldTextRef.SetCurrentValue(m_gameHandlerRef.GetCurrentCash());
         m_gameHandlerRef.ChangeCash(m_gameHandlerRef.m_goldEarnedLastGame);
-        m_totalGoldTextRef.SetDesiredValue((int)m_gameHandlerRef.GetCurrentCash());
+        m_totalGoldTextRef.SetDesiredValue(m_gameHandlerRef.GetCurrentCash());
 
     }
 

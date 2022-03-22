@@ -241,8 +241,6 @@ public class Player : Damageable
         m_shieldSpriteRenderer.color = shieldColor;
     }
 
-
-
     void ShieldUpdate()
     {
         if (m_shieldEnabled)
@@ -275,5 +273,10 @@ public class Player : Damageable
             }
         }
         ShieldUpdate();
+
+        if (Input.GetKey(KeyCode.M))
+        {
+             Damage(100f);
+        }
     }
 }

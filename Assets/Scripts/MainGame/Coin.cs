@@ -12,7 +12,6 @@ public class Coin : MonoBehaviour
     float m_targetSpeed = 30f;
     bool m_movingToTargetPos = false;
     Vector3 m_targetPosition;
-     
 
     // Start is called before the first frame update
     void Start()

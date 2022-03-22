@@ -7,18 +7,19 @@ public class RollingText : MonoBehaviour
 {
     Text m_localTextRef;
 
-    int m_desiredValue = 100;
-    int m_currentValue = 0;
-    float m_currentInterest = 0f;
+    float m_desiredValue = 100;
+    float m_currentValue = 0;
 
-    float m_rollSpeed = 160f;
+    float m_rollTime= 1.5f;
+    float m_elapsedTime = 0f;
 
-    public void SetDesiredValue(int a_value)
+
+    public void SetDesiredValue(float a_value)
     {
         m_desiredValue = a_value;
     }
 
-    public void SetCurrentValue(int a_value)
+    public void SetCurrentValue(float a_value)
     {
         m_currentValue = a_value;
     }
@@ -33,36 +34,15 @@ public class RollingText : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //If roll is not completed
         if (m_desiredValue != m_currentValue && m_desiredValue > m_currentValue)
         {
-            float increase = Time.deltaTime * (Mathf.Sin((((float)m_currentValue / (float)m_desiredValue) * Mathf.PI/2) + Mathf.PI/2) + 0.01f) * m_rollSpeed;
-            m_currentInterest += increase;
-            if (m_currentInterest >= 1f)
-            {
-                m_currentValue += (int)m_currentInterest;
-                if (m_currentValue > m_desiredValue)
-                {
-                    m_currentValue = m_desiredValue;
-                }
-                m_currentInterest -= 1f;
-            }
-            m_localTextRef.text = "" + m_currentValue;
-        }
+            m_elapsedTime += Time.deltaTime;
+            float value = m_desiredValue * Mathf.Pow(m_elapsedTime / m_rollTime, 3f);
 
-        if (Input.GetKey(KeyCode.H))
-        {
-            m_currentValue = 0;
-        }
+            m_currentValue = value;
 
-        if (Input.GetKey(KeyCode.Y))
-        {
-            m_rollSpeed += Time.deltaTime * 10f;
-            Debug.Log(m_rollSpeed);
-        }
-        if (Input.GetKey(KeyCode.N))
-        {
-            m_rollSpeed -= Time.deltaTime * 10f;
-            Debug.Log(m_rollSpeed);
+            m_localTextRef.text = "" + VLib.TruncateFloatsDecimalPlaces(m_currentValue, 2);
         }
     }
 }
