@@ -26,6 +26,7 @@ public class UpgradesScreenHandler : MonoBehaviour
             upgradeItemPanel.Init(i, this);
             m_upgradeItemPanels.Add(upgradeItemPanel);
         }
+        Refresh();
     }
 
     public void Refresh()

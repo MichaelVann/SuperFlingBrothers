@@ -49,7 +49,7 @@ public class BattleManager : MonoBehaviour
     float m_scoreGained = 0f;
     float m_bonusTimeScoreGained = 0f;
 
-    internal float m_coinValue = 100.27f;
+    internal float m_coinValue = 1f;
 
     float m_healthbarMainPos = 0f;
 
@@ -113,7 +113,9 @@ public class BattleManager : MonoBehaviour
 
     public void SpawnEnemy(Vector3 a_spawnLocation)
     {
-        GameObject enemy = Instantiate<GameObject>(m_enemyTemplate, a_spawnLocation, Quaternion.identity, m_gameViewRef.transform);
+        GameObject enemyObj = Instantiate<GameObject>(m_enemyTemplate, a_spawnLocation, Quaternion.identity, m_gameViewRef.transform);
+        Enemy enemy = enemyObj.GetComponent<Enemy>();
+        enemy.SetUpType(Enemy.eEnemyType.Strikers);
     }
 
     public void SpawnEnemies()

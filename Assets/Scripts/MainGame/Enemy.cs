@@ -12,12 +12,17 @@ public class Enemy : Damageable
 
     public GameObject m_velocityIndicatorRef;
 
-    enum EnemyType
+    public enum eEnemyType
     {
         Idlers,
         Strikers,
         Dodgers,
-    }
+    }eEnemyType m_enemyType;
+
+    public struct TypeAbilities
+    {
+        public bool flinging;
+    }TypeAbilities m_typeAbilities;
 
     float m_duplicationTimer = 0f;
     float m_duplicationTimerMax = 12f;
@@ -28,11 +33,11 @@ public class Enemy : Damageable
     float m_xpTextYOffset = 0.2f;
 
     float m_sightRadius = 4f;
+
+    //Flinging
     public float m_flingTimer = 0f;
     public float m_flingTimerMax = 3f;
-
     float m_flingAccuracy = 20f;
-
     bool m_flinging;
 
     float m_coinSpawnOffset = 0.3f;
@@ -43,14 +48,35 @@ public class Enemy : Damageable
     {
         base.Awake();
         m_battleManagerRef.ChangeEnemyCount(1);
+        m_typeAbilities = new TypeAbilities();
+        m_flingTimer -= UnityEngine.Random.Range(0f, 0.3f);
+        m_damageTextColor = Color.yellow;
+    }
+
+    public void SetUpType(eEnemyType a_type)
+    {
+        m_enemyType = new eEnemyType();
+        m_typeAbilities = new TypeAbilities();
+        m_enemyType = a_type;
+
+        switch (m_enemyType)
+        {
+            case eEnemyType.Idlers:
+                m_typeAbilities.flinging = false;
+                break;
+            case eEnemyType.Strikers:
+            case eEnemyType.Dodgers:
+                m_typeAbilities.flinging = true;
+                break;
+            default:
+                break;
+        }
     }
 
     public override void Start()
     {
         base.Start();
         m_playerRef = FindObjectOfType<Player>();
-        m_flingTimer -= UnityEngine.Random.Range(0f, 0.3f);
-        m_damageTextColor = Color.yellow;
         if (!m_gameHandlerRef.m_enemyVectorsUpgrade.m_owned)
         {
             m_velocityIndicatorRef.SetActive(false);
@@ -204,34 +230,42 @@ public class Enemy : Damageable
        
     }
 
+    private void FlingUpdate()
+    {
+        Vector3 playerPos = m_playerRef.transform.position;
+
+        if ((playerPos - transform.position).magnitude <= m_sightRadius)
+        {
+            for (int i = 0; i < m_exclamationMarkRefs.Length; i++)
+            {
+                m_exclamationMarkRefs[i].SetActive(true);
+            }
+            m_flingTimer += Time.deltaTime;
+            if (m_flingTimer >= m_flingTimerMax)
+            {
+                m_flingTimer -= m_flingTimerMax;
+
+                Fling();
+            }
+            return;
+        }
+        else
+        {
+            for (int i = 0; i < m_exclamationMarkRefs.Length; i++)
+            {
+                m_exclamationMarkRefs[i].SetActive(false);
+            }
+        }
+    }
+
     //AI
     private void AIUpdate()
     {
         if (m_playerRef)
         {
-            Vector3 playerPos = m_playerRef.transform.position;
-
-            if ((playerPos - transform.position).magnitude <= m_sightRadius)
+            if (m_typeAbilities.flinging)
             {
-                for (int i = 0; i < m_exclamationMarkRefs.Length; i++)
-                {
-                    m_exclamationMarkRefs[i].SetActive(true);
-                }
-                m_flingTimer += Time.deltaTime;
-                if (m_flingTimer >= m_flingTimerMax)
-                {
-                    m_flingTimer -= m_flingTimerMax;
-
-                    Fling();
-                }
-                return;
-            }
-            else
-            {
-                for (int i = 0; i < m_exclamationMarkRefs.Length; i++)
-                {
-                    m_exclamationMarkRefs[i].SetActive(false);
-                }
+                FlingUpdate();
             }
         }
     }
