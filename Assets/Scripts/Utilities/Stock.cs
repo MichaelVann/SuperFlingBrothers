@@ -115,7 +115,6 @@ public class Stock
         //Debug.Log("newValue:" + newValue);
         //Debug.Log("deltaNormal:" + deltaNormal);
         //Debug.Log("deltaNormalFactor:" + deltaNormalFactor);
-        Debug.Log("m_trendNormalValue:" + m_trendNormalValue);
     }
 
     public void TradeStock(int a_amountTraded)

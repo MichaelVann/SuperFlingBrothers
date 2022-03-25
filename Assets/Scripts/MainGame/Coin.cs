@@ -30,7 +30,7 @@ public class Coin : MonoBehaviour
     void Update()
     {
         //If the player has won the game
-        if (m_battleManagerRef.m_endingGame && m_battleManagerRef.m_victory)
+        if (m_battleManagerRef.m_endingGame && m_battleManagerRef.m_endGameType == eEndGameType.win)
         {
             //Fly the coin towards the player
             transform.position += (m_playerRef.transform.position - transform.position).normalized * m_endSpeed * Time.deltaTime;

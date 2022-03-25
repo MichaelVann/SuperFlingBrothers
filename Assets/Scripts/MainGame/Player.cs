@@ -55,6 +55,7 @@ public class Player : Damageable
         m_battleManagerRef = FindObjectOfType<BattleManager>();
         m_damageTextColor = Color.red;
         SetupShield();
+        Fling(new Vector3(0f, -600f, 0f), 1f);
     }
 
     void SetupShield()
@@ -139,13 +140,14 @@ public class Player : Damageable
         if (!m_battleManagerRef.m_endingGame)
         {
             base.Die();
-            m_battleManagerRef.StartEndingGame(false);
+            m_battleManagerRef.StartEndingGame(eEndGameType.lose);
         }
     }
 
     public override void OnCollisionEnter2D(Collision2D a_collision)
     {
         Enemy enemy = a_collision.gameObject.GetComponent<Enemy>();
+        EscapeZone escapeZone = a_collision.gameObject.GetComponent<EscapeZone>();
         if (enemy)//If collided with an enemy
         {
             if (m_health <= m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue / 3f)//
@@ -154,8 +156,17 @@ public class Player : Damageable
                 {
                     m_hitSlowdownActive = true;
                     Time.timeScale = m_hitTimeSlowdownRate;
+                    m_battleManagerRef.SetTimeScale(m_hitTimeSlowdownRate);
                 }
             }
+        }
+        else if (escapeZone)
+        {
+            if (!m_battleManagerRef.m_endingGame)
+            {
+                m_battleManagerRef.Escape();
+            }
+            
         }
 
         switch (m_gameHandlerRef.m_currentGameMode)
@@ -165,7 +176,7 @@ public class Player : Damageable
             case GameHandler.eGameMode.Health:
                 if (a_collision.gameObject.GetComponent<Pocket>())
                 {
-                    Damage(m_battleManagerRef.m_pocketDamage);
+                    TakePocketDamage();
                 }
                 else
                 {
@@ -269,7 +280,7 @@ public class Player : Damageable
             {
                 m_hitSlowdownActive = false;
                 m_enemyHitTimer = 0f;
-                Time.timeScale = 1f;
+                m_battleManagerRef.SetTimeScale(1f);
             }
         }
         ShieldUpdate();

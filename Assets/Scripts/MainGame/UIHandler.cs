@@ -20,11 +20,32 @@ public class UIHandler : MonoBehaviour
         m_battleManagerRef = GetComponent<BattleManager>();
     }
 
-    public void StartEnding(bool a_won)
+    public void StartEnding(eEndGameType a_type)
     {
-        string endTextString = a_won ? "Victory!" : "Defeat!";
-        Color m_highlightColor = a_won ? Color.white : Color.red;
-        Color m_bgColor = a_won ? Color.green : Color.black;
+        string endTextString = "";
+        Color m_highlightColor = Color.white;
+        Color m_bgColor = Color.white;
+
+        switch (a_type)
+        {
+            case eEndGameType.escape:
+                endTextString = "Escape!";
+                m_highlightColor = Color.white;
+                m_bgColor = Color.green;
+                break;
+            case eEndGameType.win:
+                endTextString ="Victory!";
+                m_highlightColor = Color.white;
+                m_bgColor = Color.blue;
+                break;
+            case eEndGameType.lose:
+                endTextString = "Defeat!";
+                m_highlightColor = Color.red;
+                m_bgColor = Color.black;
+                break;
+            default:
+                break;
+        }
 
         m_endingText.SetActive(true);
         m_endingText.GetComponent<Text>().color = m_bgColor;

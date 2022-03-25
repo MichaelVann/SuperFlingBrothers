@@ -37,8 +37,9 @@ public class Damageable : BaseObject
 
     internal StatHandler m_statHandler;
     internal float m_health;
+    internal float m_maxHealth;
 
-    public float GetHealthPercentage() { return m_health / m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue; }
+    public float GetHealthPercentage() { return m_health / m_maxHealth; }
 
     public override void Awake()
     {
@@ -46,7 +47,7 @@ public class Damageable : BaseObject
         m_battleManagerRef = FindObjectOfType<BattleManager>();
         m_statHandler = new StatHandler();
         m_statHandler.Init();
-        m_health = m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue;
+        m_health = m_maxHealth = m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue;
         m_originalMass = m_rigidBody.mass;
         m_originalColor = m_spriteRenderer.color;
     }
@@ -56,7 +57,7 @@ public class Damageable : BaseObject
         m_gameHandlerRef = m_battleManagerRef.m_gameHandlerRef;
 
         UpdateHealthColor();
-        m_healthBarRef.SetMaxProgressValue(m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue);
+        m_healthBarRef.SetMaxProgressValue(m_maxHealth);
 
     }
 
@@ -118,7 +119,7 @@ public class Damageable : BaseObject
         {
             //Damage it
             m_health -= a_damage;
-            m_health = Mathf.Clamp(m_health, 0f, m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue);
+            m_health = Mathf.Clamp(m_health, 0f, m_maxHealth);
 
             //Spawn collision sparks
             Instantiate(m_collisionSparkPrefab, transform.position, new Quaternion(), transform);
@@ -174,5 +175,10 @@ public class Damageable : BaseObject
 
         if (m_healthBarRef) { m_healthBarRef.SetProgressValue(m_health); }
         
+    }
+
+    protected void TakePocketDamage()
+    {
+        Damage(m_health * 0.45f + m_maxHealth * 0.05f);
     }
 }

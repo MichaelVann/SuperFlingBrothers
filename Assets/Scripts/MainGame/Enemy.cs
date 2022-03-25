@@ -126,7 +126,7 @@ public class Enemy : Damageable
                 case GameHandler.eGameMode.TurnLimit:
                     break;
                 case GameHandler.eGameMode.Health:
-                    Damage(m_battleManagerRef.m_pocketDamage);
+                    TakePocketDamage();
                     break;
                 case GameHandler.eGameMode.Pockets:
                     Die();

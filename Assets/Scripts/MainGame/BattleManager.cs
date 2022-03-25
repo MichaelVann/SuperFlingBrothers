@@ -5,6 +5,14 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+
+public enum eEndGameType
+{
+    escape,
+    win,
+    lose
+}
+
 public class BattleManager : MonoBehaviour
 {
     public GameHandler m_gameHandlerRef;
@@ -12,6 +20,7 @@ public class BattleManager : MonoBehaviour
     public GameObject m_enemyTemplate;
     public GameObject m_gameViewRef;
     UIHandler m_uiHandlerRef;
+    public GameObject m_escapeZoneRef;
 
     public Text m_enemyCountText;
 
@@ -36,7 +45,7 @@ public class BattleManager : MonoBehaviour
     public float m_gameEndSlowdownFactor = 0.25f;
     public float m_gameEndTimer = 0f;
     public const float m_maxGameEndTimer = 0.55f;
-    public bool m_victory;
+    public eEndGameType m_endGameType;
 
     public float m_score = 0f;
     public float m_xpEarned = 0f;
@@ -57,6 +66,8 @@ public class BattleManager : MonoBehaviour
     float m_enemySpawnGap = 0.4f;
     Vector3 m_coreEnemySpawnLocation;
 
+    bool m_startingSequence = true;
+
     public float GetMaxGameEndTimer()
     {
         return m_maxGameEndTimer;
@@ -67,9 +78,11 @@ public class BattleManager : MonoBehaviour
         m_frozen = a_frozen;
         if (!m_endingGame)
         {
-            Time.timeScale = a_frozen ? 0.0f : 1.0f;
+            SetTimeScale(a_frozen ? 0.0f : 1.0f);
         }
     }
+
+    public void SetScore(float a_value) { m_score = a_value; }
 
     public void ChangeScore(float a_change) { m_score += a_change; }
     public void ChangeXp(float a_change) { m_xpEarned += a_change; }
@@ -77,6 +90,12 @@ public class BattleManager : MonoBehaviour
     public void CalculateFinishedGame()
     {
         m_gameHandlerRef.CalculateFinishedGame();
+    }
+
+    public void SetTimeScale(float a_scale)
+    {
+        Time.timeScale = a_scale;
+        Debug.Log(a_scale);
     }
 
     void Awake()
@@ -177,7 +196,7 @@ public class BattleManager : MonoBehaviour
         m_enemyCount += a_change;
         if (m_enemyCount <= 0)
         {
-            StartEndingGame(true);
+            StartEndingGame(eEndGameType.win);
         }
     }
 
@@ -192,7 +211,7 @@ public class BattleManager : MonoBehaviour
                 m_turnsRemaining--;
                 if (m_turnsRemaining <= 0)
                 {
-                    StartEndingGame(false);
+                    StartEndingGame(eEndGameType.lose);
                 }
             }
             else
@@ -200,6 +219,11 @@ public class BattleManager : MonoBehaviour
                 m_turnsRemaining++;
             }
         }
+    }
+
+    internal void Escape()
+    {
+        StartEndingGame(eEndGameType.escape);
     }
 
     void UpdateFreezeTimer()
@@ -215,7 +239,8 @@ public class BattleManager : MonoBehaviour
             if (m_freezing)
             {
                 m_freezingTimer += Time.deltaTime;
-                Time.timeScale = 1f - m_slowableTime * m_freezingTimer / m_freezingTimerMax;
+
+                SetTimeScale(1f - m_slowableTime * m_freezingTimer / m_freezingTimerMax);
                 if (m_freezingTimer >= m_freezingTimerMax)
                 {
                     m_freezingTimer = 0f;
@@ -231,19 +256,23 @@ public class BattleManager : MonoBehaviour
         m_gameHandlerRef.m_goldEarnedLastGame = m_score;
         m_gameHandlerRef.m_xpEarnedLastGame = m_score;
         //Go to post game screen
-        Time.timeScale = 1f;
+        SetTimeScale(1f);
         FindObjectOfType<GameHandler>().ChangeScene(GameHandler.eScene.postBattle);
     }
 
-    public void StartEndingGame(bool a_won)
+    public void StartEndingGame(eEndGameType a_type)
     {
         if (!m_endingGame)
         {
             m_endingGame = true;
-            m_gameHandlerRef.SetLastGameResult(a_won);
-            Time.timeScale = m_gameEndSlowdownFactor;
-            m_uiHandlerRef.StartEnding(a_won);
-            m_victory = a_won;
+            m_gameHandlerRef.SetLastGameResult(a_type);
+            SetTimeScale(m_gameEndSlowdownFactor);
+            m_uiHandlerRef.StartEnding(a_type);
+            m_endGameType = a_type;
+            if (m_endGameType == eEndGameType.lose)
+            {
+                SetScore(0f);
+            }
         }
     }
 
@@ -278,7 +307,7 @@ public class BattleManager : MonoBehaviour
 
             if (m_enemyCount <= 0)
             {
-                StartEndingGame(true);
+                StartEndingGame(eEndGameType.win);
             }
             UpdateFreezeTimer();
         }

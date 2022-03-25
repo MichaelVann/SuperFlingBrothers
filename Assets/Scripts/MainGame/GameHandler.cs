@@ -30,7 +30,7 @@ public class GameHandler : MonoBehaviour
     private float m_cash = 0;
 
     //Last Game
-    public bool m_wonLastGame = false;
+    public eEndGameType m_lastGameResult = eEndGameType.lose;
     public float m_xpEarnedLastGame = 0f;
     public float m_goldEarnedLastGame = 0f;
 
@@ -61,7 +61,7 @@ public class GameHandler : MonoBehaviour
     SaveData m_saveData;
     bool m_autoLoadDataOnLaunch = false;
 
-    public void SetLastGameResult(bool a_value) { m_wonLastGame = a_value; }
+    public void SetLastGameResult(eEndGameType a_value) { m_lastGameResult = a_value; }
 
     public void SetGameMode(eGameMode a_gameMode) { m_currentGameMode = a_gameMode; }
     public void ChangeCash(float a_change) { m_cash += a_change; }

@@ -11,7 +11,7 @@ public class PostBattleHandler : MonoBehaviour
     public Text m_goldCollectedTextRef;
     public RollingText m_totalGoldTextRef;
 
-    bool m_winResult = false;
+    eEndGameType m_winResult = eEndGameType.lose;
 
     public void ContinuePressed()
     {
@@ -20,6 +20,7 @@ public class PostBattleHandler : MonoBehaviour
 
     private void Awake()
     {
+
     }
 
     // Start is called before the first frame update
@@ -27,8 +28,22 @@ public class PostBattleHandler : MonoBehaviour
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         
-        m_winResult = m_gameHandlerRef.m_wonLastGame;
-        m_resultTextRef.text = m_winResult ? "Victory!" : "Defeat!";
+        m_winResult = m_gameHandlerRef.m_lastGameResult;
+        switch (m_winResult)
+        {
+            case eEndGameType.escape:
+                m_resultTextRef.text ="Escaped!";
+                break;
+            case eEndGameType.win:
+                m_resultTextRef.text ="Victory!";
+                break;
+            case eEndGameType.lose:
+                m_resultTextRef.text = "Defeat!";
+                break;
+            default:
+                break;
+        }
+
         m_goldCollectedTextRef.text = "" + (float)m_gameHandlerRef.m_goldEarnedLastGame;
         //m_goldCollectedTextRef.SetDesiredValue(0);
         m_totalGoldTextRef.SetCurrentValue(m_gameHandlerRef.GetCurrentCash());
