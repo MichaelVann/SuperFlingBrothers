@@ -1,18 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PreBattleManager : MonoBehaviour
+public class GameModeHandler : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
     public Text m_gameModeTextRef;
 
+    // Start is called before the first frame update
     void Start()
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         UpdateGameModeText();
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
     }
 
     void UpdateGameModeText()
@@ -34,11 +41,5 @@ public class PreBattleManager : MonoBehaviour
     public void Back()
     {
         FindObjectOfType<GameHandler>().ChangeScene(GameHandler.eScene.mainMenu);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

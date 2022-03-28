@@ -79,12 +79,10 @@ public class GameHandler : MonoBehaviour
         m_playerStatHandler.Init();
         //m_playerStatHandler.m_stats[(int)eStatIndices.strength].effectiveValue = 1f;
 
-        //HumanBody
-        m_humanBody = new HumanBody();
-
         //Stocks
         m_stockHandler = new StockHandler(this);
 
+        SetupHumanBody();
         SetupUpgrades();
         SetupShield();
         if (m_autoLoadDataOnLaunch)
@@ -93,6 +91,10 @@ public class GameHandler : MonoBehaviour
         }
     }
 
+    private void SetupHumanBody()
+    {
+        m_humanBody = new HumanBody();
+    }
 
     private void SetupShield()
     {
@@ -165,8 +167,6 @@ public class GameHandler : MonoBehaviour
         }
         m_stockHandler.Update();
     }
-
-
 
     public void ChangeScene(eScene a_scene)
     {
