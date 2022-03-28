@@ -14,7 +14,8 @@ public class GameHandler : MonoBehaviour
         preBattle,
         battle,
         postBattle
-    }
+    } eScene m_currentScene;
+
 
     public enum eGameMode
     {
@@ -23,22 +24,22 @@ public class GameHandler : MonoBehaviour
         Pockets,
         Hunger,
         ModeCount
-    }
-    public eGameMode m_currentGameMode;
+    } public eGameMode m_currentGameMode;
 
-    internal StatHandler m_playerStatHandler;
     private float m_cash = 0;
+    internal StatHandler m_playerStatHandler;
+    HumanBody m_humanBody;
 
     //Last Game
     public eEndGameType m_lastGameResult = eEndGameType.lose;
     public float m_xpEarnedLastGame = 0f;
     public float m_goldEarnedLastGame = 0f;
 
+    //Upgrades
     public UpgradeItem[] m_upgrades;
     public UpgradeItem m_enemyVectorsUpgrade;
     public UpgradeItem m_shieldUpgrade;
 
-    eScene m_currentScene;
 
     public struct Shield
     {
@@ -73,11 +74,17 @@ public class GameHandler : MonoBehaviour
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
-        //m_playerStatHandler = gameObject.GetComponent<StatHandler>();
+        //Stats
         m_playerStatHandler = new StatHandler();
         m_playerStatHandler.Init();
         //m_playerStatHandler.m_stats[(int)eStatIndices.strength].effectiveValue = 1f;
+
+        //HumanBody
+        m_humanBody = new HumanBody();
+
+        //Stocks
         m_stockHandler = new StockHandler(this);
+
         SetupUpgrades();
         SetupShield();
         if (m_autoLoadDataOnLaunch)
