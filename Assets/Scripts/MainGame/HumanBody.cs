@@ -1,0 +1,132 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class HumanBody
+{
+    public struct BodyPart
+    {
+        public int invaders;
+        public struct Health
+        {
+            public float value;
+            public float max;
+        } public Health health;
+
+        public enum eType
+        {
+            Chest,
+            Face,
+            Head,
+            LeftFoot,
+            LeftForeArm,
+            LeftHand,
+            LeftKnee,
+            LeftShoulder,
+            LeftThigh,
+            Neck,
+            Pelvis,
+            RightFoot,
+            RightForeArm,
+            RightHand,
+            RightKnee,
+            RightShoulder,
+            RightThigh,
+            Waist,
+            Count
+        } public eType type;
+
+        public string name;
+
+        public static string GetPartName(BodyPart.eType a_type) { return Enum.GetName(typeof(BodyPart.eType), a_type); }
+
+        public BodyPart(BodyPart.eType a_type, int a_invaders, BodyPart.Health a_health)
+        {
+            name = GetPartName(a_type);
+            invaders = a_invaders;
+            health = a_health;
+            type = a_type;
+        }
+    }
+    BodyPart[] m_bodyPartList;
+
+    float m_basePartHealth = 100;
+
+    public HumanBody()
+    {
+        SetUpBodyParts();
+    }
+
+    private void SetUpBodyParts()
+    {
+        m_bodyPartList = new BodyPart[(int)BodyPart.eType.Count];
+        for (int i = 0; i < (int)BodyPart.eType.Count; i++)
+        {
+            SetUpDefaultBodyPart(ref m_bodyPartList[i], i);
+        }
+    }
+
+    public void SetUpDefaultBodyPart(ref BodyPart a_part, int a_index)
+    {
+        ref BodyPart part = ref a_part;
+        int invaders = 100;
+        BodyPart.Health health = new BodyPart.Health();
+        health.max = 0;
+
+        switch ((BodyPart.eType)a_index)
+        {
+            case BodyPart.eType.Chest:
+                health.max = 1.8f;
+                break;
+            case BodyPart.eType.Face:
+                health.max = 0.5f;
+                break;
+            case BodyPart.eType.Head:
+                health.max = 0.5f;
+                break;
+            case BodyPart.eType.Neck:
+                health.max = 0.5f;
+                break;
+            case BodyPart.eType.Pelvis:
+                health.max = 0.6f;
+                break;
+            case BodyPart.eType.Waist:
+                health.max = 1f;
+                break;
+            case BodyPart.eType.LeftFoot:
+            case BodyPart.eType.RightFoot:
+                health.max = 0.4f;
+                break;
+            case BodyPart.eType.LeftForeArm:
+            case BodyPart.eType.RightForeArm:
+                health.max = 0.4f;
+                break;
+            case BodyPart.eType.LeftHand:
+            case BodyPart.eType.RightHand:
+                health.max = 0.4f;
+                break;
+            case BodyPart.eType.LeftKnee:
+            case BodyPart.eType.RightKnee:
+                health.max = 0.6f;
+                break;
+            case BodyPart.eType.LeftShoulder:
+            case BodyPart.eType.RightShoulder:
+                health.max = 0.7f;
+                break;
+            case BodyPart.eType.LeftThigh:
+            case BodyPart.eType.RightThigh:
+                health.max = 0.6f;
+                break;
+
+            case BodyPart.eType.Count:
+                break;
+            default:
+                break;
+        }
+        health.value = health.max *= m_basePartHealth;
+
+
+        a_part = new BodyPart((BodyPart.eType)a_index, invaders, health);
+    }
+}
