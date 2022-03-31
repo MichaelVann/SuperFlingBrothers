@@ -7,6 +7,9 @@ using UnityEngine.UI;
 public class PreBattleManager : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
+    public GameObject m_bodyPartSelectionRef;
+    public GameObject m_gameModeSelectionRef;
+
 
     enum SubScreen
     {
@@ -25,7 +28,17 @@ public class PreBattleManager : MonoBehaviour
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
     }
 
+    public void MoveToBodySelection()
+    {
+        m_gameModeSelectionRef.SetActive(false);
+        m_bodyPartSelectionRef.SetActive(true);
 
+    }
+    public void MoveToGameSelection()
+    {
+        m_gameModeSelectionRef.SetActive(true);
+        m_bodyPartSelectionRef.SetActive(false);
+    }
 
     // Update is called once per frame
     void Update()
