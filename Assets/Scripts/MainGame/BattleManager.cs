@@ -304,7 +304,6 @@ public class BattleManager : MonoBehaviour
                     break;
             }
 
-
             if (m_enemyCount <= 0)
             {
                 StartEndingGame(eEndGameType.win);

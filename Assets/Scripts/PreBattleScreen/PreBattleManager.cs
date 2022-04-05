@@ -40,6 +40,16 @@ public class PreBattleManager : MonoBehaviour
         m_bodyPartSelectionRef.SetActive(false);
     }
 
+    public void Play()
+    {
+        m_gameHandlerRef.ChangeScene(GameHandler.eScene.battle);
+    }
+
+    public void ReturnToMainMenu()
+    {
+        m_gameHandlerRef.ChangeScene(GameHandler.eScene.mainMenu);
+    }
+
     // Update is called once per frame
     void Update()
     {
