@@ -10,7 +10,11 @@ public class BodyPartUI : MonoBehaviour
 
     void Start()
     {
-        
+        UIBattleNode[] battleNodes = GetComponentsInChildren<UIBattleNode>();
+        for (int i = 0; i < battleNodes.Length; i++)
+        {
+            m_battleNodeList.Add(battleNodes[i]);
+        }
     }
 
     // Update is called once per frame

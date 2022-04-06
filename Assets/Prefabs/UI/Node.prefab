@@ -91,6 +91,7 @@ MonoBehaviour:
   m_connectionList: []
   m_invaders: 0
   m_id: 0
+  m_lineMaterial: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!114 &7517422226066360955
 MonoBehaviour:
   m_ObjectHideFlags: 0

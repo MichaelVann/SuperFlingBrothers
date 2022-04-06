@@ -16,6 +16,7 @@ public class BodyPartSelectionHandler : MonoBehaviour
     Vector3 m_humanBodyStartPos;
     Vector3 m_zoomPartVisibilityOffset;
     bool m_zoomed = false;
+    bool m_zoomingIn = false;
     bool m_zooming = false;
     float m_startingZoom = 1f;
     float m_currentZoom = 1f;
@@ -29,6 +30,7 @@ public class BodyPartSelectionHandler : MonoBehaviour
     float m_zoomSpeed = 1f;
 
     List<BodyPartUI> m_bodyPartUIObjectList;
+    public List<GameObject> m_nodeContainers;
 
     // Start is called before the first frame update
     void Start()
@@ -41,9 +43,7 @@ public class BodyPartSelectionHandler : MonoBehaviour
         {
             SetUpPartNodes();
         }
-
-
-
+        ToggleNodeVisibility(-1);
     }
 
     void SetUpPartNodes()
@@ -64,11 +64,18 @@ public class BodyPartSelectionHandler : MonoBehaviour
         UpdateZoom();
     }
 
+    void ToggleNodeVisibility(int a_id)
+    {
+        for (int i = 0; i < m_nodeContainers.Count; i++)
+        {
+            m_nodeContainers[i].SetActive(i == a_id ? true : false);
+        }
+    }
+
     void UpdateZoom()
     {
         if (m_zooming)
         {
-
             m_zoomProgress += Time.deltaTime / m_zoomTime;
             m_zoomProgress = Mathf.Clamp(m_zoomProgress, 0f, 1f);
             m_currentZoom = m_startingZoom + m_zoomProgress * (m_targetZoom - m_startingZoom);
@@ -83,6 +90,11 @@ public class BodyPartSelectionHandler : MonoBehaviour
             {
                 m_zooming = false;
                 m_zoomProgress = 0f;
+                m_zoomed = m_zoomingIn ? true : false;
+                if (m_zoomed)
+                {
+                    ToggleNodeVisibility(m_selectedPartIndex);
+                }
             }
         }
     }
@@ -103,6 +115,7 @@ public class BodyPartSelectionHandler : MonoBehaviour
         m_startingZoomLocation = m_currentZoomLocation;
         m_partInfoPanel.SetActive(true);
         m_zoomProgress = 0f;
+        m_zoomingIn = true;
     }
 
     public void UnZoom()
@@ -114,5 +127,7 @@ public class BodyPartSelectionHandler : MonoBehaviour
         m_startingZoomLocation = m_currentZoomLocation;
         m_partInfoPanel.SetActive(false);
         m_zoomProgress = 0f;
+        m_zoomingIn = false;
+        ToggleNodeVisibility(-1);
     }
 }
