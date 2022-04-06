@@ -10,17 +10,16 @@ public class PreBattleManager : MonoBehaviour
     public GameObject m_bodyPartSelectionRef;
     public GameObject m_gameModeSelectionRef;
 
-
-    enum SubScreen
+    public enum eSubScreen
     {
         choosePart,
         zoomedOnPart,
         chooseGameMode
-    } SubScreen m_currentSubScreen;
+    } eSubScreen m_currentSubScreen;
 
     private void Awake()
     {
-        m_currentSubScreen = SubScreen.choosePart;
+        m_currentSubScreen = eSubScreen.choosePart;
     }
 
     void Start()
@@ -32,9 +31,14 @@ public class PreBattleManager : MonoBehaviour
     {
         m_gameModeSelectionRef.SetActive(false);
         m_bodyPartSelectionRef.SetActive(true);
-
     }
     public void MoveToGameSelection()
+    {
+        m_gameModeSelectionRef.SetActive(true);
+        m_bodyPartSelectionRef.SetActive(false);
+    }
+
+    public void MoveToSubScreen(eSubScreen a_subScreen)
     {
         m_gameModeSelectionRef.SetActive(true);
         m_bodyPartSelectionRef.SetActive(false);

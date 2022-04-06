@@ -16,7 +16,6 @@ public class GameHandler : MonoBehaviour
         postBattle
     } eScene m_currentScene;
 
-
     public enum eGameMode
     {
         TurnLimit,
@@ -28,7 +27,7 @@ public class GameHandler : MonoBehaviour
 
     private float m_cash = 0;
     internal StatHandler m_playerStatHandler;
-    HumanBody m_humanBody;
+    public HumanBody m_humanBody;
 
     //Last Game
     public eEndGameType m_lastGameResult = eEndGameType.lose;
@@ -94,6 +93,11 @@ public class GameHandler : MonoBehaviour
     private void SetupHumanBody()
     {
         m_humanBody = new HumanBody();
+    }
+
+    private void SetUpBodyPart()
+    {
+
     }
 
     private void SetupShield()

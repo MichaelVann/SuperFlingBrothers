@@ -5,57 +5,14 @@ using UnityEngine;
 
 public class HumanBody
 {
-    public struct BodyPart
-    {
-        public static string GetPartName(BodyPart.eType a_type) { return Enum.GetName(typeof(BodyPart.eType), a_type); }
-
-        public int invaders;
-        public string name;
-        public bool unlocked;
-
-        public struct Health
-        {
-            public float value;
-            public float max;
-        } public Health health;
-
-        public enum eType
-        {
-            Chest,
-            Face,
-            Head,
-            LeftFoot,
-            LeftForeArm,
-            LeftHand,
-            LeftKnee,
-            LeftShoulder,
-            LeftThigh,
-            Neck,
-            Pelvis,
-            RightFoot,
-            RightForeArm,
-            RightHand,
-            RightKnee,
-            RightShoulder,
-            RightThigh,
-            Waist,
-            Count
-        } public eType type;
-
-        public BodyPart(BodyPart.eType a_type, int a_invaders, BodyPart.Health a_health, bool a_unlocked)
-        {
-            name = GetPartName(a_type);
-            invaders = a_invaders;
-            health = a_health;
-            type = a_type;
-            unlocked = a_unlocked;
-        }
-    }
+    
     BodyPart[] m_bodyPartList;
 
     float m_basePartHealth = 100;
 
-    public void SetBodyPartLockedStatus(BodyPart.eType a_type, bool a_unlocked) { m_bodyPartList[(int)a_type].unlocked = a_unlocked; }
+    public bool m_bodySetupComplete = false;
+
+    public void SetBodyPartLockedStatus(BodyPart.eType a_type, bool a_unlocked) { m_bodyPartList[(int)a_type].m_unlocked = a_unlocked; }
 
     public HumanBody()
     {
@@ -68,6 +25,14 @@ public class HumanBody
         for (int i = 0; i < (int)BodyPart.eType.Count; i++)
         {
             SetUpDefaultBodyPart(ref m_bodyPartList[i], i);
+        }
+    }
+
+    public void SetUpBodyPartNodes(List<BodyPartUI> a_UIPartList)
+    {
+        for (int i = 0; i < a_UIPartList.Count; i++)
+        {
+            m_bodyPartList[i].SetUpPartNodesFromUI(a_UIPartList[i].m_battleNodeList);
         }
     }
 
@@ -133,6 +98,6 @@ public class HumanBody
         }
         health.value = health.max *= m_basePartHealth;
 
-        a_part = new BodyPart((BodyPart.eType)a_index, invaders, health, unlocked);
+        a_part = new BodyPart((BodyPart.eType)a_index, health, unlocked);
     }
 }

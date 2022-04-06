@@ -13,7 +13,6 @@ public class GameModeHandler : MonoBehaviour
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         UpdateGameModeText();
-
     }
 
     // Update is called once per frame

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BodyPartSelectionHandler : MonoBehaviour
 {
+    GameHandler m_gameHandlerRef;
     Camera m_cameraRef;
     public GameObject[] m_bodyPartUIRefs;
     public GameObject m_bodyContainerRef;
@@ -27,12 +28,34 @@ public class BodyPartSelectionHandler : MonoBehaviour
     float m_zoomTime = 0.5f;
     float m_zoomSpeed = 1f;
 
+    List<BodyPartUI> m_bodyPartUIObjectList;
+
     // Start is called before the first frame update
     void Start()
     {
+        m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_cameraRef = FindObjectOfType<Camera>();
         m_humanBodyStartPos = m_bodyContainerRef.transform.localPosition;
         m_zoomPartVisibilityOffset = new Vector3(0f, 120f, 0f);
+        if (!m_gameHandlerRef.m_humanBody.m_bodySetupComplete)
+        {
+            SetUpPartNodes();
+        }
+
+
+
+    }
+
+    void SetUpPartNodes()
+    {
+        m_bodyPartUIObjectList = new List<BodyPartUI>();
+
+        for (int i = 0; i < m_bodyPartUIRefs.Length; i++)
+        {
+            m_bodyPartUIObjectList.Add(m_bodyPartUIRefs[i].GetComponent<BodyPartUI>());
+        }
+
+        m_gameHandlerRef.m_humanBody.SetUpBodyPartNodes(m_bodyPartUIObjectList);
     }
 
     // Update is called once per frame
@@ -45,24 +68,6 @@ public class BodyPartSelectionHandler : MonoBehaviour
     {
         if (m_zooming)
         {
-            //Vector3 deltaPos = m_zoomTargetLocation - m_currentZoomLocation;
-            //float deltaZoom = m_targetZoom - m_currentZoom;
-            //float zoomIncrement = Time.deltaTime * m_zoomSpeed * (deltaZoom >= 0 ? 1f : -1f);
-            //zoomIncrement = deltaZoom >= 0 ? Mathf.Clamp(zoomIncrement, 0f, deltaZoom) : Mathf.Clamp(zoomIncrement, deltaZoom, 0f);
-            //m_currentZoom += zoomIncrement;
-
-            //float zoomDeltaPerc = zoomIncrement / deltaZoom;
-            //float translationProgression = Time.deltaTime;
-
-
-            //m_currentZoomLocation = new Vector3(Mathf.Lerp(m_currentZoomLocation.x, m_zoomTargetLocation.x, zoomDeltaPerc), Mathf.Lerp(m_currentZoomLocation.y, m_zoomTargetLocation.y, zoomDeltaPerc), Mathf.Lerp(m_currentZoomLocation.z, m_zoomTargetLocation.z, zoomDeltaPerc));
-
-            //m_bodyContainerRef.transform.localPosition = m_currentZoomLocation * m_currentZoom;
-            //m_bodyContainerRef.transform.localScale = new Vector3(m_currentZoom, m_currentZoom, 1f);
-            //if (zoomDeltaPerc >= 1f)
-            //{
-            //    m_zooming = false;
-            //}
 
             m_zoomProgress += Time.deltaTime / m_zoomTime;
             m_zoomProgress = Mathf.Clamp(m_zoomProgress, 0f, 1f);
