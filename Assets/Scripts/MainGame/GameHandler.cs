@@ -212,5 +212,4 @@ public class GameHandler : MonoBehaviour
         m_playerStatHandler = m_saveData.statHandler;
         m_stockHandler.m_stockList = m_saveData.stockList;
     }
-
 }

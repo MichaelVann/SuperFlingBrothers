@@ -20,7 +20,10 @@ public class UIBattleNode : MonoBehaviour
         m_lineRenderers = new LineRenderer[m_connectionList.Count];
         for (int i = 0; i < m_connectionList.Count; i++)
         {
-            m_lineRenderers[i] = gameObject.AddComponent<LineRenderer>();
+            //m_lineRenderers[i] = gameObject.AddComponent<LineRenderer>();
+            GameObject gObject = new GameObject("MyGameObject");
+            gObject.transform.parent = gameObject.transform;
+            m_lineRenderers[i] = gObject.AddComponent<LineRenderer>();
             m_lineRenderers[i].startWidth = m_lineRenderers[i].endWidth = 0.02f;
             m_lineRenderers[i].startColor = m_lineRenderers[i].endColor = Color.green;
             m_lineRenderers[i].material = m_lineMaterial;
