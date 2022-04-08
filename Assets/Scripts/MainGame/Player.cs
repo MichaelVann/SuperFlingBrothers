@@ -49,10 +49,10 @@ public class Player : Damageable
     public override void Start()
     {
         base.Start();
-        m_statHandler = m_gameHandlerRef.m_playerStatHandler;
-        m_health = m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue;
         m_healthBarRef.SetMaxProgressValue(m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue);
         m_battleManagerRef = FindObjectOfType<BattleManager>();
+        m_statHandler = m_gameHandlerRef.m_playerStatHandler;
+        UpdateLocalStatsFromStatHandler();
         m_damageTextColor = Color.red;
         SetupShield();
         Fling(new Vector3(0f, -600f, 0f), 1f);

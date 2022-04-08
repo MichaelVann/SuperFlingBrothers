@@ -11,32 +11,38 @@ public class UIBattleNode : MonoBehaviour
     public int m_invaders = 0;
     public int m_id = 0;
 
-    LineRenderer[] m_lineRenderers;
+    GameObject[] m_uiLines;
 
-    public Material m_lineMaterial;
+    public GameObject m_uiLineRef;
+    public GameObject m_lineContainerRef;
+    float m_lineWidth = 1.7f;
 
     void Start()
     {
-        m_lineRenderers = new LineRenderer[m_connectionList.Count];
+        m_uiLines = new GameObject[m_connectionList.Count];
+
         for (int i = 0; i < m_connectionList.Count; i++)
         {
-            //m_lineRenderers[i] = gameObject.AddComponent<LineRenderer>();
-            GameObject gObject = new GameObject("MyGameObject");
-            gObject.transform.parent = gameObject.transform;
-            m_lineRenderers[i] = gObject.AddComponent<LineRenderer>();
-            m_lineRenderers[i].startWidth = m_lineRenderers[i].endWidth = 0.02f;
-            m_lineRenderers[i].startColor = m_lineRenderers[i].endColor = Color.green;
-            m_lineRenderers[i].material = m_lineMaterial;
+            m_uiLines[i] = Instantiate<GameObject>(m_uiLineRef, m_lineContainerRef.transform);
+        }
+        SetUpLines();
+    }
+
+    void SetUpLines()
+    {
+        for (int i = 0; i < m_connectionList.Count; i++)
+        {
+            float angle = Vector3.SignedAngle(new Vector3(0f, 1f, 0f), new Vector3(transform.localPosition.x, transform.localPosition.y, 0f) - new Vector3(m_connectionList[i].transform.localPosition.x, m_connectionList[i].transform.localPosition.y, 0f), Vector3.forward);
+            float m_deltaMagnitude = (transform.localPosition - m_connectionList[i].transform.localPosition).magnitude;
+            m_uiLines[i].transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
+            m_uiLines[i].transform.position = transform.position;
+            m_uiLines[i].GetComponent<RectTransform>().sizeDelta = new Vector2(m_lineWidth, m_deltaMagnitude);
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        for (int i = 0; i < m_connectionList.Count; i++)
-        {
-            m_lineRenderers[i].SetPosition(0, new Vector3(transform.position.x, transform.position.y, 0f));
-            m_lineRenderers[i].SetPosition(1, new Vector3(m_connectionList[i].transform.position.x, m_connectionList[i].transform.position.y, 0f));
-        }
+        //SetUpLines();
     }
 }

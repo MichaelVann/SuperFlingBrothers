@@ -15,22 +15,30 @@ public class BodyPartSelectionHandler : MonoBehaviour
     //Zooming
     Vector3 m_humanBodyStartPos;
     Vector3 m_zoomPartVisibilityOffset;
-    bool m_zoomed = false;
+    bool m_initialZoomed = false;
     bool m_zoomingIn = false;
     bool m_zooming = false;
     float m_startingZoom = 1f;
     float m_currentZoom = 1f;
     float m_targetZoom = 0f;
-    float m_maxZoom = 2.5f;
+    float m_initialZoom = 3.5f;
+    float m_maxZoom = 9.5f;
     Vector3 m_startingZoomLocation;
     Vector3 m_currentZoomLocation;
     Vector3 m_zoomTargetLocation;
     float m_zoomProgress = 0f;
     float m_zoomTime = 0.5f;
-    float m_zoomSpeed = 1f;
+
+    bool m_wasPinchingLastFrame = false;
+    float m_lastPinchDistance;
+
+    float m_panSpeed = 7f;
 
     List<BodyPartUI> m_bodyPartUIObjectList;
     public List<GameObject> m_nodeContainers;
+    public List<GameObject> m_lineContainers;
+    public GameObject m_lineContainer;
+    public GameObject m_nodeContainer;
 
     // Start is called before the first frame update
     void Start()
@@ -38,12 +46,12 @@ public class BodyPartSelectionHandler : MonoBehaviour
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_cameraRef = FindObjectOfType<Camera>();
         m_humanBodyStartPos = m_bodyContainerRef.transform.localPosition;
-        m_zoomPartVisibilityOffset = new Vector3(0f, 120f, 0f);
+        m_zoomPartVisibilityOffset = new Vector3(0f, 30f, 0f);
         if (!m_gameHandlerRef.m_humanBody.m_bodySetupComplete)
         {
             SetUpPartNodes();
         }
-        ToggleNodeVisibility(-1);
+        ToggleNodeAndLineVisibility(false);
     }
 
     void SetUpPartNodes()
@@ -61,18 +69,29 @@ public class BodyPartSelectionHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateZoom();
-    }
+        UpdateInitialZoom();
 
-    void ToggleNodeVisibility(int a_id)
-    {
-        for (int i = 0; i < m_nodeContainers.Count; i++)
+        if (m_initialZoomed)
         {
-            m_nodeContainers[i].SetActive(i == a_id ? true : false);
+            PinchZoom();
+            PanCamera();
         }
     }
 
-    void UpdateZoom()
+    void ToggleNodeAndLineVisibility(bool a_visible)
+    {
+        m_lineContainer.SetActive(a_visible);
+        m_nodeContainer.SetActive(a_visible);
+
+    }
+
+    void ApplyZoomAndPan()
+    {
+        m_bodyContainerRef.transform.localPosition = m_currentZoomLocation * m_currentZoom;
+        m_bodyContainerRef.transform.localScale = new Vector3(m_currentZoom, m_currentZoom, 1f);
+    }
+
+    void UpdateInitialZoom()
     {
         if (m_zooming)
         {
@@ -84,41 +103,81 @@ public class BodyPartSelectionHandler : MonoBehaviour
 
             m_currentZoomLocation = new Vector3(Mathf.Lerp(m_startingZoomLocation.x, m_zoomTargetLocation.x, lerp), Mathf.Lerp(m_startingZoomLocation.y, m_zoomTargetLocation.y, lerp), Mathf.Lerp(m_startingZoomLocation.z, m_zoomTargetLocation.z, lerp));
 
-            m_bodyContainerRef.transform.localPosition = m_currentZoomLocation * m_currentZoom;
-            m_bodyContainerRef.transform.localScale = new Vector3(m_currentZoom, m_currentZoom, 1f);
+            ApplyZoomAndPan();
+
             if (m_zoomProgress >= 1f)
             {
                 m_zooming = false;
                 m_zoomProgress = 0f;
-                m_zoomed = m_zoomingIn ? true : false;
-                if (m_zoomed)
+                m_initialZoomed = m_zoomingIn ? true : false;
+                if (m_initialZoomed)
                 {
-                    ToggleNodeVisibility(m_selectedPartIndex);
+                    ToggleNodeAndLineVisibility(true);
                 }
             }
         }
     }
 
-    public void SelectPart(int a_index)
+    void PinchZoom()
     {
-        m_selectedPartIndex = a_index;
-        ZoomToPart(a_index);
+        if (Input.touchCount >= 2)
+        {
+            Vector2 touch0, touch1;
+            float pinchDistance;
+            touch0 = Input.GetTouch(0).position;
+            touch1 = Input.GetTouch(1).position;
+            pinchDistance = Vector2.Distance(touch0, touch1);
+
+            if (m_wasPinchingLastFrame)
+            {
+                float deltaPinchDistance = pinchDistance / m_lastPinchDistance;
+                m_currentZoom = Mathf.Clamp(m_currentZoom * deltaPinchDistance, m_initialZoom, m_maxZoom);
+                ApplyZoomAndPan();
+            }
+
+            m_lastPinchDistance = pinchDistance;
+            m_wasPinchingLastFrame = true;
+        }
+        else
+        {
+            m_wasPinchingLastFrame = false;
+        }
     }
 
-    public void ZoomToPart(int a_index)
+    void PanCamera()
+    {
+        if (Input.touchCount == 1)
+        {
+            m_currentZoomLocation += new Vector3(Input.GetTouch(0).deltaPosition.x, Input.GetTouch(0).deltaPosition.y, 0f) * m_panSpeed * Time.deltaTime;
+            Debug.Log(Input.GetTouch(0).deltaPosition);
+            ApplyZoomAndPan();
+        }
+    }
+
+    public void SelectPart(int a_index)
+    {
+        if (!m_initialZoomed)
+        {
+            m_selectedPartIndex = a_index;
+            InitialZoomToPart(a_index);
+        }
+
+    }
+
+    public void InitialZoomToPart(int a_index)
     {
         m_zooming = true;
         m_startingZoom = m_currentZoom;// m_bodyContainerRef.transform.localScale.x;
-        m_targetZoom = m_maxZoom;
+        m_targetZoom = m_initialZoom;
         m_zoomTargetLocation = m_humanBodyStartPos - m_bodyPartUIRefs[a_index].transform.localPosition + m_zoomPartVisibilityOffset;
-        //m_zoomTargetLocation = m_humanBodyStartPos - m_bodyPartUIRefs[a_index].transform.localPosition * m_maxZoom + m_zoomPartVisibilityOffset;
         m_startingZoomLocation = m_currentZoomLocation;
         m_partInfoPanel.SetActive(true);
         m_zoomProgress = 0f;
         m_zoomingIn = true;
+
     }
 
-    public void UnZoom()
+    public void UnInitialZoom()
     {
         m_zooming = true;
         m_startingZoom = m_currentZoom;// m_bodyContainerRef.transform.localScale.x;
@@ -128,6 +187,6 @@ public class BodyPartSelectionHandler : MonoBehaviour
         m_partInfoPanel.SetActive(false);
         m_zoomProgress = 0f;
         m_zoomingIn = false;
-        ToggleNodeVisibility(-1);
+        ToggleNodeAndLineVisibility(false);
     }
 }

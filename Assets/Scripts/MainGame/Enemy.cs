@@ -47,7 +47,6 @@ public class Enemy : Damageable
     public override void Awake()
     {
         base.Awake();
-        m_battleManagerRef.ChangeEnemyCount(1);
         m_typeAbilities = new TypeAbilities();
         m_flingTimer -= UnityEngine.Random.Range(0f, 0.3f);
         m_damageTextColor = Color.yellow;
@@ -81,6 +80,7 @@ public class Enemy : Damageable
         {
             m_velocityIndicatorRef.SetActive(false);
         }
+        m_battleManagerRef.ChangeEnemyCount(1);
     }
 
     public void Copy(Damageable a_ref)

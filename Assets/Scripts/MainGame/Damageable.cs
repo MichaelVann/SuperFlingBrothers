@@ -44,21 +44,29 @@ public class Damageable : BaseObject
     public override void Awake()
     {
         base.Awake();
-        m_battleManagerRef = FindObjectOfType<BattleManager>();
-        m_statHandler = new StatHandler();
-        m_statHandler.Init();
-        m_health = m_maxHealth = m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue;
-        m_originalMass = m_rigidBody.mass;
-        m_originalColor = m_spriteRenderer.color;
+
     }
 
     public virtual void Start()
     {
-        m_gameHandlerRef = m_battleManagerRef.m_gameHandlerRef;
+        m_battleManagerRef = FindObjectOfType<BattleManager>();
+        m_gameHandlerRef = FindObjectOfType<GameHandler>();
 
+        m_statHandler = new StatHandler();
+        m_statHandler.Init();
+
+        m_originalColor = m_spriteRenderer.color;
+        m_originalMass = m_rigidBody.mass;
+
+        UpdateLocalStatsFromStatHandler();
+
+    }
+
+    protected void UpdateLocalStatsFromStatHandler()
+    {
+        m_health = m_maxHealth = m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue;
         UpdateHealthColor();
         m_healthBarRef.SetMaxProgressValue(m_maxHealth);
-
     }
 
     void BoundsCheck()
