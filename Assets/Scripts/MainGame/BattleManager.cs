@@ -188,6 +188,7 @@ public class BattleManager : MonoBehaviour
             }
             Vector3 spawnLocation = new Vector3(x, y, 0f) + m_coreEnemySpawnLocation;
             SpawnEnemy(spawnLocation);
+            ChangeEnemyCount(1);
         }
     }
 

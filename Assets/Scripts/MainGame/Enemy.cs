@@ -80,7 +80,6 @@ public class Enemy : Damageable
         {
             m_velocityIndicatorRef.SetActive(false);
         }
-        m_battleManagerRef.ChangeEnemyCount(1);
     }
 
     public void Copy(Damageable a_ref)
