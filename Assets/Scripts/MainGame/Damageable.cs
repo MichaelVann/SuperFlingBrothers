@@ -44,22 +44,18 @@ public class Damageable : BaseObject
     public override void Awake()
     {
         base.Awake();
+        m_statHandler = new StatHandler();
+        m_statHandler.Init();
+        m_originalColor = m_spriteRenderer.color;
+        m_originalMass = m_rigidBody.mass;
 
+        UpdateLocalStatsFromStatHandler();
     }
 
     public virtual void Start()
     {
         m_battleManagerRef = FindObjectOfType<BattleManager>();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-
-        m_statHandler = new StatHandler();
-        m_statHandler.Init();
-
-        m_originalColor = m_spriteRenderer.color;
-        m_originalMass = m_rigidBody.mass;
-
-        UpdateLocalStatsFromStatHandler();
-
     }
 
     protected void UpdateLocalStatsFromStatHandler()

@@ -62,7 +62,7 @@ public class BattleManager : MonoBehaviour
 
     float m_healthbarMainPos = 0f;
 
-    internal int m_enemiesToSpawn = 3;
+    internal int m_enemiesToSpawn = 1;
     float m_enemySpawnGap = 0.4f;
     Vector3 m_coreEnemySpawnLocation;
 

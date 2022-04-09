@@ -17,7 +17,7 @@ public class Enemy : Damageable
         Idlers,
         Strikers,
         Dodgers,
-    }eEnemyType m_enemyType;
+    }public eEnemyType m_enemyType;
 
     public struct TypeAbilities
     {
@@ -82,11 +82,12 @@ public class Enemy : Damageable
         }
     }
 
-    public void Copy(Damageable a_ref)
+    public void Copy(Enemy a_ref)
     {
         m_health = a_ref.m_health;
         m_originalMass = a_ref.m_originalMass;
         m_originalColor = a_ref.m_originalColor;
+        SetUpType(a_ref.m_enemyType);
         UpdateHealthColor();
     }
 
@@ -99,6 +100,7 @@ public class Enemy : Damageable
         Enemy clonedEnemy = clonedObject.GetComponent<Enemy>();
         clonedEnemy.m_rigidBody.velocity = -m_rigidBody.velocity;
         clonedEnemy.Copy(this);
+        m_battleManagerRef.ChangeEnemyCount(1);
     }
 
 
