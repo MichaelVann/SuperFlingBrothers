@@ -32,7 +32,8 @@ public class BodyPartSelectionHandler : MonoBehaviour
     bool m_wasPinchingLastFrame = false;
     float m_lastPinchDistance;
 
-    float m_panSpeed = 7f;
+    bool m_wasPanning = false;
+    Vector3 m_panLastRawLocation;
 
     List<BodyPartUI> m_bodyPartUIObjectList;
     public List<GameObject> m_nodeContainers;
@@ -70,7 +71,6 @@ public class BodyPartSelectionHandler : MonoBehaviour
     void Update()
     {
         UpdateInitialZoom();
-
         if (m_initialZoomed)
         {
             PinchZoom();
@@ -101,7 +101,7 @@ public class BodyPartSelectionHandler : MonoBehaviour
 
             float lerp = m_zoomProgress;// * (1f + (m_targetZoom - m_currentZoom));
 
-            m_currentZoomLocation = new Vector3(Mathf.Lerp(m_startingZoomLocation.x, m_zoomTargetLocation.x, lerp), Mathf.Lerp(m_startingZoomLocation.y, m_zoomTargetLocation.y, lerp), Mathf.Lerp(m_startingZoomLocation.z, m_zoomTargetLocation.z, lerp));
+            m_currentZoomLocation = new Vector3(Mathf.Lerp(m_startingZoomLocation.x, m_zoomTargetLocation.x, lerp), Mathf.Lerp(m_startingZoomLocation.y, m_zoomTargetLocation.y, lerp), 0f);
 
             ApplyZoomAndPan();
 
@@ -148,9 +148,29 @@ public class BodyPartSelectionHandler : MonoBehaviour
     {
         if (Input.touchCount == 1)
         {
-            m_currentZoomLocation += new Vector3(Input.GetTouch(0).deltaPosition.x, Input.GetTouch(0).deltaPosition.y, 0f) * m_panSpeed * Time.deltaTime;
-            Debug.Log(Input.GetTouch(0).deltaPosition);
+            Camera camera = FindObjectOfType<Camera>();
+            Vector3 localPanPosRaw = camera.ScreenToWorldPoint(Input.GetTouch(0).position);
+            Vector3 localPanPos = m_bodyContainerRef.transform.InverseTransformPoint(camera.ScreenToWorldPoint(Input.GetTouch(0).position));
+            localPanPos.z = 0f;
+            localPanPosRaw.z = 0f;
+
+            if (!m_wasPanning)
+            {
+                m_panLastRawLocation = localPanPosRaw;
+            }
+            else
+            {
+                m_currentZoomLocation += localPanPos - m_bodyContainerRef.transform.InverseTransformPoint(m_panLastRawLocation);
+                m_currentZoomLocation.z = 0f;
+                m_panLastRawLocation = localPanPosRaw;
+
+            }
+            m_wasPanning = true;
             ApplyZoomAndPan();
+        }
+        else
+        {
+            m_wasPanning = false;
         }
     }
 
