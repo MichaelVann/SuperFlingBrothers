@@ -6,11 +6,11 @@ using UnityEngine;
 public class HumanBody
 {
     
-    BodyPart[] m_bodyPartList;
+    public BodyPart[] m_bodyPartList;
 
     float m_basePartHealth = 100;
 
-    public bool m_bodySetupComplete = false;
+    public bool m_bodyInitialised = false;
 
     public void SetBodyPartLockedStatus(BodyPart.eType a_type, bool a_unlocked) { m_bodyPartList[(int)a_type].m_unlocked = a_unlocked; }
 
@@ -32,7 +32,7 @@ public class HumanBody
     {
         for (int i = 0; i < a_UIPartList.Count; i++)
         {
-            m_bodyPartList[i].SetUpPartNodesFromUI(a_UIPartList[i].m_battleNodeList);
+            m_bodyPartList[i].SetUpPartNodesFromUI(a_UIPartList[i].m_UIBattleNodeList);
         }
     }
 

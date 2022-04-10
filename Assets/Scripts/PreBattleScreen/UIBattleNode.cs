@@ -6,10 +6,15 @@ public class UIBattleNode : MonoBehaviour
 {
     // Start is called before the first frame update
 
+    GameHandler m_gameHandlerRef;
     public List<GameObject> m_connectionList;
+    BodyPartSelectionHandler m_bodySelectionHandlerRef;
+    internal BattleNode m_battleNodeRef;
+    BodyPart m_parentBodyPartRef;
 
     public int m_invaders = 0;
     public int m_id = 0;
+    public int m_parentBodyPartID;
 
     GameObject[] m_uiLines;
 
@@ -19,6 +24,10 @@ public class UIBattleNode : MonoBehaviour
 
     void Start()
     {
+        m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        m_bodySelectionHandlerRef = FindObjectOfType<BodyPartSelectionHandler>();
+        m_parentBodyPartRef = m_gameHandlerRef.m_humanBody.m_bodyPartList[m_parentBodyPartID];
+        m_battleNodeRef = m_parentBodyPartRef.m_nodes[m_id];
         m_uiLines = new GameObject[m_connectionList.Count];
 
         for (int i = 0; i < m_connectionList.Count; i++)
@@ -26,7 +35,9 @@ public class UIBattleNode : MonoBehaviour
             m_uiLines[i] = Instantiate<GameObject>(m_uiLineRef, m_lineContainerRef.transform);
         }
         SetUpLines();
+
     }
+
 
     void SetUpLines()
     {
@@ -44,5 +55,10 @@ public class UIBattleNode : MonoBehaviour
     void Update()
     {
         //SetUpLines();
+    }
+
+    public void Select()
+    {
+        m_bodySelectionHandlerRef.SelectNode(m_id);
     }
 }

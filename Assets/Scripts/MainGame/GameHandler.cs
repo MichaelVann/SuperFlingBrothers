@@ -28,6 +28,7 @@ public class GameHandler : MonoBehaviour
     private float m_cash = 0;
     internal StatHandler m_playerStatHandler;
     public HumanBody m_humanBody;
+    public BodyPart m_bodyPartSelectedForBattle;
 
     //Last Game
     public eEndGameType m_lastGameResult = eEndGameType.lose;
@@ -66,6 +67,8 @@ public class GameHandler : MonoBehaviour
     public void SetGameMode(eGameMode a_gameMode) { m_currentGameMode = a_gameMode; }
     public void ChangeCash(float a_change) { m_cash += a_change; }
 
+    public void SetBodyPartSelectedForBattle(BodyPart a_bodyPart) { m_bodyPartSelectedForBattle = a_bodyPart; }
+
     public float GetCurrentCash() { return m_cash; }
 
     internal StockHandler GetStockHandlerRef() { return m_stockHandler; }
@@ -93,11 +96,6 @@ public class GameHandler : MonoBehaviour
     private void SetupHumanBody()
     {
         m_humanBody = new HumanBody();
-    }
-
-    private void SetUpBodyPart()
-    {
-
     }
 
     private void SetupShield()

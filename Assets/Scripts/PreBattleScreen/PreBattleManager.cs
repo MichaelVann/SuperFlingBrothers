@@ -46,6 +46,7 @@ public class PreBattleManager : MonoBehaviour
 
     public void Play()
     {
+        m_gameHandlerRef.SetBodyPartSelectedForBattle(m_bodyPartSelectionRef.GetComponent<BodyPartSelectionHandler>().m_selectedBodyPart);
         m_gameHandlerRef.ChangeScene(GameHandler.eScene.battle);
     }
 

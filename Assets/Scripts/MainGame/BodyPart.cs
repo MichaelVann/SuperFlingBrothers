@@ -26,7 +26,7 @@ public class BattleNode
 
 public class BodyPart
 {
-    BattleNode[] m_nodes;
+    public BattleNode[] m_nodes;
 
     public static string GetPartName(BodyPart.eType a_type) { return Enum.GetName(typeof(BodyPart.eType), a_type); }
 
@@ -83,12 +83,13 @@ public class BodyPart
             m_nodes[i].m_connectedNodes = new BattleNode[partNode.m_connectionList.Count];
         }
 
+
         for (int i = 0; i < a_nodeGameObjects.Count; i++)
         {
             UIBattleNode partNode = a_nodeGameObjects[i];
             for (int j = 0; j < partNode.m_connectionList.Count; j++)
             {
-                m_nodes[i].m_connectedNodes[j] = m_nodes[i].m_connectedNodes[j];
+                m_nodes[i].m_connectedNodes[j] = a_nodeGameObjects[i].m_connectionList[j].GetComponent<UIBattleNode>().m_battleNodeRef;
             }
         }
     }

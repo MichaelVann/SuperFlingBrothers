@@ -155,7 +155,6 @@ public class Player : Damageable
                 if (!m_battleManagerRef.m_endingGame)
                 {
                     m_hitSlowdownActive = true;
-                    Time.timeScale = m_hitTimeSlowdownRate;
                     m_battleManagerRef.SetTimeScale(m_hitTimeSlowdownRate);
                 }
             }
