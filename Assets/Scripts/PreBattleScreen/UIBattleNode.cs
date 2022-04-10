@@ -21,7 +21,11 @@ public class UIBattleNode : MonoBehaviour
 
     public GameObject m_uiLineRef;
     public GameObject m_lineContainerRef;
+    public GameObject m_selectionRing;
     float m_lineWidth = 1.7f;
+
+    public void SetSelectionRingActive(bool a_active) { m_selectionRing.SetActive(a_active); }
+
 
     void Start()
     {
@@ -30,6 +34,7 @@ public class UIBattleNode : MonoBehaviour
         m_parentBodyPartRef = m_gameHandlerRef.m_humanBody.m_bodyPartList[m_parentBodyPartID];
         m_battleNodeRef = m_parentBodyPartRef.m_nodes[m_id];
         m_uiLines = new GameObject[m_connectionList.Count];
+        m_selectionRing.SetActive(false);
 
         for (int i = 0; i < m_connectionList.Count; i++)
         {
@@ -60,6 +65,8 @@ public class UIBattleNode : MonoBehaviour
 
     public void Select()
     {
-        m_bodySelectionHandlerRef.SelectNode(m_id);
+        m_selectionRing.SetActive(true);
+        m_bodySelectionHandlerRef.SelectNode(m_id,this);
     }
+
 }

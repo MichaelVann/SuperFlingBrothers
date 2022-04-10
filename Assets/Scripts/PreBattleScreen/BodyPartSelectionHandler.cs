@@ -21,6 +21,7 @@ public class BodyPartSelectionHandler : MonoBehaviour
     public BodyPart m_selectedBodyPart;
     int m_selectedBattleNodeId = 0;
     public BattleNode m_selectedBattleNode;
+    public UIBattleNode m_selectedUIBattleNode;
 
     //Zooming
     Vector3 m_humanBodyStartPos;
@@ -206,13 +207,25 @@ public class BodyPartSelectionHandler : MonoBehaviour
         }
     }
 
-    public void SelectNode(int a_id)
+    public void SelectNode(int a_id, UIBattleNode a_selectedNode)
     {
+        DeselectUINode();
         m_selectedBattleNodeId = a_id;
         m_selectedBattleNode = m_gameHandlerRef.m_humanBody.m_bodyPartList[m_selectedBodyPartIndex].m_nodes[m_selectedBattleNodeId];
+        m_selectedUIBattleNode = a_selectedNode;
         SetNodeInfoPanelOpenState(true);
         m_nodeInfoPanel.SetUp(m_selectedBattleNode);
     }
+
+    public void DeselectUINode()
+    {
+        if (m_selectedUIBattleNode != null)
+        {
+            m_selectedUIBattleNode.SetSelectionRingActive(false);
+            m_selectedUIBattleNode = null;
+        }
+    }
+
 
     public void InitialZoomToPart(int a_index)
     {
