@@ -28,7 +28,11 @@ public class GameHandler : MonoBehaviour
     private float m_cash = 0;
     internal StatHandler m_playerStatHandler;
     public HumanBody m_humanBody;
+
+    //Current Battle
     public BodyPart m_bodyPartSelectedForBattle;
+    public int m_battleDifficulty = 0;
+    //public bool[] m_battleAllowedEnemyTypes;
 
     //Last Game
     public eEndGameType m_lastGameResult = eEndGameType.lose;
@@ -39,7 +43,6 @@ public class GameHandler : MonoBehaviour
     public UpgradeItem[] m_upgrades;
     public UpgradeItem m_enemyVectorsUpgrade;
     public UpgradeItem m_shieldUpgrade;
-
 
     public struct Shield
     {
@@ -52,6 +55,8 @@ public class GameHandler : MonoBehaviour
     } public Shield m_playerShield;
 
     StockHandler m_stockHandler;
+
+    public static Enemy.TypeTrait[] m_enemyTypeTraits = new Enemy.TypeTrait[(int)Enemy.eEnemyType.Count];
 
     [Serializable]
     struct SaveData
@@ -71,6 +76,8 @@ public class GameHandler : MonoBehaviour
 
     public float GetCurrentCash() { return m_cash; }
 
+    public void SetBattleDifficulty(int a_difficulty) { m_battleDifficulty = a_difficulty; }
+
     internal StockHandler GetStockHandlerRef() { return m_stockHandler; }
 
     void Awake()
@@ -87,10 +94,31 @@ public class GameHandler : MonoBehaviour
         SetupHumanBody();
         SetupUpgrades();
         SetupShield();
+        SetUpEnemyTypes();
         if (m_autoLoadDataOnLaunch)
         {
             LoadGame();
         }
+
+        //Battle
+    }
+
+    private void SetUpEnemyTypes()
+    {
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Idler].type = Enemy.eEnemyType.Idler;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Idler].flinger = false;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Idler].difficulty = 1;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].duplicator = false;
+
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].type = Enemy.eEnemyType.Striker;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].flinger = true;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].difficulty = 6;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].duplicator = true;
+
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].type = Enemy.eEnemyType.Dodger;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].flinger = true;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].difficulty = 6;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].duplicator = true;
     }
 
     private void SetupHumanBody()

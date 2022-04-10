@@ -15,6 +15,7 @@ public class UIBattleNode : MonoBehaviour
     public int m_invaders = 0;
     public int m_id = 0;
     public int m_parentBodyPartID;
+    public int m_difficulty = 5;
 
     GameObject[] m_uiLines;
 

@@ -62,7 +62,7 @@ public class BattleManager : MonoBehaviour
 
     float m_healthbarMainPos = 0f;
 
-    internal int m_enemiesToSpawn = 3;
+    internal int m_enemiesToSpawn = 8;
     float m_enemySpawnGap = 0.4f;
     Vector3 m_coreEnemySpawnLocation;
 
@@ -95,7 +95,7 @@ public class BattleManager : MonoBehaviour
     public void SetTimeScale(float a_scale)
     {
         Time.timeScale = a_scale;
-        Debug.Log(a_scale);
+        //Debug.Log(a_scale);
     }
 
     void Awake()
@@ -130,16 +130,17 @@ public class BattleManager : MonoBehaviour
         SpawnEnemies();
     }
 
-    public void SpawnEnemy(Vector3 a_spawnLocation)
+    public void SpawnEnemy(Vector3 a_spawnLocation, Enemy.eEnemyType a_type)
     {
         GameObject enemyObj = Instantiate<GameObject>(m_enemyTemplate, a_spawnLocation, Quaternion.identity, m_gameViewRef.transform);
         Enemy enemy = enemyObj.GetComponent<Enemy>();
-        enemy.SetUpType(Enemy.eEnemyType.Strikers);
+        enemy.SetUpType(a_type);
     }
 
     public void SpawnEnemies()
     {
-        for (int i = 0; i < m_enemiesToSpawn; i++)
+        int remainingDifficulty = m_gameHandlerRef.m_battleDifficulty;
+        for (int i = 0; i < m_enemiesToSpawn && remainingDifficulty > 0; i++)
         {
             float x = 0f;
             float y = 0f;
@@ -186,8 +187,37 @@ public class BattleManager : MonoBehaviour
                 default:
                     break;
             }
+
+            Enemy.eEnemyType enemyType = Enemy.eEnemyType.Idler;
+
+            //List<int> enemyTypeLottery;
+            //enemyTypeLottery = new List<int>();
+            //for (int j = 0; j < GameHandler.m_enemyTypeTraits.Length; j++)
+            //{
+            //    if (GameHandler.m_enemyTypeTraits[j].difficulty <= m_gameHandlerRef.m_battleDifficulty)
+            //    {
+            //        for (int k = 0; k < GameHandler.m_enemyTypeTraits[j].difficulty; k++)
+            //        {
+            //            enemyTypeLottery.Add(j);
+            //        }
+            //    }
+            //}
+            //enemyType = (Enemy.eEnemyType)UnityEngine.Random.Range(0, enemyTypeLottery.Count);
+
+            for (int j = GameHandler.m_enemyTypeTraits.Length -1 ; j >= 0; j--)
+            {
+                if (GameHandler.m_enemyTypeTraits[j].difficulty <= remainingDifficulty)
+                {
+                    enemyType = (Enemy.eEnemyType)j;
+                    remainingDifficulty -= GameHandler.m_enemyTypeTraits[j].difficulty;
+                    break;
+                }
+            }
+
+            Debug.Log(enemyType);
+
             Vector3 spawnLocation = new Vector3(x, y, 0f) + m_coreEnemySpawnLocation;
-            SpawnEnemy(spawnLocation);
+            SpawnEnemy(spawnLocation, enemyType);
             ChangeEnemyCount(1);
         }
     }

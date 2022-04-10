@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class NodeInfoPanelHandler : MonoBehaviour
 {
     public Text m_invadersTextRef;
+    public Text m_difficultyTextRef;
     BattleNode m_inspectedBattleNodeRef;
 
     // Start is called before the first frame update
@@ -24,5 +25,6 @@ public class NodeInfoPanelHandler : MonoBehaviour
     {
         m_inspectedBattleNodeRef = a_inspectedBattleNode;
         m_invadersTextRef.text = "" + m_inspectedBattleNodeRef.m_invaders;
+        m_difficultyTextRef.text = "" + m_inspectedBattleNodeRef.m_difficulty;
     }
 }

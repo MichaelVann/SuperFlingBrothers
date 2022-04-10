@@ -14,21 +14,27 @@ public class Enemy : Damageable
 
     public enum eEnemyType
     {
-        Idlers,
-        Strikers,
-        Dodgers,
+        Idler,
+        Striker,
+        Dodger,
+        Count
     }public eEnemyType m_enemyType;
 
-    public struct TypeAbilities
+    public struct TypeTrait
     {
-        public bool flinging;
-    }TypeAbilities m_typeAbilities;
+        public Enemy.eEnemyType type;
+        public int difficulty;
+        public bool flinger;
+        public bool duplicator;
+    } TypeTrait m_typeTrait;
+
 
     float m_duplicationTimer = 0f;
     float m_duplicationTimerMax = 12f;
 
     private float m_scoreValue = 1f;
     int m_xpReward = 5;
+    const float m_coinToXPRatio = 0.2f;
 
     float m_xpTextYOffset = 0.2f;
 
@@ -47,29 +53,34 @@ public class Enemy : Damageable
     public override void Awake()
     {
         base.Awake();
-        m_typeAbilities = new TypeAbilities();
+        m_typeTrait = new TypeTrait();
         m_flingTimer -= UnityEngine.Random.Range(0f, 0.3f);
         m_damageTextColor = Color.yellow;
     }
 
     public void SetUpType(eEnemyType a_type)
     {
-        m_enemyType = new eEnemyType();
-        m_typeAbilities = new TypeAbilities();
+        m_typeTrait = GameHandler.m_enemyTypeTraits[(int)a_type];
         m_enemyType = a_type;
-
         switch (m_enemyType)
         {
-            case eEnemyType.Idlers:
-                m_typeAbilities.flinging = false;
+            case eEnemyType.Idler:
+                m_originalColor = Color.yellow;
                 break;
-            case eEnemyType.Strikers:
-            case eEnemyType.Dodgers:
-                m_typeAbilities.flinging = true;
+            case eEnemyType.Striker:
+                m_originalColor = Color.red;
+                break;
+            case eEnemyType.Dodger:
+                m_originalColor = Color.magenta;
+                break;
+            case eEnemyType.Count:
                 break;
             default:
                 break;
         }
+        m_xpReward = m_typeTrait.difficulty;
+        m_scoreValue = (float)(m_xpReward) * m_coinToXPRatio;
+        UpdateHealthColor();
     }
 
     public override void Start()
@@ -79,6 +90,10 @@ public class Enemy : Damageable
         if (!m_gameHandlerRef.m_enemyVectorsUpgrade.m_owned)
         {
             m_velocityIndicatorRef.SetActive(false);
+        }
+        for (int i = 0; i < m_exclamationMarkRefs.Length; i++)
+        {
+            m_exclamationMarkRefs[i].SetActive(false);
         }
     }
 
@@ -102,7 +117,6 @@ public class Enemy : Damageable
         clonedEnemy.Copy(this);
         m_battleManagerRef.ChangeEnemyCount(1);
     }
-
 
     void DuplicationUpdate()
     {
@@ -145,7 +159,10 @@ public class Enemy : Damageable
     public override void Update()
     {
         base.Update();
-        DuplicationUpdate();
+        if (m_typeTrait.duplicator)
+        {
+            DuplicationUpdate();
+        }
         AIUpdate();
     }
     public override void Die()
@@ -264,7 +281,7 @@ public class Enemy : Damageable
     {
         if (m_playerRef)
         {
-            if (m_typeAbilities.flinging)
+            if (m_typeTrait.flinger)
             {
                 FlingUpdate();
             }

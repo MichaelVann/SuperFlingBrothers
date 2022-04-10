@@ -20,7 +20,7 @@ public class BodyPartSelectionHandler : MonoBehaviour
     int m_selectedBodyPartIndex = 0;
     public BodyPart m_selectedBodyPart;
     int m_selectedBattleNodeId = 0;
-    BattleNode m_selectedBattleNode;
+    public BattleNode m_selectedBattleNode;
 
     //Zooming
     Vector3 m_humanBodyStartPos;

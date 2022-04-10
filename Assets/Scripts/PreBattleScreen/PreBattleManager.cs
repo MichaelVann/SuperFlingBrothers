@@ -47,7 +47,11 @@ public class PreBattleManager : MonoBehaviour
     public void Play()
     {
         m_gameHandlerRef.SetBodyPartSelectedForBattle(m_bodyPartSelectionRef.GetComponent<BodyPartSelectionHandler>().m_selectedBodyPart);
+        m_gameHandlerRef.SetBattleDifficulty(m_bodyPartSelectionRef.GetComponent<BodyPartSelectionHandler>().m_selectedBattleNode.m_difficulty);
         m_gameHandlerRef.ChangeScene(GameHandler.eScene.battle);
+        //m_gameHandlerRef.m_battleAllowedEnemyTypes[(int)Enemy.eEnemyType.Idler] = true;
+        //m_gameHandlerRef.m_battleAllowedEnemyTypes[(int)Enemy.eEnemyType.Striker] = true;
+        //m_gameHandlerRef.m_battleAllowedEnemyTypes[(int)Enemy.eEnemyType.Dodger] = true;
     }
 
     public void ReturnToMainMenu()

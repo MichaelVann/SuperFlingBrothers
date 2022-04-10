@@ -13,13 +13,15 @@ public class BattleNode
     }
     public eState m_state;
     public int m_invaders;
+    public int m_difficulty;
     public BattleNode[] m_connectedNodes;
 
-    public BattleNode(int a_id, eState a_state, int a_invaders)
+    public BattleNode(int a_id, eState a_state, int a_invaders, int a_difficulty)
     {
         m_id = a_id;
         m_state = a_state;
         m_invaders = a_invaders;
+        m_difficulty = a_difficulty;
         m_connectedNodes = null;
     }
 }
@@ -79,7 +81,7 @@ public class BodyPart
         for (int i = 0; i < a_nodeGameObjects.Count; i++)
         {
             UIBattleNode partNode = a_nodeGameObjects[i];
-            m_nodes[i] = new BattleNode(i, BattleNode.eState.locked, partNode.m_invaders);
+            m_nodes[i] = new BattleNode(i, BattleNode.eState.locked, partNode.m_invaders, partNode.m_difficulty);
             m_nodes[i].m_connectedNodes = new BattleNode[partNode.m_connectionList.Count];
         }
 

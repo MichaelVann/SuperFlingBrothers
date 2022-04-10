@@ -111,6 +111,7 @@ MonoBehaviour:
   - {fileID: 7249526844949174227}
   - {fileID: 803595846732859215}
   m_velocityIndicatorRef: {fileID: 1467332499506325743}
+  m_enemyType: 0
   m_flingTimer: 0
   m_flingTimerMax: 3
 --- !u!1 &7249526844949174227
@@ -424,12 +425,12 @@ PrefabInstance:
     - target: {fileID: 3853683323552886618, guid: 688cedeb614fed54b951ebf40cfa3a62,
         type: 3}
       propertyPath: m_Color.g
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3853683323552886618, guid: 688cedeb614fed54b951ebf40cfa3a62,
         type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0.2027123
       objectReference: {fileID: 0}
     - target: {fileID: 3871167508993658042, guid: 688cedeb614fed54b951ebf40cfa3a62,
         type: 3}
