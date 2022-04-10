@@ -165,6 +165,8 @@ public class Player : Damageable
             if (!m_battleManagerRef.m_endingGame)
             {
                 m_battleManagerRef.Escape();
+                m_rigidBody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
+                transform.position = escapeZone.transform.position;
             }
             
         }

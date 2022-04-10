@@ -93,7 +93,7 @@ public class Stock
     {
         if (m_priceShiftTimer.Update())
         {
-            m_trendNormalValue = 100000f;// m_normalValue * UnityEngine.Random.Range(1/m_stability, m_stability);
+            m_trendNormalValue = m_normalValue * UnityEngine.Random.Range(1/m_stability, m_stability);
         }
 
         float deltaNormal = (m_trendNormalValue / m_currentValue);
