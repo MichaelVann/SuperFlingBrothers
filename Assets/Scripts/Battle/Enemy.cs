@@ -15,8 +15,8 @@ public class Enemy : Damageable
     public enum eEnemyType
     {
         Idler,
-        Striker,
         Dodger,
+        Striker,
         Count
     }public eEnemyType m_enemyType;
 
@@ -25,6 +25,7 @@ public class Enemy : Damageable
         public Enemy.eEnemyType type;
         public int difficulty;
         public bool flinger;
+        public bool dodger;
         public bool duplicator;
     } TypeTrait m_typeTrait;
 
@@ -72,6 +73,7 @@ public class Enemy : Damageable
                 break;
             case eEnemyType.Dodger:
                 m_originalColor = Color.magenta;
+                m_flingAccuracy = 360f;
                 break;
             case eEnemyType.Count:
                 break;
@@ -234,7 +236,6 @@ public class Enemy : Damageable
 
             if ((playerPos - transform.position).magnitude <= m_sightRadius)
             {
-
                 Vector3 inaccurateFlingVector = (playerPos - transform.position).normalized;
 
                 Vector3 aimDisturbance = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, m_flingAccuracy) - m_flingAccuracy / 2f, Vector3.forward) * inaccurateFlingVector;
@@ -278,7 +279,7 @@ public class Enemy : Damageable
     {
         if (m_playerRef)
         {
-            if (m_typeTrait.flinger)
+            if (m_typeTrait.flinger || m_typeTrait.dodger)
             {
                 FlingUpdate();
             }

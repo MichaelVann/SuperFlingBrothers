@@ -106,18 +106,16 @@ public class GameHandler : MonoBehaviour
     private void SetUpEnemyTypes()
     {
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Idler].type = Enemy.eEnemyType.Idler;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Idler].flinger = false;
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Idler].difficulty = 1;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].duplicator = false;
+
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].type = Enemy.eEnemyType.Dodger;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].dodger = true;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].difficulty = 4;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].duplicator = true;
 
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].type = Enemy.eEnemyType.Striker;
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].flinger = true;
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].difficulty = 6;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].duplicator = true;
-
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].type = Enemy.eEnemyType.Dodger;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].flinger = true;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].difficulty = 6;
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].duplicator = true;
     }
 
