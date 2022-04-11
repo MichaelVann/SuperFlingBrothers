@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIHandler : MonoBehaviour
+public class BattleUIHandler : MonoBehaviour
 {
     BattleManager m_battleManagerRef;
 

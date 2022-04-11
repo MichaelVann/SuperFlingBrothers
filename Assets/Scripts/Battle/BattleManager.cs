@@ -19,7 +19,7 @@ public class BattleManager : MonoBehaviour
     public GameObject m_gameHandlerTemplate;
     public GameObject m_enemyTemplate;
     public GameObject m_gameViewRef;
-    UIHandler m_uiHandlerRef;
+    BattleUIHandler m_uiHandlerRef;
     public GameObject m_escapeZoneRef;
 
     public Text m_enemyCountText;
@@ -100,7 +100,7 @@ public class BattleManager : MonoBehaviour
 
     void Awake()
     {
-        m_uiHandlerRef = GetComponent<UIHandler>();
+        m_uiHandlerRef = GetComponent<BattleUIHandler>();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_freezeTimerMax = m_turnInterval;
         m_freezeTimer = m_freezeTimerMax;

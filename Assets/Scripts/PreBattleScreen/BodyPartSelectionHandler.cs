@@ -226,7 +226,6 @@ public class BodyPartSelectionHandler : MonoBehaviour
         }
     }
 
-
     public void InitialZoomToPart(int a_index)
     {
         m_zooming = true;
