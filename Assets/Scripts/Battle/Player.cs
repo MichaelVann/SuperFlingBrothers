@@ -93,6 +93,11 @@ public class Player : Damageable
         }
         else
         {
+            if (Input.touchCount >= 2)
+            {
+                m_flinging = false;
+                return;
+            }
             m_flingLine.enabled = true;
             Vector3 worldMousePoint = m_cameraRef.ScreenToWorldPoint(Input.mousePosition);
 
@@ -167,7 +172,6 @@ public class Player : Damageable
                 m_rigidBody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
                 transform.position = escapeZone.transform.position;
             }
-            
         }
 
         switch (m_gameHandlerRef.m_currentGameMode)

@@ -42,6 +42,7 @@ public class GameHandler : MonoBehaviour
     //Upgrades
     public UpgradeItem[] m_upgrades;
     public UpgradeItem m_enemyVectorsUpgrade;
+    public UpgradeItem m_playerVectorUpgrade;
     public UpgradeItem m_shieldUpgrade;
 
     public struct Shield
@@ -133,19 +134,25 @@ public class GameHandler : MonoBehaviour
 
     void SetupUpgrades()
     {
-        m_upgrades = new UpgradeItem[2];
+        m_upgrades = new UpgradeItem[3];
 
         m_enemyVectorsUpgrade = new UpgradeItem();
         m_enemyVectorsUpgrade.SetName("Enemy Vectors");
         m_enemyVectorsUpgrade.SetDescription("Shows the direction of all enemies movement");
-        m_enemyVectorsUpgrade.SetCost(50);
+        m_enemyVectorsUpgrade.SetCost(30);
         m_upgrades[0] = m_enemyVectorsUpgrade;
+
+        m_playerVectorUpgrade = new UpgradeItem();
+        m_playerVectorUpgrade.SetName("Player Vector");
+        m_playerVectorUpgrade.SetDescription("Shows the direction of player movement");
+        m_playerVectorUpgrade.SetCost(20);
+        m_upgrades[1] = m_playerVectorUpgrade;
 
         m_shieldUpgrade = new UpgradeItem();
         m_shieldUpgrade.SetName("Shield");
         m_shieldUpgrade.SetDescription("Enables a shield that protects the user from a limited amount of damage");
         m_shieldUpgrade.SetCost(100);
-        m_upgrades[1] = m_shieldUpgrade;
+        m_upgrades[2] = m_shieldUpgrade;
     }
 
     internal bool AttemptToBuyUpgrade(int m_upgradeID)
