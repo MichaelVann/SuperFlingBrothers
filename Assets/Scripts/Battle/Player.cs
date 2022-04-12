@@ -5,6 +5,7 @@ using UnityEngine;
 public class Player : Damageable
 {
     Camera m_cameraRef;
+    public GameObject m_velocityIndicatorRef;
 
     bool m_flinging = false;
     Vector3 m_originalFlingPos;
@@ -56,6 +57,7 @@ public class Player : Damageable
         m_damageTextColor = Color.red;
         SetupShield();
         Fling(new Vector3(0f, -600f, 0f), 1f);
+        m_velocityIndicatorRef.SetActive(m_gameHandlerRef.m_playerVectorUpgrade.m_owned);
     }
 
     void SetupShield()
