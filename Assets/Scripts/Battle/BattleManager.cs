@@ -15,12 +15,14 @@ public enum eEndGameType
 
 public class BattleManager : MonoBehaviour
 {
+    BattleUIHandler m_uiHandlerRef;
     public GameHandler m_gameHandlerRef;
     public GameObject m_gameHandlerTemplate;
     public GameObject m_enemyTemplate;
     public GameObject m_gameViewRef;
-    BattleUIHandler m_uiHandlerRef;
     public GameObject m_escapeZoneRef;
+    public Button m_extraTurnButtonRef;
+    public GameObject m_extraTurnButtonLockImageRef;
 
     public Text m_enemyCountText;
 
@@ -68,6 +70,8 @@ public class BattleManager : MonoBehaviour
 
     bool m_startingSequence = true;
 
+    int m_extraTurnsRemaining = 1;
+
     public float GetMaxGameEndTimer()
     {
         return m_maxGameEndTimer;
@@ -86,6 +90,19 @@ public class BattleManager : MonoBehaviour
 
     public void ChangeScore(float a_change) { m_score += a_change; }
     public void ChangeXp(float a_change) { m_xpEarned += a_change; }
+
+    public void UseExtraTurn()
+    {
+        if (m_extraTurnsRemaining >= 1)
+        {
+            m_extraTurnsRemaining--;
+            m_freezeTimer = m_freezeTimerMax;
+            if (m_extraTurnsRemaining <= 0)
+            {
+                SetExtraTurnUIState(false);
+            }
+        }
+    }
 
     public void CalculateFinishedGame()
     {
@@ -117,6 +134,20 @@ public class BattleManager : MonoBehaviour
 
         m_healthBarRef.Init(m_gameHandlerRef.m_playerStatHandler.m_stats[(int)eStatIndices.constitution].finalValue, m_gameHandlerRef.m_playerStatHandler.m_stats[(int)eStatIndices.constitution].finalValue);
 
+        InitialiseUpgrades();
+
+        SpawnEnemies();
+    }
+
+    void SetExtraTurnUIState(bool a_on)
+    {
+        m_extraTurnButtonRef.interactable = a_on;
+        m_extraTurnButtonLockImageRef.SetActive(!a_on);
+    }
+
+    void InitialiseUpgrades()
+    {
+        //Shield
         if (m_gameHandlerRef.m_shieldUpgrade.m_owned)
         {
             m_shieldBarRef.Init(m_gameHandlerRef.m_playerShield.capacity);
@@ -127,7 +158,8 @@ public class BattleManager : MonoBehaviour
             m_shieldBarRef.gameObject.SetActive(false);
         }
 
-        SpawnEnemies();
+        //Extra turn
+        SetExtraTurnUIState(m_gameHandlerRef.m_extraTurnUpgrade.m_owned);
     }
 
     public void SpawnEnemy(Vector3 a_spawnLocation, Enemy.eEnemyType a_type)

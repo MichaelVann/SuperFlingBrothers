@@ -67,7 +67,6 @@ public class Damageable : BaseObject
 
     void BoundsCheck()
     {
-
     }
 
     void UpdateMass()
