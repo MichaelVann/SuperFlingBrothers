@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BodyPartSelectionHandler : MonoBehaviour
 {
@@ -17,11 +18,14 @@ public class BodyPartSelectionHandler : MonoBehaviour
     public GameObject m_lineContainer;
     public GameObject m_nodeContainer;
 
+    HumanBody m_humanBodyRef;
     int m_selectedBodyPartIndex = 0;
     public BodyPart m_selectedBodyPart;
     int m_selectedBattleNodeId = 0;
     public BattleNode m_selectedBattleNode;
     public UIBattleNode m_selectedUIBattleNode;
+    public Text m_personNameText;
+    public Text m_personNameHighlightText;
 
     //Zooming
     Vector3 m_humanBodyStartPos;
@@ -57,24 +61,25 @@ public class BodyPartSelectionHandler : MonoBehaviour
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_cameraRef = FindObjectOfType<Camera>();
+        m_humanBodyRef = m_gameHandlerRef.m_humanBody;
         m_humanBodyStartPos = m_bodyContainerRef.transform.localPosition;
         m_zoomPartVisibilityOffset = new Vector3(0f, 30f, 0f);
 
-        if (!m_gameHandlerRef.m_humanBody.m_bodyInitialised)
+        if (!m_humanBodyRef.m_bodyInitialised)
         {
             SetUpPartNodes();
         }
         for (int i = 0; i < m_bodyPartUIList.Count; i++)
         {
-            m_bodyPartUIList[i].SetUp(m_gameHandlerRef.m_humanBody.m_bodyPartList[i]);
+            m_bodyPartUIList[i].SetUp(m_humanBodyRef.m_bodyPartList[i]);
         }
         ToggleNodeAndLineVisibility(false);
+        m_personNameText.text = m_personNameHighlightText.text = "Subject: " + m_humanBodyRef.m_firstName + " " + m_humanBodyRef.m_lastName;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-
 
     }
 
@@ -87,7 +92,7 @@ public class BodyPartSelectionHandler : MonoBehaviour
             m_bodyPartUIList.Add(m_bodyPartUIObjectRefs[i].GetComponent<BodyPartUI>());
         }
 
-        m_gameHandlerRef.m_humanBody.SetUpBodyPartNodes(m_bodyPartUIList);
+        m_humanBodyRef.SetUpBodyPartNodes(m_bodyPartUIList);
     }
 
     // Update is called once per frame
@@ -202,7 +207,7 @@ public class BodyPartSelectionHandler : MonoBehaviour
         if (!m_initialZoomed)
         {
             m_selectedBodyPartIndex = a_index;
-            m_selectedBodyPart = m_gameHandlerRef.m_humanBody.m_bodyPartList[a_index];
+            m_selectedBodyPart = m_humanBodyRef.m_bodyPartList[a_index];
             InitialZoomToPart(a_index);
         }
     }
@@ -211,7 +216,7 @@ public class BodyPartSelectionHandler : MonoBehaviour
     {
         DeselectUINode();
         m_selectedBattleNodeId = a_id;
-        m_selectedBattleNode = m_gameHandlerRef.m_humanBody.m_bodyPartList[m_selectedBodyPartIndex].m_nodes[m_selectedBattleNodeId];
+        m_selectedBattleNode = m_humanBodyRef.m_bodyPartList[m_selectedBodyPartIndex].m_nodes[m_selectedBattleNodeId];
         m_selectedUIBattleNode = a_selectedNode;
         SetNodeInfoPanelOpenState(true);
         m_nodeInfoPanel.SetUp(m_selectedBattleNode);

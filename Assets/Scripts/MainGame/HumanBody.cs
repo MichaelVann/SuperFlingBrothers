@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class HumanBody
 {
-    
+    public string m_firstName;
+    public string m_lastName;
     public BodyPart[] m_bodyPartList;
 
     float m_basePartHealth = 100;
@@ -17,6 +18,9 @@ public class HumanBody
     public HumanBody()
     {
         SetUpBodyParts();
+        string[] names = VLib.GenerateRandomPersonsName();
+        m_firstName = names[0];
+        m_lastName = names[1];
     }
 
     private void SetUpBodyParts()

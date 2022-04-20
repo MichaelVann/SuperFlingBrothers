@@ -33,7 +33,7 @@ public static class VLib
         return UnityEngine.Random.Range(a_inclusiveMin, a_inclusiveMax);
     }
 
-    public static string GenerateName()
+    public static string GenerateRandomizedName()
     {
         string name = "";
         int length = vRandom(2, 10);
@@ -62,5 +62,68 @@ public static class VLib
             }
         }
         return name;
+    }
+
+    public static string[] GenerateRandomPersonsName()
+    {
+        string[] generatedNames = new string[2];
+
+        string[] firstNames =
+        {
+            "Andrew",
+            "Bart",
+            "Ben",
+            "John",
+            "Stuart",
+            "Giles",
+            "Carnaby",
+            "Callum",
+            "Sean",
+            "Will",
+            "Micky",
+            "Jack",
+            "Tyler",
+            "Israq",
+            "Daniel",
+            "Stephen",
+            "Richard",
+
+            "Eloise",
+            "Mikenna",
+            "Molly",
+            "Emma",
+            "Lavinia",
+            "Sandra",
+            "Mary",
+            "Julia",
+            "Tina",
+            "Penelope",
+            "Lucy",
+            "Becky",
+            "Ruth",
+            "Calli",
+            "Aditi"
+        };
+
+        string[] lastNames =
+        {
+            "Digby",
+            "Webster-Hawes",
+            "Constant",
+            "Vann",
+            "Ison",
+            "Hansen",
+            "Gilani",
+            "Dhrubo",
+            "Modra",
+            "Head",
+            "Hensgen",
+            "Basnet"
+        };
+
+        generatedNames[0] = firstNames[UnityEngine.Random.Range(0, firstNames.Length)];
+        generatedNames[1] = lastNames[UnityEngine.Random.Range(0, lastNames.Length)];
+
+        return generatedNames;
     }
 }

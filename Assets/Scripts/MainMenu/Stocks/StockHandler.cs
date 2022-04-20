@@ -22,8 +22,8 @@ public class StockHandler
     private void SetupStocks()
     {
         m_stockList = new List<Stock>();
-        m_stockList.Add(new Stock(VLib.GenerateName()));
-        m_stockList.Add(new Stock(VLib.GenerateName()));
+        m_stockList.Add(new Stock(VLib.GenerateRandomizedName()));
+        m_stockList.Add(new Stock(VLib.GenerateRandomizedName()));
         m_stockUpdateTimer = new vTimer(1f);
     }
 

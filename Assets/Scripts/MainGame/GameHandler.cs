@@ -27,6 +27,8 @@ public class GameHandler : MonoBehaviour
 
     private float m_cash = 0;
     internal StatHandler m_playerStatHandler;
+
+    //Body
     public HumanBody m_humanBody;
 
     //Current Battle
