@@ -16,6 +16,7 @@ public class UpgradeItemPanel : MonoBehaviour
     public Image m_imageRef;
     public Button m_buyButtonRef;
     public Text m_buyButtonTextRef;
+    public Image m_outlineRef;
 
     void Start()
     {
@@ -64,7 +65,11 @@ public class UpgradeItemPanel : MonoBehaviour
     void SetBuyButtonToOwnedStatus()
     {
         m_buyButtonRef.interactable = false;
+        ColorBlock colorBlock = m_buyButtonRef.colors;
+        colorBlock.disabledColor = Color.green;
+        m_buyButtonRef.colors = colorBlock;
         m_buyButtonTextRef.text = "Owned";
+        m_outlineRef.color = Color.green;
     }
 
     public void AttemptToBuy()
