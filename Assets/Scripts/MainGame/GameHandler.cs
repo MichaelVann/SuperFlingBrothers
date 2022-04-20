@@ -32,7 +32,6 @@ public class GameHandler : MonoBehaviour
     //Current Battle
     public BodyPart m_bodyPartSelectedForBattle;
     public int m_battleDifficulty = 0;
-    //public bool[] m_battleAllowedEnemyTypes;
 
     //Last Game
     public eEndGameType m_lastGameResult = eEndGameType.lose;
@@ -68,6 +67,7 @@ public class GameHandler : MonoBehaviour
     }
     SaveData m_saveData;
     bool m_autoLoadDataOnLaunch = false;
+    internal float m_enemyXPScale = 5f;
 
     public void SetLastGameResult(eEndGameType a_value) { m_lastGameResult = a_value; }
 
@@ -117,7 +117,7 @@ public class GameHandler : MonoBehaviour
 
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].type = Enemy.eEnemyType.Striker;
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].flinger = true;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].difficulty = 6;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].difficulty = 12;
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].duplicator = true;
     }
 

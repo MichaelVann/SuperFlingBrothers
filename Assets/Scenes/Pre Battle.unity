@@ -908,7 +908,7 @@ PrefabInstance:
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
       propertyPath: m_difficulty
-      value: 12
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
@@ -1091,7 +1091,7 @@ PrefabInstance:
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
       propertyPath: m_difficulty
-      value: 5
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
@@ -2603,7 +2603,7 @@ PrefabInstance:
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
       propertyPath: m_difficulty
-      value: 3
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
@@ -4169,7 +4169,7 @@ PrefabInstance:
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
       propertyPath: m_difficulty
-      value: 2
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
@@ -4640,7 +4640,7 @@ PrefabInstance:
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
       propertyPath: m_difficulty
-      value: 9
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
@@ -7963,7 +7963,7 @@ PrefabInstance:
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
       propertyPath: m_difficulty
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
@@ -9483,7 +9483,7 @@ PrefabInstance:
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
       propertyPath: m_difficulty
-      value: 15
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}

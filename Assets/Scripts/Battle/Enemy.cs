@@ -80,7 +80,7 @@ public class Enemy : Damageable
             default:
                 break;
         }
-        m_xpReward = m_typeTrait.difficulty;
+        m_xpReward = (int)(m_typeTrait.difficulty * m_gameHandlerRef.m_enemyXPScale);
         m_scoreValue = (float)(m_xpReward) * m_coinToXPRatio;
         UpdateHealthColor();
     }

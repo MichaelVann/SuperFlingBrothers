@@ -19,7 +19,7 @@ public struct Stat
     public float scale;
     public float postAddedValue;
     public float effectiveValue;
-    public float finalValue;
+    public float finalValue; // = ((stat.value-1f) * stat.scale) + stat.postAddedValue;
     public float originalCost;
     public float cost;
     public float costIncreaseRate;
@@ -114,9 +114,9 @@ public class StatHandler
         SetStatScale(eStatIndices.dexterity, 4f);
 
         m_stats[(int)eStatIndices.constitution].scale = 4f;
-        SetStatPostAddedValue(eStatIndices.constitution, 10f);
-        SetStatScale(eStatIndices.strength, 2f);
-        SetStatPostAddedValue(eStatIndices.strength, 5f);
+        SetStatPostAddedValue(eStatIndices.constitution, 100f);
+        SetStatScale(eStatIndices.strength, 5f);
+        SetStatPostAddedValue(eStatIndices.strength, 50f);
     }
 
 
