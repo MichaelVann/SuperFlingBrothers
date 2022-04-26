@@ -110,7 +110,6 @@ public class BodyPartSelectionHandler : MonoBehaviour
     {
         m_lineContainer.SetActive(a_visible);
         m_nodeContainer.SetActive(a_visible);
-
     }
 
     void ApplyZoomAndPan()
