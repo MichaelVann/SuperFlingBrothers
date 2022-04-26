@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TilteScreenHandler : MonoBehaviour
+public class TitleScreenHandler : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
     public GameObject m_statAllocationNotifierRef;
