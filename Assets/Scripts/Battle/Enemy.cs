@@ -51,6 +51,9 @@ public class Enemy : Damageable
     int m_coinsToSpawn = 3;
     float m_closestCoinSpawnAngle = 15f;
 
+    Vector2 m_duplicationPositionClampMax = new Vector2(1.956f,2.84f);
+    Vector2 m_duplicationPositionClampMin = new Vector2(-1.956f,-3.46f);
+
     public override void Awake()
     {
         base.Awake();
@@ -110,6 +113,9 @@ public class Enemy : Damageable
     {
         Vector3 normalisedVelocity = m_rigidBody.velocity.normalized;
         Vector3 spawnLocation = transform.position - normalisedVelocity * 0.4f;
+        spawnLocation.x = Mathf.Clamp(spawnLocation.x, m_duplicationPositionClampMin.x, m_duplicationPositionClampMax.x);
+        spawnLocation.y = Mathf.Clamp(spawnLocation.y, m_duplicationPositionClampMin.y, m_duplicationPositionClampMax.y);
+
         GameObject clonedObject = Instantiate(gameObject, spawnLocation, new Quaternion());
         Enemy clonedEnemy = clonedObject.GetComponent<Enemy>();
         clonedEnemy.m_rigidBody.velocity = -m_rigidBody.velocity;
