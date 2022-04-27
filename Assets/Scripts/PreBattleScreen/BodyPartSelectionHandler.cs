@@ -19,7 +19,7 @@ public class BodyPartSelectionHandler : MonoBehaviour
     public GameObject m_nodeContainer;
 
     HumanBody m_humanBodyRef;
-    int m_selectedBodyPartIndex = 0;
+    static int m_selectedBodyPartIndex = 0;
     public BodyPart m_selectedBodyPart;
     int m_selectedBattleNodeId = 0;
     public BattleNode m_selectedBattleNode;
@@ -30,19 +30,19 @@ public class BodyPartSelectionHandler : MonoBehaviour
     //Zooming
     Vector3 m_humanBodyStartPos;
     Vector3 m_zoomPartVisibilityOffset;
-    bool m_initialZoomed = false;
-    bool m_zoomingIn = false;
-    bool m_zooming = false;
-    float m_startingZoom = 1f;
-    float m_currentZoom = 1f;
-    float m_targetZoom = 0f;
-    float m_initialZoom = 3.5f;
-    float m_maxZoom = 9.5f;
-    Vector3 m_startingZoomLocation;
-    Vector3 m_currentZoomLocation;
-    Vector3 m_zoomTargetLocation;
-    float m_zoomProgress = 0f;
-    float m_zoomTime = 0.5f;
+    static bool m_initialZoomed = false;
+    static bool m_zoomingIn = false;
+    static bool m_zooming = false;
+    static float m_startingZoom = 1f;
+    static float m_currentZoom = 1f;
+    static float m_targetZoom = 0f;
+    static float m_initialZoom = 3.5f;
+    static float m_maxZoom = 9.5f;
+    static Vector3 m_startingZoomLocation;
+    static Vector3 m_currentZoomLocation;
+    static Vector3 m_zoomTargetLocation;
+    static float m_zoomProgress = 0f;
+    static float m_zoomTime = 0.5f;
 
     bool m_wasPinchingLastFrame = false;
     float m_lastPinchDistance;
@@ -80,7 +80,11 @@ public class BodyPartSelectionHandler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
+        if (m_initialZoomed)
+        {
+            InitialZoomToPart(m_selectedBodyPartIndex);
+            ToggleNodeAndLineVisibility(true);
+        }
     }
 
     void SetUpPartNodes()

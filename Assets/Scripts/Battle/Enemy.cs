@@ -54,6 +54,8 @@ public class Enemy : Damageable
     Vector2 m_duplicationPositionClampMax = new Vector2(1.956f,2.84f);
     Vector2 m_duplicationPositionClampMin = new Vector2(-1.956f,-3.46f);
 
+    bool m_dead = false;
+
     public override void Awake()
     {
         base.Awake();
@@ -172,6 +174,11 @@ public class Enemy : Damageable
     }
     public override void Die()
     {
+        if(m_dead)
+        {
+            return;
+        }
+        m_dead = true;
         m_battleManagerRef.ChangeScore(m_scoreValue);
         m_gameHandlerRef.m_playerStatHandler.ChangeXP(m_xpReward);
         m_battleManagerRef.ChangeXp(m_xpReward);
