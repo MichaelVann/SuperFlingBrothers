@@ -234,6 +234,10 @@ public class Player : Damageable
 
     public override void Damage(float a_damage)
     {
+        if (m_battleManagerRef.m_endingGame)
+        {
+            return;
+        }
         float damage = a_damage;
         if (m_shieldEnabled)
         {

@@ -120,6 +120,12 @@ public class Damageable : BaseObject
     //Damages the damageable
     public virtual void Damage(float a_damage)
     {
+        //If the game is ending, disable damage
+        if (m_battleManagerRef.m_endingGame)
+        {
+            return;
+        }
+
         //If the damageables health is above it's minimum health
         if (m_health > 0f)
         {
