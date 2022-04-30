@@ -99,7 +99,7 @@ public class Damageable : BaseObject
 
     public virtual void Fling(Vector3 a_flingVector, float a_flingStrength)
     {
-        a_flingStrength *= (0.33f + (GetHealthPercentage() * 0.77f));
+        a_flingStrength *= (0.67f + (GetHealthPercentage() * 0.33f));
         if (m_secondFling)
         {
             if (m_clearVelocityOption)
