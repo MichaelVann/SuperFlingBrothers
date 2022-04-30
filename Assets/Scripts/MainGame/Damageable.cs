@@ -26,12 +26,15 @@ public class Damageable : BaseObject
 
     public ProgressBar m_healthBarRef;
 
+    //Fling
     bool m_secondFling = true;
     float m_bumpFlingStrengthMult = 0.25f;
     float m_secondFlingTimer = 0f;
     float m_secondFlingTimerMax = 0.09f;
     Vector3 m_storedFlingVector;
     float m_storedFlingStrength = 0f;
+
+    float m_pocketFlingStrength = 100f;
 
     bool m_clearVelocityOption = true;
 
@@ -183,5 +186,10 @@ public class Damageable : BaseObject
     protected void TakePocketDamage()
     {
         Damage(m_health * 0.45f + m_maxHealth * 0.05f);
+    }
+
+    protected void PocketFling(Vector3 a_pocketPos)
+    {
+        m_rigidBody.AddForce((transform.position - a_pocketPos).normalized * m_pocketFlingStrength);
     }
 }

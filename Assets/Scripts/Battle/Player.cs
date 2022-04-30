@@ -184,6 +184,7 @@ public class Player : Damageable
                 if (a_collision.gameObject.GetComponent<Pocket>())
                 {
                     TakePocketDamage();
+                    PocketFling(a_collision.gameObject.transform.position);
                 }
                 else
                 {

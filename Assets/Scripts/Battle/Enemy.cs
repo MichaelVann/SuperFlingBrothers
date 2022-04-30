@@ -149,6 +149,7 @@ public class Enemy : Damageable
                     break;
                 case GameHandler.eGameMode.Health:
                     TakePocketDamage();
+                    PocketFling(a_collision.gameObject.transform.position);
                     break;
                 case GameHandler.eGameMode.Pockets:
                     Die();
