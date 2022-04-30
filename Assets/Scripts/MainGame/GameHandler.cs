@@ -159,7 +159,7 @@ public class GameHandler : MonoBehaviour
 
         m_extraTurnUpgrade = new UpgradeItem();
         m_extraTurnUpgrade.SetName("Extra Turn");
-        m_extraTurnUpgrade.SetDescription("Gives an extra turn that can be used at any point during the game.");
+        m_extraTurnUpgrade.SetDescription("Gives an extra turn that triggers on collision with the enemy.");
         m_extraTurnUpgrade.SetCost(700);
         m_upgrades[3] = m_extraTurnUpgrade;
     }

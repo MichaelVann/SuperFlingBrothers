@@ -43,6 +43,7 @@ public class BattleManager : MonoBehaviour
     const float m_freezingTimerMax = 0.2f;
     const float m_slowableTime = 0.8f;
 
+    //End Game
     public bool m_endingGame = false;
     public float m_gameEndSlowdownFactor = 0.25f;
     public float m_gameEndTimer = 0f;
@@ -70,7 +71,9 @@ public class BattleManager : MonoBehaviour
 
     bool m_startingSequence = true;
 
+    //Extra Turn Upgrade
     int m_extraTurnsRemaining = 1;
+    bool m_usingExtraTurn;
 
     public float GetMaxGameEndTimer()
     {
@@ -91,16 +94,24 @@ public class BattleManager : MonoBehaviour
     public void ChangeScore(float a_change) { m_score += a_change; }
     public void ChangeXp(float a_change) { m_xpEarned += a_change; }
 
-    public void UseExtraTurn()
+    public void PrepareExtraTurn()
     {
         if (m_extraTurnsRemaining >= 1)
         {
+            m_usingExtraTurn = !m_usingExtraTurn;
+            UpdateExtraTurnUIState();
+        }
+    }
+
+    public void UseExtraTurn()
+    {
+        if (m_usingExtraTurn)
+        {
             m_extraTurnsRemaining--;
             m_freezeTimer = m_freezeTimerMax;
-            if (m_extraTurnsRemaining <= 0)
-            {
-                SetExtraTurnUIState(false);
-            }
+            m_freezingTimer = m_freezingTimerMax/2f;
+            m_usingExtraTurn = false;
+            UpdateExtraTurnUIState();
         }
     }
 
@@ -122,7 +133,6 @@ public class BattleManager : MonoBehaviour
         m_freezeTimerMax = m_turnInterval;
         m_freezeTimer = m_freezeTimerMax;
         m_coreEnemySpawnLocation = new Vector3(0f, -1.6f, 0f);
-        
     }
 
     public void Start()
@@ -139,10 +149,21 @@ public class BattleManager : MonoBehaviour
         SpawnEnemies();
     }
 
-    void SetExtraTurnUIState(bool a_on)
+    void UpdateExtraTurnUIState()
     {
-        m_extraTurnButtonRef.interactable = a_on;
-        m_extraTurnButtonLockImageRef.SetActive(!a_on);
+        bool enabled = m_gameHandlerRef.m_extraTurnUpgrade.m_owned && m_extraTurnsRemaining > 0;
+
+        m_extraTurnButtonRef.interactable = enabled;
+        m_extraTurnButtonLockImageRef.SetActive(!enabled);
+        if (enabled)
+        {
+            m_extraTurnButtonRef.GetComponentInChildren<Text>().text = "Extra Turn: " + m_extraTurnsRemaining;
+            m_extraTurnButtonRef.gameObject.GetComponent<Image>().color = m_usingExtraTurn ? Color.green : Color.red;
+        }
+        else
+        {
+            m_extraTurnButtonRef.gameObject.GetComponent<Image>().color = Color.grey;
+        }
     }
 
     void InitialiseUpgrades()
@@ -159,7 +180,7 @@ public class BattleManager : MonoBehaviour
         }
 
         //Extra turn
-        SetExtraTurnUIState(m_gameHandlerRef.m_extraTurnUpgrade.m_owned);
+        UpdateExtraTurnUIState();
     }
 
     public void SpawnEnemy(Vector3 a_spawnLocation, Enemy.eEnemyType a_type)

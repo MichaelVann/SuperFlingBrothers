@@ -139,7 +139,6 @@ public class Player : Damageable
                 }
             }
         }
-
     }
 
     public override void Die()
@@ -165,6 +164,7 @@ public class Player : Damageable
                     m_battleManagerRef.SetTimeScale(m_hitTimeSlowdownRate);
                 }
             }
+            m_battleManagerRef.UseExtraTurn();
         }
         else if (escapeZone)
         {
@@ -205,6 +205,7 @@ public class Player : Damageable
                 break;
         }
     }
+
     public void OnTriggerEnter2D(Collider2D a_collider)
     {
         if (a_collider.gameObject.GetComponent<Coin>())
