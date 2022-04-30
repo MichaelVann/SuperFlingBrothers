@@ -77,7 +77,7 @@ public class Enemy : Damageable
                 m_originalColor = Color.red;
                 break;
             case eEnemyType.Dodger:
-                m_originalColor = Color.magenta;
+                m_originalColor = Color.green;
                 m_flingAccuracy = 360f;
                 break;
             case eEnemyType.Count:
