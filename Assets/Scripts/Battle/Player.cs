@@ -25,7 +25,6 @@ public class Player : Damageable
     public SpriteRenderer m_invalidFlingCross;
 
     //Coins
-    float m_damageTextYOffset = 0.2f;
     float m_cumulativeCoinValue = 0f;
     float m_coinPickupTimeout = 0;
     float m_coinPickupTimeoutMax = 1.3f;

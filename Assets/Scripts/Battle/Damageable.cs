@@ -19,7 +19,7 @@ public class Damageable : BaseObject
     public GameObject m_collisionSparkPrefab;
 
     public GameObject m_risingFadingTextPrefab;
-    float m_damageTextYOffset = 0.2f;
+    protected float m_damageTextYOffset = 0.2f;
     protected Color m_damageTextColor = Color.yellow;
 
     static Func<int, Collision2D> CollisionFuncPTR = null;
