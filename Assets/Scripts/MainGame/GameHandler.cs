@@ -273,6 +273,12 @@ public class GameHandler : MonoBehaviour
         m_cash = m_saveData.cash;
         m_playerStatHandler = m_saveData.statHandler;
         m_stockHandler.m_stockList = m_saveData.stockList;
-        m_upgrades = m_saveData.upgrades;
+
+        for (int i = 0; i < m_upgrades.Length; i++)
+        {
+            m_upgrades[i].Copy(m_saveData.upgrades[i]);
+        }
+
+        //m_upgrades = m_saveData.upgrades;
     }
 }

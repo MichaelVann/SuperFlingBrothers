@@ -33,6 +33,19 @@ public class UpgradeItem
 
     }
 
+    public void Copy(UpgradeItem a_upgradeItem)
+    {
+        m_name = a_upgradeItem.m_name;
+        m_description = a_upgradeItem.m_description;
+
+        m_cost = a_upgradeItem.m_cost;
+        m_costScaling = a_upgradeItem.m_costScaling;
+        m_owned = a_upgradeItem.m_owned;
+        m_hasLevels = a_upgradeItem.m_hasLevels;
+        m_level = a_upgradeItem.m_level;
+        m_maxLevel = a_upgradeItem.m_maxLevel;
+    }
+
     public void Update()
     {
 
