@@ -72,7 +72,6 @@ public class StatHandler
             case eStatIndices.dexterity:
                 break;
             case eStatIndices.constitution:
-                SetStatScale(eStatIndices.constitution, m_baseHealthScale * a_value);
                 break;
             case eStatIndices.count:
                 break;
