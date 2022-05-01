@@ -72,8 +72,10 @@ public class GameHandler : MonoBehaviour
     [Serializable]
     struct SaveData
     {
+        public float cash;
         public StatHandler statHandler;
         public List<Stock> stockList;
+        public UpgradeItem[] upgrades;
     }
     SaveData m_saveData;
     bool m_autoLoadDataOnLaunch = false;
@@ -254,8 +256,10 @@ public class GameHandler : MonoBehaviour
 
     public void SaveGame()
     {
+        m_saveData.cash = m_cash;
         m_saveData.statHandler = m_playerStatHandler;
         m_saveData.stockList = m_stockHandler.m_stockList;
+        m_saveData.upgrades = m_upgrades;
 
         string path = Application.persistentDataPath + "/Data.txt";
         string json = JsonUtility.ToJson(m_saveData);
@@ -266,7 +270,9 @@ public class GameHandler : MonoBehaviour
         string path = Application.persistentDataPath + "/Data.txt";
         string loadedString = File.ReadAllText(path);
         m_saveData = JsonUtility.FromJson<SaveData>(loadedString);
+        m_cash = m_saveData.cash;
         m_playerStatHandler = m_saveData.statHandler;
         m_stockHandler.m_stockList = m_saveData.stockList;
+        m_upgrades = m_saveData.upgrades;
     }
 }
