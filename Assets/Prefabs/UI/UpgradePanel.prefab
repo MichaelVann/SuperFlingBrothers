@@ -928,6 +928,7 @@ MonoBehaviour:
   m_nameTextRef: {fileID: 7083368681255242796}
   m_descriptionTextRef: {fileID: 7083368682078384584}
   m_costTextRef: {fileID: 7083368681030449439}
+  m_levelDisplayRef: {fileID: 5176664515154525476}
   m_levelTextRef: {fileID: 7557052140812521489}
   m_imageRef: {fileID: 7083368681165773284}
   m_buyButtonRef: {fileID: 7083368681741597107}

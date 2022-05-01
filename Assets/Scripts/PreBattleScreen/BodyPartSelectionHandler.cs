@@ -50,7 +50,6 @@ public class BodyPartSelectionHandler : MonoBehaviour
     bool m_wasPanning = false;
     Vector3 m_panLastRawLocation;
 
-
     public void SetNodeInfoPanelOpenState(bool a_open)
     {
         m_nodeInfoPanel.gameObject.SetActive(a_open);
@@ -215,10 +214,11 @@ public class BodyPartSelectionHandler : MonoBehaviour
         }
     }
 
-    public void SelectNode(int a_id, UIBattleNode a_selectedNode)
+    public void SelectNode(int a_id, int a_bodypartID, UIBattleNode a_selectedNode)
     {
         DeselectUINode();
         m_selectedBattleNodeId = a_id;
+        m_selectedBodyPartIndex = a_bodypartID;
         m_selectedBattleNode = m_humanBodyRef.m_bodyPartList[m_selectedBodyPartIndex].m_nodes[m_selectedBattleNodeId];
         m_selectedUIBattleNode = a_selectedNode;
         SetNodeInfoPanelOpenState(true);
@@ -244,7 +244,6 @@ public class BodyPartSelectionHandler : MonoBehaviour
         m_partInfoPanel.SetActive(true);
         m_zoomProgress = 0f;
         m_zoomingIn = true;
-
     }
 
     public void UnInitialZoom()

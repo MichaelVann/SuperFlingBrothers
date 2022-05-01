@@ -142,6 +142,7 @@ public class BattleManager : MonoBehaviour
             m_turnsRemaining = 0;
         }
 
+
         m_healthBarRef.Init(m_gameHandlerRef.m_playerStatHandler.m_stats[(int)eStatIndices.constitution].finalValue, m_gameHandlerRef.m_playerStatHandler.m_stats[(int)eStatIndices.constitution].finalValue);
 
         InitialiseUpgrades();
@@ -151,13 +152,14 @@ public class BattleManager : MonoBehaviour
 
     void UpdateExtraTurnUIState()
     {
-        bool enabled = m_gameHandlerRef.m_extraTurnUpgrade.m_owned && m_extraTurnsRemaining > 0;
+        bool enabled = m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.extraTurn].m_owned && m_extraTurnsRemaining > 0;
 
         m_extraTurnButtonRef.interactable = enabled;
         m_extraTurnButtonLockImageRef.SetActive(!enabled);
+        m_extraTurnButtonRef.GetComponentInChildren<Text>().text = "Extra Turn: " + m_extraTurnsRemaining;
+
         if (enabled)
         {
-            m_extraTurnButtonRef.GetComponentInChildren<Text>().text = "Extra Turn: " + m_extraTurnsRemaining;
             m_extraTurnButtonRef.gameObject.GetComponent<Image>().color = m_usingExtraTurn ? Color.green : Color.red;
         }
         else
@@ -169,7 +171,7 @@ public class BattleManager : MonoBehaviour
     void InitialiseUpgrades()
     {
         //Shield
-        if (m_gameHandlerRef.m_shieldUpgrade.m_owned)
+        if (m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.shield].m_owned)
         {
             m_shieldBarRef.Init(m_gameHandlerRef.m_playerShield.capacity);
         }
@@ -180,6 +182,10 @@ public class BattleManager : MonoBehaviour
         }
 
         //Extra turn
+        if (m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.extraTurn].m_owned)
+        {
+            m_extraTurnsRemaining = m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.extraTurn].m_level;
+        }
         UpdateExtraTurnUIState();
     }
 

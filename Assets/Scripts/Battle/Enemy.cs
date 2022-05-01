@@ -94,7 +94,7 @@ public class Enemy : Damageable
     {
         base.Start();
         m_playerRef = FindObjectOfType<Player>();
-        m_velocityIndicatorRef.SetActive(m_gameHandlerRef.m_enemyVectorsUpgrade.m_owned);
+        m_velocityIndicatorRef.SetActive(m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.enemyVector].m_owned);
         for (int i = 0; i < m_exclamationMarkRefs.Length; i++)
         {
             m_exclamationMarkRefs[i].SetActive(false);

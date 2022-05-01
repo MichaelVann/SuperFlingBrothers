@@ -42,10 +42,18 @@ public class GameHandler : MonoBehaviour
 
     //Upgrades
     public UpgradeItem[] m_upgrades;
-    public UpgradeItem m_enemyVectorsUpgrade;
-    public UpgradeItem m_playerVectorUpgrade;
-    public UpgradeItem m_shieldUpgrade;
-    public UpgradeItem m_extraTurnUpgrade;
+    public enum UpgradeId
+    {
+        enemyVector,
+        playerVector,
+        shield,
+        extraTurn,
+        Count
+    }
+    //public UpgradeItem m_enemyVectorsUpgrade;
+    //public UpgradeItem m_playerVectorUpgrade;
+    //public UpgradeItem m_shieldUpgrade;
+    //public UpgradeItem m_extraTurnUpgrade;
 
     public struct Shield
     {
@@ -130,50 +138,59 @@ public class GameHandler : MonoBehaviour
 
     private void SetupShield()
     {
-        m_playerShield.capacity = 5f;
+        m_playerShield.capacity = 5f * m_upgrades[(int)UpgradeId.shield].m_level;
         m_playerShield.delay = 3f;
-        m_playerShield.rechargeRate = 1.6f;
+        m_playerShield.rechargeRate = 1.6f * m_upgrades[(int)UpgradeId.shield].m_level;
     }
 
     void SetupUpgrades()
     {
         m_upgrades = new UpgradeItem[4];
 
-        m_enemyVectorsUpgrade = new UpgradeItem();
-        m_enemyVectorsUpgrade.SetName("Enemy Vectors");
-        m_enemyVectorsUpgrade.SetDescription("Shows the direction of all enemies movement.");
-        m_enemyVectorsUpgrade.SetCost(30);
-        m_upgrades[0] = m_enemyVectorsUpgrade;
+        m_upgrades[(int)UpgradeId.enemyVector] = new UpgradeItem();
+        m_upgrades[(int)UpgradeId.enemyVector].SetName("Enemy Vectors");
+        m_upgrades[(int)UpgradeId.enemyVector].SetDescription("Shows the direction of all enemies movement.");
+        m_upgrades[(int)UpgradeId.enemyVector].SetCost(30);
 
-        m_playerVectorUpgrade = new UpgradeItem();
-        m_playerVectorUpgrade.SetName("Player Vector");
-        m_playerVectorUpgrade.SetDescription("Shows the direction of player movement.");
-        m_playerVectorUpgrade.SetCost(20);
-        m_upgrades[1] = m_playerVectorUpgrade;
+        m_upgrades[(int)UpgradeId.playerVector] = new UpgradeItem();
+        m_upgrades[(int)UpgradeId.playerVector].SetName("Player Vector");
+        m_upgrades[(int)UpgradeId.playerVector].SetDescription("Shows the direction of player movement.");
+        m_upgrades[(int)UpgradeId.playerVector].SetCost(20);
 
-        m_shieldUpgrade = new UpgradeItem();
-        m_shieldUpgrade.SetName("Shield");
-        m_shieldUpgrade.SetDescription("Enables a shield that protects the user from a limited amount of damage.");
-        m_shieldUpgrade.SetCost(100);
-        m_upgrades[2] = m_shieldUpgrade;
+        m_upgrades[(int)UpgradeId.shield] = new UpgradeItem();
+        m_upgrades[(int)UpgradeId.shield].SetName("Shield");
+        m_upgrades[(int)UpgradeId.shield].SetDescription("Enables a shield that protects the user from a limited amount of damage.");
+        m_upgrades[(int)UpgradeId.shield].SetCost(100);
+        m_upgrades[(int)UpgradeId.shield].SetHasLevels(true);
 
-        m_extraTurnUpgrade = new UpgradeItem();
-        m_extraTurnUpgrade.SetName("Extra Turn");
-        m_extraTurnUpgrade.SetDescription("Gives an extra turn that triggers on collision with the enemy.");
-        m_extraTurnUpgrade.SetCost(700);
-        m_upgrades[3] = m_extraTurnUpgrade;
+        m_upgrades[(int)UpgradeId.extraTurn] = new UpgradeItem();
+        m_upgrades[(int)UpgradeId.extraTurn].SetName("Extra Turn");
+        m_upgrades[(int)UpgradeId.extraTurn].SetDescription("Gives an extra turn that triggers on collision with the enemy.");
+        m_upgrades[(int)UpgradeId.extraTurn].SetCost(700);
+        m_upgrades[(int)UpgradeId.extraTurn].SetHasLevels(true);
     }
 
-    internal bool AttemptToBuyUpgrade(int m_upgradeID)
+    internal bool AttemptToBuyUpgrade(int a_upgradeID)
     {
-        UpgradeItem upgrade = m_upgrades[m_upgradeID];
+        bool returnValue = false;
+        UpgradeItem upgrade = m_upgrades[a_upgradeID];
         if (upgrade.m_cost <= m_cash)
         {
             m_cash -= upgrade.m_cost;
-            upgrade.SetOwned(true);
-            return true;
+            upgrade.m_level++;
+            upgrade.m_cost *= upgrade.m_costScaling;
+            if (!upgrade.m_owned)
+            {
+                upgrade.SetOwned(true);
+            }
+            returnValue =  true;
         }
-        return false;
+
+        if (a_upgradeID == (int)UpgradeId.shield)
+        {
+            SetupShield();
+        }
+        return returnValue;
     }
 
     public void ChangeGameMode(int a_change)

@@ -1653,7 +1653,7 @@ PrefabInstance:
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
       propertyPath: m_parentBodyPartID
-      value: 11
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
@@ -1921,7 +1921,7 @@ PrefabInstance:
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
       propertyPath: m_parentBodyPartID
-      value: 11
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
@@ -2263,7 +2263,7 @@ PrefabInstance:
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
       propertyPath: m_parentBodyPartID
-      value: 11
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
@@ -2842,7 +2842,7 @@ PrefabInstance:
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
       propertyPath: m_parentBodyPartID
-      value: 11
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
@@ -4580,7 +4580,7 @@ PrefabInstance:
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
       propertyPath: m_parentBodyPartID
-      value: 11
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
@@ -6486,7 +6486,7 @@ PrefabInstance:
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
       propertyPath: m_parentBodyPartID
-      value: 11
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
@@ -8631,7 +8631,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: c0f80fec66d882344af0aea56941631a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
@@ -11371,7 +11371,7 @@ PrefabInstance:
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}
       propertyPath: m_parentBodyPartID
-      value: 11
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4761417700377774636, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
         type: 3}

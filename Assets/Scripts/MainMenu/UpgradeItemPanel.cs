@@ -13,6 +13,7 @@ public class UpgradeItemPanel : MonoBehaviour
     public Text m_nameTextRef;
     public Text m_descriptionTextRef;
     public Text m_costTextRef;
+    public GameObject m_levelDisplayRef;
     public Text m_levelTextRef;
     public Image m_imageRef;
     public Button m_buyButtonRef;
@@ -42,15 +43,9 @@ public class UpgradeItemPanel : MonoBehaviour
         m_descriptionTextRef.text = m_upgradeRef.m_description;
         m_costTextRef.text = "Cost: " + m_upgradeRef.m_cost;
         m_levelTextRef.text = "Level: " + m_upgradeRef.m_level;
+        m_levelDisplayRef.SetActive(m_upgradeRef.m_hasLevels);
 
-        if (m_upgradeRef.m_owned)
-        {
-            SetBuyButtonToOwnedStatus();
-        }
-        else
-        {
-            SetBuyButtonEnabled(m_gameHandlerRef.GetCurrentCash() >= m_upgradeRef.m_cost);
-        }
+        SetBuyButtonStatus();
     }
 
     // Update is called once per frame
@@ -59,26 +54,44 @@ public class UpgradeItemPanel : MonoBehaviour
 
     }
 
-    void SetBuyButtonEnabled(bool a_enabled)
+    void SetBuyButtonStatus()
     {
-        m_buyButtonRef.interactable = a_enabled;
-    }
+        if (m_upgradeRef.m_owned)
+        {
+            m_outlineRef.color = Color.green;
 
-    void SetBuyButtonToOwnedStatus()
-    {
-        m_buyButtonRef.interactable = false;
-        ColorBlock colorBlock = m_buyButtonRef.colors;
-        colorBlock.disabledColor = Color.green;
-        m_buyButtonRef.colors = colorBlock;
-        m_buyButtonTextRef.text = "Owned";
-        m_outlineRef.color = Color.green;
+            if (m_upgradeRef.m_level >= m_upgradeRef.m_maxLevel || !m_upgradeRef.m_hasLevels)
+            {
+                ColorBlock colorBlock = m_buyButtonRef.colors;
+                colorBlock.disabledColor = Color.green;
+                m_buyButtonRef.colors = colorBlock;
+                m_buyButtonTextRef.text = "Owned";
+            }
+            else
+            {
+                m_buyButtonRef.gameObject.GetComponent<Image>().color = Color.blue;
+                m_buyButtonTextRef.text = "Upgrade";
+            }
+        }
+
+        bool interactable = (m_gameHandlerRef.GetCurrentCash() >= m_upgradeRef.m_cost);
+
+        if (m_upgradeRef.m_hasLevels)
+        {
+            interactable &= (m_upgradeRef.m_level < m_upgradeRef.m_maxLevel);
+        }
+        else
+        {
+            interactable &= !m_upgradeRef.m_owned;
+        }
+        m_buyButtonRef.interactable = interactable;
     }
 
     public void AttemptToBuy()
     {
         if (m_upgradeScreenHandler.AttemptToBuyUpgrade(m_upgradeID))
         {
-            SetBuyButtonToOwnedStatus();
+            Refresh();
         }
         
     }

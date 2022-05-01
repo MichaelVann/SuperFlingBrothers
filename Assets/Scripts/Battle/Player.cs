@@ -57,19 +57,19 @@ public class Player : Damageable
         m_damageTextColor = Color.red;
         SetupShield();
         Fling(new Vector3(0f, -600f, 0f), 1f);
-        m_velocityIndicatorRef.SetActive(m_gameHandlerRef.m_playerVectorUpgrade.m_owned);
+        m_velocityIndicatorRef.SetActive(m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.playerVector].m_owned);
     }
 
     void SetupShield()
     {
         m_shieldRef = m_gameHandlerRef.m_playerShield;
-        if (m_gameHandlerRef.m_shieldUpgrade.m_owned)
+        if (m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.shield].m_owned)
         {
             m_shieldEnabled = true;
             m_shieldRef.delayTimer = 0f;
             m_shieldRef.value = m_gameHandlerRef.m_playerShield.capacity;
         }
-        m_shieldSpriteRenderer.gameObject.SetActive(m_gameHandlerRef.m_shieldUpgrade.m_owned);
+        m_shieldSpriteRenderer.gameObject.SetActive(m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.shield].m_owned);
     }
 
     public override void Fling(Vector3 a_flingVector, float a_flingStrength)
