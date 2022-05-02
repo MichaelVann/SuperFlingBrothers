@@ -10,6 +10,9 @@ public class ProgressBar : MonoBehaviour
     public SpriteRenderer m_progressBarRef;
     Vector3 m_originalScale;
 
+    public bool m_healthColoring = true;
+
+
     public void SetMaxProgressValue(float a_value) { m_progressMax = a_value; }
     public void SetProgressValue(float a_value)
     {
@@ -24,6 +27,32 @@ public class ProgressBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        m_progressBarRef.gameObject.transform.localScale = new Vector3(m_originalScale.x * m_progress/m_progressMax,m_originalScale.y,1f);
+        float healthPercentage = m_progress / m_progressMax;
+        m_progressBarRef.gameObject.transform.localScale = new Vector3(m_originalScale.x * healthPercentage, m_originalScale.y,1f);
+        if (m_healthColoring)
+        {
+            Color barColor = Color.white;
+            //float ratio = 0f;
+
+            float redRatio = Mathf.Clamp(2f-(2f*healthPercentage),0f,1f);
+            float greenRatio = Mathf.Clamp(5f*(healthPercentage)-1.5f, 0f, 1f);
+            barColor = new Color(redRatio, greenRatio, 0f);
+            //if (healthPercentage >= 2f / 3f)
+            //{
+            //    ratio = (healthPercentage - 2f / 3f) / (1f / 3f);
+            //    barColor = new Color(1f-ratio,1f,0f);
+            //}
+            //else if (healthPercentage >= 1f/3f )
+            //{
+            //    ratio = (healthPercentage - 1f / 3f) / (1f / 3f);
+            //    barColor = new Color(1f, ratio, 0f);
+            //}
+            //else
+            //{
+            //    barColor = Color.red;
+            //}
+            m_progressBarRef.color = barColor;
+        }
+
     }
 }

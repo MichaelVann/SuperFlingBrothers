@@ -79,7 +79,7 @@ public class Damageable : BaseObject
 
     protected void UpdateHealthColor()
     {
-        float divider = 0.25f + 0.75f*GetHealthPercentage();
+        float divider = 0.8f + 0.2f*GetHealthPercentage();
         m_spriteRenderer.color = new Color(m_originalColor.r * divider, m_originalColor.g * divider, m_originalColor.b * divider, m_originalColor.a);
     }
 
