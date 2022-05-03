@@ -41,8 +41,8 @@ public class UpgradeItemPanel : MonoBehaviour
         m_imageRef.sprite = m_upgradeScreenHandler.m_upgradeSprites[m_upgradeID];
         m_nameTextRef.text = m_upgradeRef.m_name;
         m_descriptionTextRef.text = m_upgradeRef.m_description;
-        m_costTextRef.text = "Cost: " + m_upgradeRef.m_cost;
-        m_levelTextRef.text = "Level: " + m_upgradeRef.m_level;
+        m_costTextRef.text = "" + m_upgradeRef.m_cost;
+        m_levelTextRef.text = "" + m_upgradeRef.m_level;
         m_levelDisplayRef.SetActive(m_upgradeRef.m_hasLevels);
 
         SetBuyButtonStatus();

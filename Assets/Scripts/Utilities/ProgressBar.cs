@@ -32,27 +32,11 @@ public class ProgressBar : MonoBehaviour
         if (m_healthColoring)
         {
             Color barColor = Color.white;
-            //float ratio = 0f;
 
             float redRatio = Mathf.Clamp(2f-(2f*healthPercentage),0f,1f);
             float greenRatio = Mathf.Clamp(5f*(healthPercentage)-1.5f, 0f, 1f);
             barColor = new Color(redRatio, greenRatio, 0f);
-            //if (healthPercentage >= 2f / 3f)
-            //{
-            //    ratio = (healthPercentage - 2f / 3f) / (1f / 3f);
-            //    barColor = new Color(1f-ratio,1f,0f);
-            //}
-            //else if (healthPercentage >= 1f/3f )
-            //{
-            //    ratio = (healthPercentage - 1f / 3f) / (1f / 3f);
-            //    barColor = new Color(1f, ratio, 0f);
-            //}
-            //else
-            //{
-            //    barColor = Color.red;
-            //}
             m_progressBarRef.color = barColor;
         }
-
     }
 }
