@@ -41,7 +41,7 @@ public class RollingText : MonoBehaviour
             float value = m_desiredValue * Mathf.Pow(m_elapsedTime / m_rollTime, 3f);
 
             m_currentValue = value;
-
+            m_currentValue = Mathf.Clamp(m_currentValue, 0f, m_desiredValue);
             m_localTextRef.text = "" + VLib.TruncateFloatsDecimalPlaces(m_currentValue, 2);
         }
     }

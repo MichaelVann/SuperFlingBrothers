@@ -185,6 +185,7 @@ public class Enemy : Damageable
         m_dead = true;
         m_battleManagerRef.ChangeScore(m_scoreValue);
         m_gameHandlerRef.m_playerStatHandler.ChangeXP(m_xpReward);
+        m_gameHandlerRef.m_xpEarnedLastGame += m_xpReward;
         m_battleManagerRef.ChangeXp(m_xpReward);
 
         RisingFadingText xpText = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(0f, m_xpTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();

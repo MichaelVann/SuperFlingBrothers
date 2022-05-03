@@ -38,7 +38,8 @@ public class GameHandler : MonoBehaviour
     //Last Game
     public eEndGameType m_lastGameResult = eEndGameType.lose;
     public float m_xpEarnedLastGame = 0f;
-    public float m_goldEarnedLastGame = 0f;
+    public int m_playerLevelAtStartOfBattle = 0;
+    public float m_dnaEarnedLastGame = 0f;
 
     //Upgrades
     public UpgradeItem[] m_upgrades;

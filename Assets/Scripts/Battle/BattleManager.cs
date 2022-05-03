@@ -142,8 +142,11 @@ public class BattleManager : MonoBehaviour
             m_turnsRemaining = 0;
         }
 
-
         m_healthBarRef.Init(m_gameHandlerRef.m_playerStatHandler.m_stats[(int)eStatIndices.constitution].finalValue, m_gameHandlerRef.m_playerStatHandler.m_stats[(int)eStatIndices.constitution].finalValue);
+
+        //Reset Trackers
+        m_gameHandlerRef.m_playerLevelAtStartOfBattle = m_gameHandlerRef.m_playerStatHandler.m_level;
+        m_gameHandlerRef.m_xpEarnedLastGame = 0;
 
         InitialiseUpgrades();
 
@@ -343,8 +346,7 @@ public class BattleManager : MonoBehaviour
 
     void FinishGame()
     {
-        m_gameHandlerRef.m_goldEarnedLastGame = m_score;
-        m_gameHandlerRef.m_xpEarnedLastGame = m_score;
+        m_gameHandlerRef.m_dnaEarnedLastGame = m_score;
         //Go to post game screen
         SetTimeScale(1f);
         FindObjectOfType<GameHandler>().ChangeScene(GameHandler.eScene.postBattle);

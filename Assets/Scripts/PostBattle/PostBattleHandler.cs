@@ -9,6 +9,8 @@ public class PostBattleHandler : MonoBehaviour
     public GameHandler m_gameHandlerRef;
     public Text m_resultTextRef;
     public Text m_goldCollectedTextRef;
+    public Text m_levelsGainedTextRef;
+    public Text m_xpGainedTextRef;
     public RollingText m_totalGoldTextRef;
 
     eEndGameType m_winResult = eEndGameType.lose;
@@ -44,12 +46,13 @@ public class PostBattleHandler : MonoBehaviour
                 break;
         }
 
-        m_goldCollectedTextRef.text = "" + (float)m_gameHandlerRef.m_goldEarnedLastGame;
+        m_goldCollectedTextRef.text = "" + (float)m_gameHandlerRef.m_dnaEarnedLastGame;
         //m_goldCollectedTextRef.SetDesiredValue(0);
         m_totalGoldTextRef.SetCurrentValue(m_gameHandlerRef.GetCurrentCash());
-        m_gameHandlerRef.ChangeCash(m_gameHandlerRef.m_goldEarnedLastGame);
+        m_gameHandlerRef.ChangeCash(m_gameHandlerRef.m_dnaEarnedLastGame);
         m_totalGoldTextRef.SetDesiredValue(m_gameHandlerRef.GetCurrentCash());
-
+        m_xpGainedTextRef.text = "" + m_gameHandlerRef.m_xpEarnedLastGame;
+        m_levelsGainedTextRef.text = "" + (m_gameHandlerRef.m_playerStatHandler.m_level - m_gameHandlerRef.m_playerLevelAtStartOfBattle);
     }
 
     // Update is called once per frame
