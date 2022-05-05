@@ -10,6 +10,7 @@ public class Nucleus : Damageable
         base.Awake();
         m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue = 500f;
         UpdateLocalStatsFromStatHandler();
+        m_damageTextColor = Color.red;
     }
 
     public override void Start()
