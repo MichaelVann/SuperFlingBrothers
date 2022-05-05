@@ -77,6 +77,8 @@ public class GameHandler : MonoBehaviour
         public StatHandler statHandler;
         public List<Stock> stockList;
         public UpgradeItem[] upgrades;
+        public string bodyFirstName;
+        public string bodyLastName;
     }
     SaveData m_saveData;
     bool m_autoLoadDataOnLaunch = false;
@@ -261,6 +263,8 @@ public class GameHandler : MonoBehaviour
         m_saveData.statHandler = m_playerStatHandler;
         m_saveData.stockList = m_stockHandler.m_stockList;
         m_saveData.upgrades = m_upgrades;
+        m_saveData.bodyFirstName = m_humanBody.m_firstName;
+        m_saveData.bodyLastName = m_humanBody.m_lastName;
 
         string path = Application.persistentDataPath + "/Data.txt";
         string json = JsonUtility.ToJson(m_saveData);
@@ -274,6 +278,8 @@ public class GameHandler : MonoBehaviour
         m_cash = m_saveData.cash;
         m_playerStatHandler = m_saveData.statHandler;
         m_stockHandler.m_stockList = m_saveData.stockList;
+        m_humanBody.m_firstName = m_saveData.bodyFirstName;
+        m_humanBody.m_lastName = m_saveData.bodyLastName;
 
         for (int i = 0; i < m_upgrades.Length; i++)
         {

@@ -87,6 +87,7 @@ public static class VLib
             "Daniel",
             "Stephen",
             "Richard",
+            "Oliver",
 
             "Eloise",
             "Mikenna",
@@ -102,7 +103,10 @@ public static class VLib
             "Becky",
             "Ruth",
             "Calli",
-            "Aditi"
+            "Aditi",
+            "Molly",
+            "Emma",
+            
         };
 
         string[] lastNames =
@@ -118,7 +122,10 @@ public static class VLib
             "Modra",
             "Head",
             "Hensgen",
-            "Basnet"
+            "Basnet",
+            "Shoebridge",
+            "Porter",
+            "Foster",
         };
 
         generatedNames[0] = firstNames[UnityEngine.Random.Range(0, firstNames.Length)];
