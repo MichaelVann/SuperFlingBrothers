@@ -277,7 +277,10 @@ public class GameHandler : MonoBehaviour
         m_saveData = JsonUtility.FromJson<SaveData>(loadedString);
         m_cash = m_saveData.cash;
         m_playerStatHandler = m_saveData.statHandler;
-        m_stockHandler.m_stockList = m_saveData.stockList;
+        for (int i = 0; i < m_stockHandler.m_stockList.Count; i++)
+        {
+            m_stockHandler.m_stockList[i].CopyValues(m_saveData.stockList[i]);
+        }
         m_humanBody.m_firstName = m_saveData.bodyFirstName;
         m_humanBody.m_lastName = m_saveData.bodyLastName;
 

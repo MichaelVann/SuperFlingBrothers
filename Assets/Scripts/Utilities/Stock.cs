@@ -79,6 +79,12 @@ public class Stock
         Init("Stock", m_defaultvaluesTracked, m_defaultNormalValue, m_defaultDeviationMultiplicityRange, m_defaultVolatility, m_defaultStability);
     }
 
+    public void CopyValues(Stock a_ref)
+    {
+        Init(a_ref.m_name, a_ref.m_valuesTracked, a_ref.m_normalValue, a_ref.m_deviationMultiplicityRange, a_ref.m_volatility, a_ref.m_stability);
+        m_amountOwned = a_ref.m_amountOwned;
+    }
+
     private void PushBackValue(float a_value)
     {
         for (int i = m_values.Length - 1; i > 0; i--)

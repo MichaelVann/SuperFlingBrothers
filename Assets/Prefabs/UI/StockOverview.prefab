@@ -995,11 +995,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 131c70e86821e2b428af635c63fdc8d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_backgroundRef: {fileID: 7398440648117567779}
+  m_selectButtonRef: {fileID: 7398440649006012918}
   m_stockId: 0
   m_nameTextRef: {fileID: 7398440649493408875}
   m_costTextRef: {fileID: 7398440647574133080}
   m_amountOwnedText: {fileID: 7952976820630311931}
-  m_imageRef: {fileID: 7398440649571613091}
+  m_imageRef: {fileID: 7398440649006012917}
 --- !u!1 &7398440649493408876
 GameObject:
   m_ObjectHideFlags: 0

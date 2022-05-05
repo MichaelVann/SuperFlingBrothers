@@ -7,6 +7,8 @@ public class StockOverview : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
     StockScreenHandler m_stockScreenHandler;
+    public GameObject m_backgroundRef;
+    public GameObject m_selectButtonRef;
     Stock m_stockRef;
     public int m_stockId;
 
@@ -42,6 +44,21 @@ public class StockOverview : MonoBehaviour
         m_stockScreenHandler.Select(m_stockId);
     }
 
+    public void SetSelected(bool a_value)
+    {
+        if (a_value)
+        {
+            m_backgroundRef.GetComponent<Outline>().effectColor = Color.green;
+            m_selectButtonRef.GetComponent<Image>().color = Color.green;
+            m_selectButtonRef.GetComponentInChildren<Text>().text = "Selected";
+        }
+        else
+        {
+            m_backgroundRef.GetComponent<Outline>().effectColor = Color.black;
+            m_selectButtonRef.GetComponent<Image>().color = Color.white;
+            m_selectButtonRef.GetComponentInChildren<Text>().text = "Select";
+        }
+    }
 
 
     // Update is called once per frame

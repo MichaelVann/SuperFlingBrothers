@@ -46,9 +46,11 @@ public class StockScreenHandler : MonoBehaviour
 
     internal void Select(int a_graphDisplayedStockID)
     {
+        m_stockOverviewList[m_selectedStockID].SetSelected(false);
         m_selectedStockID = a_graphDisplayedStockID;
         AlignSelectedStockRefToID();
         m_graphRef.Init(m_selectedStock.GetTrackedValues(), m_selectedStock.GetName());
+        m_stockOverviewList[m_selectedStockID].SetSelected(true);
     }
 
     private void UpdateGraph()
