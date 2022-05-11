@@ -45,23 +45,23 @@ public class BodyPart
     public enum eType
     {
         Chest,
+        Neck,
         Face,
         Head,
-        LeftFoot,
+        Waist,
+        Pelvis,
+        LeftShoulder,
         LeftForeArm,
         LeftHand,
-        LeftKnee,
-        LeftShoulder,
-        LeftThigh,
-        Neck,
-        Pelvis,
-        RightFoot,
+        RightShoulder,
         RightForeArm,
         RightHand,
-        RightKnee,
-        RightShoulder,
+        LeftThigh,
+        LeftKnee,
+        LeftFoot,
         RightThigh,
-        Waist,
+        RightKnee,
+        RightFoot,
         Count
     }
     public eType m_type;

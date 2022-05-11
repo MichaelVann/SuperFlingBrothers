@@ -36,7 +36,7 @@ public class HumanBody
     {
         for (int i = 0; i < a_UIPartList.Count; i++)
         {
-            m_bodyPartList[i].SetUpPartNodesFromUI(a_UIPartList[i].m_UIBattleNodeList);
+            //m_bodyPartList[i].SetUpPartNodesFromUI(a_UIPartList[i].m_UIBattleNodeList);
         }
     }
 

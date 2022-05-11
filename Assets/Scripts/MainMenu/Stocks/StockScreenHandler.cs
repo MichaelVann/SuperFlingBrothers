@@ -74,7 +74,6 @@ public class StockScreenHandler : MonoBehaviour
         m_sellButton.interactable = m_selectedStock.GetAmountOwned() >= (float)m_tradeAmount;
     }
 
-
     // Update is called once per frame
     void Update()
     {

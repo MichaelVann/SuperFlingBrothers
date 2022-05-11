@@ -70,7 +70,7 @@ public class BodyPartSelectionHandler : MonoBehaviour
         }
         for (int i = 0; i < m_bodyPartUIList.Count; i++)
         {
-            m_bodyPartUIList[i].SetUp(m_humanBodyRef.m_bodyPartList[i]);
+            //m_bodyPartUIList[i].SetUp(m_humanBodyRef.m_bodyPartList[i]);
         }
         ToggleNodeAndLineVisibility(false);
         m_personNameText.text = m_personNameHighlightText.text = "Subject: " + m_humanBodyRef.m_firstName + " " + m_humanBodyRef.m_lastName;
@@ -111,13 +111,13 @@ public class BodyPartSelectionHandler : MonoBehaviour
 
     void ToggleNodeAndLineVisibility(bool a_visible)
     {
-        m_lineContainer.SetActive(a_visible);
-        m_nodeContainer.SetActive(a_visible);
+        //m_lineContainer.SetActive(a_visible);
+        //m_nodeContainer.SetActive(a_visible);
     }
 
     void ApplyZoomAndPan()
     {
-        m_bodyContainerRef.transform.localPosition = m_currentZoomLocation * m_currentZoom;
+        m_bodyContainerRef.transform.localPosition = m_currentZoomLocation * m_currentZoom ;
         m_bodyContainerRef.transform.localScale = new Vector3(m_currentZoom, m_currentZoom, 1f);
     }
 
