@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1516979037643367911}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: FrontLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2812824228596626598}
   - component: {fileID: 4475439906932875411}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RightLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -60,7 +60,7 @@ Transform:
   m_GameObject: {fileID: 2265342678998909817}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.0100000445, y: 0.0050000222, z: 1}
+  m_LocalScale: {x: 0.05, y: 0.01, z: 1}
   m_Children: []
   m_Father: {fileID: 1516979037643367911}
   m_RootOrder: 1
@@ -113,7 +113,7 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
+  m_MaskInteraction: 1
   m_SpriteSortPoint: 0
 --- !u!1 &2608120054035259469
 GameObject:
@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 2608120054035259468}
   - component: {fileID: 2608120054035259465}
   - component: {fileID: 1509513652008709968}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: BodyPartInterface
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -266,7 +266,6 @@ MonoBehaviour:
   m_rightFrontLineRef: {fileID: 2265342678998909817}
   m_leftFrontLineColliderRef: {fileID: 4166780752670897622}
   m_rightFrontLineColliderRef: {fileID: 4969116987310833070}
-  m_colliderRef: {fileID: 2608120054035259468}
 --- !u!50 &1509513652008709968
 Rigidbody2D:
   serializedVersion: 4
@@ -299,7 +298,7 @@ GameObject:
   - component: {fileID: 6053480355064568750}
   - component: {fileID: 5193860547234405623}
   - component: {fileID: 2705157554386441729}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: LeftColliderChecker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -314,7 +313,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4166780752670897622}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.010001, y: 0, z: 0}
+  m_LocalPosition: {x: -0.05, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1516979037643367911}
@@ -368,7 +367,7 @@ GameObject:
   - component: {fileID: 7879104898726007528}
   - component: {fileID: 1642122403620719322}
   - component: {fileID: 4401881808371901093}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: RightColliderChecker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -383,7 +382,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4969116987310833070}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.01001, y: 0, z: -0.12}
+  m_LocalPosition: {x: 0.05, y: 0, z: -0.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1516979037643367911}
@@ -436,7 +435,7 @@ GameObject:
   m_Component:
   - component: {fileID: 31663741067231272}
   - component: {fileID: 8693883676398751801}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: LeftLine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -452,7 +451,7 @@ Transform:
   m_GameObject: {fileID: 7949985578704097987}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.01, y: 0.005, z: 1}
+  m_LocalScale: {x: 0.05, y: 0.01, z: 1}
   m_Children: []
   m_Father: {fileID: 1516979037643367911}
   m_RootOrder: 0
@@ -505,5 +504,5 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
+  m_MaskInteraction: 1
   m_SpriteSortPoint: 0

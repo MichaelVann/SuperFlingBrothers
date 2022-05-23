@@ -90,25 +90,21 @@ public class BodyPartInterface : MonoBehaviour
             //    m_rightFrontLineSetup = true;
             //}
 
-            if (!m_rightFrontLineSetup)
+            m_rightFrontLineRef.transform.localScale = new Vector3(m_rightFrontLineRef.transform.localScale.x + m_deltaFrontLineScale, m_rightFrontLineRef.transform.localScale.y, 1f);
+            float colliderPosX = m_rightFrontLineRef.transform.localPosition.x + m_rightFrontLineColliderOriginalOffsetX * m_rightFrontLineRef.transform.localScale.x / m_rightFrontLineOriginalXScale;
+            m_rightFrontLineColliderRef.transform.localPosition = new Vector3(colliderPosX, m_rightFrontLineColliderRef.transform.localPosition.y, m_rightFrontLineColliderRef.transform.localPosition.z);
+            if (Physics2D.IsTouching(m_rightFrontLineColliderRef.GetComponent<Collider2D>(), m_colliderRef))
             {
-                m_rightFrontLineRef.transform.localScale = new Vector3(m_rightFrontLineRef.transform.localScale.x + m_deltaFrontLineScale, m_rightFrontLineRef.transform.localScale.y, 1f);
-                float colliderPosX = m_rightFrontLineRef.transform.localPosition.x + m_rightFrontLineColliderOriginalOffsetX * m_rightFrontLineRef.transform.localScale.x / m_rightFrontLineOriginalXScale;
-                m_rightFrontLineColliderRef.transform.localPosition = new Vector3(colliderPosX, m_rightFrontLineColliderRef.transform.localPosition.y, m_rightFrontLineColliderRef.transform.localPosition.z);
-                if (Physics2D.IsTouching(m_rightFrontLineColliderRef.GetComponent<Collider2D>(), m_colliderRef))
-                {
-                    m_rightFrontLineRef.GetComponent<SpriteRenderer>().color = Color.red;
-                }
-                else
-                {
-                    m_rightFrontLineRef.GetComponent<SpriteRenderer>().color = Color.green;
-                    m_rightFrontLineSetup = true;
-                }
+                m_rightFrontLineRef.GetComponent<SpriteRenderer>().color = Color.red;
+            }
+            else
+            {
+                m_rightFrontLineRef.GetComponent<SpriteRenderer>().color = Color.green;
             }
         }
     }
 
-    void OnMouseDown()
+    void OnMouseUpAsButton()
     {
         m_bodyPartSelectionHandler.SelectPart(m_bodyPartID);
     }
