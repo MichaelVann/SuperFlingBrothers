@@ -32,11 +32,11 @@ public class HumanBody
         }
     }
 
-    public void SetUpBodyPartNodes(List<BodyPartUI> a_UIPartList)
+    public void SetUpBodyPartNodes(List<BodyPartInterface> a_bodyPartInterfaceList)
     {
-        for (int i = 0; i < a_UIPartList.Count; i++)
+        for (int i = 0; i < a_bodyPartInterfaceList.Count; i++)
         {
-            //m_bodyPartList[i].SetUpPartNodesFromUI(a_UIPartList[i].m_UIBattleNodeList);
+            m_bodyPartList[i].SetUpPartNodesFromUI(a_bodyPartInterfaceList[i].m_nodeList);
         }
     }
 

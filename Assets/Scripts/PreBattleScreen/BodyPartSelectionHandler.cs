@@ -12,7 +12,8 @@ public class BodyPartSelectionHandler : MonoBehaviour
     public GameObject m_partInfoPanel;
     public NodeInfoPanelHandler m_nodeInfoPanel;
 
-    List<BodyPartUI> m_bodyPartUIList;
+    //List<BodyPartUI> m_bodyPartUIList;
+    List<BodyPartInterface> m_bodyPartInterfaceList;
     public List<GameObject> m_nodeContainers;
     public List<GameObject> m_lineContainers;
     public GameObject m_lineContainer;
@@ -68,10 +69,10 @@ public class BodyPartSelectionHandler : MonoBehaviour
         {
             SetUpPartNodes();
         }
-        for (int i = 0; i < m_bodyPartUIList.Count; i++)
-        {
-            //m_bodyPartUIList[i].SetUp(m_humanBodyRef.m_bodyPartList[i]);
-        }
+        //for (int i = 0; i < m_bodyPartUIList.Count; i++)
+        //{
+        //    m_bodyPartUIList[i].SetUp(m_humanBodyRef.m_bodyPartList[i]);
+        //}
         ToggleNodeAndLineVisibility(false);
         m_personNameText.text = m_personNameHighlightText.text = "Subject: " + m_humanBodyRef.m_firstName + " " + m_humanBodyRef.m_lastName;
     }
@@ -88,14 +89,14 @@ public class BodyPartSelectionHandler : MonoBehaviour
 
     void SetUpPartNodes()
     {
-        m_bodyPartUIList = new List<BodyPartUI>();
+        m_bodyPartInterfaceList = new List<BodyPartInterface>();
 
         for (int i = 0; i < m_bodyPartUIObjectRefs.Length; i++)
         {
-            m_bodyPartUIList.Add(m_bodyPartUIObjectRefs[i].GetComponent<BodyPartUI>());
+            m_bodyPartInterfaceList.Add(m_bodyPartUIObjectRefs[i].GetComponent<BodyPartInterface>());
         }
-
-        m_humanBodyRef.SetUpBodyPartNodes(m_bodyPartUIList);
+        fix this
+        m_humanBodyRef.SetUpBodyPartNodes(m_bodyPartInterfaceList);
     }
 
     // Update is called once per frame
