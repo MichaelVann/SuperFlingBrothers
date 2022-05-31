@@ -86,13 +86,13 @@ public class BodyPart
         }
 
 
-        for (int i = 0; i < a_nodeGameObjects.Count; i++)
-        {
-            UIBattleNode partNode = a_nodeGameObjects[i];
-            for (int j = 0; j < partNode.m_connectionList.Count; j++)
-            {
-                m_nodes[i].m_connectedNodes[j] = a_nodeGameObjects[i].m_connectionList[j].GetComponent<UIBattleNode>().m_battleNodeRef;
-            }
-        }
+        //for (int i = 0; i < a_nodeGameObjects.Count; i++)
+        //{
+        //    UIBattleNode partNode = a_nodeGameObjects[i];
+        //    for (int j = 0; j < partNode.m_connectionList.Count; j++)
+        //    {
+        //        m_nodes[i].m_connectedNodes[j] = a_nodeGameObjects[i].m_connectionList[j].GetComponent<UIBattleNode>().m_battleNodeRef;
+        //    }
+        //}
     }
 }

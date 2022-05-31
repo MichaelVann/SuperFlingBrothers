@@ -40,7 +40,6 @@ public class UIBattleNode : MonoBehaviour
 
     public void Select()
     {
-        m_selectionRing.SetActive(true);
         m_bodySelectionHandlerRef.SelectNode(m_id,m_parentBodyPartID, this);
     }
 

@@ -344,6 +344,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_bodyPartSelectionHandler: {fileID: 0}
   m_bodyPartID: 0
+  m_frontLineRef: {fileID: 2082217796105218051}
   m_leftFrontLineRef: {fileID: 7949985578704097987}
   m_rightFrontLineRef: {fileID: 2265342678998909817}
   m_leftFrontLineColliderRef: {fileID: 4166780752670897622}
@@ -351,6 +352,8 @@ MonoBehaviour:
   m_lockRef: {fileID: 2396755519791423510}
   m_nodePrefabRef: {fileID: 4761417700377774800, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
     type: 3}
+  m_nodeGameobjectList: []
+  m_nodeList: []
 --- !u!50 &1509513652008709968
 Rigidbody2D:
   serializedVersion: 4

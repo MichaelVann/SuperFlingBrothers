@@ -7,6 +7,7 @@ public class BodyPartInterface : MonoBehaviour
     GameHandler m_gameHandlerRef;
     public BodyPartSelectionHandler m_bodyPartSelectionHandler;
     public int m_bodyPartID;
+    public GameObject m_frontLineRef;
     public GameObject m_leftFrontLineRef;
     public GameObject m_rightFrontLineRef;
     public GameObject m_leftFrontLineColliderRef;
@@ -147,7 +148,7 @@ public class BodyPartInterface : MonoBehaviour
     {
         for (int i = 0; i < m_nodesToSpawn; i++)
         {
-            GameObject node = Instantiate<GameObject>(m_nodePrefabRef, transform);
+            GameObject nodeGameObject = Instantiate<GameObject>(m_nodePrefabRef, m_frontLineRef.transform);
 
             bool validSpawnFound = false;
             int spawnAttempts = 0;
@@ -156,19 +157,19 @@ public class BodyPartInterface : MonoBehaviour
             {
                 float xPos = UnityEngine.Random.Range(m_leftFrontLineColliderRef.transform.localPosition.x, m_rightFrontLineColliderRef.transform.localPosition.x);
                 float yPos = UnityEngine.Random.Range(-0.1f, 0.1f);
-                node.transform.localPosition = new Vector3(xPos, yPos, 0f);
+                nodeGameObject.transform.localPosition = new Vector3(xPos, yPos, -1f);
 
                 validSpawnFound = true;
                 spawnAttempts++;
                 for (int j = 0; j < m_nodeGameobjectList.Count; j++)
                 {
-                    Collider2D colliderA = node.GetComponent<Collider2D>();
+                    Collider2D colliderA = nodeGameObject.GetComponent<Collider2D>();
                     Collider2D colliderB = m_nodeGameobjectList[j].GetComponent<Collider2D>();
-                    float distMag = (node.transform.localPosition - m_nodeGameobjectList[j].transform.localPosition).magnitude;
+                    float distMag = (nodeGameObject.transform.localPosition - m_nodeGameobjectList[j].transform.localPosition).magnitude;
                     float allowedRadius = 0.1f;// node.GetComponent<CircleCollider2D>().radius * transform.;
                     if (spawnAttempts > m_maxNodeSpawnAttempts)
                     {
-                        node.GetComponent<SpriteRenderer>().color = Color.yellow;
+                        nodeGameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
                     }
                     if (distMag <= allowedRadius && spawnAttempts <= m_maxNodeSpawnAttempts)
                     {
@@ -179,14 +180,19 @@ public class BodyPartInterface : MonoBehaviour
 
             if (spawnAttempts > m_maxNodeSpawnAttempts)
             {
-                Destroy(node);
+                Destroy(nodeGameObject);
+                break;
             }
             else
             {
-                m_nodeGameobjectList.Add(node);
-                m_nodeList.Add(node.GetComponent<UIBattleNode>());
+                UIBattleNode node = nodeGameObject.GetComponent<UIBattleNode>();
+                node.m_id = i;
+                node.m_parentBodyPartID = m_bodyPartID;
+                m_nodeGameobjectList.Add(nodeGameObject);
+                m_nodeList.Add(node);
             }
 
         }
+        m_bodyPartSelectionHandler.SetUpBodyPartNodes(m_bodyPartID);
     }
 }
