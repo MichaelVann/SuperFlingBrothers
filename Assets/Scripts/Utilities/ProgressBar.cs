@@ -31,11 +31,7 @@ public class ProgressBar : MonoBehaviour
         m_progressBarRef.gameObject.transform.localScale = new Vector3(m_originalScale.x * healthPercentage, m_originalScale.y,1f);
         if (m_healthColoring)
         {
-            Color barColor = Color.white;
-
-            float redRatio = Mathf.Clamp(2f-(2f*healthPercentage),0f,1f);
-            float greenRatio = Mathf.Clamp(5f*(healthPercentage)-1.5f, 0f, 1f);
-            barColor = new Color(redRatio, greenRatio, 0f);
+            Color barColor = VLib.PercentageToColor(healthPercentage);
             m_progressBarRef.color = barColor;
         }
     }

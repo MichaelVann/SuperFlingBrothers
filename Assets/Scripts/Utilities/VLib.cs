@@ -33,6 +33,16 @@ public static class VLib
         return UnityEngine.Random.Range(a_inclusiveMin, a_inclusiveMax);
     }
 
+    public static Color PercentageToColor(float a_percentage)
+    {
+        Color returnColor = Color.white;
+
+        float redRatio = Mathf.Clamp(2f - (2f * a_percentage), 0f, 1f);
+        float greenRatio = Mathf.Clamp(5f * (a_percentage) - 1.5f, 0f, 1f);
+        returnColor = new Color(redRatio, greenRatio, 0f);
+        return returnColor;
+    }
+
     public static string GenerateRandomizedName()
     {
         string name = "";

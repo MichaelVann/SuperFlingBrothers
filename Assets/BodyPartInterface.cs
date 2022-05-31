@@ -30,6 +30,9 @@ public class BodyPartInterface : MonoBehaviour
     int m_nodesToSpawn = 20;
     int m_maxNodeSpawnAttempts = 100;
 
+    public int m_minBaseDifficulty = 1;
+    public int m_minBaseMaxDifficulty = 30;
+
     const float m_deltaFrontLineScale = 0.001f;
     // Start is called before the first frame update
     void Start()
@@ -43,6 +46,10 @@ public class BodyPartInterface : MonoBehaviour
 
         m_nodeGameobjectList = new List<GameObject>();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        if (!m_gameHandlerRef.m_humanBody.m_bodyPartList[m_bodyPartID].m_unlocked)
+        {
+            GetComponent<SpriteRenderer>().color = new Color(0.3f,0.3f,0.3f,1f);
+        }
         m_lockRef.SetActive(!m_gameHandlerRef.m_humanBody.m_bodyPartList[m_bodyPartID].m_unlocked);
         //SetUpNodes();
     }
@@ -188,6 +195,8 @@ public class BodyPartInterface : MonoBehaviour
                 UIBattleNode node = nodeGameObject.GetComponent<UIBattleNode>();
                 node.m_id = i;
                 node.m_parentBodyPartID = m_bodyPartID;
+                node.m_difficulty = Random.Range(m_minBaseDifficulty, m_minBaseMaxDifficulty);
+                node.GetComponent<SpriteRenderer>().color = VLib.PercentageToColor(1f- (float)(node.m_difficulty - m_minBaseDifficulty) / (float)(m_minBaseMaxDifficulty - m_minBaseDifficulty));
                 m_nodeGameobjectList.Add(nodeGameObject);
                 m_nodeList.Add(node);
             }
