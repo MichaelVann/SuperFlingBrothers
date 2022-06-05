@@ -17,21 +17,25 @@ public class BodyPartInterface : MonoBehaviour
     float m_rightFrontLineColliderOriginalOffsetX = 0f;
     float m_leftFrontLineOriginalXScale = 1f;
     float m_leftFrontLineColliderOriginalOffsetX = 0f;
-    bool m_rightFrontLineSetupComplete = false;
-    bool m_leftFrontLineSetupComplete = false;
+    int m_rightFrontLineSetupComplete = 0;
+    int m_leftFrontLineSetupComplete = 0;
     Collider2D m_colliderRef;
     const int m_maximumFrontLineChecks = 1000;
     int m_frontLineChecks = 0;
 
+
+    //Nodes
     public GameObject m_nodePrefabRef;
     public List<GameObject> m_nodeGameobjectList;
     public List<UIBattleNode> m_nodeList;
     bool m_nodeSetupComplete = false;
     int m_nodesToSpawn = 20;
     int m_maxNodeSpawnAttempts = 100;
+    bool m_nodeSetupFrameComplete = false;
 
     public int m_minBaseDifficulty = 1;
     public int m_minBaseMaxDifficulty = 30;
+
 
     const float m_deltaFrontLineScale = 0.001f;
     // Start is called before the first frame update
@@ -57,10 +61,18 @@ public class BodyPartInterface : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (m_gameHandlerRef.m_humanBody.m_bodyPartList[m_bodyPartID].m_unlocked)
+        if (m_nodeSetupFrameComplete)
         {
-            SetUpFrontLine();
+            if (m_gameHandlerRef.m_humanBody.m_bodyPartList[m_bodyPartID].m_unlocked)
+            {
+                SetUpFrontLine();
+            }
         }
+        else
+        {
+            m_nodeSetupFrameComplete = true;
+        }
+
     }
 
     void OnMouseUpAsButton()
@@ -75,7 +87,7 @@ public class BodyPartInterface : MonoBehaviour
 
     public void SetUpFrontLine()
     {
-        if (!m_rightFrontLineSetupComplete)
+        if (m_rightFrontLineSetupComplete < 2)
         {
             m_rightFrontLineRef.transform.localScale = new Vector3(m_rightFrontLineRef.transform.localScale.x + m_deltaFrontLineScale, m_rightFrontLineRef.transform.localScale.y, 1f);
             float colliderPosX = m_rightFrontLineRef.transform.localPosition.x + m_rightFrontLineColliderOriginalOffsetX * m_rightFrontLineRef.transform.localScale.x / m_rightFrontLineOriginalXScale;
@@ -87,8 +99,8 @@ public class BodyPartInterface : MonoBehaviour
             else
             {
                 m_rightFrontLineRef.GetComponent<SpriteRenderer>().color = Color.green;
-                m_rightFrontLineSetupComplete = true;
-                if (m_leftFrontLineSetupComplete)
+                m_rightFrontLineSetupComplete++;
+                if (m_rightFrontLineSetupComplete >= 2)
                 {
                     m_nodeSetupComplete = true;
                     SetUpNodes();
@@ -96,7 +108,7 @@ public class BodyPartInterface : MonoBehaviour
             }
         }
 
-        if (!m_leftFrontLineSetupComplete)
+        if (m_leftFrontLineSetupComplete < 2)
         {
             m_leftFrontLineRef.transform.localScale = new Vector3(m_leftFrontLineRef.transform.localScale.x + m_deltaFrontLineScale, m_leftFrontLineRef.transform.localScale.y, 1f);
             float colliderPosX = m_leftFrontLineRef.transform.localPosition.x + m_leftFrontLineColliderOriginalOffsetX * m_leftFrontLineRef.transform.localScale.x / m_leftFrontLineOriginalXScale;
@@ -108,8 +120,8 @@ public class BodyPartInterface : MonoBehaviour
             else
             {
                 m_leftFrontLineRef.GetComponent<SpriteRenderer>().color = Color.green;
-                m_leftFrontLineSetupComplete = true;
-                if (m_rightFrontLineSetupComplete)
+                m_leftFrontLineSetupComplete++;
+                if (m_rightFrontLineSetupComplete >= 2)
                 {
                     m_nodeSetupComplete = true;
                     SetUpNodes();
