@@ -13,6 +13,7 @@ public class BattleNode
     }
     public eState m_state;
     public int m_invaders;
+    public float m_invasionOwnershipPercentage = 0f;
     public int m_difficulty;
     public BattleNode[] m_connectedNodes;
 
@@ -34,6 +35,7 @@ public class BodyPart
 
     public string m_name;
     public bool m_unlocked;
+    internal int m_maxEnemyDifficulty;
 
     public struct Health
     {
@@ -75,8 +77,9 @@ public class BodyPart
         m_nodes = null;
     }
 
-    public void SetUpPartNodesFromUI(List<UIBattleNode> a_nodeGameObjects)
+    public void SetUpFromUI(List<UIBattleNode> a_nodeGameObjects, int a_maxEnemyDifficulty)
     {
+        m_maxEnemyDifficulty = a_maxEnemyDifficulty;
         m_nodes = new BattleNode[a_nodeGameObjects.Count];
         for (int i = 0; i < a_nodeGameObjects.Count; i++)
         {

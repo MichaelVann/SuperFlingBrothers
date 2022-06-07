@@ -96,7 +96,7 @@ public class BodyPartSelectionHandler : MonoBehaviour
 
     public void SetUpBodyPartNodes(int a_partIndex)
     {
-        m_humanBodyRef.m_bodyPartList[a_partIndex].SetUpPartNodesFromUI(m_bodyPartInterfaceList[a_partIndex].m_nodeList);
+        m_humanBodyRef.m_bodyPartList[a_partIndex].SetUpFromUI(m_bodyPartInterfaceList[a_partIndex].m_nodeList, m_bodyPartInterfaceList[a_partIndex].m_maxEnemyDifficulty);
 
         //m_humanBodyRef.SetUpBodyPartNodes(m_bodyPartInterfaceList);
     }

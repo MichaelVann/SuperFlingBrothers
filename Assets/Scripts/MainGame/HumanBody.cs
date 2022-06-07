@@ -32,14 +32,6 @@ public class HumanBody
         }
     }
 
-    public void SetUpBodyPartNodes(List<BodyPartInterface> a_bodyPartInterfaceList)
-    {
-        for (int i = 0; i < a_bodyPartInterfaceList.Count; i++)
-        {
-            m_bodyPartList[i].SetUpPartNodesFromUI(a_bodyPartInterfaceList[i].m_nodeList);
-        }
-    }
-
     public void SetUpDefaultBodyPart(ref BodyPart a_part, int a_index)
     {
         ref BodyPart part = ref a_part;

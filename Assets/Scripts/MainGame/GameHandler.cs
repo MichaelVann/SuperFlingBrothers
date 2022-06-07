@@ -34,6 +34,7 @@ public class GameHandler : MonoBehaviour
     //Current Battle
     public BodyPart m_bodyPartSelectedForBattle;
     public int m_battleDifficulty = 0;
+    internal int m_maxEnemyDifficulty = 0;
 
     //Last Game
     public eEndGameType m_lastGameResult = eEndGameType.lose;
@@ -94,6 +95,7 @@ public class GameHandler : MonoBehaviour
     public float GetCurrentCash() { return m_cash; }
 
     public void SetBattleDifficulty(int a_difficulty) { m_battleDifficulty = a_difficulty; }
+    public void SetMaxEnemyDifficulty(int a_difficulty) { m_maxEnemyDifficulty = a_difficulty; }
 
     internal StockHandler GetStockHandlerRef() { return m_stockHandler; }
 

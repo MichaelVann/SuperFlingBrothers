@@ -19,6 +19,7 @@ public class BodyPartInterface : MonoBehaviour
     float m_leftFrontLineColliderOriginalOffsetX = 0f;
     int m_rightFrontLineSetupComplete = 0;
     int m_leftFrontLineSetupComplete = 0;
+    int m_frontLineSetupCompletionsRequired = 2;
     Collider2D m_colliderRef;
     const int m_maximumFrontLineChecks = 1000;
     int m_frontLineChecks = 0;
@@ -35,7 +36,7 @@ public class BodyPartInterface : MonoBehaviour
 
     public int m_minBaseDifficulty = 1;
     public int m_minBaseMaxDifficulty = 30;
-
+    public int m_maxEnemyDifficulty = 5;
 
     const float m_deltaFrontLineScale = 0.001f;
     // Start is called before the first frame update
@@ -87,7 +88,7 @@ public class BodyPartInterface : MonoBehaviour
 
     public void SetUpFrontLine()
     {
-        if (m_rightFrontLineSetupComplete < 2)
+        if (m_rightFrontLineSetupComplete < m_frontLineSetupCompletionsRequired)
         {
             m_rightFrontLineRef.transform.localScale = new Vector3(m_rightFrontLineRef.transform.localScale.x + m_deltaFrontLineScale, m_rightFrontLineRef.transform.localScale.y, 1f);
             float colliderPosX = m_rightFrontLineRef.transform.localPosition.x + m_rightFrontLineColliderOriginalOffsetX * m_rightFrontLineRef.transform.localScale.x / m_rightFrontLineOriginalXScale;
@@ -100,7 +101,7 @@ public class BodyPartInterface : MonoBehaviour
             {
                 m_rightFrontLineRef.GetComponent<SpriteRenderer>().color = Color.green;
                 m_rightFrontLineSetupComplete++;
-                if (m_rightFrontLineSetupComplete >= 2)
+                if (m_rightFrontLineSetupComplete >= m_frontLineSetupCompletionsRequired)
                 {
                     m_nodeSetupComplete = true;
                     SetUpNodes();
@@ -108,7 +109,7 @@ public class BodyPartInterface : MonoBehaviour
             }
         }
 
-        if (m_leftFrontLineSetupComplete < 2)
+        if (m_leftFrontLineSetupComplete < m_frontLineSetupCompletionsRequired)
         {
             m_leftFrontLineRef.transform.localScale = new Vector3(m_leftFrontLineRef.transform.localScale.x + m_deltaFrontLineScale, m_leftFrontLineRef.transform.localScale.y, 1f);
             float colliderPosX = m_leftFrontLineRef.transform.localPosition.x + m_leftFrontLineColliderOriginalOffsetX * m_leftFrontLineRef.transform.localScale.x / m_leftFrontLineOriginalXScale;
@@ -121,44 +122,11 @@ public class BodyPartInterface : MonoBehaviour
             {
                 m_leftFrontLineRef.GetComponent<SpriteRenderer>().color = Color.green;
                 m_leftFrontLineSetupComplete++;
-                if (m_rightFrontLineSetupComplete >= 2)
+                if (m_rightFrontLineSetupComplete >= m_frontLineSetupCompletionsRequired)
                 {
                     m_nodeSetupComplete = true;
                     SetUpNodes();
                 }
-            }
-        }
-
-
-        if (Input.GetKey(KeyCode.V))
-        {
-            //m_rightFrontLineRef.transform.localScale = new Vector3(m_rightFrontLineRef.transform.localScale.x + m_deltaFrontLineScale, m_rightFrontLineRef.transform.localScale.y, 1f);
-            //float colliderPosX = m_rightFrontLineRef.transform.localPosition.x + m_rightFrontLineColliderOriginalOffsetX * m_rightFrontLineRef.transform.localScale.x/m_rightFrontLineOriginalXScale;
-            //m_rightFrontLineColliderRef.transform.localPosition = new Vector3(colliderPosX, m_rightFrontLineColliderRef.transform.localPosition.y, m_rightFrontLineColliderRef.transform.localPosition.z);
-
-            //m_rightFrontLineRef.transform.localScale = new Vector3(m_rightFrontLineRef.transform.localScale.x + m_deltaFrontLineScale, m_rightFrontLineRef.transform.localScale.y, 1f);
-            //float colliderPosX = m_rightFrontLineRef.transform.localPosition.x + m_rightFrontLineColliderOriginalOffsetX * m_rightFrontLineRef.transform.localScale.x / m_rightFrontLineOriginalXScale;
-            //m_rightFrontLineColliderRef.transform.localPosition = new Vector3(colliderPosX, m_rightFrontLineColliderRef.transform.localPosition.y, m_rightFrontLineColliderRef.transform.localPosition.z);
-            //if (Physics2D.IsTouching(m_rightFrontLineColliderRef.GetComponent<Collider2D>(), m_colliderRef))
-            //{
-            //    m_rightFrontLineRef.GetComponent<SpriteRenderer>().color = Color.red;
-            //}
-            //else
-            //{
-            //    m_rightFrontLineRef.GetComponent<SpriteRenderer>().color = Color.green;
-            //    m_rightFrontLineSetup = true;
-            //}
-
-            m_rightFrontLineRef.transform.localScale = new Vector3(m_rightFrontLineRef.transform.localScale.x + m_deltaFrontLineScale, m_rightFrontLineRef.transform.localScale.y, 1f);
-            float colliderPosX = m_rightFrontLineRef.transform.localPosition.x + m_rightFrontLineColliderOriginalOffsetX * m_rightFrontLineRef.transform.localScale.x / m_rightFrontLineOriginalXScale;
-            m_rightFrontLineColliderRef.transform.localPosition = new Vector3(colliderPosX, m_rightFrontLineColliderRef.transform.localPosition.y, m_rightFrontLineColliderRef.transform.localPosition.z);
-            if (Physics2D.IsTouching(m_rightFrontLineColliderRef.GetComponent<Collider2D>(), m_colliderRef))
-            {
-                m_rightFrontLineRef.GetComponent<SpriteRenderer>().color = Color.red;
-            }
-            else
-            {
-                m_rightFrontLineRef.GetComponent<SpriteRenderer>().color = Color.green;
             }
         }
     }
@@ -193,7 +161,17 @@ public class BodyPartInterface : MonoBehaviour
                     if (distMag <= allowedRadius && spawnAttempts <= m_maxNodeSpawnAttempts)
                     {
                         validSpawnFound = false;
+                        break;
                     }
+                }
+                if (!validSpawnFound)
+                {
+                    continue;
+                }
+
+                if (true)
+                {
+
                 }
             }
 
@@ -204,6 +182,7 @@ public class BodyPartInterface : MonoBehaviour
             }
             else
             {
+                //Spawn Node
                 UIBattleNode node = nodeGameObject.GetComponent<UIBattleNode>();
                 node.m_id = i;
                 node.m_parentBodyPartID = m_bodyPartID;

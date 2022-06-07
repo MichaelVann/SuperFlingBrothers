@@ -43,6 +43,22 @@ public class BattleManager : MonoBehaviour
     const float m_freezingTimerMax = 0.2f;
     const float m_slowableTime = 0.8f;
 
+    internal float m_coinValue = 1f;
+
+    float m_healthbarMainPos = 0f;
+
+    //Enemy Spawning
+    internal int m_enemiesToSpawn = 8;
+    float m_enemySpawnGap = 0.4f;
+    Vector3 m_coreEnemySpawnLocation;
+    int m_maxEnemyDifficulty = 0;
+
+    bool m_startingSequence = true;
+
+    //Extra Turn Upgrade
+    int m_extraTurnsRemaining = 1;
+    bool m_usingExtraTurn;
+
     //End Game
     public bool m_endingGame = false;
     public float m_gameEndSlowdownFactor = 0.25f;
@@ -60,20 +76,6 @@ public class BattleManager : MonoBehaviour
     //Post game
     float m_scoreGained = 0f;
     float m_bonusTimeScoreGained = 0f;
-
-    internal float m_coinValue = 1f;
-
-    float m_healthbarMainPos = 0f;
-
-    internal int m_enemiesToSpawn = 8;
-    float m_enemySpawnGap = 0.4f;
-    Vector3 m_coreEnemySpawnLocation;
-
-    bool m_startingSequence = true;
-
-    //Extra Turn Upgrade
-    int m_extraTurnsRemaining = 1;
-    bool m_usingExtraTurn;
 
     public float GetMaxGameEndTimer()
     {
@@ -201,6 +203,7 @@ public class BattleManager : MonoBehaviour
 
     public void SpawnEnemies()
     {
+        m_maxEnemyDifficulty = m_gameHandlerRef.m_maxEnemyDifficulty;
         int remainingDifficulty = m_gameHandlerRef.m_battleDifficulty;
         for (int i = 0; i < m_enemiesToSpawn && remainingDifficulty > 0; i++)
         {
@@ -268,7 +271,7 @@ public class BattleManager : MonoBehaviour
 
             for (int j = GameHandler.m_enemyTypeTraits.Length -1 ; j >= 0; j--)
             {
-                if (GameHandler.m_enemyTypeTraits[j].difficulty <= remainingDifficulty)
+                if (GameHandler.m_enemyTypeTraits[j].difficulty <= remainingDifficulty && GameHandler.m_enemyTypeTraits[j].difficulty <= m_maxEnemyDifficulty)
                 {
                     enemyType = (Enemy.eEnemyType)j;
                     remainingDifficulty -= GameHandler.m_enemyTypeTraits[j].difficulty;
