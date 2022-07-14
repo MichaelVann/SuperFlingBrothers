@@ -91,6 +91,7 @@ public class BodyPartSelectionHandler : MonoBehaviour
         {
             InitialZoomToPart(m_selectedBodyPartIndex);
             ToggleNodeAndLineVisibility(true);
+            m_selectedBodyPart = m_humanBodyRef.m_bodyPartList[m_selectedBodyPartIndex];
         }
     }
 
