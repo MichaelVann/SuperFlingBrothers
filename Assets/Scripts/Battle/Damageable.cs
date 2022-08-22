@@ -42,6 +42,11 @@ public class Damageable : BaseObject
     internal float m_health;
     internal float m_maxHealth;
 
+    bool m_damageColourOverrideRunning = false;
+    vTimer m_damageColourOverrideTimer;
+    //float m_damageColourTimer = 0f;
+    float m_damageColourTimerMax = 0.1f;
+
     public float GetHealthPercentage() { return m_health / m_maxHealth; }
 
     public override void Awake()
@@ -53,6 +58,7 @@ public class Damageable : BaseObject
         m_statHandler.Init();
         m_originalColor = m_spriteRenderer.color;
         m_originalMass = m_rigidBody.mass;
+        m_damageColourOverrideTimer = new vTimer(m_damageColourTimerMax,false);
 
         UpdateLocalStatsFromStatHandler();
     }
@@ -117,6 +123,12 @@ public class Damageable : BaseObject
         }
     }
 
+    private void StartDamageColourTimer()
+    {
+        m_damageColourOverrideRunning = true;
+        //m_damageColourTimer = 0f;
+    }
+
     //Damages the damageable
     public virtual void Damage(float a_damage)
     {
@@ -125,6 +137,8 @@ public class Damageable : BaseObject
         {
             return;
         }
+
+        StartDamageColourTimer();
 
         //If the damageables health is above it's minimum health
         if (m_health > 0f)
@@ -179,6 +193,24 @@ public class Damageable : BaseObject
         }
     }
 
+    private void DamageColourOverrideUpdate()
+    {
+        if (m_damageColourOverrideRunning)
+        {
+            m_spriteRenderer.color = new Color(2f, 0f,0f,1f);
+            if (m_damageColourOverrideTimer.Update())
+            {
+                m_damageColourOverrideRunning = false;
+                m_damageColourOverrideTimer.Reset();
+                UpdateHealthColor();
+            }
+        }
+        //m_damageColourTimer += Time.deltaTime;
+        //if (m_damageColourTimer >= m_damageColourTimerMax)
+        //{
+        //}
+    }
+
     public override void Update()
     {
         base.Update();
@@ -186,7 +218,8 @@ public class Damageable : BaseObject
         SecondFlingUpdate();
 
         if (m_healthBarRef) { m_healthBarRef.SetProgressValue(m_health); }
-        
+
+        DamageColourOverrideUpdate();
     }
 
     protected void TakePocketDamage()

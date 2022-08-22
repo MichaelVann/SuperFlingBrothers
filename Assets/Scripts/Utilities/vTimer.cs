@@ -16,7 +16,7 @@ public class vTimer
     {
         m_timer = 0f;
         m_timerMax = a_maxTime;
-        a_onceOff = false;
+        m_onceOff = a_onceOff;
     }
 
     public vTimer(float a_maxTime, bool a_onceOff)
@@ -27,6 +27,11 @@ public class vTimer
     public vTimer(float a_maxTime)
     {
         Init(a_maxTime, false);
+    }
+
+    public void Reset()
+    {
+        m_timer = 0f;
     }
 
     public bool Update()
