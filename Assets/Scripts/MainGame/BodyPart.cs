@@ -43,6 +43,7 @@ public class BodyPart
         public float max;
     }
     public Health m_health;
+    public int m_invaderStrength;
 
     public enum eType
     {
@@ -68,11 +69,14 @@ public class BodyPart
     }
     public eType m_type;
 
-    public BodyPart(BodyPart.eType a_type, BodyPart.Health a_health, bool a_unlocked)
+    public void ChangeInvaderStrength(int a_value) { m_invaderStrength += a_value; }
+
+    public BodyPart(BodyPart.eType a_type, BodyPart.Health a_health, int a_invaderStrength, bool a_unlocked)
     {
         m_name = GetPartName(a_type);
-        m_health = a_health;
         m_type = a_type;
+        m_health = a_health;
+        m_invaderStrength = a_invaderStrength;
         m_unlocked = a_unlocked;
         m_nodes = null;
     }

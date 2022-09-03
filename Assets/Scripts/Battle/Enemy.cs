@@ -29,7 +29,6 @@ public class Enemy : Damageable
         public bool duplicator;
     } TypeTrait m_typeTrait;
 
-
     float m_duplicationTimer = 0f;
     float m_duplicationTimerMax = 12f;
 
@@ -187,6 +186,7 @@ public class Enemy : Damageable
         m_gameHandlerRef.m_playerStatHandler.ChangeXP(m_xpReward);
         m_gameHandlerRef.m_xpEarnedLastGame += m_xpReward;
         m_battleManagerRef.ChangeXp(m_xpReward);
+        m_battleManagerRef.ChangeInvaderStrength(-m_typeTrait.difficulty);
 
         RisingFadingText xpText = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(0f, m_xpTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
         xpText.SetImageEnabled(false);

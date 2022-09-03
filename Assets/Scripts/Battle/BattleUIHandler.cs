@@ -57,7 +57,7 @@ public class BattleUIHandler : MonoBehaviour
         m_playingEnding = true;
         m_endingText.SetActive(true);
 
-        m_battleManagerRef.CalculateFinishedGame();
+        //m_battleManagerRef.CalculateFinishedGame();
     }
 
     public void PlayEnding()

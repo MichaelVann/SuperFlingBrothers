@@ -35,7 +35,7 @@ public class HumanBody
     public void SetUpDefaultBodyPart(ref BodyPart a_part, int a_index)
     {
         ref BodyPart part = ref a_part;
-        int invaders = 100;
+        int invaderStrength = 0;
         BodyPart.Health health = new BodyPart.Health();
         health.max = 0;
         bool unlocked = false;
@@ -92,8 +92,12 @@ public class HumanBody
             default:
                 break;
         }
+        if (unlocked)
+        {
+            invaderStrength = 50;
+        }
         health.value = health.max *= m_basePartHealth;
 
-        a_part = new BodyPart((BodyPart.eType)a_index, health, unlocked);
+        a_part = new BodyPart((BodyPart.eType)a_index, health, invaderStrength, unlocked);
     }
 }

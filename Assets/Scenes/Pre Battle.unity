@@ -11998,6 +11998,7 @@ MonoBehaviour:
   - {fileID: 1241966466}
   m_bodyContainerRef: {fileID: 1113452749}
   m_partInfoPanel: {fileID: 1396086768}
+  m_partInfoInvaderStrengthText: {fileID: 1701373314}
   m_nodeInfoPanel: {fileID: 326284500}
   m_nodeContainers:
   - {fileID: 1238174690}

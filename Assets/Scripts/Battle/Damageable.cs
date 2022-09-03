@@ -205,10 +205,6 @@ public class Damageable : BaseObject
                 UpdateHealthColor();
             }
         }
-        //m_damageColourTimer += Time.deltaTime;
-        //if (m_damageColourTimer >= m_damageColourTimerMax)
-        //{
-        //}
     }
 
     public override void Update()

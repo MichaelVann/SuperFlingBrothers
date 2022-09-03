@@ -10,6 +10,7 @@ public class BodyPartSelectionHandler : MonoBehaviour
     public GameObject[] m_bodyPartUIObjectRefs;
     public GameObject m_bodyContainerRef;
     public GameObject m_partInfoPanel;
+    public Text m_partInfoInvaderStrengthText;
     public NodeInfoPanelHandler m_nodeInfoPanel;
 
     //List<BodyPartUI> m_bodyPartUIList;
@@ -210,7 +211,7 @@ public class BodyPartSelectionHandler : MonoBehaviour
 
     public void SelectPart(int a_index)
     {
-        if (!m_initialZoomed)
+        if (!m_initialZoomed && m_humanBodyRef.m_bodyPartList[a_index].m_unlocked)
         {
             m_selectedBodyPartIndex = a_index;
             m_selectedBodyPart = m_humanBodyRef.m_bodyPartList[a_index];
@@ -252,6 +253,7 @@ public class BodyPartSelectionHandler : MonoBehaviour
         m_zoomTargetLocation = m_humanBodyStartPos - m_bodyPartUIObjectRefs[a_index].transform.localPosition + m_zoomPartVisibilityOffset;
         m_startingZoomLocation = m_currentZoomLocation;
         m_partInfoPanel.SetActive(true);
+        m_partInfoInvaderStrengthText.text = "" + m_gameHandlerRef.m_humanBody.m_bodyPartList[a_index].m_invaderStrength;
         m_zoomProgress = 0f;
         m_zoomingIn = true;
     }

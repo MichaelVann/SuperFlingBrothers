@@ -39,8 +39,10 @@ public class GameHandler : MonoBehaviour
     //Last Game
     public eEndGameType m_lastGameResult = eEndGameType.lose;
     public float m_xpEarnedLastGame = 0f;
+    public int m_invaderStrengthChangeLastGame = 0;
     public int m_playerLevelAtStartOfBattle = 0;
     public float m_dnaEarnedLastGame = 0f;
+    public BodyPart m_lastBodyPartSelectedForBattle;
 
     //Upgrades
     public UpgradeItem[] m_upgrades;
@@ -207,7 +209,8 @@ public class GameHandler : MonoBehaviour
   
     public void CalculateFinishedGame()
     {
-
+        m_lastBodyPartSelectedForBattle = m_bodyPartSelectedForBattle;
+        m_lastBodyPartSelectedForBattle.ChangeInvaderStrength(m_invaderStrengthChangeLastGame);
     }
 
     void Update()

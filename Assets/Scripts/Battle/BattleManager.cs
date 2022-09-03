@@ -76,6 +76,7 @@ public class BattleManager : MonoBehaviour
     //Post game
     float m_scoreGained = 0f;
     float m_bonusTimeScoreGained = 0f;
+    int m_invaderStrengthChange = 0;
 
     public float GetMaxGameEndTimer()
     {
@@ -95,6 +96,7 @@ public class BattleManager : MonoBehaviour
 
     public void ChangeScore(float a_change) { m_score += a_change; }
     public void ChangeXp(float a_change) { m_xpEarned += a_change; }
+    public void ChangeInvaderStrength(int a_change) { m_invaderStrengthChange += a_change; }
 
     public void PrepareExtraTurn()
     {
@@ -350,8 +352,10 @@ public class BattleManager : MonoBehaviour
     void FinishGame()
     {
         m_gameHandlerRef.m_dnaEarnedLastGame = m_score;
+        m_gameHandlerRef.m_invaderStrengthChangeLastGame = m_invaderStrengthChange;
         //Go to post game screen
         SetTimeScale(1f);
+        CalculateFinishedGame();
         FindObjectOfType<GameHandler>().ChangeScene(GameHandler.eScene.postBattle);
     }
 
