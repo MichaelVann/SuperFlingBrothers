@@ -12,7 +12,6 @@ public class BattleNode
         locked, unlocked, beaten
     }
     public eState m_state;
-    public int m_invaders;
     public float m_invasionOwnershipPercentage = 0f;
     public int m_difficulty;
     public BattleNode[] m_connectedNodes;
@@ -21,7 +20,6 @@ public class BattleNode
     {
         m_id = a_id;
         m_state = a_state;
-        m_invaders = a_invaders;
         m_difficulty = a_difficulty;
         m_connectedNodes = null;
     }
