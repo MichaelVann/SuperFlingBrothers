@@ -27,6 +27,7 @@ public class Damageable : BaseObject
     public ProgressBar m_healthBarRef;
 
     //Fling
+    int Samuel = 5;
     bool m_secondFling = true;
     float m_bumpFlingStrengthMult = 0.25f;
     float m_secondFlingTimer = 0f;
@@ -65,6 +66,7 @@ public class Damageable : BaseObject
 
     public virtual void Start()
     {
+
     }
 
     protected void UpdateLocalStatsFromStatHandler()
@@ -76,6 +78,7 @@ public class Damageable : BaseObject
 
     void BoundsCheck()
     {
+
     }
 
     void UpdateMass()

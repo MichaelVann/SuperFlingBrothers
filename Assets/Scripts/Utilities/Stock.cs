@@ -35,7 +35,7 @@ public class Stock
     vTimer m_priceShiftTimer;
 
     //Defaults
-    const int m_defaultvaluesTracked = 15;
+    const int m_defaultvaluesTracked = 16;
     const float m_defaultNormalValue = 100f;
     float m_defaultDeviationMultiplicityRange = 1f;
     float m_defaultVolatility = 0.1f;

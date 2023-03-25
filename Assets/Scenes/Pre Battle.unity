@@ -2800,7 +2800,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d916a24e472e0045885a118411808f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_invadersTextRef: {fileID: 0}
   m_difficultyTextRef: {fileID: 1956447291}
 --- !u!1001 &327113930
 PrefabInstance:

@@ -159,12 +159,11 @@ public class vGraph : MonoBehaviour
 
         for (int i = 0; i < m_trackedValues.Length; i++)
         {
-            float x = (i + 1) * xGap;
+            float x = m_bgWidth - ((i + 1) * xGap);
             float y = m_graphVerticalPadding + m_trackedValues[i] / yScale * (m_bgHeight - m_graphVerticalPadding * 2f);
             m_dots[i].transform.localPosition = new Vector3(x, y, 0f);
             m_dots[i].transform.localPosition -= new Vector3(m_bgWidth / 2f, m_bgHeight / 2f, 0f);
             m_dots[i].transform.position = m_dots[i].transform.parent.TransformPoint(m_dots[i].transform.localPosition);
-            //linePositions[i] = m_dots[i].transform.localPosition;
             linePositions[i] = m_dots[i].transform.position;
             linePositions[i].z = 0f;
         }
