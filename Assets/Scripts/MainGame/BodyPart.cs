@@ -68,6 +68,7 @@ public class BodyPart
     public eType m_type;
 
     public void ChangeInvaderStrength(int a_value) { m_invaderStrength += a_value; }
+    public void Damage(float a_value) {m_health.value -= a_value; }
 
     public BodyPart(BodyPart.eType a_type, BodyPart.Health a_health, int a_invaderStrength, bool a_unlocked)
     {

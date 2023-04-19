@@ -8,7 +8,7 @@ public class Nucleus : Damageable
     public override void Awake()
     {
         base.Awake();
-        m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue = 500f;
+        m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue = 100f;
         UpdateLocalStatsFromStatHandler();
         m_damageTextColor = Color.red;
     }

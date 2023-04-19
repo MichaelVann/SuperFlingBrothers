@@ -211,6 +211,10 @@ public class GameHandler : MonoBehaviour
     {
         m_lastBodyPartSelectedForBattle = m_bodyPartSelectedForBattle;
         m_lastBodyPartSelectedForBattle.ChangeInvaderStrength(m_invaderStrengthChangeLastGame);
+        if (m_lastGameResult == eEndGameType.lose)
+        {
+            m_lastBodyPartSelectedForBattle.Damage(1);
+        }
     }
 
     void Update()

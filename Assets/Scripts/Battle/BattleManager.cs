@@ -25,6 +25,7 @@ public class BattleManager : MonoBehaviour
     public GameObject m_extraTurnButtonLockImageRef;
 
     public Text m_enemyCountText;
+    public Text m_levelDifficultyText;
 
     public Image m_fadeToBlackRef;
 
@@ -155,6 +156,7 @@ public class BattleManager : MonoBehaviour
         InitialiseUpgrades();
 
         SpawnEnemies();
+        m_levelDifficultyText.text = "Level Difficulty: " + m_gameHandlerRef.m_battleDifficulty;
     }
 
     void UpdateExtraTurnUIState()

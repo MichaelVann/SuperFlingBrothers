@@ -18,8 +18,8 @@ public struct Stat
     public float value;
     public float scale;
     public float postAddedValue;
-    public float effectiveValue;
-    public float finalValue; // = ((stat.value-1f) * stat.scale) + stat.postAddedValue;
+    public float effectiveValue; // = = ((stat.value-1f) * stat.scale);
+    public float finalValue; // = effectiveValue + stat.postAddedValue;
     public float originalCost;
     public float cost;
     public float costIncreaseRate;
