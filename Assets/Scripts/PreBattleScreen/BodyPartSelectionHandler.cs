@@ -11,6 +11,7 @@ public class BodyPartSelectionHandler : MonoBehaviour
     public GameObject m_bodyContainerRef;
     public GameObject m_partInfoPanel;
     public Text m_partInfoInvaderStrengthText;
+    public Text m_partInfoInvaderHealthText;
     public NodeInfoPanelHandler m_nodeInfoPanel;
 
     //List<BodyPartUI> m_bodyPartUIList;
@@ -254,6 +255,9 @@ public class BodyPartSelectionHandler : MonoBehaviour
         m_startingZoomLocation = m_currentZoomLocation;
         m_partInfoPanel.SetActive(true);
         m_partInfoInvaderStrengthText.text = "" + m_gameHandlerRef.m_humanBody.m_bodyPartList[a_index].m_invaderStrength;
+        float healthPercentage = m_gameHandlerRef.m_humanBody.m_bodyPartList[a_index].m_health.value / m_gameHandlerRef.m_humanBody.m_bodyPartList[a_index].m_health.max;
+        m_partInfoInvaderHealthText.text = "(" + m_gameHandlerRef.m_humanBody.m_bodyPartList[a_index].m_health.value  + " / " + m_gameHandlerRef.m_humanBody.m_bodyPartList[a_index].m_health.max + ") " + healthPercentage * 100f + "%";
+        m_partInfoInvaderHealthText.color = VLib.PercentageToColor(healthPercentage);
         m_zoomProgress = 0f;
         m_zoomingIn = true;
     }
