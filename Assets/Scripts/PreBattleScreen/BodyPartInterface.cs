@@ -66,7 +66,7 @@ public class BodyPartInterface : MonoBehaviour
         {
             if (m_gameHandlerRef.m_humanBody.m_bodyPartList[m_bodyPartID].m_unlocked)
             {
-                SetUpFrontLine();
+                SetUpFrontLines();
             }
         }
         else
@@ -86,22 +86,24 @@ public class BodyPartInterface : MonoBehaviour
 
     }
 
-    public void SetUpFrontLine()
+    void SetUpFrontLinePart(ref int a_frontLineSetupComplete, ref GameObject a_frontLineRef, ref GameObject a_frontLineColliderRef, float a_frontLineOriginalXScale, float a_frontLineColliderOriginalOffsetX)
     {
-        if (m_rightFrontLineSetupComplete < m_frontLineSetupCompletionsRequired)
+        //If the front line hasn't finished setting up yet
+        if (a_frontLineSetupComplete < m_frontLineSetupCompletionsRequired)
         {
-            m_rightFrontLineRef.transform.localScale = new Vector3(m_rightFrontLineRef.transform.localScale.x + m_deltaFrontLineScale, m_rightFrontLineRef.transform.localScale.y, 1f);
-            float colliderPosX = m_rightFrontLineRef.transform.localPosition.x + m_rightFrontLineColliderOriginalOffsetX * m_rightFrontLineRef.transform.localScale.x / m_rightFrontLineOriginalXScale;
-            m_rightFrontLineColliderRef.transform.localPosition = new Vector3(colliderPosX, m_rightFrontLineColliderRef.transform.localPosition.y, m_rightFrontLineColliderRef.transform.localPosition.z);
-            if (Physics2D.IsTouching(m_rightFrontLineColliderRef.GetComponent<Collider2D>(), m_colliderRef))
+
+            a_frontLineRef.transform.localScale = new Vector3(a_frontLineRef.transform.localScale.x + m_deltaFrontLineScale, a_frontLineRef.transform.localScale.y, 1f);
+            float colliderPosX = a_frontLineRef.transform.localPosition.x + a_frontLineColliderOriginalOffsetX * a_frontLineRef.transform.localScale.x / a_frontLineOriginalXScale;
+            a_frontLineColliderRef.transform.localPosition = new Vector3(colliderPosX, a_frontLineColliderRef.transform.localPosition.y, a_frontLineColliderRef.transform.localPosition.z);
+            if (Physics2D.IsTouching(a_frontLineColliderRef.GetComponent<Collider2D>(), m_colliderRef))
             {
-                m_rightFrontLineRef.GetComponent<SpriteRenderer>().color = Color.red;
+                a_frontLineRef.GetComponent<SpriteRenderer>().color = Color.red;
             }
             else
             {
-                m_rightFrontLineRef.GetComponent<SpriteRenderer>().color = Color.green;
-                m_rightFrontLineSetupComplete++;
-                if (m_rightFrontLineSetupComplete >= m_frontLineSetupCompletionsRequired)
+                a_frontLineRef.GetComponent<SpriteRenderer>().color = Color.green;
+                a_frontLineSetupComplete++;
+                if (a_frontLineSetupComplete >= m_frontLineSetupCompletionsRequired)
                 {
                     m_nodeSetupComplete = true;
                     SetUpNodes();
@@ -109,26 +111,12 @@ public class BodyPartInterface : MonoBehaviour
             }
         }
 
-        if (m_leftFrontLineSetupComplete < m_frontLineSetupCompletionsRequired)
-        {
-            m_leftFrontLineRef.transform.localScale = new Vector3(m_leftFrontLineRef.transform.localScale.x + m_deltaFrontLineScale, m_leftFrontLineRef.transform.localScale.y, 1f);
-            float colliderPosX = m_leftFrontLineRef.transform.localPosition.x + m_leftFrontLineColliderOriginalOffsetX * m_leftFrontLineRef.transform.localScale.x / m_leftFrontLineOriginalXScale;
-            m_leftFrontLineColliderRef.transform.localPosition = new Vector3(colliderPosX, m_leftFrontLineColliderRef.transform.localPosition.y, m_leftFrontLineColliderRef.transform.localPosition.z);
-            if (Physics2D.IsTouching(m_leftFrontLineColliderRef.GetComponent<Collider2D>(), m_colliderRef))
-            {
-                m_leftFrontLineRef.GetComponent<SpriteRenderer>().color = Color.red;
-            }
-            else
-            {
-                m_leftFrontLineRef.GetComponent<SpriteRenderer>().color = Color.green;
-                m_leftFrontLineSetupComplete++;
-                if (m_rightFrontLineSetupComplete >= m_frontLineSetupCompletionsRequired)
-                {
-                    m_nodeSetupComplete = true;
-                    SetUpNodes();
-                }
-            }
-        }
+    }
+
+    public void SetUpFrontLines()
+    {
+        SetUpFrontLinePart(ref m_rightFrontLineSetupComplete, ref m_rightFrontLineRef, ref m_rightFrontLineColliderRef, m_rightFrontLineOriginalXScale, m_rightFrontLineColliderOriginalOffsetX);
+        SetUpFrontLinePart(ref m_leftFrontLineSetupComplete, ref m_leftFrontLineRef, ref m_leftFrontLineColliderRef, m_leftFrontLineOriginalXScale, m_leftFrontLineColliderOriginalOffsetX);
     }
 
     void SetUpNodes()

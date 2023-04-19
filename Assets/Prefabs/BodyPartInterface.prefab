@@ -356,6 +356,7 @@ MonoBehaviour:
   m_nodeList: []
   m_minBaseDifficulty: 1
   m_minBaseMaxDifficulty: 30
+  m_maxEnemyDifficulty: 5
 --- !u!50 &1509513652008709968
 Rigidbody2D:
   serializedVersion: 4
