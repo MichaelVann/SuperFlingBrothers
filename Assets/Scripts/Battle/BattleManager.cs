@@ -32,6 +32,8 @@ public class BattleManager : MonoBehaviour
     public UIBar m_shieldBarRef;
     public UIBar m_healthBarRef;
 
+    public SpriteRenderer[] m_wallSpriteRenderers;
+
     public int m_turnsRemaining;
     public float m_turnInterval;
     float m_turnsTimer = 0f;
@@ -87,6 +89,11 @@ public class BattleManager : MonoBehaviour
     public void SetFrozen(bool a_frozen)
     {
         m_frozen = a_frozen;
+        for (int i = 0; i < m_wallSpriteRenderers.Length; i++)
+        {
+            float colourScale = 0.12f;
+            m_wallSpriteRenderers[i].color = m_frozen ? Color.yellow : new Color(colourScale, colourScale, colourScale);
+        }
         if (!m_endingGame)
         {
             SetTimeScale(a_frozen ? 0.0f : 1.0f);
