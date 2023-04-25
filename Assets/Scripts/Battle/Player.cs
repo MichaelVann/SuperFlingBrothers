@@ -55,7 +55,7 @@ public class Player : Damageable
         UpdateLocalStatsFromStatHandler();
         m_damageTextColor = Color.red;
         SetupShield();
-        Fling(new Vector3(0f, -600f, 0f), 1f);
+        //Fling(new Vector3(0f, -600f, 0f), 1f);
         m_velocityIndicatorRef.SetActive(m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.playerVector].m_owned);
     }
 
@@ -85,7 +85,7 @@ public class Player : Damageable
         {
             m_flingLine.enabled = false;
 
-            if (m_battleManagerRef.m_frozen && Input.GetMouseButton(0))
+            if (m_battleManagerRef.m_timeFrozen && Input.GetMouseButton(0))
             {
                 m_originalFlingPos = m_cameraRef.ScreenToWorldPoint(Input.mousePosition);
 

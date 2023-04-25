@@ -6,8 +6,11 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public class GameHandler : MonoBehaviour
 {
+    static internal bool DEBUG_MODE = true;
+
     public enum eScene
     {
         mainMenu,
@@ -33,8 +36,8 @@ public class GameHandler : MonoBehaviour
 
     //Current Battle
     public BodyPart m_bodyPartSelectedForBattle;
-    public int m_battleDifficulty = 0;
-    internal int m_maxEnemyDifficulty = 0;
+    internal int m_battleDifficulty = 25;
+    internal int m_maxEnemyDifficulty = 13;
 
     //Last Game
     public eEndGameType m_lastGameResult = eEndGameType.lose;
@@ -209,12 +212,16 @@ public class GameHandler : MonoBehaviour
   
     public void CalculateFinishedGame()
     {
-        m_lastBodyPartSelectedForBattle = m_bodyPartSelectedForBattle;
-        m_lastBodyPartSelectedForBattle.ChangeInvaderStrength(m_invaderStrengthChangeLastGame);
-        if (m_lastGameResult == eEndGameType.lose)
+        if (m_bodyPartSelectedForBattle != null)
         {
-            m_lastBodyPartSelectedForBattle.Damage(1);
+            m_lastBodyPartSelectedForBattle = m_bodyPartSelectedForBattle;
+            m_lastBodyPartSelectedForBattle.ChangeInvaderStrength(m_invaderStrengthChangeLastGame);
+            if (m_lastGameResult == eEndGameType.lose)
+            {
+                m_lastBodyPartSelectedForBattle.Damage(1);
+            }
         }
+
     }
 
     void Update()

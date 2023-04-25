@@ -18,6 +18,79 @@ public static class VLib
         return truncatedFloat;
     }
 
+    #region Clamps
+
+    public static float BigClamp(float a_value, float a_ceiling)
+    {
+        return a_value > a_ceiling ? a_ceiling : a_value;
+    }
+
+    public static int BigClamp(int a_value, int a_ceiling)
+    {
+        return a_value > a_ceiling ? a_ceiling : a_value;
+    }
+
+    public static double BigClamp(double a_value, double a_ceiling)
+    {
+        return a_value > a_ceiling ? a_ceiling : a_value;
+    }
+
+    public static float LilClamp(float a_value, float a_floor)
+    {
+        return a_value < a_floor ? a_floor : a_value;
+    }
+
+    public static int LilClamp(int a_value, int a_floor)
+    {
+        return a_value < a_floor ? a_floor : a_value;
+    }
+
+    public static double LilClamp(double a_value, double a_floor)
+    {
+        return a_value < a_floor ? a_floor : a_value;
+    }
+
+    #endregion
+
+    public static float SigmoidLerp(float a_start, float a_finish, float a_t, int a_sensitivity = 3)
+    {
+        float retVal = 0f;
+        float x = a_t;
+        int y = a_sensitivity;
+        if (a_t <= 0.5)
+        {
+            retVal = Mathf.Pow(x, (float)y) *(float)(2 << ((int)y - 2));
+        }
+        else
+        {
+            retVal = (float)(Mathf.Pow(-2, y - 1)) * Mathf.Pow(x - 1f, (float)y) + 1f;
+        }
+
+        retVal = a_start + (a_finish - a_start) * retVal;
+
+        return retVal;
+    }
+
+
+
+    public static Vector2 SigmoidLerp(Vector2 a_start, Vector3 a_finish, float a_t, int a_sensitivity = 3)
+    {
+        Vector2 retVec = new Vector2();
+        retVec.x = SigmoidLerp(a_start.x, a_finish.x, a_t, a_sensitivity);
+        retVec.y = SigmoidLerp(a_start.y, a_finish.y, a_t, a_sensitivity);
+        return retVec;
+    }
+
+    public static Vector3 SigmoidLerp(Vector3 a_start, Vector3 a_finish, float a_t, int a_sensitivity = 3)
+    {
+        Vector3 retVec = new Vector3();
+        retVec.x = SigmoidLerp(a_start.x, a_finish.x, a_t, a_sensitivity);
+        retVec.y = SigmoidLerp(a_start.y, a_finish.y, a_t, a_sensitivity);
+        retVec.z = SigmoidLerp(a_start.z, a_finish.z, a_t, a_sensitivity);
+        return retVec;
+    }
+
+
     public static int SafeMod(int a_value, int a_mod)
     {
         return (a_value % a_mod + a_mod) % a_mod;

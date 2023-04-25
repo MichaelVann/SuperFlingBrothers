@@ -15,9 +15,13 @@ public enum eEndGameType
 
 public class BattleManager : MonoBehaviour
 {
+    //Debug
+    public Text m_debugText;
+
     BattleUIHandler m_uiHandlerRef;
     public GameHandler m_gameHandlerRef;
     public GameObject m_gameHandlerTemplate;
+    public GameObject m_playerTemplate;
     public GameObject m_enemyTemplate;
     public GameObject m_gameViewRef;
     public GameObject m_escapeZoneRef;
@@ -34,16 +38,28 @@ public class BattleManager : MonoBehaviour
 
     public SpriteRenderer[] m_wallSpriteRenderers;
 
+    Player m_player;
+    List<Enemy> m_enemies;
+
+    //Player Spawn Intro
+    bool m_introActive = true;
+    public GameObject m_playerSpawnPoint;
+    public GameObject m_playerSlidePoint;
+    float m_playerSlideLerp = 0f;
+    float m_playerSlideTime = 1f;
+
+    //Turns
     public int m_turnsRemaining;
     public float m_turnInterval;
     float m_turnsTimer = 0f;
 
-    public bool m_frozen = false;
-    float m_freezeTimer;
-    float m_freezeTimerMax;
-    bool m_freezing = false;
-    float m_freezingTimer = 0f;
-    const float m_freezingTimerMax = 0.2f;
+    //Turn Freezing
+    public bool m_timeFrozen = false;
+    float m_turnFreezeTimer;
+    float m_turnFreezeTimerMax;
+    bool m_turnFreezing = false;
+    float m_turnFreezingTimer = 0f;
+    const float m_turnFreezingTimerMax = 0.2f;
     const float m_slowableTime = 0.8f;
 
     internal float m_coinValue = 1f;
@@ -61,6 +77,10 @@ public class BattleManager : MonoBehaviour
     //Extra Turn Upgrade
     int m_extraTurnsRemaining = 1;
     bool m_usingExtraTurn;
+
+    //Pre Game
+    bool m_runningPregame = true;
+
 
     //End Game
     public bool m_endingGame = false;
@@ -88,11 +108,13 @@ public class BattleManager : MonoBehaviour
 
     public void SetFrozen(bool a_frozen)
     {
-        m_frozen = a_frozen;
+        m_turnFreezingTimer = 0f;
+        m_turnFreezing = false;
+        m_timeFrozen = a_frozen;
         for (int i = 0; i < m_wallSpriteRenderers.Length; i++)
         {
             float colourScale = 0.12f;
-            m_wallSpriteRenderers[i].color = m_frozen ? Color.yellow : new Color(colourScale, colourScale, colourScale);
+            m_wallSpriteRenderers[i].color = m_timeFrozen ? Color.yellow : new Color(colourScale, colourScale, colourScale);
         }
         if (!m_endingGame)
         {
@@ -120,8 +142,8 @@ public class BattleManager : MonoBehaviour
         if (m_usingExtraTurn)
         {
             m_extraTurnsRemaining--;
-            m_freezeTimer = m_freezeTimerMax;
-            m_freezingTimer = m_freezingTimerMax/2f;
+            m_turnFreezeTimer = m_turnFreezeTimerMax;
+            m_turnFreezingTimer = m_turnFreezingTimerMax/2f;
             m_usingExtraTurn = false;
             UpdateExtraTurnUIState();
         }
@@ -138,17 +160,26 @@ public class BattleManager : MonoBehaviour
         //Debug.Log(a_scale);
     }
 
+    void SetupDebug()
+    {
+        m_debugText.gameObject.SetActive(GameHandler.DEBUG_MODE);
+        if (GameHandler.DEBUG_MODE)
+        {
+        }
+    }
+
     void Awake()
     {
         m_uiHandlerRef = GetComponent<BattleUIHandler>();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_freezeTimerMax = m_turnInterval;
-        m_freezeTimer = m_freezeTimerMax;
+        m_turnFreezeTimerMax = m_turnInterval;
+        m_turnFreezeTimer = m_turnFreezeTimerMax;
         m_coreEnemySpawnLocation = new Vector3(0f, -1.6f, 0f);
     }
 
     public void Start()
     {
+        SetupDebug();
         if (m_gameHandlerRef.m_currentGameMode != GameHandler.eGameMode.TurnLimit)
         {
             m_turnsRemaining = 0;
@@ -162,6 +193,7 @@ public class BattleManager : MonoBehaviour
 
         InitialiseUpgrades();
 
+        SpawnPlayer();
         SpawnEnemies();
         m_levelDifficultyText.text = "Level Difficulty: " + m_gameHandlerRef.m_battleDifficulty;
     }
@@ -203,6 +235,12 @@ public class BattleManager : MonoBehaviour
             m_extraTurnsRemaining = m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.extraTurn].m_level;
         }
         UpdateExtraTurnUIState();
+    }
+
+    public void SpawnPlayer()
+    {
+        GameObject playerObj = Instantiate<GameObject>(m_playerTemplate, m_playerSpawnPoint.transform.position, Quaternion.identity, m_gameViewRef.transform);
+        m_player = playerObj.GetComponent<Player>();
     }
 
     public void SpawnEnemy(Vector3 a_spawnLocation, Enemy.eEnemyType a_type)
@@ -335,23 +373,24 @@ public class BattleManager : MonoBehaviour
 
     void UpdateFreezeTimer()
     {
-        if (!m_frozen && !m_endingGame)
+        if (!m_timeFrozen && !m_endingGame)
         {
-            m_freezeTimer += Time.deltaTime;
-            if (m_freezeTimer >= m_freezeTimerMax)
+            if (!m_turnFreezing)
             {
-                m_freezing = true;
-                m_freezeTimer = 0f;
-            }
-            if (m_freezing)
-            {
-                m_freezingTimer += Time.deltaTime;
-
-                SetTimeScale(1f - m_slowableTime * m_freezingTimer / m_freezingTimerMax);
-                if (m_freezingTimer >= m_freezingTimerMax)
+                m_turnFreezeTimer += Time.deltaTime;
+                if (m_turnFreezeTimer >= m_turnFreezeTimerMax)
                 {
-                    m_freezingTimer = 0f;
-                    m_freezing = false;
+                    m_turnFreezing = true;
+                    m_turnFreezeTimer = 0f;
+                }
+            }
+            else
+            {
+                m_turnFreezingTimer += Time.deltaTime;
+
+                SetTimeScale(1f - m_slowableTime * m_turnFreezingTimer / m_turnFreezingTimerMax);
+                if (m_turnFreezingTimer >= m_turnFreezingTimerMax)
+                {
                     SetFrozen(true);
                 }
             }
@@ -397,7 +436,21 @@ public class BattleManager : MonoBehaviour
     void Update()
     {
         m_enemyCountText.text = "Enemy Count: " + m_enemyCount;
-        if (!m_endingGame)
+
+        //Intro
+        if (m_introActive)
+        {
+            m_playerSlideLerp += Time.deltaTime;
+            if (m_playerSlideLerp >= m_playerSlideTime)
+            {
+                m_playerSlideLerp = m_playerSlideTime;
+                m_introActive = false;
+                SetFrozen(true);
+            }
+            //m_player.gameObject.transform.position = Vector3.Lerp(m_playerSpawnPoint.transform.position, m_playerSlidePoint.transform.position, m_playerSlideLerp/m_playerSlideTime);
+            m_player.gameObject.transform.position = VLib.SigmoidLerp(m_playerSpawnPoint.transform.position, m_playerSlidePoint.transform.position, m_playerSlideLerp);
+        }
+        else if (!m_endingGame)
         {
             UpdateTurns();
             switch (m_gameHandlerRef.m_currentGameMode)
@@ -418,7 +471,7 @@ public class BattleManager : MonoBehaviour
             }
             UpdateFreezeTimer();
         }
-        else
+        else if(m_endingGame)
         {
             UpdateGameEnding();
         }
