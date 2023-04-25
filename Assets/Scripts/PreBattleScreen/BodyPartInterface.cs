@@ -172,43 +172,17 @@ public class BodyPartInterface : MonoBehaviour
                 m_nodesSetupCount++;
                 node.m_parentBodyPartID = m_bodyPartID;
 
-                int DEBUGDifficultySystem = 0;
-                if (DEBUGDifficultySystem == 0)
+                node.m_difficulty = Random.Range(m_minBaseDifficulty, m_maxBaseDifficulty);
+
+                float roll = Random.Range(0f, 1f);
+                float rollCutoff = 0.1f;
+                if (node.m_difficulty >= (int)((m_maxBaseDifficulty - m_minBaseDifficulty) * 0.8f + m_minBaseDifficulty))
                 {
-                    node.m_difficulty = Random.Range(m_minBaseDifficulty, m_maxBaseDifficulty);
-                }
-                else if (DEBUGDifficultySystem == 1)
-                {
-                    int difficulty = ((m_maxBaseDifficulty - m_minBaseDifficulty) / 2) + m_minBaseDifficulty;
-                    int difficultyDelta = 0;
-                    
-                    float roll = Random.Range(0f, 1f);
-                    float rollCutoff = 0.1f;
-                    while (roll >= rollCutoff)
+                    while (roll <= rollCutoff)
                     {
+                        node.m_difficulty *= 2;
                         roll = Random.Range(0f, 1f);
-                        //rollCutoff += 0.1f;
-                        difficultyDelta++;
-                    }
-                    difficultyDelta *= Random.Range(0f, 1f) >= 0.5f ? 1 : -1;
-                    difficulty += difficultyDelta;
-                    node.m_difficulty = 60;
-
-                }
-                else if (DEBUGDifficultySystem == 2)
-                {
-                    node.m_difficulty = Random.Range(m_minBaseDifficulty, m_maxBaseDifficulty);
-
-                    float roll = Random.Range(0f, 1f);
-                    float rollCutoff = 0.1f;
-                    if (node.m_difficulty >= (int)((m_maxBaseDifficulty-m_minBaseDifficulty)*0.8f + m_minBaseDifficulty))
-                    {
-                        while (roll <= rollCutoff)
-                        {
-                            node.m_difficulty *= 2;
-                            roll = Random.Range(0f, 1f);
-                            node.m_difficultyBoostTier++;
-                        }
+                        node.m_difficultyBoostTier++;
                     }
                 }
                 Color nodeColor = VLib.PercentageToColor(1f - (float)(node.m_difficulty - m_minBaseDifficulty) / (float)(m_maxBaseDifficulty - m_minBaseDifficulty));
