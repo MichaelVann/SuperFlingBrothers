@@ -37,6 +37,7 @@ public class BodyPartInterface : MonoBehaviour
     public int m_minBaseDifficulty = 1;
     public int m_maxBaseDifficulty = 30;
     public int m_maxEnemyDifficulty = 5;
+    int m_nodesSetupCount = 0;
 
     const float m_deltaFrontLineScale = 0.001f;
     // Start is called before the first frame update
@@ -121,6 +122,7 @@ public class BodyPartInterface : MonoBehaviour
 
     void SetUpNodes()
     {
+        m_debugLineSetups++;
         for (int i = 0; i < m_nodesToSpawn; i++)
         {
             GameObject nodeGameObject = Instantiate<GameObject>(m_nodePrefabRef, m_frontLineRef.transform);
@@ -156,11 +158,6 @@ public class BodyPartInterface : MonoBehaviour
                 {
                     continue;
                 }
-
-                if (true)
-                {
-
-                }
             }
 
             if (spawnAttempts > m_maxNodeSpawnAttempts)
@@ -172,7 +169,8 @@ public class BodyPartInterface : MonoBehaviour
             {
                 //Spawn Node
                 UIBattleNode node = nodeGameObject.GetComponent<UIBattleNode>();
-                node.m_id = i;
+                node.m_id = m_nodesSetupCount;
+                m_nodesSetupCount++;
                 node.m_parentBodyPartID = m_bodyPartID;
 
                 int DEBUGDifficultySystem = 0;
