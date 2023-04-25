@@ -18,6 +18,8 @@ public class BattleManager : MonoBehaviour
     //Debug
     public Text m_debugText;
 
+    static public float m_shadowDistance = 0.1f;
+
     BattleUIHandler m_uiHandlerRef;
     public GameHandler m_gameHandlerRef;
     public GameObject m_gameHandlerTemplate;

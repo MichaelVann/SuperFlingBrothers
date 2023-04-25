@@ -11,7 +11,6 @@ public class Enemy : Damageable
     public GameObject[] m_exclamationMarkRefs;
     public GameObject m_flingReadinessIndicatorRef;
     public GameObject m_velocityIndicatorRef;
-    public GameObject m_shadowRef;
     public Sprite m_idleBacteriaSprite;
     public Sprite m_idleBacteriaShadowSprite;
     public enum eEnemyType
@@ -29,6 +28,7 @@ public class Enemy : Damageable
         public bool flinger;
         public bool dodger;
         public bool duplicator;
+        public bool canRotate;
     } TypeTrait m_typeTrait;
 
     float m_duplicationTimer = 0f;
@@ -74,10 +74,10 @@ public class Enemy : Damageable
             case eEnemyType.Idler:
                 m_originalColor = Color.yellow;
                 m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue /= 2f;
-                //transform.localScale *= 0.75f;
+                transform.localScale *= 1f;
                 m_rigidBody.mass *= 0.45f;
                 m_rigidBody.drag = 0.1f;
-                //m_rigidBody.freezeRotation = false;
+                m_rigidBody.freezeRotation = false;
                 CapsuleCollider2D capsuleCollider = GetComponent<CapsuleCollider2D>();
                 capsuleCollider.offset = new Vector2(-0.001643321f,0.0299f);
                 capsuleCollider.size = new Vector2(0.4838f,1.82515f);
@@ -100,6 +100,7 @@ public class Enemy : Damageable
         }
         m_xpReward = (int)(m_typeTrait.difficulty * GameHandler.GAME_enemyXPRewardScale);
         m_scoreValue = (float)(m_xpReward) * m_coinToXPRatio;
+        m_rigidBody.freezeRotation = !m_typeTrait.canRotate;
         UpdateLocalStatsFromStatHandler();
         UpdateHealthColor();
     }
@@ -186,6 +187,12 @@ public class Enemy : Damageable
             DuplicationUpdate();
         }
         AIUpdate();
+        m_healthBarRef.transform.localEulerAngles = -transform.localEulerAngles;
+
+        if (m_enemyType == eEnemyType.Idler)
+        {
+
+        }
     }
     public override void Die()
     {

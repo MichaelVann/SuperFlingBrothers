@@ -25,6 +25,7 @@ public class Damageable : BaseObject
     static Func<int, Collision2D> CollisionFuncPTR = null;
 
     public ProgressBar m_healthBarRef;
+    public GameObject m_shadowRef;
 
     //Fling
     bool m_secondFling = true;
@@ -218,6 +219,10 @@ public class Damageable : BaseObject
         if (m_healthBarRef) { m_healthBarRef.SetProgressValue(m_health); }
 
         DamageColourOverrideUpdate();
+        float eulerAnglesForShadow = transform.eulerAngles.z + GameHandler.BATTLE_ShadowAngle;
+        float x = Mathf.Sin(eulerAnglesForShadow * Mathf.PI / 180f) / transform.localScale.x;
+        float y = Mathf.Cos(eulerAnglesForShadow * Mathf.PI / 180f) / transform.localScale.y;
+        m_shadowRef.transform.localPosition = new Vector3(x, y) * BattleManager.m_shadowDistance;
     }
 
     protected void TakePocketDamage()

@@ -14,7 +14,8 @@ public class GameHandler : MonoBehaviour
     // -- BALANCE VARIABLES --
 
     static internal float GAME_enemyXPRewardScale = 20f;
-    static internal float BATTLE_CoinValue = 1f; 
+    static internal float BATTLE_CoinValue = 1f;
+    static internal float BATTLE_ShadowAngle = 225f;
     //Damageables
     static internal float DAMAGEABLE_defaultMass = 1f;
     static internal float DAMAGEABLE_bumpFlingStrengthMult = 0.25f;
@@ -47,8 +48,8 @@ public class GameHandler : MonoBehaviour
 
     //Current Battle
     public BodyPart m_bodyPartSelectedForBattle;
-    internal int m_battleDifficulty = 25;
-    internal int m_maxEnemyDifficulty = 13;
+    internal int m_battleDifficulty = 8;
+    internal int m_maxEnemyDifficulty = 2;
 
     //Last Game
     public eEndGameType m_lastGameResult = eEndGameType.lose;
@@ -139,8 +140,19 @@ public class GameHandler : MonoBehaviour
 
     private void SetUpEnemyTypes()
     {
+        for (int i = 0; i < (int)Enemy.eEnemyType.Count; i++)
+        {
+            m_enemyTypeTraits[i].type = Enemy.eEnemyType.Idler;
+            m_enemyTypeTraits[i].difficulty = 1;
+            m_enemyTypeTraits[i].flinger = false;
+            m_enemyTypeTraits[i].dodger = false;
+            m_enemyTypeTraits[i].duplicator = false;
+            m_enemyTypeTraits[i].canRotate = false;
+        }
+
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Idler].type = Enemy.eEnemyType.Idler;
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Idler].difficulty = 1;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Idler].canRotate = true;
 
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].type = Enemy.eEnemyType.Dodger;
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].dodger = true;
@@ -258,6 +270,7 @@ public class GameHandler : MonoBehaviour
             m_playerStatHandler.Init();
         }
         m_stockHandler.Update();
+        //BATTLE_ShadowAngle = Mathf.Sin(Time.unscaledTime)*360f;
     }
 
     public void ChangeScene(eScene a_scene)

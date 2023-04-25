@@ -6,7 +6,7 @@ public class Coin : MonoBehaviour
 {
     BattleManager m_battleManagerRef;
     Player m_playerRef;
-
+    public GameObject m_shadowRef;
     float m_endSpeed = 5f;
 
     float m_targetSpeed = 30f;
@@ -33,9 +33,17 @@ public class Coin : MonoBehaviour
         if (m_battleManagerRef.m_endingGame && m_battleManagerRef.m_endGameType == eEndGameType.win)
         {
             //Fly the coin towards the player
-            transform.position += (m_playerRef.transform.position - transform.position).normalized * m_endSpeed * Time.deltaTime;
-            m_endSpeed = Mathf.Pow(m_endSpeed, 1.003f);
-            m_movingToTargetPos = false;
+            if (m_playerRef == null)
+            {
+                m_playerRef = FindObjectOfType<Player>();
+            }
+            if (m_playerRef != null)
+            {
+                transform.position += (m_playerRef.transform.position - transform.position).normalized * m_endSpeed * Time.deltaTime;
+                m_endSpeed = Mathf.Pow(m_endSpeed, 1.003f);
+                m_movingToTargetPos = false;
+            }
+
         }
         else if (m_movingToTargetPos)
         {
@@ -50,6 +58,11 @@ public class Coin : MonoBehaviour
                 m_movingToTargetPos = false;
             }
         }
+
+        float eulerAnglesForShadow = transform.eulerAngles.z + GameHandler.BATTLE_ShadowAngle;
+        float x = Mathf.Sin(eulerAnglesForShadow * Mathf.PI / 180f) / transform.localScale.x;
+        float y = Mathf.Cos(eulerAnglesForShadow * Mathf.PI / 180f) / transform.localScale.y;
+        m_shadowRef.transform.localPosition = new Vector3(x, y) * BattleManager.m_shadowDistance;
     }
 
     public void OnTriggerEnter2D(Collider2D a_collider)
