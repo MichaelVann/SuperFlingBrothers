@@ -9,9 +9,11 @@ public class Enemy : Damageable
     public GameObject m_coinPrefab;
 
     public GameObject[] m_exclamationMarkRefs;
-
+    public GameObject m_flingReadinessIndicatorRef;
     public GameObject m_velocityIndicatorRef;
-
+    public GameObject m_shadowRef;
+    public Sprite m_idleBacteriaSprite;
+    public Sprite m_idleBacteriaShadowSprite;
     public enum eEnemyType
     {
         Idler,
@@ -72,9 +74,17 @@ public class Enemy : Damageable
             case eEnemyType.Idler:
                 m_originalColor = Color.yellow;
                 m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue /= 2f;
-                transform.localScale *= 0.75f;
-                m_rigidBody.mass *= 0.75f;
-                GetComponent<Rigidbody2D>().drag = 0.1f;
+                //transform.localScale *= 0.75f;
+                m_rigidBody.mass *= 0.45f;
+                m_rigidBody.drag = 0.1f;
+                //m_rigidBody.freezeRotation = false;
+                CapsuleCollider2D capsuleCollider = GetComponent<CapsuleCollider2D>();
+                capsuleCollider.offset = new Vector2(-0.001643321f,0.0299f);
+                capsuleCollider.size = new Vector2(0.4838f,1.82515f);
+                m_spriteRenderer.sprite = m_idleBacteriaSprite;
+                m_spriteRenderer.color = Color.white;
+                m_shadowRef.GetComponent<SpriteRenderer>().sprite = m_idleBacteriaShadowSprite;
+                m_flingReadinessIndicatorRef.SetActive(false);
                 break;
             case eEnemyType.Striker:
                 m_originalColor = Color.red;

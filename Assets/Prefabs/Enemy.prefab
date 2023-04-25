@@ -110,7 +110,13 @@ MonoBehaviour:
   - {fileID: 8748797080785600610}
   - {fileID: 7249526844949174227}
   - {fileID: 803595846732859215}
+  m_flingReadinessIndicatorRef: {fileID: 5883652704009919025}
   m_velocityIndicatorRef: {fileID: 1467332499506325743}
+  m_shadowRef: {fileID: 5402681964157731222}
+  m_idleBacteriaSprite: {fileID: 21300000, guid: f79352467ebfdd744bdef538de77f2a1,
+    type: 3}
+  m_idleBacteriaShadowSprite: {fileID: 21300000, guid: 734bdcb09cf35894faf1386901f7ecf3,
+    type: 3}
   m_enemyType: 0
   m_flingTimer: 0
   m_flingTimerMax: 3
@@ -345,6 +351,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ef8918e9669b9442a3ac51c5f4405db, type: 3}
+--- !u!1 &5883652704009919025 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5994689010069112227, guid: 4ef8918e9669b9442a3ac51c5f4405db,
+    type: 3}
+  m_PrefabInstance: {fileID: 186766423695859602}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4734021104761705739
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -509,3 +521,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed23b20bce8856f4aa87c1c5f65e6b49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &5402681964157731222 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 813094912303961245, guid: 688cedeb614fed54b951ebf40cfa3a62,
+    type: 3}
+  m_PrefabInstance: {fileID: 4734021104761705739}
+  m_PrefabAsset: {fileID: 0}
