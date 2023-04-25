@@ -33,7 +33,7 @@ public class Player : Damageable
     public SpriteRenderer m_shieldSpriteRenderer;
     bool m_shieldEnabled = false;
     GameHandler.Shield m_shieldRef;
-    float m_maxShieldOpactiy = 0.64f;
+    float m_maxShieldOpacity = 0.64f;
 
     public override void Awake()
     {
@@ -260,7 +260,7 @@ public class Player : Damageable
     void UpdateShieldOpacity()
     {
         Color shieldColor = m_shieldSpriteRenderer.color;
-        shieldColor.a = m_maxShieldOpactiy * m_shieldRef.value/m_shieldRef.capacity;
+        shieldColor.a = m_maxShieldOpacity * m_shieldRef.value/m_shieldRef.capacity;
         m_shieldSpriteRenderer.color = shieldColor;
     }
 

@@ -11,6 +11,17 @@ public class GameHandler : MonoBehaviour
 {
     static internal bool DEBUG_MODE = true;
 
+    // -- BALANCE VARIABLES --
+
+    static internal float GAME_enemyXPRewardScale = 20f;
+    static internal float BATTLE_CoinValue = 1f; 
+    //Damageables
+    static internal float DAMAGEABLE_defaultMass = 1f;
+    static internal float DAMAGEABLE_bumpFlingStrengthMult = 0.25f;
+    static internal float DAMAGEABLE_pocketFlingStrength = 100f;
+    static internal float DAMAGEABLE_damagePerSpeedDivider = 8f;
+    // -- END OF BALANCE --
+
     public enum eScene
     {
         mainMenu,
@@ -88,7 +99,6 @@ public class GameHandler : MonoBehaviour
     }
     SaveData m_saveData;
     bool m_autoLoadDataOnLaunch = false;
-    internal float m_enemyXPScale = 5f;
 
     public void SetLastGameResult(eEndGameType a_value) { m_lastGameResult = a_value; }
 

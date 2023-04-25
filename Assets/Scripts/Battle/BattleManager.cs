@@ -62,7 +62,7 @@ public class BattleManager : MonoBehaviour
     const float m_turnFreezingTimerMax = 0.2f;
     const float m_slowableTime = 0.8f;
 
-    internal float m_coinValue = 1f;
+    internal float m_coinValue = GameHandler.BATTLE_CoinValue;
 
     float m_healthbarMainPos = 0f;
 

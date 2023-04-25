@@ -18,7 +18,7 @@ public struct Stat
     public float value;
     public float scale;
     public float postAddedValue;
-    public float effectiveValue; // = = ((stat.value-1f) * stat.scale);
+    public float effectiveValue; // = ((stat.value-1f) * stat.scale);
     public float finalValue; // = effectiveValue + stat.postAddedValue;
     public float originalCost;
     public float cost;
@@ -29,7 +29,7 @@ public struct Stat
 public class StatHandler
 {
     public int m_XP = 0;
-    public int m_maxXP = 83 / 4;
+    public int m_maxXP = 83;
     public int m_level = 1;
     public int m_allocationPoints = 0;
 
@@ -140,8 +140,11 @@ public class StatHandler
         {
             m_XP -= m_maxXP;
             int levelPlusOne = m_level + 1;
-            int firstPass = (int)(levelPlusOne + 300 * Mathf.Pow(2f, (float)(levelPlusOne) / 7f));
-            m_maxXP += (int)((firstPass) / 12f);
+            //int firstPass = (int)(levelPlusOne + 300 * Mathf.Pow(2f, (float)(levelPlusOne) / 7f));
+            //m_maxXP += (int)((firstPass) / 12f);
+            float additionalXPNeeded = ((float)(levelPlusOne) + 300f * Mathf.Pow(2f, (float)(levelPlusOne) / 7f))/4f;
+            m_maxXP += (int)(additionalXPNeeded);
+
             m_level++;
             m_allocationPoints++;
         }

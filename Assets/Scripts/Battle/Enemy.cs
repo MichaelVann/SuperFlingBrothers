@@ -73,6 +73,8 @@ public class Enemy : Damageable
                 m_originalColor = Color.yellow;
                 m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue /= 2f;
                 transform.localScale *= 0.75f;
+                m_rigidBody.mass *= 0.75f;
+                GetComponent<Rigidbody2D>().drag = 0.1f;
                 break;
             case eEnemyType.Striker:
                 m_originalColor = Color.red;
@@ -86,7 +88,7 @@ public class Enemy : Damageable
             default:
                 break;
         }
-        m_xpReward = (int)(m_typeTrait.difficulty * m_gameHandlerRef.m_enemyXPScale);
+        m_xpReward = (int)(m_typeTrait.difficulty * GameHandler.GAME_enemyXPRewardScale);
         m_scoreValue = (float)(m_xpReward) * m_coinToXPRatio;
         UpdateLocalStatsFromStatHandler();
         UpdateHealthColor();

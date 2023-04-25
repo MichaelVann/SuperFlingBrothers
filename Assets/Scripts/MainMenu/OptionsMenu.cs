@@ -25,7 +25,7 @@ public class OptionsMenu : MonoBehaviour
 
     public void OnXPRewardSliderChange()
     {
-        m_gameHandlerRef.m_enemyXPScale = m_xpRewardScaleSlider.value;
+        GameHandler.GAME_enemyXPRewardScale = m_xpRewardScaleSlider.value;
         m_xpRewardTextRef.text = "" + m_xpRewardScaleSlider.value;
     }
 

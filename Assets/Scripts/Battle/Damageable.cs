@@ -9,7 +9,7 @@ public class Damageable : BaseObject
     protected BattleManager m_battleManagerRef;
 
     public float m_lastMomentumMagnitude = 0f;
-    float m_damagePerSpeedDivider = 8f;
+    float m_damagePerSpeedDivider = GameHandler.DAMAGEABLE_damagePerSpeedDivider;
 
     const float m_massDivider = 2f;
     public float m_originalMass;
@@ -27,15 +27,14 @@ public class Damageable : BaseObject
     public ProgressBar m_healthBarRef;
 
     //Fling
-    int Samuel = 5;
     bool m_secondFling = true;
-    float m_bumpFlingStrengthMult = 0.25f;
+    float m_bumpFlingStrengthMult = GameHandler.DAMAGEABLE_bumpFlingStrengthMult;
     float m_secondFlingTimer = 0f;
     float m_secondFlingTimerMax = 0.09f;
     Vector3 m_storedFlingVector;
     float m_storedFlingStrength = 0f;
 
-    float m_pocketFlingStrength = 100f;
+    float m_pocketFlingStrength = GameHandler.DAMAGEABLE_pocketFlingStrength;
 
     bool m_clearVelocityOption = true;
 
@@ -58,7 +57,7 @@ public class Damageable : BaseObject
         m_statHandler = new StatHandler();
         m_statHandler.Init();
         m_originalColor = m_spriteRenderer.color;
-        m_originalMass = m_rigidBody.mass;
+        m_rigidBody.mass = m_originalMass = GameHandler.DAMAGEABLE_defaultMass;
         m_damageColourOverrideTimer = new vTimer(m_damageColourTimerMax,false);
 
         UpdateLocalStatsFromStatHandler();
