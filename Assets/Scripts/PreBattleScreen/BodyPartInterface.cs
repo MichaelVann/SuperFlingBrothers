@@ -122,7 +122,6 @@ public class BodyPartInterface : MonoBehaviour
 
     void SetUpNodes()
     {
-        m_debugLineSetups++;
         for (int i = 0; i < m_nodesToSpawn; i++)
         {
             GameObject nodeGameObject = Instantiate<GameObject>(m_nodePrefabRef, m_frontLineRef.transform);
