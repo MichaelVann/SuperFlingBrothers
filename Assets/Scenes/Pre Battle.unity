@@ -6105,6 +6105,21 @@ PrefabInstance:
       propertyPath: m_bodyPartID
       value: 14
       objectReference: {fileID: 0}
+    - target: {fileID: 2608120054035259465, guid: 1ef2fada552a3394a85a8a00afb9c55d,
+        type: 3}
+      propertyPath: m_maxBaseDifficulty
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608120054035259465, guid: 1ef2fada552a3394a85a8a00afb9c55d,
+        type: 3}
+      propertyPath: m_minBaseDifficulty
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608120054035259465, guid: 1ef2fada552a3394a85a8a00afb9c55d,
+        type: 3}
+      propertyPath: m_maxEnemyDifficulty
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 2608120054035259466, guid: 1ef2fada552a3394a85a8a00afb9c55d,
         type: 3}
       propertyPath: m_RootOrder
@@ -15659,6 +15674,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_bodyPartID
       value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608120054035259465, guid: 1ef2fada552a3394a85a8a00afb9c55d,
+        type: 3}
+      propertyPath: m_maxBaseDifficulty
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608120054035259465, guid: 1ef2fada552a3394a85a8a00afb9c55d,
+        type: 3}
+      propertyPath: m_minBaseDifficulty
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2608120054035259465, guid: 1ef2fada552a3394a85a8a00afb9c55d,
+        type: 3}
+      propertyPath: m_maxEnemyDifficulty
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 2608120054035259466, guid: 1ef2fada552a3394a85a8a00afb9c55d,
         type: 3}

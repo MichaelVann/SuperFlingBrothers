@@ -17,6 +17,7 @@ public class UIBattleNode : MonoBehaviour
     public int m_id = 0;
     public int m_parentBodyPartID;
     public int m_difficulty = 5;
+    public int m_difficultyBoostTier = 0;
 
     public GameObject m_selectionRing;
 

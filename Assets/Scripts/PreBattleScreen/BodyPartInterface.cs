@@ -35,7 +35,7 @@ public class BodyPartInterface : MonoBehaviour
     bool m_nodeSetupFrameComplete = false;
 
     public int m_minBaseDifficulty = 1;
-    public int m_minBaseMaxDifficulty = 30;
+    public int m_maxBaseDifficulty = 30;
     public int m_maxEnemyDifficulty = 5;
 
     const float m_deltaFrontLineScale = 0.001f;
@@ -174,8 +174,69 @@ public class BodyPartInterface : MonoBehaviour
                 UIBattleNode node = nodeGameObject.GetComponent<UIBattleNode>();
                 node.m_id = i;
                 node.m_parentBodyPartID = m_bodyPartID;
-                node.m_difficulty = Random.Range(m_minBaseDifficulty, m_minBaseMaxDifficulty);
-                node.GetComponent<SpriteRenderer>().color = VLib.PercentageToColor(1f- (float)(node.m_difficulty - m_minBaseDifficulty) / (float)(m_minBaseMaxDifficulty - m_minBaseDifficulty));
+
+                int DEBUGDifficultySystem = 0;
+                if (DEBUGDifficultySystem == 0)
+                {
+                    node.m_difficulty = Random.Range(m_minBaseDifficulty, m_maxBaseDifficulty);
+                }
+                else if (DEBUGDifficultySystem == 1)
+                {
+                    int difficulty = ((m_maxBaseDifficulty - m_minBaseDifficulty) / 2) + m_minBaseDifficulty;
+                    int difficultyDelta = 0;
+                    
+                    float roll = Random.Range(0f, 1f);
+                    float rollCutoff = 0.1f;
+                    while (roll >= rollCutoff)
+                    {
+                        roll = Random.Range(0f, 1f);
+                        //rollCutoff += 0.1f;
+                        difficultyDelta++;
+                    }
+                    difficultyDelta *= Random.Range(0f, 1f) >= 0.5f ? 1 : -1;
+                    difficulty += difficultyDelta;
+                    node.m_difficulty = 60;
+
+                }
+                else if (DEBUGDifficultySystem == 2)
+                {
+                    node.m_difficulty = Random.Range(m_minBaseDifficulty, m_maxBaseDifficulty);
+
+                    float roll = Random.Range(0f, 1f);
+                    float rollCutoff = 0.1f;
+                    if (node.m_difficulty >= (int)((m_maxBaseDifficulty-m_minBaseDifficulty)*0.8f + m_minBaseDifficulty))
+                    {
+                        while (roll <= rollCutoff)
+                        {
+                            node.m_difficulty *= 2;
+                            roll = Random.Range(0f, 1f);
+                            node.m_difficultyBoostTier++;
+                        }
+                    }
+                }
+                Color nodeColor = VLib.PercentageToColor(1f - (float)(node.m_difficulty - m_minBaseDifficulty) / (float)(m_maxBaseDifficulty - m_minBaseDifficulty));
+                if (node.m_difficultyBoostTier > 0)
+                {
+                    switch (node.m_difficultyBoostTier)
+                    {
+                        default:
+                            nodeColor = Color.black;
+                            break;
+                        case 1:
+                            nodeColor = Color.blue;
+                            break;
+                        case 2:
+                            nodeColor = Color.cyan;
+                            break;
+                        case 3:
+                            nodeColor = Color.magenta;
+                            break;
+                        case 4:
+                            nodeColor = Color.white;
+                            break;
+                    }
+                }
+                node.GetComponent<SpriteRenderer>().color = nodeColor;
                 m_nodeGameobjectList.Add(nodeGameObject);
                 m_nodeList.Add(node);
             }
