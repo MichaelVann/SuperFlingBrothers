@@ -6,6 +6,7 @@ using UnityEngine;
 public class Enemy : Damageable
 {
     Player m_playerRef;
+    Nucleus m_nucleusRef = null;
     public GameObject m_coinPrefab;
 
     public GameObject[] m_exclamationMarkRefs;
@@ -33,6 +34,8 @@ public class Enemy : Damageable
 
     float m_duplicationTimer = 0f;
     float m_duplicationTimerMax = 12f;
+
+    vTimer m_nucleusDrainTimer;
 
     private float m_scoreValue = 1f;
     int m_xpReward = 5;
@@ -79,12 +82,13 @@ public class Enemy : Damageable
                 m_rigidBody.drag = 0.1f;
                 m_rigidBody.freezeRotation = false;
                 CapsuleCollider2D capsuleCollider = GetComponent<CapsuleCollider2D>();
-                capsuleCollider.offset = new Vector2(-0.001643321f,0.0299f);
-                capsuleCollider.size = new Vector2(0.4838f,1.82515f);
+                capsuleCollider.offset = new Vector2(-0.013965f, -0.09077191f);
+                capsuleCollider.size = new Vector2(0.75793f, 2.911544f);
                 m_spriteRenderer.sprite = m_idleBacteriaSprite;
                 m_spriteRenderer.color = Color.white;
                 m_shadowRef.GetComponent<SpriteRenderer>().sprite = m_idleBacteriaShadowSprite;
                 m_flingReadinessIndicatorRef.SetActive(false);
+                m_nucleusDrainTimer = new vTimer(1.0f, false, false);
                 break;
             case eEnemyType.Striker:
                 m_originalColor = Color.red;
@@ -177,6 +181,13 @@ public class Enemy : Damageable
                     break;
             }
         }
+        else if (a_collision.gameObject.GetComponent<Nucleus>() != null && m_enemyType == eEnemyType.Idler)
+        {
+            m_nucleusRef = a_collision.gameObject.GetComponent<Nucleus>();
+            m_rigidBody.constraints = RigidbodyConstraints2D.FreezePosition;
+            m_rigidBody.freezeRotation = true;
+            m_nucleusDrainTimer.SetActive(true);
+        }
     }
 
     public override void Update()
@@ -191,7 +202,11 @@ public class Enemy : Damageable
 
         if (m_enemyType == eEnemyType.Idler)
         {
-
+            if (m_nucleusDrainTimer.Update())
+            {
+                m_nucleusRef.Damage();
+            }
+            
         }
     }
     public override void Die()

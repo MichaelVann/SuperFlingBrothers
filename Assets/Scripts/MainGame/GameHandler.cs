@@ -14,7 +14,7 @@ public class GameHandler : MonoBehaviour
 
     // -- BALANCE VARIABLES --
 
-    static internal float GAME_enemyXPRewardScale = 20f;
+    static internal float GAME_enemyXPRewardScale = 5f;
     static internal float BATTLE_CoinValue = 1f;
     static internal float BATTLE_ShadowAngle = 225f;
     //Damageables
