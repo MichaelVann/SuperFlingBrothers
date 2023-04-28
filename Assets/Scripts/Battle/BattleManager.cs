@@ -69,7 +69,9 @@ public class BattleManager : MonoBehaviour
     float m_healthbarMainPos = 0f;
 
     //Enemy Spawning
-    internal int m_enemiesToSpawn = 8;
+    public GameObject m_enemySpawnPointContainerRef;
+    List<GameObject> m_enemySpawnPointsRefs;
+    internal int m_enemiesToSpawn = 12;
     float m_enemySpawnGap = 0.4f;
     Vector3 m_coreEnemySpawnLocation;
     int m_maxEnemyDifficulty = 0;
@@ -177,6 +179,7 @@ public class BattleManager : MonoBehaviour
         m_turnFreezeTimerMax = m_turnInterval;
         m_turnFreezeTimer = m_turnFreezeTimerMax;
         m_coreEnemySpawnLocation = new Vector3(0f, -1.6f, 0f);
+        m_enemySpawnPointsRefs = new List<GameObject>();
     }
 
     public void Start()
@@ -196,6 +199,11 @@ public class BattleManager : MonoBehaviour
         InitialiseUpgrades();
 
         SpawnPlayer();
+        foreach (SpriteRenderer spriteRendererRef in m_enemySpawnPointContainerRef.GetComponentsInChildren<SpriteRenderer>())
+        {
+            m_enemySpawnPointsRefs.Add(spriteRendererRef.gameObject);
+            spriteRendererRef.enabled = false;
+        }
         SpawnEnemies();
         m_levelDifficultyText.text = "Level Difficulty: " + m_gameHandlerRef.m_battleDifficulty;
     }
@@ -254,10 +262,14 @@ public class BattleManager : MonoBehaviour
 
     public void SpawnEnemies()
     {
+        Vector3 spawnLocation = new Vector3();
+
         m_maxEnemyDifficulty = m_gameHandlerRef.m_maxEnemyDifficulty;
         int remainingDifficulty = m_gameHandlerRef.m_battleDifficulty;
-        for (int i = 0; i < m_enemiesToSpawn && remainingDifficulty > 0; i++)
+        for (int i = 0; i < m_enemiesToSpawn && i < m_enemySpawnPointsRefs.Count && remainingDifficulty > 0; i++)
         {
+            #region Old Spawning
+            /*
             float x = 0f;
             float y = 0f;
             switch (i)
@@ -283,10 +295,10 @@ public class BattleManager : MonoBehaviour
             switch (i)
             {
                 case 0:
-                    y = m_enemySpawnGap/2f;
+                    y = m_enemySpawnGap / 2f;
                     break;
                 case 1:
-                    y = -m_enemySpawnGap/2f;
+                    y = -m_enemySpawnGap / 2f;
                     break;
                 case 2:
                 case 3:
@@ -302,7 +314,12 @@ public class BattleManager : MonoBehaviour
                     break;
                 default:
                     break;
-            }
+            }*/
+
+            //spawnLocation = new Vector3(x, y, 0f) + m_coreEnemySpawnLocation;
+
+            #endregion
+
 
             Enemy.eEnemyType enemyType = Enemy.eEnemyType.Idler;
 
@@ -332,7 +349,7 @@ public class BattleManager : MonoBehaviour
 
             Debug.Log(enemyType);
 
-            Vector3 spawnLocation = new Vector3(x, y, 0f) + m_coreEnemySpawnLocation;
+            spawnLocation = m_enemySpawnPointsRefs[i].transform.position;
             SpawnEnemy(spawnLocation, enemyType);
             ChangeEnemyCount(1);
         }

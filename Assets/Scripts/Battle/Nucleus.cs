@@ -16,6 +16,8 @@ public class Nucleus : Damageable
     public override void Start()
     {
         base.Start();
+        m_gameHandlerRef = FindObjectOfType<GameHandler>();
+
     }
 
     public override void Update()

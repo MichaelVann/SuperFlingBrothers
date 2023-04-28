@@ -49,7 +49,7 @@ public class GameHandler : MonoBehaviour
 
     //Current Battle
     public BodyPart m_bodyPartSelectedForBattle;
-    internal int m_battleDifficulty = 8;
+    internal int m_battleDifficulty = 16;
     internal int m_maxEnemyDifficulty = 2;
 
     //Last Game

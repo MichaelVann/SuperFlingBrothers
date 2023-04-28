@@ -204,7 +204,10 @@ public class Enemy : Damageable
         {
             if (m_nucleusDrainTimer.Update())
             {
-                m_nucleusRef.Damage();
+                if (m_nucleusRef != null)
+                {
+                    m_nucleusRef.Damage();
+                }
             }
             
         }
