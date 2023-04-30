@@ -16,6 +16,7 @@ public class Enemy : Damageable
     public Sprite m_idleBacteriaShadowSprite;
     public enum eEnemyType
     {
+        //Null = -1,
         Idler,
         Dodger,
         Striker,

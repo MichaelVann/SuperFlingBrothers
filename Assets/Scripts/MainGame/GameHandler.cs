@@ -49,8 +49,8 @@ public class GameHandler : MonoBehaviour
 
     //Current Battle
     public BodyPart m_bodyPartSelectedForBattle;
-    internal int m_battleDifficulty = 16;
-    internal int m_maxEnemyDifficulty = 2;
+    internal int m_battleDifficulty = 8;
+    internal int m_maxEnemyDifficulty = 12;
 
     //Last Game
     public eEndGameType m_lastGameResult = eEndGameType.lose;
@@ -239,7 +239,7 @@ public class GameHandler : MonoBehaviour
         {
             m_lastBodyPartSelectedForBattle = m_bodyPartSelectedForBattle;
             m_lastBodyPartSelectedForBattle.ChangeInvaderStrength(m_invaderStrengthChangeLastGame);
-            if (m_lastGameResult == eEndGameType.lose)
+            if (m_lastGameResult == eEndGameType.lose || m_lastGameResult == eEndGameType.escape)
             {
                 m_lastBodyPartSelectedForBattle.Damage(1);
             }

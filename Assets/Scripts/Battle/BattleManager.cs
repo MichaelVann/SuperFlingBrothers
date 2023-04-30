@@ -32,6 +32,9 @@ public class BattleManager : MonoBehaviour
 
     public Text m_enemyCountText;
     public Text m_levelDifficultyText;
+    public Text m_currentDifficultyText;
+    public Text m_deltaDifficultyText;
+
 
     public Image m_fadeToBlackRef;
 
@@ -262,94 +265,80 @@ public class BattleManager : MonoBehaviour
 
     public void SpawnEnemies()
     {
-        Vector3 spawnLocation = new Vector3();
-
-        m_maxEnemyDifficulty = m_gameHandlerRef.m_maxEnemyDifficulty;
         int remainingDifficulty = m_gameHandlerRef.m_battleDifficulty;
-        for (int i = 0; i < m_enemiesToSpawn && i < m_enemySpawnPointsRefs.Count && remainingDifficulty > 0; i++)
+        m_maxEnemyDifficulty = m_gameHandlerRef.m_maxEnemyDifficulty > m_gameHandlerRef.m_battleDifficulty ? m_gameHandlerRef.m_battleDifficulty : m_gameHandlerRef.m_maxEnemyDifficulty;
+        int minimumDifficulty = 0;
+
+        bool highestSpawnableEnemyFound = false;
+        int highestSpawnableEnemyDifficulty = 0;
+        int highestSpawnableEnemyIndex = (int)(Enemy.eEnemyType.Count)-1;
+        while (!highestSpawnableEnemyFound)
         {
-            #region Old Spawning
-            /*
-            float x = 0f;
-            float y = 0f;
-            switch (i)
+            if (m_maxEnemyDifficulty >= GameHandler.m_enemyTypeTraits[highestSpawnableEnemyIndex].difficulty || highestSpawnableEnemyIndex == 0)
             {
-                case 0:
-                case 1:
-                    x = 0f;
-                    break;
-                case 2:
-                case 4:
-                case 6:
-                    x = -m_enemySpawnGap;
-                    break;
-                case 3:
-                case 5:
-                case 7:
-                    x = m_enemySpawnGap;
-                    break;
-                default:
-                    break;
+                highestSpawnableEnemyFound = true;
+                m_maxEnemyDifficulty = GameHandler.m_enemyTypeTraits[highestSpawnableEnemyIndex].difficulty;
             }
-
-            switch (i)
+            else
             {
-                case 0:
-                    y = m_enemySpawnGap / 2f;
-                    break;
-                case 1:
-                    y = -m_enemySpawnGap / 2f;
-                    break;
-                case 2:
-                case 3:
-                    y = 0f;
-                    break;
-                case 4:
-                case 7:
-                    y = m_enemySpawnGap;
-                    break;
-                case 5:
-                case 6:
-                    y = -m_enemySpawnGap;
-                    break;
-                default:
-                    break;
-            }*/
+                highestSpawnableEnemyIndex--;
+            }
+        }
 
-            //spawnLocation = new Vector3(x, y, 0f) + m_coreEnemySpawnLocation;
+        int minimumSpawnsNeeded = Mathf.CeilToInt((float)m_gameHandlerRef.m_battleDifficulty / (float)(m_maxEnemyDifficulty)); 
+        int maximumSpawns = Mathf.CeilToInt((float)m_gameHandlerRef.m_battleDifficulty / (float)GameHandler.m_enemyTypeTraits[0].difficulty);
+        m_enemiesToSpawn = UnityEngine.Random.Range(minimumSpawnsNeeded, maximumSpawns);
+        int[] spawnLocationsTypes = new int[m_enemySpawnPointsRefs.Count];
 
-            #endregion
+        for (int i = 0; i < spawnLocationsTypes.Length; i++)
+        {
+            spawnLocationsTypes[i] = -1;
+        }
 
-
-            Enemy.eEnemyType enemyType = Enemy.eEnemyType.Idler;
-
-            //List<int> enemyTypeLottery;
-            //enemyTypeLottery = new List<int>();
-            //for (int j = 0; j < GameHandler.m_enemyTypeTraits.Length; j++)
-            //{
-            //    if (GameHandler.m_enemyTypeTraits[j].difficulty <= m_gameHandlerRef.m_battleDifficulty)
-            //    {
-            //        for (int k = 0; k < GameHandler.m_enemyTypeTraits[j].difficulty; k++)
-            //        {
-            //            enemyTypeLottery.Add(j);
-            //        }
-            //    }
-            //}
-            //enemyType = (Enemy.eEnemyType)UnityEngine.Random.Range(0, enemyTypeLottery.Count);
-
-            for (int j = GameHandler.m_enemyTypeTraits.Length -1 ; j >= 0; j--)
+        int enemiesToSpawn = m_enemiesToSpawn;
+        enemiesToSpawn = enemiesToSpawn < m_enemySpawnPointsRefs.Count ? enemiesToSpawn : m_enemySpawnPointsRefs.Count;
+        for (int i = 0; i < enemiesToSpawn && remainingDifficulty > 0; i++)
+        {
+            spawnLocationsTypes[i] = minimumDifficulty;
+            remainingDifficulty -= GameHandler.m_enemyTypeTraits[minimumDifficulty].difficulty;
+        }
+        for (int i = 0; i < spawnLocationsTypes.Length; i++)
+        {
+            if (spawnLocationsTypes[i] + 1 >= GameHandler.m_enemyTypeTraits.Length)
             {
-                if (GameHandler.m_enemyTypeTraits[j].difficulty <= remainingDifficulty && GameHandler.m_enemyTypeTraits[j].difficulty <= m_maxEnemyDifficulty)
+                break;
+            }
+            int currentLevelDifficulty = spawnLocationsTypes[i] <0 ? 0 : GameHandler.m_enemyTypeTraits[spawnLocationsTypes[i]].difficulty;
+            int nextLevelDifficulty = GameHandler.m_enemyTypeTraits[spawnLocationsTypes[i] + 1].difficulty;
+            int upgradeCost = nextLevelDifficulty - currentLevelDifficulty;
+            bool upgradeAvailable = remainingDifficulty >= upgradeCost;
+            while (upgradeAvailable)
+            {
+                spawnLocationsTypes[i]++;
+                remainingDifficulty -= upgradeCost;
+                if (spawnLocationsTypes[i] + 1 >= GameHandler.m_enemyTypeTraits.Length)
                 {
-                    enemyType = (Enemy.eEnemyType)j;
-                    remainingDifficulty -= GameHandler.m_enemyTypeTraits[j].difficulty;
+                    upgradeAvailable = false;
                     break;
                 }
+                upgradeCost = GameHandler.m_enemyTypeTraits[spawnLocationsTypes[i] + 1].difficulty - GameHandler.m_enemyTypeTraits[spawnLocationsTypes[i]].difficulty;
+                bool enoughDifficulty = remainingDifficulty >= upgradeCost;
+                bool notOverDifficultyCap = GameHandler.m_enemyTypeTraits[spawnLocationsTypes[i] + 1].difficulty <= m_maxEnemyDifficulty;
+                upgradeAvailable = (enoughDifficulty && notOverDifficultyCap);
             }
+        }
+
+        for (int i = 0; i < spawnLocationsTypes.Length; i++)
+        {
+            if (spawnLocationsTypes[i] < 0)
+            {
+                break;
+            }
+            Enemy.eEnemyType enemyType = (Enemy.eEnemyType)(spawnLocationsTypes[i]);
 
             Debug.Log(enemyType);
 
-            spawnLocation = m_enemySpawnPointsRefs[i].transform.position;
+            Vector3 spawnLocation = m_enemySpawnPointsRefs[i].transform.position;
             SpawnEnemy(spawnLocation, enemyType);
             ChangeEnemyCount(1);
         }
