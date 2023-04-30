@@ -64,16 +64,15 @@ public class RisingFadingText : MonoBehaviour
 
         float verticalOffset = m_gravityAffected ? Mathf.Sin(completionPerc * Mathf.PI) * m_risingSpeed : completionPerc * m_risingSpeed / 2f;
 
-        //float scale = 0.7f + 0.3f * Mathf.Sin(Mathf.Pow(completionPerc,3f) * Mathf.PI);
-        //float scale = Mathf.Sin((completionPerc + 0.3f) * Mathf.PI * 0.78f);
-        //float scale = Mathf.Sin(Mathf.Pow(completionPerc,0.5f) * Mathf.PI);
         float scale = Mathf.Pow(Mathf.Clamp(Mathf.Sin(Mathf.Pow(completionPerc,0.5f) * Mathf.PI),0f,1f),0.2f);
         scale *= m_originalScale;
         transform.position = m_originalPosition + new Vector3(m_horizontalSpeed * completionPerc, verticalOffset);
         transform.localScale = new Vector3(scale, scale, 1f);
         if (m_lifeTimer >= m_fadeDelay)
         {
-            GetComponent<Text>().color = new Color(m_originalColor.r, m_originalColor.g, m_originalColor.b, m_originalColor.a * 1 - Mathf.Pow((m_lifeTimer-m_fadeDelay) / (m_lifeTimerMax-m_fadeDelay),2f));
+            float colorScale = 1f - Mathf.Pow((m_lifeTimer - m_fadeDelay) / (m_lifeTimerMax - m_fadeDelay), 2f);
+            float exponentialColorScale = Mathf.Pow(colorScale, 3f);
+            GetComponent<Text>().color = new Color(m_originalColor.r * exponentialColorScale, m_originalColor.g * exponentialColorScale, m_originalColor.b * exponentialColorScale, m_originalColor.a * colorScale);
         }
     }
 
