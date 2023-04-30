@@ -29,6 +29,7 @@ public class BattleManager : MonoBehaviour
     public GameObject m_escapeZoneRef;
     public Button m_extraTurnButtonRef;
     public GameObject m_extraTurnButtonLockImageRef;
+    public GameObject m_wallTriangles;
 
     public Text m_enemyCountText;
     public Text m_levelDifficultyText;
@@ -84,6 +85,12 @@ public class BattleManager : MonoBehaviour
     //Extra Turn Upgrade
     int m_extraTurnsRemaining = 1;
     bool m_usingExtraTurn;
+
+    internal struct EnvironmentalEffects
+    {
+        internal bool wallTriangles;
+    }
+    EnvironmentalEffects m_environmentalEffects;
 
     //Pre Game
     bool m_runningPregame = true;
@@ -175,6 +182,13 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    void SetupEnvironmentalEffects()
+    {
+        m_environmentalEffects = new EnvironmentalEffects();
+        m_environmentalEffects.wallTriangles = UnityEngine.Random.Range(0f,1f) <= 0.1f;
+        m_wallTriangles.SetActive(m_environmentalEffects.wallTriangles);
+    }
+
     void Awake()
     {
         m_uiHandlerRef = GetComponent<BattleUIHandler>();
@@ -183,6 +197,7 @@ public class BattleManager : MonoBehaviour
         m_turnFreezeTimer = m_turnFreezeTimerMax;
         m_coreEnemySpawnLocation = new Vector3(0f, -1.6f, 0f);
         m_enemySpawnPointsRefs = new List<GameObject>();
+        SetupEnvironmentalEffects();
     }
 
     public void Start()
