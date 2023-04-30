@@ -49,8 +49,8 @@ public class GameHandler : MonoBehaviour
 
     //Current Battle
     public BodyPart m_bodyPartSelectedForBattle;
-    internal int m_battleDifficulty = 8;
-    internal int m_maxEnemyDifficulty = 12;
+    internal int m_battleDifficulty = 60;
+    internal int m_maxEnemyDifficulty = 8;
 
     //Last Game
     public eEndGameType m_lastGameResult = eEndGameType.lose;

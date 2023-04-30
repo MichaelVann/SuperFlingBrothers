@@ -265,13 +265,13 @@ public class BattleManager : MonoBehaviour
 
     public void SpawnEnemies()
     {
-        int remainingDifficulty = m_gameHandlerRef.m_battleDifficulty;
+        int difficultyBudget = m_gameHandlerRef.m_battleDifficulty;
         m_maxEnemyDifficulty = m_gameHandlerRef.m_maxEnemyDifficulty > m_gameHandlerRef.m_battleDifficulty ? m_gameHandlerRef.m_battleDifficulty : m_gameHandlerRef.m_maxEnemyDifficulty;
         int minimumDifficulty = 0;
 
         bool highestSpawnableEnemyFound = false;
-        int highestSpawnableEnemyDifficulty = 0;
         int highestSpawnableEnemyIndex = (int)(Enemy.eEnemyType.Count)-1;
+        //Find the highest spawnable enemy with the current difficulty available for the battle
         while (!highestSpawnableEnemyFound)
         {
             if (m_maxEnemyDifficulty >= GameHandler.m_enemyTypeTraits[highestSpawnableEnemyIndex].difficulty || highestSpawnableEnemyIndex == 0)
@@ -284,50 +284,70 @@ public class BattleManager : MonoBehaviour
                 highestSpawnableEnemyIndex--;
             }
         }
-
+        //Find minimum spawns needed to equal or exceed the available budget
         int minimumSpawnsNeeded = Mathf.CeilToInt((float)m_gameHandlerRef.m_battleDifficulty / (float)(m_maxEnemyDifficulty)); 
         int maximumSpawns = Mathf.CeilToInt((float)m_gameHandlerRef.m_battleDifficulty / (float)GameHandler.m_enemyTypeTraits[0].difficulty);
+
+        //Roll an amount of enemies to be spawned between the minimum and maximum needed enemies
         m_enemiesToSpawn = UnityEngine.Random.Range(minimumSpawnsNeeded, maximumSpawns);
         int[] spawnLocationsTypes = new int[m_enemySpawnPointsRefs.Count];
 
+        //Initialise the spawnLocations to empty
         for (int i = 0; i < spawnLocationsTypes.Length; i++)
         {
             spawnLocationsTypes[i] = -1;
         }
 
         int enemiesToSpawn = m_enemiesToSpawn;
+        //Make sure that we're not trying to spawn more enemies than there are available spawn points
         enemiesToSpawn = enemiesToSpawn < m_enemySpawnPointsRefs.Count ? enemiesToSpawn : m_enemySpawnPointsRefs.Count;
-        for (int i = 0; i < enemiesToSpawn && remainingDifficulty > 0; i++)
+
+        //Do a first pass to add some basic enemies to the level
+        for (int i = 0; i < enemiesToSpawn && difficultyBudget > 0; i++)
         {
             spawnLocationsTypes[i] = minimumDifficulty;
-            remainingDifficulty -= GameHandler.m_enemyTypeTraits[minimumDifficulty].difficulty;
+            difficultyBudget -= GameHandler.m_enemyTypeTraits[minimumDifficulty].difficulty;
         }
+
+        //Go through and upgrade the enemies from top down, upgrading the first enemy as much as possible then moving to the second, and so forth
         for (int i = 0; i < spawnLocationsTypes.Length; i++)
         {
+            //Redundant upgrade check that shouldn't be hit, but for future prrofing in case we ever spawn the top tier enemy straight away
             if (spawnLocationsTypes[i] + 1 >= GameHandler.m_enemyTypeTraits.Length)
             {
-                break;
+                continue;
             }
+
+            //Find the upgrade cost of upgrading this enemy to the next enemy
             int currentLevelDifficulty = spawnLocationsTypes[i] <0 ? 0 : GameHandler.m_enemyTypeTraits[spawnLocationsTypes[i]].difficulty;
             int nextLevelDifficulty = GameHandler.m_enemyTypeTraits[spawnLocationsTypes[i] + 1].difficulty;
             int upgradeCost = nextLevelDifficulty - currentLevelDifficulty;
-            bool upgradeAvailable = remainingDifficulty >= upgradeCost;
+
+            //Check whether we can upgrade the enemy with the current budget
+            bool upgradeAvailable = difficultyBudget >= upgradeCost;
+
+            //Try to recursively upgrade the enemy until 
             while (upgradeAvailable)
             {
                 spawnLocationsTypes[i]++;
-                remainingDifficulty -= upgradeCost;
+                difficultyBudget -= upgradeCost;
+
+                //If the coming upgrade is higher than available enemy types, break
                 if (spawnLocationsTypes[i] + 1 >= GameHandler.m_enemyTypeTraits.Length)
                 {
                     upgradeAvailable = false;
                     break;
                 }
+
+                //Check to see if the next upgrade is viable via being affordable and not over the set m_maxEnemyDifficulty
                 upgradeCost = GameHandler.m_enemyTypeTraits[spawnLocationsTypes[i] + 1].difficulty - GameHandler.m_enemyTypeTraits[spawnLocationsTypes[i]].difficulty;
-                bool enoughDifficulty = remainingDifficulty >= upgradeCost;
+                bool enoughDifficulty = difficultyBudget >= upgradeCost;
                 bool notOverDifficultyCap = GameHandler.m_enemyTypeTraits[spawnLocationsTypes[i] + 1].difficulty <= m_maxEnemyDifficulty;
                 upgradeAvailable = (enoughDifficulty && notOverDifficultyCap);
             }
         }
 
+        //Spawn the enemies in by iterating through spawnLocationsTypes and spawning the corresponding enemy at the corresponding location
         for (int i = 0; i < spawnLocationsTypes.Length; i++)
         {
             if (spawnLocationsTypes[i] < 0)
