@@ -36,7 +36,6 @@ public class BattleManager : MonoBehaviour
     public Text m_currentDifficultyText;
     public Text m_deltaDifficultyText;
 
-
     public Image m_fadeToBlackRef;
 
     public UIBar m_shieldBarRef;

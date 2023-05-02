@@ -5,7 +5,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-//Version 12
+//Version 13
 
 
 public class GameHandler : MonoBehaviour
@@ -49,7 +49,7 @@ public class GameHandler : MonoBehaviour
 
     //Current Battle
     public BodyPart m_bodyPartSelectedForBattle;
-    internal int m_battleDifficulty = 60;
+    internal int m_battleDifficulty = 8;
     internal int m_maxEnemyDifficulty = 8;
 
     //Last Game

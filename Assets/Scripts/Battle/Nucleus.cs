@@ -17,6 +17,8 @@ public class Nucleus : Damageable
     {
         base.Start();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue *= Mathf.Pow(m_gameHandlerRef.m_battleDifficulty, 0.5f)/Mathf.Pow(10f, 0.5f);
+        UpdateLocalStatsFromStatHandler();
 
     }
 
