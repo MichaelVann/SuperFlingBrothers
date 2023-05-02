@@ -123,10 +123,10 @@ public class Enemy : Damageable
 
     public void Copy(Enemy a_ref)
     {
+        SetUpType(a_ref.m_enemyType);
         m_health = a_ref.m_health;
         m_originalMass = a_ref.m_originalMass;
         m_originalColor = a_ref.m_originalColor;
-        SetUpType(a_ref.m_enemyType);
         UpdateHealthColor();
     }
 
