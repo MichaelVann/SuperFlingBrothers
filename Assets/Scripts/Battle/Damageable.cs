@@ -37,7 +37,7 @@ public class Damageable : BaseObject
 
     float m_pocketFlingStrength = GameHandler.DAMAGEABLE_pocketFlingStrength;
 
-    bool m_clearVelocityOption = true;
+    bool m_clearVelocityOption = false;
 
     internal StatHandler m_statHandler;
     internal float m_health;
