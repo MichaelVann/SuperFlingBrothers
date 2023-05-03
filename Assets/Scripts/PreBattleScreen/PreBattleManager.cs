@@ -9,6 +9,7 @@ public class PreBattleManager : MonoBehaviour
     GameHandler m_gameHandlerRef;
     public GameObject m_bodyPartSelectionRef;
     public GameObject m_gameModeSelectionRef;
+    public Text m_battleDifficultyText;
 
     public enum eSubScreen
     {
@@ -36,6 +37,8 @@ public class PreBattleManager : MonoBehaviour
     {
         m_gameModeSelectionRef.SetActive(true);
         m_bodyPartSelectionRef.SetActive(false);
+        m_battleDifficultyText.text = "" + m_bodyPartSelectionRef.GetComponent<BodyPartSelectionHandler>().m_selectedBattleNode.m_difficulty;
+
     }
 
     public void MoveToSubScreen(eSubScreen a_subScreen)
