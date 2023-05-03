@@ -12,6 +12,7 @@ public class Enemy : Damageable
     public GameObject[] m_exclamationMarkRefs;
     public GameObject m_flingReadinessIndicatorRef;
     public GameObject m_velocityIndicatorRef;
+    public GameObject m_visionConeRef;
     public Sprite m_idleBacteriaSprite;
     public Sprite m_idleBacteriaShadowSprite;
     public enum eEnemyType
@@ -73,6 +74,7 @@ public class Enemy : Damageable
     {
         m_typeTrait = GameHandler.m_enemyTypeTraits[(int)a_type];
         m_enemyType = a_type;
+        m_visionConeRef.SetActive(false);
         switch (m_enemyType)
         {
             case eEnemyType.Idler:
@@ -93,6 +95,7 @@ public class Enemy : Damageable
                 break;
             case eEnemyType.Striker:
                 m_originalColor = Color.red;
+                m_visionConeRef.SetActive(true);
                 break;
             case eEnemyType.Dodger:
                 m_originalColor = Color.green;
@@ -191,6 +194,18 @@ public class Enemy : Damageable
         }
     }
 
+    private void VisionConeUpdate()
+    {
+        if (m_visionConeRef.activeSelf && m_playerRef)
+        {
+            Vector3 deltaVec = (m_playerRef.transform.position - transform.position).normalized;
+            float angle = VLib.Vector2ToEulerAngle(deltaVec);
+            m_visionConeRef.transform.eulerAngles = new Vector3(0f, 0f,angle);
+            float deltaMag = (m_playerRef.transform.position - transform.position).magnitude;
+            m_visionConeRef.transform.localScale = new Vector3(m_visionConeRef.transform.localScale.x, deltaMag / 1.6f, 1f);
+        }
+    }
+
     public override void Update()
     {
         base.Update();
@@ -210,8 +225,9 @@ public class Enemy : Damageable
                     m_nucleusRef.Damage();
                 }
             }
-            
         }
+
+        VisionConeUpdate();
     }
     public override void Die()
     {
@@ -292,9 +308,9 @@ public class Enemy : Damageable
 
             if ((playerPos - transform.position).magnitude <= m_sightRadius)
             {
-                Vector3 inaccurateFlingVector = (playerPos - transform.position).normalized;
+                Vector3 accurateFlingVector = (playerPos - transform.position).normalized;
 
-                Vector3 aimDisturbance = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, m_flingAccuracy) - m_flingAccuracy / 2f, Vector3.forward) * inaccurateFlingVector;
+                Vector3 aimDisturbance = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, m_flingAccuracy) - m_flingAccuracy / 2f, Vector3.forward) * accurateFlingVector;
 
                 Fling(aimDisturbance, m_statHandler.m_stats[(int)eStatIndices.dexterity].finalValue);
             }
@@ -308,6 +324,10 @@ public class Enemy : Damageable
 
         if ((playerPos - transform.position).magnitude <= m_sightRadius)
         {
+            if (m_typeTrait.flinger)
+            {
+                m_visionConeRef.SetActive(true);
+            }
             for (int i = 0; i < m_exclamationMarkRefs.Length; i++)
             {
                 m_exclamationMarkRefs[i].SetActive(true);
@@ -327,6 +347,7 @@ public class Enemy : Damageable
             {
                 m_exclamationMarkRefs[i].SetActive(false);
             }
+            m_visionConeRef.SetActive(false);
         }
     }
 

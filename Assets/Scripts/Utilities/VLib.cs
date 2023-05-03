@@ -90,6 +90,19 @@ public static class VLib
         return retVec;
     }
 
+    public static Vector2 EulerAngleToVector2(float a_angle)
+    {
+        float x = Mathf.Sin(a_angle * Mathf.PI / 180f);
+        float y = Mathf.Cos(a_angle * Mathf.PI / 180f);
+        return new Vector2(x, y);
+
+    }
+    public static float Vector2ToEulerAngle(Vector2 a_vector2)
+    {
+        float angle = Vector2.SignedAngle(new Vector2(0f,1f), a_vector2);
+        return angle;
+    }
+
 
     public static int SafeMod(int a_value, int a_mod)
     {
