@@ -329,6 +329,5 @@ public class GameHandler : MonoBehaviour
             m_upgrades[i].Copy(m_saveData.upgrades[i]);
         }
         SetupShield();
-        //m_upgrades = m_saveData.upgrades;
     }
 }

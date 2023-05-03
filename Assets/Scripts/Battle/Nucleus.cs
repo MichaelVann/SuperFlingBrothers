@@ -29,6 +29,22 @@ public class Nucleus : Damageable
         base.Update();
     }
 
+    public override void OnCollisionEnter2D(Collision2D a_collision)
+    {
+        Player oppPlayer = a_collision.gameObject.GetComponent<Player>();
+        if (oppPlayer)
+        {
+            if (oppPlayer.m_lastMomentumMagnitude >= m_lastMomentumMagnitude)
+            {
+                Heal(oppPlayer.m_statHandler.m_stats[(int)eStatIndices.strength].finalValue * oppPlayer.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
+            }
+        }
+        else
+        {
+            base.OnCollisionEnter2D(a_collision);
+        }
+    }
+
     public override void Die()
     {
         m_battleManagerRef.StartEndingGame(eEndGameType.lose);

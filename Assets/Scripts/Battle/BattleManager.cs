@@ -135,9 +135,9 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void SetScore(float a_value) { m_score = a_value; }
+    public void SetScore(float a_value) { m_score = Mathf.Round(a_value*100f)/100f; }
 
-    public void ChangeScore(float a_change) { m_score += a_change; }
+    public void ChangeScore(float a_change) { SetScore(m_score + a_change); }
     public void ChangeXp(float a_change) { m_xpEarned += a_change; }
     public void ChangeInvaderStrength(int a_change) { m_invaderStrengthChange += a_change; }
 

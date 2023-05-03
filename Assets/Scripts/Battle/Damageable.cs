@@ -9,7 +9,7 @@ public class Damageable : BaseObject
     protected BattleManager m_battleManagerRef;
 
     public float m_lastMomentumMagnitude = 0f;
-    float m_damagePerSpeedDivider = GameHandler.DAMAGEABLE_damagePerSpeedDivider;
+    protected float m_damagePerSpeedDivider = GameHandler.DAMAGEABLE_damagePerSpeedDivider;
 
     const float m_massDivider = 2f;
     public float m_originalMass;
@@ -21,6 +21,7 @@ public class Damageable : BaseObject
     public GameObject m_risingFadingTextPrefab;
     protected float m_damageTextYOffset = 0.2f;
     protected Color m_damageTextColor = Color.yellow;
+    protected Color m_healTextColor = Color.green;
 
     static Func<int, Collision2D> CollisionFuncPTR = null;
 
@@ -132,22 +133,24 @@ public class Damageable : BaseObject
         //m_damageColourTimer = 0f;
     }
 
-    //Damages the damageable
-    public virtual void Damage(float a_damage)
+    private void ChangeHealth(float a_change)
     {
-        //If the game is ending, disable damage
+         //If the game is ending, disable damage
         if (m_battleManagerRef.m_endingGame)
         {
             return;
         }
 
-        StartDamageColourTimer();
+        if (a_change < 0f)
+        {
+            StartDamageColourTimer();
+        }
 
         //If the damageables health is above it's minimum health
         if (m_health > 0f)
         {
             //Damage it
-            m_health -= a_damage;
+            m_health += a_change;
             m_health = Mathf.Clamp(m_health, 0f, m_maxHealth);
 
             //Spawn collision sparks
@@ -157,8 +160,8 @@ public class Damageable : BaseObject
             RisingFadingText damageText = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(0f, m_damageTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
             damageText.SetImageEnabled(false);
             damageText.SetGravityAffected(true);
-            damageText.SetTextContent(a_damage);
-            damageText.SetOriginalColor(m_damageTextColor);
+            damageText.SetTextContent(a_change);
+            damageText.SetOriginalColor(a_change >= 0f ? m_healTextColor : m_damageTextColor);
         }
 
         //If the dmgble is below minimum health
@@ -171,6 +174,17 @@ public class Damageable : BaseObject
         }
         UpdateMass();
         UpdateHealthColor();
+    }
+
+    //Damages the damageable
+    public virtual void Damage(float a_damage)
+    {
+        ChangeHealth(-a_damage);
+    }
+
+    public void Heal(float a_healing)
+    {
+        ChangeHealth(a_healing);
     }
 
     public void Damage()
