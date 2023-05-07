@@ -10,14 +10,16 @@ public class ProgressBar : MonoBehaviour
     public SpriteRenderer m_progressBarRef;
     Vector3 m_originalScale;
 
-    public bool m_healthColoring = true;
+    bool m_healthColoring = true;
 
 
     public void SetMaxProgressValue(float a_value) { m_progressMax = a_value; }
+    public void SetHealthColoring(bool a_value) { m_healthColoring = a_value; }
     public void SetProgressValue(float a_value)
     {
         m_progress = a_value;
     }
+
 
     void Start()
     {

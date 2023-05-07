@@ -62,13 +62,16 @@ public class Player : Damageable
     void SetupShield()
     {
         m_shieldRef = m_gameHandlerRef.m_playerShield;
-        if (m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.shield].m_owned)
+        bool shieldOwned = m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.shield].m_owned;
+        if (shieldOwned)
         {
             m_shieldEnabled = true;
             m_shieldRef.delayTimer = 0f;
             m_shieldRef.value = m_gameHandlerRef.m_playerShield.capacity;
         }
-        m_shieldSpriteRenderer.gameObject.SetActive(m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.shield].m_owned);
+        m_shieldSpriteRenderer.gameObject.SetActive(shieldOwned);
+        m_shieldBarRef.gameObject.SetActive(shieldOwned);
+        m_shieldBarRef.SetMaxProgressValue(m_shieldRef.capacity);
     }
 
     public override void Fling(Vector3 a_flingVector, float a_flingStrength)
@@ -262,6 +265,7 @@ public class Player : Damageable
         Color shieldColor = m_shieldSpriteRenderer.color;
         shieldColor.a = m_maxShieldOpacity * m_shieldRef.value/m_shieldRef.capacity;
         m_shieldSpriteRenderer.color = shieldColor;
+        m_shieldBarRef.SetProgressValue(m_shieldRef.value);
     }
 
     void ShieldUpdate()

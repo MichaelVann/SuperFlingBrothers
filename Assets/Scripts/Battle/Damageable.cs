@@ -26,6 +26,7 @@ public class Damageable : BaseObject
     static Func<int, Collision2D> CollisionFuncPTR = null;
 
     public ProgressBar m_healthBarRef;
+    public ProgressBar m_shieldBarRef;
     public GameObject m_shadowRef;
 
     //Fling
@@ -61,13 +62,15 @@ public class Damageable : BaseObject
         m_originalColor = m_spriteRenderer.color;
         m_rigidBody.mass = m_originalMass = GameHandler.DAMAGEABLE_defaultMass;
         m_damageColourOverrideTimer = new vTimer(m_damageColourTimerMax,false);
-
         UpdateLocalStatsFromStatHandler();
     }
 
     public virtual void Start()
     {
-
+        if (m_shieldBarRef)
+        {
+            m_shieldBarRef.SetHealthColoring(false);
+        }
     }
 
     protected void UpdateLocalStatsFromStatHandler()
