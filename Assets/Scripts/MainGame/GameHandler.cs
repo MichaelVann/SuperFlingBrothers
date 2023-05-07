@@ -14,7 +14,7 @@ public class GameHandler : MonoBehaviour
 
     // -- BALANCE VARIABLES --
 
-    static internal float GAME_enemyXPRewardScale = 8f;
+    static internal float GAME_enemyXPRewardScale = 40f;
     static internal float BATTLE_CoinValue = 1f;
     static internal float BATTLE_ShadowAngle = 225f;
     //Damageables
@@ -59,6 +59,8 @@ public class GameHandler : MonoBehaviour
     public int m_playerLevelAtStartOfBattle = 0;
     public float m_dnaEarnedLastGame = 0f;
     public BodyPart m_lastBodyPartSelectedForBattle;
+    public int m_lastXpBonus = 0;
+    public int m_lastDnaBonus = 0;
 
     //Upgrades
     public UpgradeItem[] m_upgrades;
@@ -242,6 +244,10 @@ public class GameHandler : MonoBehaviour
             if (m_lastGameResult == eEndGameType.lose || m_lastGameResult == eEndGameType.escape)
             {
                 m_lastBodyPartSelectedForBattle.Damage(1);
+            }
+            else if (m_lastGameResult == eEndGameType.win)
+            {
+
             }
         }
 

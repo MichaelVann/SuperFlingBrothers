@@ -441,6 +441,10 @@ public class BattleManager : MonoBehaviour
 
     void FinishGame()
     {
+        //if (m_endGameType == eEndGameType.win)
+        //{
+        //    m_score += m_gameHandlerRef.m_battleDifficulty;
+        //}
         m_gameHandlerRef.m_dnaEarnedLastGame = m_score;
         m_gameHandlerRef.m_invaderStrengthChangeLastGame = m_invaderStrengthChange;
         //Go to post game screen

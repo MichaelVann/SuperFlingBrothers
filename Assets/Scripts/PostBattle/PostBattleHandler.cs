@@ -13,6 +13,10 @@ public class PostBattleHandler : MonoBehaviour
     public Text m_xpGainedTextRef;
     public RollingText m_totalGoldTextRef;
 
+    public GameObject m_winBonusRef;
+    public Text m_XPBonusText;
+    public Text m_goldBonusText;
+
     eEndGameType m_winResult = eEndGameType.lose;
 
     public void ContinuePressed()
@@ -31,6 +35,7 @@ public class PostBattleHandler : MonoBehaviour
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         
         m_winResult = m_gameHandlerRef.m_lastGameResult;
+        m_winBonusRef.SetActive(m_winResult == eEndGameType.win);
         switch (m_winResult)
         {
             case eEndGameType.escape:
@@ -38,6 +43,16 @@ public class PostBattleHandler : MonoBehaviour
                 break;
             case eEndGameType.win:
                 m_resultTextRef.text ="Victory!";
+                //m_gameHandlerRef.m_lastXpBonus = m_gameHandlerRef.m_lastDnaBonus = Mathf.RoundToInt(Mathf.Pow(m_gameHandlerRef.m_battleDifficulty, 1.1f));
+                m_gameHandlerRef.m_lastXpBonus = (int)m_gameHandlerRef.m_xpEarnedLastGame;
+                m_gameHandlerRef.m_lastDnaBonus = (int)m_gameHandlerRef.m_dnaEarnedLastGame;
+                m_gameHandlerRef.m_dnaEarnedLastGame += m_gameHandlerRef.m_lastDnaBonus;
+                m_goldBonusText.text = "DNA x2";// + m_gameHandlerRef.m_lastDnaBonus;
+                m_gameHandlerRef.m_xpEarnedLastGame += m_gameHandlerRef.m_lastXpBonus;
+                m_gameHandlerRef.m_playerStatHandler.ChangeXP((int)m_gameHandlerRef.m_lastXpBonus);
+
+                m_XPBonusText.text = "XP x2";// +m_gameHandlerRef.m_lastXpBonus;
+
                 break;
             case eEndGameType.lose:
                 m_resultTextRef.text = "Defeat!";
