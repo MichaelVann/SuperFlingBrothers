@@ -45,7 +45,7 @@ public class StatIncreaser : MonoBehaviour
                 suffixString = "Damage";
                 break;
             case eStatIndices.dexterity:
-                suffixString = "Fling Strength";
+                suffixString = "μNm of Fling Strength";
                 break;
             case eStatIndices.constitution:
                 suffixString = "Health";

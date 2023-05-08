@@ -34,6 +34,7 @@ public class StatHandler
     public int m_allocationPoints = 0;
 
     public int m_DNA = 0;
+    public int m_reSpecCost = 100;
 
     public Stat[] m_stats;
 
@@ -52,6 +53,14 @@ public class StatHandler
         m_stats = new Stat[(int)eStatIndices.count];
         SetDefaultStats();
     }
+
+    public void ReSpec()
+    {
+        SetDefaultStats();
+        m_allocationPoints = m_level - 1;
+        m_reSpecCost *= 10;
+    }
+
     public void UpdateStat(eStatIndices a_index)
     {
         Stat stat = m_stats[(int)a_index];
@@ -112,12 +121,11 @@ public class StatHandler
         SetStatPostAddedValue(eStatIndices.dexterity, 259f);
         SetStatScale(eStatIndices.dexterity, 4f);
 
-        m_stats[(int)eStatIndices.constitution].scale = 4f;
+        m_stats[(int)eStatIndices.constitution].scale = 10f;
         SetStatPostAddedValue(eStatIndices.constitution, 100f);
         SetStatScale(eStatIndices.strength, 5f);
         SetStatPostAddedValue(eStatIndices.strength, 50f);
     }
-
 
     public void AttemptToIncreaseStat(eStatIndices a_index)
     {
@@ -149,7 +157,6 @@ public class StatHandler
             m_allocationPoints++;
         }
     }
-
 
     // Update is called once per frame
     void Update()

@@ -39,7 +39,18 @@ public class GameHandler : MonoBehaviour
         Pockets,
         Hunger,
         ModeCount
-    } public eGameMode m_currentGameMode;
+    }
+
+    internal void AttemptToRespec()
+    {
+        if (m_playerStatHandler.m_reSpecCost <= m_cash)
+        {
+            m_cash -= m_playerStatHandler.m_reSpecCost;
+            m_playerStatHandler.ReSpec();
+        }
+    }
+
+    public eGameMode m_currentGameMode;
 
     private float m_cash = 0;
     internal StatHandler m_playerStatHandler;

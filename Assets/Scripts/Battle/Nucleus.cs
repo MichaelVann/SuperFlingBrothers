@@ -8,7 +8,7 @@ public class Nucleus : Damageable
     public override void Awake()
     {
         base.Awake();
-        m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue = 100f;
+        m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue = 80f;
         UpdateLocalStatsFromStatHandler();
         m_damageTextColor = Color.red;
     }
@@ -18,7 +18,7 @@ public class Nucleus : Damageable
         base.Start();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         int difficulty = m_gameHandlerRef.m_battleDifficulty < 10 ? 10 : m_gameHandlerRef.m_battleDifficulty;
-        float exponent = 1f;
+        float exponent = 0.3f;
         m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue *= Mathf.Pow(difficulty, exponent) /Mathf.Pow(10f, exponent);
         UpdateLocalStatsFromStatHandler();
 
