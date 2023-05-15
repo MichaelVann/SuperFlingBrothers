@@ -41,7 +41,7 @@ public class Damageable : BaseObject
 
     bool m_clearVelocityOption = false;
 
-    internal StatHandler m_statHandler;
+    internal CharacterStatHandler m_statHandler;
     internal float m_health;
     internal float m_maxHealth;
 
@@ -57,7 +57,7 @@ public class Damageable : BaseObject
         base.Awake();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_battleManagerRef = FindObjectOfType<BattleManager>();
-        m_statHandler = new StatHandler();
+        m_statHandler = new CharacterStatHandler();
         m_statHandler.Init();
         m_originalColor = m_spriteRenderer.color;
         m_rigidBody.mass = m_originalMass = GameHandler.DAMAGEABLE_defaultMass;
@@ -75,7 +75,7 @@ public class Damageable : BaseObject
 
     protected void UpdateLocalStatsFromStatHandler()
     {
-        m_health = m_maxHealth = m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue;
+        m_health = m_maxHealth = m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue;
         UpdateHealthColor();
         m_healthBarRef.SetMaxProgressValue(m_maxHealth);
     }
@@ -208,7 +208,7 @@ public class Damageable : BaseObject
         {
             if (oppDamageable.m_lastMomentumMagnitude >= m_lastMomentumMagnitude)
             {
-                Damage(oppDamageable.m_statHandler.m_stats[(int)eStatIndices.strength].finalValue * oppDamageable.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
+                Damage(oppDamageable.m_statHandler.m_stats[(int)eCharacterStatIndices.strength].finalValue * oppDamageable.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
             }
         }
     }

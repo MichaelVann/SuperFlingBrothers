@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class StatIncreaser : MonoBehaviour
 {
-    public eStatIndices m_statIndex;
+    public eCharacterStatIndices m_statIndex;
     GameHandler m_gameHandlerRef;
     public Text m_effectDescriptionTextRef;
     public Text m_effectSuffixTextRef;
@@ -32,7 +32,7 @@ public class StatIncreaser : MonoBehaviour
     {
         m_increaseButtonRef.interactable = m_gameHandlerRef.m_playerStatHandler.m_allocationPoints > 0 ? true : false;
 
-        Stat m_referencedStat = m_gameHandlerRef.m_playerStatHandler.m_stats[(int)m_statIndex];
+        CharacterStat m_referencedStat = m_gameHandlerRef.m_playerStatHandler.m_stats[(int)m_statIndex];
 
         m_statCounterRef.m_text.text = "" + m_referencedStat.value;
 
@@ -41,16 +41,16 @@ public class StatIncreaser : MonoBehaviour
         string suffixString = "";
         switch (m_statIndex)
         {
-            case eStatIndices.strength:
+            case eCharacterStatIndices.strength:
                 suffixString = "Damage";
                 break;
-            case eStatIndices.dexterity:
+            case eCharacterStatIndices.dexterity:
                 suffixString = "μNm of Fling Strength";
                 break;
-            case eStatIndices.constitution:
+            case eCharacterStatIndices.constitution:
                 suffixString = "Health";
                 break;
-            case eStatIndices.count:
+            case eCharacterStatIndices.count:
                 break;
             default:
                 break;

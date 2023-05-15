@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum eStatIndices
+public enum eCharacterStatIndices
 {
     strength,
     dexterity,
@@ -12,7 +12,7 @@ public enum eStatIndices
 }
 
 [Serializable]
-public struct Stat
+public struct CharacterStat
 {
     public string name;
     public float value;
@@ -26,7 +26,7 @@ public struct Stat
 }
 
 [Serializable]
-public class StatHandler
+public class CharacterStatHandler
 {
     public int m_XP = 0;
     public int m_maxXP = 83;
@@ -36,7 +36,7 @@ public class StatHandler
     public int m_DNA = 0;
     public int m_reSpecCost = 100;
 
-    public Stat[] m_stats;
+    public CharacterStat[] m_stats;
 
     const float m_baseHealthScale = 4f;
 
@@ -50,7 +50,7 @@ public class StatHandler
     // Start is called before the first frame update
     public void Init()
     {
-        m_stats = new Stat[(int)eStatIndices.count];
+        m_stats = new CharacterStat[(int)eCharacterStatIndices.count];
         SetDefaultStats();
     }
 
@@ -61,46 +61,46 @@ public class StatHandler
         m_reSpecCost *= 10;
     }
 
-    public void UpdateStat(eStatIndices a_index)
+    public void UpdateStat(eCharacterStatIndices a_index)
     {
-        Stat stat = m_stats[(int)a_index];
+        CharacterStat stat = m_stats[(int)a_index];
         stat.effectiveValue = ((stat.value-1f) * stat.scale);
         stat.finalValue = stat.effectiveValue + stat.postAddedValue;
         m_stats[(int)a_index] = stat;
     }
 
-    public void SetStatValue(eStatIndices a_index, float a_value)
+    public void SetStatValue(eCharacterStatIndices a_index, float a_value)
     {
         m_stats[(int)a_index].value = a_value;
         UpdateStat(a_index);
 
         switch (a_index)
         {
-            case eStatIndices.strength:
+            case eCharacterStatIndices.strength:
                 break;
-            case eStatIndices.dexterity:
+            case eCharacterStatIndices.dexterity:
                 break;
-            case eStatIndices.constitution:
+            case eCharacterStatIndices.constitution:
                 break;
-            case eStatIndices.count:
+            case eCharacterStatIndices.count:
                 break;
             default:
                 break;
         }
     }
 
-    public void ChangeStatValue(eStatIndices a_index, float a_change)
+    public void ChangeStatValue(eCharacterStatIndices a_index, float a_change)
     {
         SetStatValue(a_index, m_stats[(int)a_index].value + a_change);
     }
 
-    public void SetStatScale(eStatIndices a_index, float a_value)
+    public void SetStatScale(eCharacterStatIndices a_index, float a_value)
     {
         m_stats[(int)a_index].scale = a_value;
         UpdateStat(a_index);
     }
 
-    public void SetStatPostAddedValue(eStatIndices a_index, float a_value)
+    public void SetStatPostAddedValue(eCharacterStatIndices a_index, float a_value)
     {
         m_stats[(int)a_index].postAddedValue = a_value;
         UpdateStat(a_index);
@@ -108,26 +108,26 @@ public class StatHandler
 
     public void SetDefaultStats()
     {
-        for (int i = 0; i < (int)eStatIndices.count; i++)
+        for (int i = 0; i < (int)eCharacterStatIndices.count; i++)
         {
-            SetStatScale((eStatIndices)i,1f);
-            SetStatValue((eStatIndices)i, 1f);
+            SetStatScale((eCharacterStatIndices)i,1f);
+            SetStatValue((eCharacterStatIndices)i, 1f);
             m_stats[i].originalCost = 10f;
             m_stats[i].cost = m_stats[i].originalCost;
             m_stats[i].costIncreaseRate = 1.8f;
             m_stats[i].postAddedValue = 0f;
         }
 
-        SetStatPostAddedValue(eStatIndices.dexterity, 259f);
-        SetStatScale(eStatIndices.dexterity, 4f);
+        SetStatPostAddedValue(eCharacterStatIndices.dexterity, 259f);
+        SetStatScale(eCharacterStatIndices.dexterity, 4f);
 
-        m_stats[(int)eStatIndices.constitution].scale = 10f;
-        SetStatPostAddedValue(eStatIndices.constitution, 100f);
-        SetStatScale(eStatIndices.strength, 5f);
-        SetStatPostAddedValue(eStatIndices.strength, 50f);
+        m_stats[(int)eCharacterStatIndices.constitution].scale = 10f;
+        SetStatPostAddedValue(eCharacterStatIndices.constitution, 100f);
+        SetStatScale(eCharacterStatIndices.strength, 5f);
+        SetStatPostAddedValue(eCharacterStatIndices.strength, 50f);
     }
 
-    public void AttemptToIncreaseStat(eStatIndices a_index)
+    public void AttemptToIncreaseStat(eCharacterStatIndices a_index)
     {
         if (m_allocationPoints >= 1)
         {

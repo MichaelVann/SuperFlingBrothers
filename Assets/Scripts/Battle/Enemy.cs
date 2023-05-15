@@ -79,7 +79,7 @@ public class Enemy : Damageable
         {
             case eEnemyType.Idler:
                 m_originalColor = Color.yellow;
-                m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue /= 2f;
+                m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue /= 2f;
                 transform.localScale *= 1f;
                 m_rigidBody.mass *= 0.45f;
                 m_rigidBody.drag = 0.1f;
@@ -312,7 +312,7 @@ public class Enemy : Damageable
 
                 Vector3 aimDisturbance = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, m_flingAccuracy) - m_flingAccuracy / 2f, Vector3.forward) * accurateFlingVector;
 
-                Fling(aimDisturbance, m_statHandler.m_stats[(int)eStatIndices.dexterity].finalValue);
+                Fling(aimDisturbance, m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].finalValue);
             }
         }
        

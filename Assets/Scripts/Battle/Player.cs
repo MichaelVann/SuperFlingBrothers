@@ -49,7 +49,7 @@ public class Player : Damageable
     public override void Start()
     {
         base.Start();
-        m_healthBarRef.SetMaxProgressValue(m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue);
+        m_healthBarRef.SetMaxProgressValue(m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue);
         m_battleManagerRef = FindObjectOfType<BattleManager>();
         m_statHandler = m_gameHandlerRef.m_playerStatHandler;
         UpdateLocalStatsFromStatHandler();
@@ -133,7 +133,7 @@ public class Player : Damageable
             {
                 if (worldMousePoint.y < m_upperLowerFlingPositionBounds && worldMousePoint.y > -m_upperLowerFlingPositionBounds)
                 {
-                    Fling(deltaMousePos, m_statHandler.m_stats[(int)eStatIndices.dexterity].finalValue);
+                    Fling(deltaMousePos, m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].finalValue);
                 }
                 else
                 {
@@ -158,7 +158,7 @@ public class Player : Damageable
         EscapeZone escapeZone = a_collision.gameObject.GetComponent<EscapeZone>();
         if (enemy)//If collided with an enemy
         {
-            if (m_health <= m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue / 3f)//
+            if (m_health <= m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue / 3f)//
             {
                 if (!m_battleManagerRef.m_endingGame)
                 {

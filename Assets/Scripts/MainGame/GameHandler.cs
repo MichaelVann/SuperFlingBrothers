@@ -16,7 +16,7 @@ public class GameHandler : MonoBehaviour
 
     static internal float GAME_enemyXPRewardScale = 40f;
     static internal float BATTLE_CoinValue = 1f;
-    static internal float BATTLE_ShadowAngle = 225f;
+    static internal float BATTLE_ShadowAngle = 135f;
     //Damageables
     static internal float DAMAGEABLE_defaultMass = 1f;
     static internal float DAMAGEABLE_bumpFlingStrengthMult = 0.25f;
@@ -53,7 +53,7 @@ public class GameHandler : MonoBehaviour
     public eGameMode m_currentGameMode;
 
     private float m_cash = 0;
-    internal StatHandler m_playerStatHandler;
+    internal CharacterStatHandler m_playerStatHandler;
 
     //Body
     public HumanBody m_humanBody;
@@ -83,6 +83,8 @@ public class GameHandler : MonoBehaviour
         extraTurn,
         Count
     }
+
+    public Equipable m_playerEquipable;
     //public UpgradeItem m_enemyVectorsUpgrade;
     //public UpgradeItem m_playerVectorUpgrade;
     //public UpgradeItem m_shieldUpgrade;
@@ -106,7 +108,7 @@ public class GameHandler : MonoBehaviour
     struct SaveData
     {
         public float cash;
-        public StatHandler statHandler;
+        public CharacterStatHandler statHandler;
         public List<Stock> stockList;
         public UpgradeItem[] upgrades;
         public string bodyFirstName;
@@ -133,9 +135,11 @@ public class GameHandler : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
         //Stats
-        m_playerStatHandler = new StatHandler();
+        m_playerStatHandler = new CharacterStatHandler();
         m_playerStatHandler.Init();
         //m_playerStatHandler.m_stats[(int)eStatIndices.strength].effectiveValue = 1f;
+
+        m_playerEquipable = new Equipable();
 
         //Stocks
         m_stockHandler = new StockHandler(this);
@@ -284,7 +288,7 @@ public class GameHandler : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.O))
         {
-            m_playerStatHandler = new StatHandler();
+            m_playerStatHandler = new CharacterStatHandler();
             m_playerStatHandler.Init();
         }
         m_stockHandler.Update();

@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class UpgradesScreenHandler : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
-    public Text m_cashCounterTextRef;
 
     public Sprite[] m_upgradeSprites;
 
@@ -31,7 +30,6 @@ public class UpgradesScreenHandler : MonoBehaviour
 
     public void Refresh()
     {
-        m_cashCounterTextRef.text = "" + VLib.TruncateFloatsDecimalPlaces(m_gameHandlerRef.GetCurrentCash(),2);
         for (int i = 0; i < m_upgradeItemPanels.Count; i++)
         {
             m_upgradeItemPanels[i].Refresh();

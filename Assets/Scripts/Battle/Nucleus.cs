@@ -8,7 +8,7 @@ public class Nucleus : Damageable
     public override void Awake()
     {
         base.Awake();
-        m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue = 80f;
+        m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue = 80f;
         UpdateLocalStatsFromStatHandler();
         m_damageTextColor = Color.red;
     }
@@ -19,7 +19,7 @@ public class Nucleus : Damageable
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         int difficulty = m_gameHandlerRef.m_battleDifficulty < 10 ? 10 : m_gameHandlerRef.m_battleDifficulty;
         float exponent = 0.3f;
-        m_statHandler.m_stats[(int)eStatIndices.constitution].finalValue *= Mathf.Pow(difficulty, exponent) /Mathf.Pow(10f, exponent);
+        m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue *= Mathf.Pow(difficulty, exponent) /Mathf.Pow(10f, exponent);
         UpdateLocalStatsFromStatHandler();
 
     }
@@ -36,7 +36,7 @@ public class Nucleus : Damageable
         {
             if (oppPlayer.m_lastMomentumMagnitude >= m_lastMomentumMagnitude)
             {
-                Heal(oppPlayer.m_statHandler.m_stats[(int)eStatIndices.strength].finalValue * oppPlayer.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
+                Heal(oppPlayer.m_statHandler.m_stats[(int)eCharacterStatIndices.strength].finalValue * oppPlayer.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
             }
         }
         else

@@ -207,7 +207,7 @@ public class BattleManager : MonoBehaviour
             m_turnsRemaining = 0;
         }
 
-        m_healthBarRef.Init(m_gameHandlerRef.m_playerStatHandler.m_stats[(int)eStatIndices.constitution].finalValue, m_gameHandlerRef.m_playerStatHandler.m_stats[(int)eStatIndices.constitution].finalValue);
+        m_healthBarRef.Init(m_gameHandlerRef.m_playerStatHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue, m_gameHandlerRef.m_playerStatHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue);
 
         //Reset Trackers
         m_gameHandlerRef.m_playerLevelAtStartOfBattle = m_gameHandlerRef.m_playerStatHandler.m_level;

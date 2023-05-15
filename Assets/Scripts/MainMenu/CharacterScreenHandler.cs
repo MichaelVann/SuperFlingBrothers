@@ -8,7 +8,6 @@ public class CharacterScreenHandler : MonoBehaviour
     GameHandler m_gameHandlerRef;
     public Counter m_strengthCounterRef;
     public Text m_availablePointsValueTextRef;
-    public Text m_cashCounterTextRef;
     public Button m_reSpecButtonRef;
     public Text m_reSpecButtonTextRef;
 
@@ -21,7 +20,6 @@ public class CharacterScreenHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        m_cashCounterTextRef.text = "" + VLib.TruncateFloatsDecimalPlaces(m_gameHandlerRef.GetCurrentCash(), 2);
         m_availablePointsValueTextRef.text = "" + m_gameHandlerRef.m_playerStatHandler.m_allocationPoints;
         m_availablePointsValueTextRef.color = m_gameHandlerRef.m_playerStatHandler.m_allocationPoints > 0 ? Color.yellow : Color.red;
         m_reSpecButtonRef.interactable = m_gameHandlerRef.m_playerStatHandler.m_reSpecCost <= m_gameHandlerRef.GetCurrentCash();
