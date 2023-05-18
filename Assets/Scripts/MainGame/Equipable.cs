@@ -7,8 +7,12 @@ using UnityEngine;
 
 public class Equipable
 {
-    int m_level = 0;
-    int m_rarityTier = 0;
+    public bool m_equipped = false;
+    //public int m_equippedSlot = -1;
+    public int m_level = 0;
+    public int m_rarityTier = 0;
+    public string m_name;
+
 
     public enum eEquipableStatIndex
     {

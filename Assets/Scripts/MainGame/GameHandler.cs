@@ -84,7 +84,8 @@ public class GameHandler : MonoBehaviour
         Count
     }
 
-    public Equipable m_playerEquipable;
+    public Equipable[] m_equipablesEquipped;
+    public Equipable[] m_equipablesInventory;
     //public UpgradeItem m_enemyVectorsUpgrade;
     //public UpgradeItem m_playerVectorUpgrade;
     //public UpgradeItem m_shieldUpgrade;
@@ -139,13 +140,14 @@ public class GameHandler : MonoBehaviour
         m_playerStatHandler.Init();
         //m_playerStatHandler.m_stats[(int)eStatIndices.strength].effectiveValue = 1f;
 
-        m_playerEquipable = new Equipable();
+        m_equipablesEquipped = new Equipable[4];
 
         //Stocks
         m_stockHandler = new StockHandler(this);
 
         SetupHumanBody();
         SetupUpgrades();
+        SetupEquipables();
         SetupShield();
         SetUpEnemyTypes();
         if (m_autoLoadDataOnLaunch)
@@ -220,6 +222,15 @@ public class GameHandler : MonoBehaviour
         m_upgrades[(int)UpgradeId.extraTurn].SetDescription("Gives an extra turn that triggers on collision with the enemy.");
         m_upgrades[(int)UpgradeId.extraTurn].SetCost(700);
         m_upgrades[(int)UpgradeId.extraTurn].SetHasLevels(true);
+    }
+
+    void SetupEquipables()
+    {
+        m_equipablesInventory = new Equipable[64];
+        m_equipablesInventory[0] = new Equipable();
+        Equipable test = m_equipablesInventory[0];
+        test.m_level = 5;
+        //m_playerEquipables.Initialize();
     }
 
     internal bool AttemptToBuyUpgrade(int a_upgradeID)

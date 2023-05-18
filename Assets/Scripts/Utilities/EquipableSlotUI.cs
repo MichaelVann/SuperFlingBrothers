@@ -20,18 +20,21 @@ public class EquipableSlotUI : MonoBehaviour
         }
     }
 
-    void UpdateStats()
+    public void Refresh()
     {
-        for (int i = 0; i < m_equipableRef.m_stats.Count; i++)
+        if (m_equipableRef != null)
         {
-            m_statTexts[i].gameObject.SetActive(true);
-            m_statTexts[i].text = m_equipableRef.m_stats[i].statType.ToString() + ": " + m_equipableRef.m_stats[i].value;
+            for (int i = 0; i < m_equipableRef.m_stats.Count; i++)
+            {
+                m_statTexts[i].gameObject.SetActive(true);
+                m_statTexts[i].text = m_equipableRef.m_stats[i].statType.ToString() + ": " + m_equipableRef.m_stats[i].value;
+            }
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        UpdateStats();
+        Refresh();
     }
 }
