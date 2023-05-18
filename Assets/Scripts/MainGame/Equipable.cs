@@ -17,7 +17,7 @@ public class Equipable
     public enum eEquipableStatIndex
     {
         Damage,
-        AttackSpeed,
+        AttkSpd,
         Shield,
         Health,
         count

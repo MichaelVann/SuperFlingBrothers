@@ -30,6 +30,13 @@ public class EquipableSlotUI : MonoBehaviour
                 m_statTexts[i].text = m_equipableRef.m_stats[i].statType.ToString() + ": " + m_equipableRef.m_stats[i].value;
             }
         }
+        else
+        {
+            for (int i = 0; i < m_statTexts.Length; i++)
+            {
+                m_statTexts[i].gameObject.SetActive(false);
+            }
+        }
     }
 
     // Update is called once per frame

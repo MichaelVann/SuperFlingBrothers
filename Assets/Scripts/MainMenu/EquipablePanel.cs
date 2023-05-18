@@ -65,19 +65,13 @@ public class EquipablePanel : MonoBehaviour
 
     void SetEquipButtonStatus()
     {
-        if (m_equipableRef.m_equipped)
-        {
-            m_equipButtonRef.gameObject.GetComponent<Image>().color = Color.yellow;
-            m_equipButtonTextRef.text = "UnEquip";
-        }
+        m_equipButtonRef.gameObject.GetComponent<Image>().color = m_equipableRef.m_equipped ? Color.yellow : Color.white;
+        m_equipButtonTextRef.text = m_equipableRef.m_equipped ? "UnEquip" : "Equip";
     }
 
     public void AttemptToEquip()
     {
-        if (m_equipmentScreenHandlerRef.AttemptToEquip(m_equipableRef))
-        {
-            Refresh();
-        }
+        m_equipmentScreenHandlerRef.SetEquipStatus(m_equipableRef, !m_equipableRef.m_equipped);
         Refresh();
     }
 }

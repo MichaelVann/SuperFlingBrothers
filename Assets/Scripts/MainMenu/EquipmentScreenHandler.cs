@@ -64,14 +64,12 @@ public class EquipmentScreenHandler : MonoBehaviour
         }
     }
 
-    public bool AttemptToEquip(Equipable a_equipable)
+    public void SetEquipStatus(Equipable a_equipable, bool a_equipped)
     {
-        bool returnVal = false;
-        m_gameHandlerRef.m_equipablesEquipped[m_openedEquipableSlotId] = a_equipable;
-        a_equipable.m_equipped = true;
+        m_gameHandlerRef.m_equipablesEquipped[m_openedEquipableSlotId] = a_equipped ? a_equipable : null;
+        a_equipable.m_equipped = a_equipped;
         CloseInventoryPanel();
         RefreshEquipableSlots();
-        return returnVal;
     }
 
     public void OpenEquipableSlot(int a_id)
