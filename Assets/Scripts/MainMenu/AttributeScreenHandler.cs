@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class CharacterScreenHandler : MonoBehaviour
+public class AttributeScreenHandler : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
     public Counter m_strengthCounterRef;

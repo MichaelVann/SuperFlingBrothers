@@ -916,7 +916,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &94047241
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1670,12 +1670,12 @@ GameObject:
   - component: {fileID: 192995294}
   - component: {fileID: 192995296}
   m_Layer: 5
-  m_Name: CharacterScreen
+  m_Name: Attribute Screen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &192995293
 RectTransform:
   m_ObjectHideFlags: 0
