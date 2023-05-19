@@ -215,6 +215,7 @@ MonoBehaviour:
   - {fileID: 9123383591555845550}
   - {fileID: 9123383591672978174}
   - {fileID: 9123383590831047745}
+  m_imageRef: {fileID: 5785698156680960698}
 --- !u!1 &9123383590831047759
 GameObject:
   m_ObjectHideFlags: 0
