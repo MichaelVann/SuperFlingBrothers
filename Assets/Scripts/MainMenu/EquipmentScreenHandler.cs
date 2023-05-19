@@ -57,7 +57,7 @@ public class EquipmentScreenHandler : MonoBehaviour
 
     public void RefreshEquipableSlots()
     {
-        for (int i = 0; i < m_equipableItemPanels.Count; i++)
+        for (int i = 0; i < m_equipableSlotUIRefs.Length; i++)
         {
             m_equipableSlotUIRefs[i].SetEquipableRef(m_gameHandlerRef.m_equipablesEquipped[i]);
             m_equipableSlotUIRefs[i].Refresh();
@@ -66,7 +66,9 @@ public class EquipmentScreenHandler : MonoBehaviour
 
     public void SetEquipStatus(Equipable a_equipable, bool a_equipped)
     {
-        m_gameHandlerRef.m_equipablesEquipped[m_openedEquipableSlotId] = a_equipped ? a_equipable : null;
+        Equipable slotEquipable = a_equipped ? a_equipable : null;
+        m_gameHandlerRef.m_playerStatHandler.EquipEquipable(slotEquipable, m_openedEquipableSlotId);
+        m_gameHandlerRef.m_equipablesEquipped[m_openedEquipableSlotId] = slotEquipable;
         a_equipable.m_equipped = a_equipped;
         CloseInventoryPanel();
         RefreshEquipableSlots();

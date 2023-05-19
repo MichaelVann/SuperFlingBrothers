@@ -226,8 +226,11 @@ public class GameHandler : MonoBehaviour
 
     void SetupEquipables()
     {
-        m_equipablesInventory = new Equipable[64];
-        m_equipablesInventory[0] = new Equipable();
+        m_equipablesInventory = new Equipable[128];
+        for (int i = 0; i < 64; i++)
+        {
+            m_equipablesInventory[i] = new Equipable();
+        }
         Equipable test = m_equipablesInventory[0];
         test.m_level = 5;
         //m_playerEquipables.Initialize();

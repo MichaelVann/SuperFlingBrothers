@@ -8,6 +8,8 @@ public enum eCharacterStatIndices
     strength,
     dexterity,
     constitution,
+    protection,
+    //ward,
     count
 }
 
@@ -18,8 +20,9 @@ public struct CharacterStat
     public float value;
     public float scale;
     public float postAddedValue;
+    public float equipmentAddedValue;
     public float effectiveValue; // = ((stat.value-1f) * stat.scale);
-    public float finalValue; // = effectiveValue + stat.postAddedValue;
+    public float finalValue; // = effectiveValue + stat.postAddedValue + equipmentAddedValue; 
     public float originalCost;
     public float cost;
     public float costIncreaseRate;
@@ -38,11 +41,45 @@ public class CharacterStatHandler
 
     public CharacterStat[] m_stats;
 
+    Equipable[] m_equippedEquipables;
+
     const float m_baseHealthScale = 4f;
 
     public float GetStatFinalValue(int a_index)
     {
         return m_stats[a_index].finalValue;
+    }
+
+    public string GetStatName(eCharacterStatIndices a_index, bool a_shortName = true)
+    {
+        string m_returnString = "";
+
+        switch (a_index)
+        {
+            case eCharacterStatIndices.strength:
+                m_returnString = !a_shortName ? "Strength" : "STR";
+                break;
+            case eCharacterStatIndices.dexterity:
+                m_returnString = !a_shortName ? "Dexterity" : "DEX";
+                break;
+            case eCharacterStatIndices.constitution:
+                m_returnString = !a_shortName ? "Constitution" : "CON";
+                break;
+            case eCharacterStatIndices.protection:
+                m_returnString = !a_shortName ? "Protection" : "PROT";
+                break;
+            case eCharacterStatIndices.count:
+                break;
+            default:
+                break;
+        }
+
+        return m_returnString;
+    }
+
+    public string GetStatName(int a_index)
+    {
+        return GetStatName((eCharacterStatIndices)a_index);
     }
 
     public void ChangeScore(int a_change) { m_DNA += a_change; }
@@ -51,7 +88,14 @@ public class CharacterStatHandler
     public void Init()
     {
         m_stats = new CharacterStat[(int)eCharacterStatIndices.count];
+        m_equippedEquipables = new Equipable[4];
         SetDefaultStats();
+    }
+
+    public void EquipEquipable(Equipable a_equipable, int a_slotId)
+    {
+        m_equippedEquipables[a_slotId] = a_equipable;
+        UpdateStats();
     }
 
     public void ReSpec()
@@ -63,10 +107,41 @@ public class CharacterStatHandler
 
     public void UpdateStat(eCharacterStatIndices a_index)
     {
-        CharacterStat stat = m_stats[(int)a_index];
-        stat.effectiveValue = ((stat.value-1f) * stat.scale);
+        UpdateStat((int)a_index);
+    }
+
+    public void UpdateStat(int a_index)
+    {
+        CharacterStat stat = m_stats[a_index];
+        stat.effectiveValue = ((stat.value - 1f) * stat.scale);
         stat.finalValue = stat.effectiveValue + stat.postAddedValue;
-        m_stats[(int)a_index] = stat;
+        stat.finalValue += stat.equipmentAddedValue;
+        m_stats[a_index] = stat;
+    }
+
+    public void UpdateStats()
+    {
+        for (int i = 0; i < m_stats.Length; i++)
+        {
+            m_stats[i].equipmentAddedValue = 0f;
+        }
+
+        for (int i = 0; i < m_equippedEquipables.Length; i++)
+        {
+            if (m_equippedEquipables[i] == null)
+            {
+                continue;
+            }
+            for (int j = 0; j < m_equippedEquipables[i].m_stats.Count; j++)
+            {
+                m_stats[(int)m_equippedEquipables[i].m_stats[j].statType].equipmentAddedValue += m_equippedEquipables[i].m_stats[j].value;
+            }
+        }
+
+        for (int i = 0; i < m_stats.Length; i++)
+        {
+            UpdateStat(i);
+        }
     }
 
     public void SetStatValue(eCharacterStatIndices a_index, float a_value)
@@ -116,6 +191,8 @@ public class CharacterStatHandler
             m_stats[i].cost = m_stats[i].originalCost;
             m_stats[i].costIncreaseRate = 1.8f;
             m_stats[i].postAddedValue = 0f;
+
+            m_stats[i].name = GetStatName(i);
         }
 
         SetStatPostAddedValue(eCharacterStatIndices.dexterity, 259f);

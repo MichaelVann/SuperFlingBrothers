@@ -12,8 +12,8 @@ public class EquipablePanel : MonoBehaviour
     //public int m_upgradeID;
     //
     public Text m_nameTextRef;
+    public Text m_rarityTextRef;
     public Text[] m_statTextRefs;
-
     public Text m_abilityTextRef;
 
     //public Text m_costTextRef;
@@ -40,6 +40,9 @@ public class EquipablePanel : MonoBehaviour
     {
         //m_imageRef.sprite = m_upgradeScreenHandler.m_upgradeSprites[m_upgradeID];
         m_nameTextRef.text = m_equipableRef.m_name;
+        m_rarityTextRef.text = m_equipableRef.m_rarityTier.name;
+        m_rarityTextRef.color = m_equipableRef.m_rarityTier.color;
+        m_nameTextRef.color = m_equipableRef.m_rarityTier.color;
 
         for (int i = 0; i < m_statTextRefs.Length; i++)
         {

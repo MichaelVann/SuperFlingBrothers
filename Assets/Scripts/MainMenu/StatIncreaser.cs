@@ -50,6 +50,9 @@ public class StatIncreaser : MonoBehaviour
             case eCharacterStatIndices.constitution:
                 suffixString = "Health";
                 break;
+            case eCharacterStatIndices.protection:
+                suffixString = "Armour";
+                break;
             case eCharacterStatIndices.count:
                 break;
             default:

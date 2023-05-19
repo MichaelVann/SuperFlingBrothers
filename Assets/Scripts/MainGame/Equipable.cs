@@ -7,45 +7,103 @@ using UnityEngine;
 
 public class Equipable
 {
+    public enum eRarityTier
+    {
+        Normal,
+        Uncommon,
+        Magic,
+        Exquisite,
+        Rare,
+        Unique,
+        Legendary,
+        Count
+    }
+
+    public struct RarityTier
+    {
+        public eRarityTier level;
+        public Color color;
+        public string name;
+    }
+
     public bool m_equipped = false;
     //public int m_equippedSlot = -1;
     public int m_level = 0;
-    public int m_rarityTier = 0;
+    //public int m_rarityTier = 0;
+    public RarityTier m_rarityTier;
     public string m_name;
 
-
-    public enum eEquipableStatIndex
-    {
-        Damage,
-        AttkSpd,
-        Shield,
-        Health,
-        count
-    }
+    //public enum eEquipableStatIndex
+    //{
+    //    Damage,
+    //    AttkSpd,
+    //    Shield,
+    //    Health,
+    //    count
+    //}
 
     public struct EquipableStat
     {
-        public eEquipableStatIndex statType;
+        public eCharacterStatIndices statType;
         public float value;
     }
 
     public List<EquipableStat> m_stats;
 
+    public void SetRarityTier(eRarityTier a_rarityTier)
+    {
+        m_rarityTier.level = a_rarityTier;
+        UpdateRarityTier();
+    }
+
+    public void UpdateRarityTier()
+    {
+        switch (m_rarityTier.level)
+        {
+            case eRarityTier.Normal:
+                m_rarityTier.color = Color.white;
+                break;
+            case eRarityTier.Uncommon:
+                m_rarityTier.color = Color.green;
+                break;
+            case eRarityTier.Magic:
+                m_rarityTier.color = Color.blue;
+                break;
+            case eRarityTier.Exquisite:
+                m_rarityTier.color = Color.magenta;
+                break;
+            case eRarityTier.Rare:
+                m_rarityTier.color = Color.yellow;
+                break;
+            case eRarityTier.Unique:
+                m_rarityTier.color = new Color(1, 94f / 256f, 5f / 256f);//Orange;
+                break;
+            case eRarityTier.Legendary:
+                m_rarityTier.color = Color.red;
+                break;
+            default:
+                break;
+        }
+        m_rarityTier.name = m_rarityTier.level.ToString();
+    }
+
     private void Roll(int a_level)
     {
+        m_name = VLib.GenerateRandomizedName(4,8);
         int m_level = a_level;
-        while (UnityEngine.Random.Range(0f,1f) <= 0.25f)
+        while (UnityEngine.Random.Range(0f,1f) <= 0.25f && m_rarityTier.level < eRarityTier.Count-1)
         {
-            m_rarityTier++;
+            m_rarityTier.level++;
         }
+        UpdateRarityTier();
 
         int points = 10 + (int)((float)(a_level)/10f);
-        points = (int)(points*Mathf.Pow(1.15f, m_rarityTier));
+        points = (int)(points*Mathf.Pow(1.25f, (float)m_rarityTier.level));
         int statsChosenCount = 2;
-        for (int i = 0; i < (int)eEquipableStatIndex.count; i++)
+        for (int i = 0; i < (int)eCharacterStatIndices.count; i++)
         {
             EquipableStat newStat = new EquipableStat();
-            newStat.statType = (eEquipableStatIndex)i;
+            newStat.statType = (eCharacterStatIndices)i;
             m_stats.Add(newStat);
         }
 
@@ -67,6 +125,7 @@ public class Equipable
     public Equipable()
     {
         m_stats = new List<EquipableStat>();
+        m_rarityTier = new RarityTier();
         Roll(1);
     }
 }

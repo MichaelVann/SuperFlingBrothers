@@ -7,8 +7,8 @@ using UnityEngine;
 
 public static class VLib
 {
-    static string[] m_consonants = { "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "z", "ch", "kh", "gh" };
-    static string[] m_vowels = { "a", "e", "i", "o", "u", "oo", "ou", "ee" };
+    static string[] m_consonants = { "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "r", "s", "t", "v", "w", "z", };// "x", "q", "ch", "kh", "gh" };
+    static string[] m_vowels = { "a", "e", "i", "o", "u" };//, "oo", "ou", "ee" };
 
     public static float TruncateFloatsDecimalPlaces(float a_float, int a_decimalsToKeep)
     {
@@ -71,8 +71,6 @@ public static class VLib
         return retVal;
     }
 
-
-
     public static Vector2 SigmoidLerp(Vector2 a_start, Vector3 a_finish, float a_t, int a_sensitivity = 3)
     {
         Vector2 retVec = new Vector2();
@@ -95,14 +93,13 @@ public static class VLib
         float x = Mathf.Sin(a_angle * Mathf.PI / 180f);
         float y = Mathf.Cos(a_angle * Mathf.PI / 180f);
         return new Vector2(x, y);
-
     }
+
     public static float Vector2ToEulerAngle(Vector2 a_vector2)
     {
         float angle = Vector2.SignedAngle(new Vector2(0f,1f), a_vector2);
         return angle;
     }
-
 
     public static int SafeMod(int a_value, int a_mod)
     {
@@ -129,15 +126,14 @@ public static class VLib
         return returnColor;
     }
 
-    public static string GenerateRandomizedName()
+    public static string GenerateRandomizedName(int a_minimumLength = 2, int a_maximumLength = 10)
     {
         string name = "";
-        int length = vRandom(2, 10);
+        int length = vRandom(a_minimumLength, a_maximumLength);
         int startWithVowel = vRandom(0, 2);
 
         for (int i = 0; i < length; i++)
         {
-
             if (i % 2 == startWithVowel)
             {
                 name += m_consonants[vRandom(0, m_consonants.Length)];
@@ -160,6 +156,7 @@ public static class VLib
         return name;
     }
 
+    //Returns a string[2]
     public static string[] GenerateRandomPersonsName()
     {
         string[] generatedNames = new string[2];
