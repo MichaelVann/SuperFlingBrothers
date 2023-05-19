@@ -84,8 +84,7 @@ public class GameHandler : MonoBehaviour
         Count
     }
 
-    //public Equipable[] m_equipablesEquipped;
-    public Equipable[] m_equipablesInventory;
+    public Equipment[] m_equipmentInventory;
     //public UpgradeItem m_enemyVectorsUpgrade;
     //public UpgradeItem m_playerVectorUpgrade;
     //public UpgradeItem m_shieldUpgrade;
@@ -140,14 +139,12 @@ public class GameHandler : MonoBehaviour
         m_playerStatHandler.Init();
         //m_playerStatHandler.m_stats[(int)eStatIndices.strength].effectiveValue = 1f;
 
-        //m_equipablesEquipped = new Equipable[4];
-
         //Stocks
         m_stockHandler = new StockHandler(this);
 
         SetupHumanBody();
         SetupUpgrades();
-        SetupEquipables();
+        SetupEquipment();
         SetupShield();
         SetUpEnemyTypes();
         if (m_autoLoadDataOnLaunch)
@@ -224,14 +221,14 @@ public class GameHandler : MonoBehaviour
         m_upgrades[(int)UpgradeId.extraTurn].SetHasLevels(true);
     }
 
-    void SetupEquipables()
+    void SetupEquipment()
     {
-        m_equipablesInventory = new Equipable[128];
+        m_equipmentInventory = new Equipment[128];
         for (int i = 0; i < 2; i++)
         {
-            m_equipablesInventory[i] = new Equipable();
+            m_equipmentInventory[i] = new Equipment();
         }
-        Equipable test = m_equipablesInventory[0];
+        Equipment test = m_equipmentInventory[0];
         test.m_level = 5;
         //m_playerEquipables.Initialize();
     }

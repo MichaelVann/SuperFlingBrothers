@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class Equipable
+public class Equipment
 {
     public enum eRarityTier
     {
@@ -42,13 +42,13 @@ public class Equipable
     //    count
     //}
 
-    public struct EquipableStat
+    public struct EquipmentStat
     {
         public eCharacterStatIndices statType;
         public float value;
     }
 
-    public List<EquipableStat> m_stats;
+    public List<EquipmentStat> m_stats;
 
     public void SetEquipStatus(bool a_equipped, int a_equippedSlot)
     {
@@ -108,7 +108,7 @@ public class Equipable
         int statsChosenCount = 2;
         for (int i = 0; i < (int)eCharacterStatIndices.count; i++)
         {
-            EquipableStat newStat = new EquipableStat();
+            EquipmentStat newStat = new EquipmentStat();
             newStat.statType = (eCharacterStatIndices)i;
             m_stats.Add(newStat);
         }
@@ -121,16 +121,16 @@ public class Equipable
         while (points > 0)
         {
             int index = UnityEngine.Random.Range(0, m_stats.Count);
-            EquipableStat statToEdit = m_stats[index];
+            EquipmentStat statToEdit = m_stats[index];
             statToEdit.value += 1;
             m_stats[index] = statToEdit;
             points--;
         }
     }
 
-    public Equipable()
+    public Equipment()
     {
-        m_stats = new List<EquipableStat>();
+        m_stats = new List<EquipmentStat>();
         m_rarityTier = new RarityTier();
         Roll(1);
     }

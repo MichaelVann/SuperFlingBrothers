@@ -6,11 +6,11 @@ using UnityEngine.UI;
 public class EquipmentPortrait : MonoBehaviour
 {
     Image m_imageRef;
-    Equipable m_equipableRef;
+    Equipment m_equipmentRef;
 
-    public void SetEquipableRef(Equipable a_equipable)
+    public void SetEquipmentRef(Equipment a_equipment)
     {
-        m_equipableRef = a_equipable;
+        m_equipmentRef = a_equipment;
         Refresh();
     }
     // Start is called before the first frame update
@@ -23,7 +23,7 @@ public class EquipmentPortrait : MonoBehaviour
     {
         if (m_imageRef)
         {
-            m_imageRef.color = m_equipableRef.m_rarityTier.color;
+            m_imageRef.color = m_equipmentRef.m_rarityTier.color;
         }
     }
 

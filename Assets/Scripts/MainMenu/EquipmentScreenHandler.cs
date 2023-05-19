@@ -7,31 +7,31 @@ using UnityEngine.UI;
 public class EquipmentScreenHandler : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
-    public EquipableSlotUI[] m_equipableSlotUIRefs;
-    public int m_openedEquipableSlotId = -1;
+    public EquipmentSlotUI[] m_equipmentSlotUIRefs;
+    public int m_openedEquipmentSlotId = -1;
 
     public GameObject m_inventoryPanelRef;
 
     public GameObject m_inventoryContentRef;
-    public GameObject m_equipablePanelTemplate;
+    public GameObject m_equipmentPanelTemplate;
 
-    List<EquipablePanel> m_equipableItemPanels;
+    List<EquipmentPanel> m_equipmentItemPanels;
 
 
     // Start is called before the first frame update
     void Start()
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_equipableItemPanels = new List<EquipablePanel>();
-        RefreshEquipableSlots();
-        for (int i = 0; i < m_gameHandlerRef.m_equipablesInventory.Length; i++)
+        m_equipmentItemPanels = new List<EquipmentPanel>();
+        RefreshEquipmentSlots();
+        for (int i = 0; i < m_gameHandlerRef.m_equipmentInventory.Length; i++)
         {
-            if (m_gameHandlerRef.m_equipablesInventory[i] != null)
+            if (m_gameHandlerRef.m_equipmentInventory[i] != null)
             {
-                EquipablePanel equipablePanel = Instantiate<GameObject>(m_equipablePanelTemplate, m_inventoryContentRef.transform).GetComponent<EquipablePanel>();
-                equipablePanel.Init(m_gameHandlerRef.m_equipablesInventory[i]);
+                EquipmentPanel equipmentPanel = Instantiate<GameObject>(m_equipmentPanelTemplate, m_inventoryContentRef.transform).GetComponent<EquipmentPanel>();
+                equipmentPanel.Init(m_gameHandlerRef.m_equipmentInventory[i]);
                 //equipablePanel.Refresh();
-                m_equipableItemPanels.Add(equipablePanel);
+                m_equipmentItemPanels.Add(equipmentPanel);
             }
         }
     }
@@ -45,33 +45,33 @@ public class EquipmentScreenHandler : MonoBehaviour
 
     public void RefreshInventory()
     {
-        for (int i = 0; i < m_equipableItemPanels.Count; i++)
+        for (int i = 0; i < m_equipmentItemPanels.Count; i++)
         {
-            m_equipableItemPanels[i].Refresh();
+            m_equipmentItemPanels[i].Refresh();
         }
     }
 
 
-    public void RefreshEquipableSlots()
+    public void RefreshEquipmentSlots()
     {
-        for (int i = 0; i < m_equipableSlotUIRefs.Length; i++)
+        for (int i = 0; i < m_equipmentSlotUIRefs.Length; i++)
         {
-            m_equipableSlotUIRefs[i].SetEquipableRef(m_gameHandlerRef.m_playerStatHandler.m_equippedEquipables[i]);
-            m_equipableSlotUIRefs[i].Refresh();
+            m_equipmentSlotUIRefs[i].SetEquipmentRef(m_gameHandlerRef.m_playerStatHandler.m_equippedEquiment[i]);
+            m_equipmentSlotUIRefs[i].Refresh();
         }
     }
 
-    public void SetEquipStatus(Equipable a_equipable)
+    public void SetEquipStatus(Equipment a_equipment)
     {
-        //Equipable slotEquipable = a_equipped ? a_equipable : null;
-        m_gameHandlerRef.m_playerStatHandler.EquipEquipable(a_equipable, m_openedEquipableSlotId);
+        //Equipable slotEquipable = a_equipped ? a_equipment : null;
+        m_gameHandlerRef.m_playerStatHandler.EquipEquipment(a_equipment, m_openedEquipmentSlotId);
         //m_gameHandlerRef.m_equipablesEquipped[m_openedEquipableSlotId] = slotEquipable;
-        //a_equipable.m_equipped = a_equipped;
+        //a_equipment.m_equipped = a_equipped;
         CloseInventoryPanel();
-        RefreshEquipableSlots();
+        RefreshEquipmentSlots();
     }
 
-    public void OpenEquipableSlot(int a_id)
+    public void OpenEquipmentSlot(int a_id)
     {
         SetInventoryPanelStatus(true, a_id);
     }
@@ -84,7 +84,7 @@ public class EquipmentScreenHandler : MonoBehaviour
     public void SetInventoryPanelStatus(bool a_open, int a_slotId = -1)
     {
         m_inventoryPanelRef.SetActive(a_open);
-        m_openedEquipableSlotId = a_slotId;
+        m_openedEquipmentSlotId = a_slotId;
         RefreshInventory();
     }
 }

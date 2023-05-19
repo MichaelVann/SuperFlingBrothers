@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EquipableSlotUI : MonoBehaviour
+public class EquipmentSlotUI : MonoBehaviour
 {
     public Text[] m_statTexts;
     public EquipmentPortrait m_portraitRef;
 
-    Equipable m_equipableRef;
+    Equipment m_equipmentRef;
 
-    public void SetEquipableRef(Equipable a_equipable) { m_equipableRef = a_equipable; }
+    public void SetEquipmentRef(Equipment a_equipment) { m_equipmentRef = a_equipment; }
 
     // Start is called before the first frame update
     void Start()
@@ -23,14 +23,14 @@ public class EquipableSlotUI : MonoBehaviour
 
     public void Refresh()
     {
-        if (m_equipableRef != null)
+        if (m_equipmentRef != null)
         {
-            for (int i = 0; i < m_equipableRef.m_stats.Count; i++)
+            for (int i = 0; i < m_equipmentRef.m_stats.Count; i++)
             {
                 m_statTexts[i].gameObject.SetActive(true);
-                m_statTexts[i].text = m_equipableRef.m_stats[i].statType.ToString() + ": " + m_equipableRef.m_stats[i].value;
+                m_statTexts[i].text = m_equipmentRef.m_stats[i].statType.ToString() + ": " + m_equipmentRef.m_stats[i].value;
             }
-            m_portraitRef.SetEquipableRef(m_equipableRef);
+            m_portraitRef.SetEquipmentRef(m_equipmentRef);
         }
         else
         {
@@ -39,7 +39,7 @@ public class EquipableSlotUI : MonoBehaviour
                 m_statTexts[i].gameObject.SetActive(false);
             }
         }
-        m_portraitRef.gameObject.SetActive(m_equipableRef != null);
+        m_portraitRef.gameObject.SetActive(m_equipmentRef != null);
     }
 
     // Update is called once per frame

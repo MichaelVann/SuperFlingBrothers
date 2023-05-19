@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EquipablePanel : MonoBehaviour
+public class EquipmentPanel : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
     EquipmentScreenHandler m_equipmentScreenHandlerRef;
-    Equipable m_equipableRef;
+    Equipment m_equipmentRef;
     //public int m_upgradeID;
     //
     public Text m_nameTextRef;
@@ -30,35 +30,35 @@ public class EquipablePanel : MonoBehaviour
         m_equipmentScreenHandlerRef = FindObjectOfType<EquipmentScreenHandler>();
     }
 
-    public void Init(Equipable a_equipable)
+    public void Init(Equipment a_equipable)
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_equipableRef = a_equipable;
+        m_equipmentRef = a_equipable;
     }
 
     public void Refresh()
     {
         //m_imageRef.sprite = m_upgradeScreenHandler.m_upgradeSprites[m_upgradeID];
-        m_nameTextRef.text = m_equipableRef.m_name;
-        m_rarityTextRef.text = m_equipableRef.m_rarityTier.name;
-        m_rarityTextRef.color = m_equipableRef.m_rarityTier.color;
-        m_nameTextRef.color = m_equipableRef.m_rarityTier.color;
+        m_nameTextRef.text = m_equipmentRef.m_name;
+        m_rarityTextRef.text = m_equipmentRef.m_rarityTier.name;
+        m_rarityTextRef.color = m_equipmentRef.m_rarityTier.color;
+        m_nameTextRef.color = m_equipmentRef.m_rarityTier.color;
 
         for (int i = 0; i < m_statTextRefs.Length; i++)
         {
             m_statTextRefs[i].text = "";
         }
 
-        for (int i = 0; i < m_equipableRef.m_stats.Count; i++)
+        for (int i = 0; i < m_equipmentRef.m_stats.Count; i++)
         {
-            m_statTextRefs[i].text = CharacterStatHandler.GetStatName(m_equipableRef.m_stats[i].statType) + ": " + m_equipableRef.m_stats[i].value;
+            m_statTextRefs[i].text = CharacterStatHandler.GetStatName(m_equipmentRef.m_stats[i].statType) + ": " + m_equipmentRef.m_stats[i].value;
         }
         
         //m_costTextRef.text = "" + m_upgradeRef.m_cost;
-        m_levelTextRef.text = "" + m_equipableRef.m_level;
+        m_levelTextRef.text = "" + m_equipmentRef.m_level;
 
         SetEquipButtonStatus();
-        m_equipmentPortrait.SetEquipableRef(m_equipableRef);
+        m_equipmentPortrait.SetEquipmentRef(m_equipmentRef);
     }
 
     //    // Update is called once per frame
@@ -71,8 +71,8 @@ public class EquipablePanel : MonoBehaviour
     {
         Color equipButtonColor = Color.white;
         string equipButtonString = "";
-        bool equipped = m_equipableRef.m_equipped;
-        bool sameSlot = m_equipmentScreenHandlerRef.m_openedEquipableSlotId == m_equipableRef.m_equippedSlotId;
+        bool equipped = m_equipmentRef.m_equipped;
+        bool sameSlot = m_equipmentScreenHandlerRef.m_openedEquipmentSlotId == m_equipmentRef.m_equippedSlotId;
         if (!equipped)
         {
             equipButtonColor = Color.white;
@@ -94,7 +94,7 @@ public class EquipablePanel : MonoBehaviour
 
     public void AttemptToEquip()
     {
-        m_equipmentScreenHandlerRef.SetEquipStatus(m_equipableRef);
+        m_equipmentScreenHandlerRef.SetEquipStatus(m_equipmentRef);
         //Refresh();
     }
 }

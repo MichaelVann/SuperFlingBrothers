@@ -41,7 +41,7 @@ public class CharacterStatHandler
 
     public CharacterStat[] m_stats;
 
-    public Equipable[] m_equippedEquipables;
+    public Equipment[] m_equippedEquiment;
 
     const float m_baseHealthScale = 4f;
 
@@ -88,34 +88,34 @@ public class CharacterStatHandler
     public void Init()
     {
         m_stats = new CharacterStat[(int)eCharacterStatIndices.count];
-        m_equippedEquipables = new Equipable[4];
+        m_equippedEquiment = new Equipment[4];
         SetDefaultStats();
     }
 
-    public void EquipEquipable(Equipable a_equipable, int a_slotId)
+    public void EquipEquipment(Equipment a_equipment, int a_slotId)
     {
         bool unequiping = false;
         bool equiping = false;
-        if (a_equipable.m_equipped)
+        if (a_equipment.m_equipped)
         {
-            if (m_equippedEquipables[a_slotId] == a_equipable)
+            if (m_equippedEquiment[a_slotId] == a_equipment)
             {
                 unequiping = true;
             }
             else
             {
-                if (m_equippedEquipables[a_slotId] != null)
+                if (m_equippedEquiment[a_slotId] != null)
                 {
-                    m_equippedEquipables[a_slotId].m_equipped = false;
-                    m_equippedEquipables[a_slotId].m_equippedSlotId = -1;
-                    m_equippedEquipables[a_slotId] = null;
+                    m_equippedEquiment[a_slotId].m_equipped = false;
+                    m_equippedEquiment[a_slotId].m_equippedSlotId = -1;
+                    m_equippedEquiment[a_slotId] = null;
                 }
                 equiping = true;
-                for (int i = 0; i < m_equippedEquipables.Length; i++)
+                for (int i = 0; i < m_equippedEquiment.Length; i++)
                 {
-                    if (m_equippedEquipables[i] == a_equipable)
+                    if (m_equippedEquiment[i] == a_equipment)
                     {
-                        m_equippedEquipables[i] = null;
+                        m_equippedEquiment[i] = null;
                     }
                 }
             }
@@ -124,23 +124,23 @@ public class CharacterStatHandler
         else
         {
             equiping = true;
-            if (m_equippedEquipables[a_slotId] != null)
+            if (m_equippedEquiment[a_slotId] != null)
             {
-                m_equippedEquipables[a_slotId].m_equipped = false;
+                m_equippedEquiment[a_slotId].m_equipped = false;
             }
         }
 
         if (equiping)
         {
-            a_equipable.m_equipped = true;
-            a_equipable.m_equippedSlotId = a_slotId;
-            m_equippedEquipables[a_slotId] = a_equipable;
+            a_equipment.m_equipped = true;
+            a_equipment.m_equippedSlotId = a_slotId;
+            m_equippedEquiment[a_slotId] = a_equipment;
         }
         else if (unequiping)
         {
-            a_equipable.m_equipped = false;
-            a_equipable.m_equippedSlotId = -1;
-            m_equippedEquipables[a_slotId] = null;
+            a_equipment.m_equipped = false;
+            a_equipment.m_equippedSlotId = -1;
+            m_equippedEquiment[a_slotId] = null;
         }
 
 
@@ -193,15 +193,15 @@ public class CharacterStatHandler
             m_stats[i].equipmentAddedValue = 0f;
         }
 
-        for (int i = 0; i < m_equippedEquipables.Length; i++)
+        for (int i = 0; i < m_equippedEquiment.Length; i++)
         {
-            if (m_equippedEquipables[i] == null)
+            if (m_equippedEquiment[i] == null)
             {
                 continue;
             }
-            for (int j = 0; j < m_equippedEquipables[i].m_stats.Count; j++)
+            for (int j = 0; j < m_equippedEquiment[i].m_stats.Count; j++)
             {
-                m_stats[(int)m_equippedEquipables[i].m_stats[j].statType].equipmentAddedValue += m_equippedEquipables[i].m_stats[j].value;
+                m_stats[(int)m_equippedEquiment[i].m_stats[j].statType].equipmentAddedValue += m_equippedEquiment[i].m_stats[j].value;
             }
         }
 
