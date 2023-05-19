@@ -84,7 +84,7 @@ public class GameHandler : MonoBehaviour
         Count
     }
 
-    public Equipable[] m_equipablesEquipped;
+    //public Equipable[] m_equipablesEquipped;
     public Equipable[] m_equipablesInventory;
     //public UpgradeItem m_enemyVectorsUpgrade;
     //public UpgradeItem m_playerVectorUpgrade;
@@ -140,7 +140,7 @@ public class GameHandler : MonoBehaviour
         m_playerStatHandler.Init();
         //m_playerStatHandler.m_stats[(int)eStatIndices.strength].effectiveValue = 1f;
 
-        m_equipablesEquipped = new Equipable[4];
+        //m_equipablesEquipped = new Equipable[4];
 
         //Stocks
         m_stockHandler = new StockHandler(this);

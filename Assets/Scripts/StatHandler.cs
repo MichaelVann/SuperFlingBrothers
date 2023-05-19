@@ -41,7 +41,7 @@ public class CharacterStatHandler
 
     public CharacterStat[] m_stats;
 
-    Equipable[] m_equippedEquipables;
+    public Equipable[] m_equippedEquipables;
 
     const float m_baseHealthScale = 4f;
 
@@ -94,7 +94,23 @@ public class CharacterStatHandler
 
     public void EquipEquipable(Equipable a_equipable, int a_slotId)
     {
-        m_equippedEquipables[a_slotId] = a_equipable;
+        bool unequiping = false;
+        if (m_equippedEquipables[a_slotId] != null)
+        {
+            m_equippedEquipables[a_slotId].m_equipped = false;
+
+            if (m_equippedEquipables[a_slotId] == a_equipable)
+            {
+                unequiping = true;
+                m_equippedEquipables[a_slotId].m_equipped = false;
+                m_equippedEquipables[a_slotId] = null;
+            }
+        }
+        if (!unequiping)
+        {
+            m_equippedEquipables[a_slotId] = a_equipable;
+            a_equipable.m_equipped = true;
+        }
         UpdateStats();
     }
 

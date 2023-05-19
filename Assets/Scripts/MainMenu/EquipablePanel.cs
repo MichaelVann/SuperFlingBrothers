@@ -74,7 +74,7 @@ public class EquipablePanel : MonoBehaviour
 
     public void AttemptToEquip()
     {
-        m_equipmentScreenHandlerRef.SetEquipStatus(m_equipableRef, !m_equipableRef.m_equipped);
+        m_equipmentScreenHandlerRef.SetEquipStatus(m_equipableRef);
         Refresh();
     }
 }

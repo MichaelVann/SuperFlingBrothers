@@ -22,10 +22,7 @@ public class EquipmentScreenHandler : MonoBehaviour
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_equipableItemPanels = new List<EquipablePanel>();
-        for (int i = 0; i < m_equipableSlotUIRefs.Length; i++)
-        {
-            m_equipableSlotUIRefs[i].SetEquipableRef(m_gameHandlerRef.m_equipablesEquipped[i]);
-        }
+        RefreshEquipableSlots();
 
         for (int i = 0; i < m_gameHandlerRef.m_equipablesInventory.Length; i++)
         {
@@ -59,17 +56,17 @@ public class EquipmentScreenHandler : MonoBehaviour
     {
         for (int i = 0; i < m_equipableSlotUIRefs.Length; i++)
         {
-            m_equipableSlotUIRefs[i].SetEquipableRef(m_gameHandlerRef.m_equipablesEquipped[i]);
+            m_equipableSlotUIRefs[i].SetEquipableRef(m_gameHandlerRef.m_playerStatHandler.m_equippedEquipables[i]);
             m_equipableSlotUIRefs[i].Refresh();
         }
     }
 
-    public void SetEquipStatus(Equipable a_equipable, bool a_equipped)
+    public void SetEquipStatus(Equipable a_equipable)
     {
-        Equipable slotEquipable = a_equipped ? a_equipable : null;
-        m_gameHandlerRef.m_playerStatHandler.EquipEquipable(slotEquipable, m_openedEquipableSlotId);
-        m_gameHandlerRef.m_equipablesEquipped[m_openedEquipableSlotId] = slotEquipable;
-        a_equipable.m_equipped = a_equipped;
+        //Equipable slotEquipable = a_equipped ? a_equipable : null;
+        m_gameHandlerRef.m_playerStatHandler.EquipEquipable(a_equipable, m_openedEquipableSlotId);
+        //m_gameHandlerRef.m_equipablesEquipped[m_openedEquipableSlotId] = slotEquipable;
+        //a_equipable.m_equipped = a_equipped;
         CloseInventoryPanel();
         RefreshEquipableSlots();
     }
@@ -88,5 +85,6 @@ public class EquipmentScreenHandler : MonoBehaviour
     {
         m_inventoryPanelRef.SetActive(a_open);
         m_openedEquipableSlotId = a_slotId;
+        RefreshInventory();
     }
 }
