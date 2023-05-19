@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,7 +8,7 @@ public class EquipmentScreenHandler : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
     public EquipableSlotUI[] m_equipableSlotUIRefs;
-    int m_openedEquipableSlotId = -1;
+    public int m_openedEquipableSlotId = -1;
 
     public GameObject m_inventoryPanelRef;
 
@@ -23,14 +24,13 @@ public class EquipmentScreenHandler : MonoBehaviour
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_equipableItemPanels = new List<EquipablePanel>();
         RefreshEquipableSlots();
-
         for (int i = 0; i < m_gameHandlerRef.m_equipablesInventory.Length; i++)
         {
             if (m_gameHandlerRef.m_equipablesInventory[i] != null)
             {
                 EquipablePanel equipablePanel = Instantiate<GameObject>(m_equipablePanelTemplate, m_inventoryContentRef.transform).GetComponent<EquipablePanel>();
                 equipablePanel.Init(m_gameHandlerRef.m_equipablesInventory[i]);
-                equipablePanel.Refresh();
+                //equipablePanel.Refresh();
                 m_equipableItemPanels.Add(equipablePanel);
             }
         }

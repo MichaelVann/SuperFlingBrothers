@@ -227,7 +227,7 @@ public class GameHandler : MonoBehaviour
     void SetupEquipables()
     {
         m_equipablesInventory = new Equipable[128];
-        for (int i = 0; i < 64; i++)
+        for (int i = 0; i < 2; i++)
         {
             m_equipablesInventory[i] = new Equipable();
         }

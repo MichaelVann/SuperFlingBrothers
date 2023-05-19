@@ -25,8 +25,8 @@ public class Equipable
         public Color color;
         public string name;
     }
-
     public bool m_equipped = false;
+    public int m_equippedSlotId = -1;
     //public int m_equippedSlot = -1;
     public int m_level = 0;
     //public int m_rarityTier = 0;
@@ -49,6 +49,12 @@ public class Equipable
     }
 
     public List<EquipableStat> m_stats;
+
+    public void SetEquipStatus(bool a_equipped, int a_equippedSlot)
+    {
+        m_equipped = a_equipped;
+        m_equippedSlotId = a_equippedSlot;
+    }
 
     public void SetRarityTier(eRarityTier a_rarityTier)
     {

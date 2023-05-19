@@ -50,7 +50,7 @@ public class CharacterStatHandler
         return m_stats[a_index].finalValue;
     }
 
-    public string GetStatName(eCharacterStatIndices a_index, bool a_shortName = true)
+    public static string GetStatName(eCharacterStatIndices a_index, bool a_shortName = true)
     {
         string m_returnString = "";
 
@@ -77,7 +77,7 @@ public class CharacterStatHandler
         return m_returnString;
     }
 
-    public string GetStatName(int a_index)
+    public static string GetStatName(int a_index)
     {
         return GetStatName((eCharacterStatIndices)a_index);
     }
@@ -95,22 +95,73 @@ public class CharacterStatHandler
     public void EquipEquipable(Equipable a_equipable, int a_slotId)
     {
         bool unequiping = false;
-        if (m_equippedEquipables[a_slotId] != null)
+        bool equiping = false;
+        if (a_equipable.m_equipped)
         {
-            m_equippedEquipables[a_slotId].m_equipped = false;
-
             if (m_equippedEquipables[a_slotId] == a_equipable)
             {
                 unequiping = true;
+            }
+            else
+            {
+                if (m_equippedEquipables[a_slotId] != null)
+                {
+                    m_equippedEquipables[a_slotId].m_equipped = false;
+                    m_equippedEquipables[a_slotId].m_equippedSlotId = -1;
+                    m_equippedEquipables[a_slotId] = null;
+                }
+                equiping = true;
+                for (int i = 0; i < m_equippedEquipables.Length; i++)
+                {
+                    if (m_equippedEquipables[i] == a_equipable)
+                    {
+                        m_equippedEquipables[i] = null;
+                    }
+                }
+            }
+
+        }
+        else
+        {
+            equiping = true;
+            if (m_equippedEquipables[a_slotId] != null)
+            {
                 m_equippedEquipables[a_slotId].m_equipped = false;
-                m_equippedEquipables[a_slotId] = null;
             }
         }
-        if (!unequiping)
+
+        if (equiping)
         {
-            m_equippedEquipables[a_slotId] = a_equipable;
             a_equipable.m_equipped = true;
+            a_equipable.m_equippedSlotId = a_slotId;
+            m_equippedEquipables[a_slotId] = a_equipable;
         }
+        else if (unequiping)
+        {
+            a_equipable.m_equipped = false;
+            a_equipable.m_equippedSlotId = -1;
+            m_equippedEquipables[a_slotId] = null;
+        }
+
+
+
+        //if (m_equippedEquipables[a_slotId] != null)
+        //{
+        //    m_equippedEquipables[a_slotId].m_equipped = false;
+
+        //    if (m_equippedEquipables[a_slotId] == a_equipable)
+        //    {
+        //        unequiping = true;
+        //        m_equippedEquipables[a_slotId].m_equipped = false;
+        //        m_equippedEquipables[a_slotId] = null;
+        //    }
+        //}
+        //if (!unequiping)
+        //{
+        //    m_equippedEquipables[a_slotId] = a_equipable;
+        //    a_equipable.m_equipped = true;
+        //    a_equipable.SetEquipStatus(true, a_slotId);
+        //}
         UpdateStats();
     }
 

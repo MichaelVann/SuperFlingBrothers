@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class EquipableSlotUI : MonoBehaviour
 {
     public Text[] m_statTexts;
-    public Image m_imageRef;
+    public EquipmentPortrait m_portraitRef;
 
     Equipable m_equipableRef;
 
@@ -30,6 +30,7 @@ public class EquipableSlotUI : MonoBehaviour
                 m_statTexts[i].gameObject.SetActive(true);
                 m_statTexts[i].text = m_equipableRef.m_stats[i].statType.ToString() + ": " + m_equipableRef.m_stats[i].value;
             }
+            m_portraitRef.SetEquipableRef(m_equipableRef);
         }
         else
         {
@@ -38,7 +39,7 @@ public class EquipableSlotUI : MonoBehaviour
                 m_statTexts[i].gameObject.SetActive(false);
             }
         }
-        m_imageRef.gameObject.SetActive(m_equipableRef != null);
+        m_portraitRef.gameObject.SetActive(m_equipableRef != null);
     }
 
     // Update is called once per frame

@@ -19,13 +19,13 @@ public class EquipablePanel : MonoBehaviour
     //public Text m_costTextRef;
     //public GameObject m_levelDisplayRef;
     public Text m_levelTextRef;
-    public Image m_imageRef;
+    public EquipmentPortrait m_equipmentPortrait;
     public Button m_equipButtonRef;
     public Text m_equipButtonTextRef;
     //public Image m_outlineRef;
 
 
-    void Start()
+    void Awake()
     {
         m_equipmentScreenHandlerRef = FindObjectOfType<EquipmentScreenHandler>();
     }
@@ -51,13 +51,14 @@ public class EquipablePanel : MonoBehaviour
 
         for (int i = 0; i < m_equipableRef.m_stats.Count; i++)
         {
-            m_statTextRefs[i].text = m_equipableRef.m_stats[i].statType.ToString() + ": " + m_equipableRef.m_stats[i].value;
+            m_statTextRefs[i].text = CharacterStatHandler.GetStatName(m_equipableRef.m_stats[i].statType) + ": " + m_equipableRef.m_stats[i].value;
         }
         
         //m_costTextRef.text = "" + m_upgradeRef.m_cost;
         m_levelTextRef.text = "" + m_equipableRef.m_level;
 
         SetEquipButtonStatus();
+        m_equipmentPortrait.SetEquipableRef(m_equipableRef);
     }
 
     //    // Update is called once per frame
@@ -68,13 +69,32 @@ public class EquipablePanel : MonoBehaviour
 
     void SetEquipButtonStatus()
     {
-        m_equipButtonRef.gameObject.GetComponent<Image>().color = m_equipableRef.m_equipped ? Color.yellow : Color.white;
-        m_equipButtonTextRef.text = m_equipableRef.m_equipped ? "UnEquip" : "Equip";
+        Color equipButtonColor = Color.white;
+        string equipButtonString = "";
+        bool equipped = m_equipableRef.m_equipped;
+        bool sameSlot = m_equipmentScreenHandlerRef.m_openedEquipableSlotId == m_equipableRef.m_equippedSlotId;
+        if (!equipped)
+        {
+            equipButtonColor = Color.white;
+            equipButtonString = "Equip";
+        }
+        else if (equipped && sameSlot)
+        {
+            equipButtonColor = Color.yellow;
+            equipButtonString = "UnEquip";
+        }
+        else if (equipped && !sameSlot)
+        {
+            equipButtonColor = Color.red;
+            equipButtonString = "ReEquip";
+        }
+        m_equipButtonRef.gameObject.GetComponent<Image>().color = equipButtonColor;
+        m_equipButtonTextRef.text = equipButtonString;
     }
 
     public void AttemptToEquip()
     {
         m_equipmentScreenHandlerRef.SetEquipStatus(m_equipableRef);
-        Refresh();
+        //Refresh();
     }
 }
