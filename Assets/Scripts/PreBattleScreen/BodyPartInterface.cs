@@ -39,7 +39,7 @@ public class BodyPartInterface : MonoBehaviour
     public int m_maxEnemyDifficulty = 5;
     int m_nodesSetupCount = 0;
 
-    const float m_deltaFrontLineScale = 0.001f;
+    const float m_deltaFrontLineScale = 0.01f;
     // Start is called before the first frame update
     void Start()
     {
