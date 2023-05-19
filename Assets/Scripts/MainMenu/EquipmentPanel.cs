@@ -30,10 +30,10 @@ public class EquipmentPanel : MonoBehaviour
         m_equipmentScreenHandlerRef = FindObjectOfType<EquipmentScreenHandler>();
     }
 
-    public void Init(Equipment a_equipable)
+    public void Init(Equipment a_equipment)
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_equipmentRef = a_equipable;
+        m_equipmentRef = a_equipment;
     }
 
     public void Refresh()

@@ -230,7 +230,6 @@ public class GameHandler : MonoBehaviour
         }
         Equipment test = m_equipmentInventory[0];
         test.m_level = 5;
-        //m_playerEquipables.Initialize();
     }
 
     internal bool AttemptToBuyUpgrade(int a_upgradeID)

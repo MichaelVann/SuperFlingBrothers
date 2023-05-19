@@ -33,15 +33,6 @@ public class Equipment
     public RarityTier m_rarityTier;
     public string m_name;
 
-    //public enum eEquipableStatIndex
-    //{
-    //    Damage,
-    //    AttkSpd,
-    //    Shield,
-    //    Health,
-    //    count
-    //}
-
     public struct EquipmentStat
     {
         public eCharacterStatIndices statType;
