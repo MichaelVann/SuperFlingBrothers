@@ -226,10 +226,10 @@ public class GameHandler : MonoBehaviour
         m_equipmentInventory = new Equipment[128];
         for (int i = 0; i < 2; i++)
         {
-            m_equipmentInventory[i] = new Equipment();
+            //m_equipmentInventory[i] = new Equipment(0);
         }
-        Equipment test = m_equipmentInventory[0];
-        test.m_level = 5;
+        //Equipment test = m_equipmentInventory[0];
+        //test.m_level = 5;
     }
 
     internal bool AttemptToBuyUpgrade(int a_upgradeID)
@@ -253,6 +253,18 @@ public class GameHandler : MonoBehaviour
             SetupShield();
         }
         return returnValue;
+    }
+
+    internal void PickUpEquipment(Equipment a_equipment)
+    {
+        for (int i = 0; i < m_equipmentInventory.Length; i++)
+        {
+            if (m_equipmentInventory[i] == null)
+            {
+                m_equipmentInventory[i] = a_equipment;
+                break;
+            }
+        }
     }
 
     public void ChangeGameMode(int a_change)

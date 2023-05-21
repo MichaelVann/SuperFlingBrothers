@@ -8,6 +8,7 @@ public class Enemy : Damageable
     Player m_playerRef;
     Nucleus m_nucleusRef = null;
     public GameObject m_coinPrefab;
+    public GameObject m_equipmentDropPrefab;
 
     public GameObject[] m_exclamationMarkRefs;
     public GameObject m_flingReadinessIndicatorRef;
@@ -107,7 +108,7 @@ public class Enemy : Damageable
                 break;
         }
         m_xpReward = (int)(m_typeTrait.difficulty * GameHandler.GAME_enemyXPRewardScale);
-        m_scoreValue = (float)(m_xpReward) * m_coinToXPRatio;
+        m_scoreValue = 0f;// (float)(m_xpReward) * m_coinToXPRatio;
         m_rigidBody.freezeRotation = !m_typeTrait.canRotate;
         UpdateLocalStatsFromStatHandler();
         UpdateHealthColor();
@@ -229,6 +230,53 @@ public class Enemy : Damageable
 
         VisionConeUpdate();
     }
+
+    private void SpawnCoins()
+    {
+        float[] spawnDirection;
+
+        for (int i = 0; i < m_coinsToSpawn; i++)
+        {
+            spawnDirection = new float[m_coinsToSpawn];
+
+            spawnDirection[i] = UnityEngine.Random.Range(0f, 360f);
+            for (int j = 0; j < i; j++)
+            {
+                if ((spawnDirection[i] - spawnDirection[j] <= m_closestCoinSpawnAngle) || (spawnDirection[i] - spawnDirection[j] >= 360f - m_closestCoinSpawnAngle))
+                {
+                    spawnDirection[i] = UnityEngine.Random.Range(0f, 360f);
+                    j--;
+                }
+            }
+
+            Vector3 spawnLocation = new Vector3(m_coinSpawnOffset, 0f, 0f);
+            spawnLocation = Quaternion.AngleAxis(spawnDirection[i], Vector3.forward) * spawnLocation;
+            spawnLocation = transform.position + spawnLocation;
+
+
+            float xClamp = 2.1f;
+            float yClamp = 3.52f;
+            float xClampYCutoff = 3.148f;
+            float yClampXCutoff = 1.527f;
+
+            //Make sure the coins dont spawn inside the pockets
+            if (spawnLocation.y > xClampYCutoff)
+            {
+                float sin = Mathf.Sin(((spawnLocation.y - xClampYCutoff) / (yClamp - xClampYCutoff)) * Mathf.PI / 2f);
+                xClamp = yClampXCutoff + (1f - sin) * (xClamp - yClampXCutoff);
+            }
+            else if (spawnLocation.y < -xClampYCutoff)
+            {
+                float sin = Mathf.Sin((spawnLocation.y + xClampYCutoff) / (-yClamp + xClampYCutoff) * Mathf.PI / 2f);
+                xClamp = yClampXCutoff + (1f - sin) * (xClamp - yClampXCutoff);
+            }
+
+            spawnLocation = new Vector3(Mathf.Clamp(spawnLocation.x, -xClamp, xClamp), Mathf.Clamp(spawnLocation.y, -3.52f, 3.52f), spawnLocation.z);
+            GameObject coin = Instantiate<GameObject>(m_coinPrefab, transform.position, new Quaternion());
+            coin.GetComponent<Coin>().Init(spawnLocation);
+        }
+    }
+
     public override void Die()
     {
         if(m_dead)
@@ -253,48 +301,13 @@ public class Enemy : Damageable
 
         m_battleManagerRef.ChangeEnemyCount(-1);
 
-        float[] spawnDirection;
 
         //Spawn coins
-        for (int i = 0; i < m_coinsToSpawn; i++)
+        SpawnCoins();
+
+        if (UnityEngine.Random.Range(0f,1f) < 0.1f)
         {
-            spawnDirection = new float[m_coinsToSpawn];
-
-            spawnDirection[i] = UnityEngine.Random.Range(0f, 360f);
-            for (int j = 0; j < i; j++)
-            {
-                if ((spawnDirection[i] - spawnDirection[j] <= m_closestCoinSpawnAngle) || (spawnDirection[i] - spawnDirection[j] >= 360f - m_closestCoinSpawnAngle))
-                {
-                    spawnDirection[i] = UnityEngine.Random.Range(0f, 360f);
-                    j--;
-                }
-            }
-
-            Vector3 spawnLocation = new Vector3(m_coinSpawnOffset, 0f, 0f);
-            spawnLocation = Quaternion.AngleAxis(spawnDirection[i], Vector3.forward) * spawnLocation;
-            spawnLocation = transform.position + spawnLocation;
-
-            
-            float xClamp = 2.1f;
-            float yClamp = 3.52f;
-            float xClampYCutoff = 3.148f;
-            float yClampXCutoff = 1.527f;
-
-            //Make sure the coins dont spawn inside the pockets
-            if (spawnLocation.y > xClampYCutoff)
-            {
-                float sin = Mathf.Sin(((spawnLocation.y - xClampYCutoff) / (yClamp - xClampYCutoff)) * Mathf.PI / 2f);
-                xClamp = yClampXCutoff + (1f-sin) * (xClamp-yClampXCutoff); 
-            }
-            else if (spawnLocation.y < -xClampYCutoff)
-            {
-                float sin = Mathf.Sin((spawnLocation.y + xClampYCutoff) / (-yClamp + xClampYCutoff) * Mathf.PI / 2f);
-                xClamp = yClampXCutoff + (1f-sin) * (xClamp - yClampXCutoff);
-            }
-
-            spawnLocation = new Vector3(Mathf.Clamp(spawnLocation.x, -xClamp, xClamp), Mathf.Clamp(spawnLocation.y, -3.52f, 3.52f), spawnLocation.z);
-            GameObject coin =Instantiate<GameObject>(m_coinPrefab, transform.position, new Quaternion());
-            coin.GetComponent<Coin>().Init(spawnLocation);
+            Instantiate<GameObject>(m_equipmentDropPrefab, transform.position, new Quaternion());
         }
 
         base.Die();

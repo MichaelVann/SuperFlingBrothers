@@ -233,6 +233,10 @@ public class Player : Damageable
             m_coinValueText.SetTextContent("+" + m_cumulativeCoinValue);
             Destroy(a_collider.gameObject);
         }
+        else if (a_collider.gameObject.GetComponent<EquipmentDrop>())
+        {
+            m_gameHandlerRef.PickUpEquipment(a_collider.gameObject.GetComponent<EquipmentDrop>().m_equipment);
+        }
     }
 
     public override void Damage(float a_damage)

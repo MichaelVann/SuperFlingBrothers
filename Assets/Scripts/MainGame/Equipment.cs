@@ -87,14 +87,14 @@ public class Equipment
     private void Roll(int a_level)
     {
         m_name = VLib.GenerateRandomizedName(4,8);
-        int m_level = a_level;
+        m_level = a_level;
         while (UnityEngine.Random.Range(0f,1f) <= 0.25f && m_rarityTier.level < eRarityTier.Count-1)
         {
             m_rarityTier.level++;
         }
         UpdateRarityTier();
 
-        int points = 10 + (int)((float)(a_level)/10f);
+        int points = 10 + (int)((float)(a_level)*2f);
         points = (int)(points*Mathf.Pow(1.25f, (float)m_rarityTier.level));
         int statsChosenCount = 2;
         for (int i = 0; i < (int)eCharacterStatIndices.count; i++)
@@ -119,10 +119,10 @@ public class Equipment
         }
     }
 
-    public Equipment()
+    public Equipment(int a_level)
     {
         m_stats = new List<EquipmentStat>();
         m_rarityTier = new RarityTier();
-        Roll(1);
+        Roll(a_level);
     }
 }
