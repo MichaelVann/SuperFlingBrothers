@@ -8,13 +8,14 @@ public class EquipmentPanel : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
     EquipmentScreenHandler m_equipmentScreenHandlerRef;
-    Equipment m_equipmentRef;
+    public Equipment m_equipmentRef;
     //public int m_upgradeID;
     //
     public Text m_nameTextRef;
     public Text m_rarityTextRef;
     public Text[] m_statTextRefs;
     public Text m_abilityTextRef;
+    public Text m_goldValueTextRef;
 
     //public Text m_costTextRef;
     //public GameObject m_levelDisplayRef;
@@ -22,6 +23,7 @@ public class EquipmentPanel : MonoBehaviour
     public EquipmentPortrait m_equipmentPortrait;
     public Button m_equipButtonRef;
     public Text m_equipButtonTextRef;
+    public Button m_sellButtonRef;
     //public Image m_outlineRef;
 
 
@@ -52,32 +54,13 @@ public class EquipmentPanel : MonoBehaviour
         for (int i = 0; i < m_equipmentRef.m_stats.Count; i++)
         {
             m_statTextRefs[i].text = CharacterStatHandler.GetStatName(m_equipmentRef.m_stats[i].statType) + ": " + m_equipmentRef.m_stats[i].value;
-            Color textColor = new Color();
-            switch (m_equipmentRef.m_stats[i].statType)
-            {
-                case eCharacterStatIndices.strength:
-                    textColor = Color.yellow;
-                    break;
-                case eCharacterStatIndices.dexterity:
-                    textColor = Color.green;
-                    break;
-                case eCharacterStatIndices.constitution:
-                    textColor = Color.red;
-                    break;
-                case eCharacterStatIndices.protection:
-                    textColor = Color.gray;
-                    break;
-                case eCharacterStatIndices.count:
-                    break;
-                default:
-                    break;
-            }
-            m_statTextRefs[i].color = textColor;
+            m_statTextRefs[i].color = CharacterStatHandler.GetStatColor(m_equipmentRef.m_stats[i].statType);
 
         }
 
         //m_costTextRef.text = "" + m_upgradeRef.m_cost;
         m_levelTextRef.text = "" + m_equipmentRef.m_level;
+        m_goldValueTextRef.text = "" + m_equipmentRef.m_goldValue;
 
         SetEquipButtonStatus();
         m_equipmentPortrait.SetEquipmentRef(m_equipmentRef);
@@ -94,6 +77,7 @@ public class EquipmentPanel : MonoBehaviour
         Color equipButtonColor = Color.white;
         string equipButtonString = "";
         bool equipped = m_equipmentRef.m_equipped;
+        m_sellButtonRef.interactable = !equipped;
         bool sameSlot = m_equipmentScreenHandlerRef.m_openedEquipmentSlotId == m_equipmentRef.m_equippedSlotId;
         if (!equipped)
         {
@@ -118,5 +102,10 @@ public class EquipmentPanel : MonoBehaviour
     {
         m_equipmentScreenHandlerRef.SetEquipStatus(m_equipmentRef);
         //Refresh();
+    }
+
+    public void SellEquipment()
+    {
+        m_equipmentScreenHandlerRef.SellEquipment(this);
     }
 }

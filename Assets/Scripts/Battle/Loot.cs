@@ -32,6 +32,7 @@ public class Loot : MonoBehaviour
         m_startingPosition = transform.position;
         m_originalScale = transform.localScale;
         m_movingToTargetPos = true;
+        GetComponent<CircleCollider2D>().enabled = false;
     }
 
     // Update is called once per frame
@@ -67,6 +68,7 @@ public class Loot : MonoBehaviour
             if (m_jumpTimer >= m_jumpTimerMax)
             {
                 m_movingToTargetPos = false;
+                GetComponent<CircleCollider2D>().enabled = true;
             }
             //Vector3 deltaPos = m_targetPosition - transform.position;
 

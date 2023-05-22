@@ -27,11 +27,10 @@ public class Equipment
     }
     public bool m_equipped = false;
     public int m_equippedSlotId = -1;
-    //public int m_equippedSlot = -1;
     public int m_level = 0;
-    //public int m_rarityTier = 0;
     public RarityTier m_rarityTier;
     public string m_name;
+    public int m_goldValue = 0;
 
     public struct EquipmentStat
     {
@@ -96,6 +95,7 @@ public class Equipment
 
         int points = 10 + (int)((float)(a_level)*2f);
         points = (int)(points*Mathf.Pow(1.25f, (float)m_rarityTier.level));
+        m_goldValue = points;
         int statsChosenCount = 2;
         for (int i = 0; i < (int)eCharacterStatIndices.count; i++)
         {

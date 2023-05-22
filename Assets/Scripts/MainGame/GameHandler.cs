@@ -5,7 +5,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-//Version 14
+//Version 15
 
 
 public class GameHandler : MonoBehaviour
@@ -263,6 +263,19 @@ public class GameHandler : MonoBehaviour
             if (m_equipmentInventory[i] == null)
             {
                 m_equipmentInventory[i] = a_equipment;
+                break;
+            }
+        }
+    }
+
+    internal void SellEquipment(Equipment a_equipment)
+    {
+        for (int i = 0; i < m_equipmentInventory.Length; i++)
+        {
+            if (m_equipmentInventory[i] == a_equipment)
+            {
+                ChangeCash(m_equipmentInventory[i].m_goldValue);
+                m_equipmentInventory[i] = null;
                 break;
             }
         }

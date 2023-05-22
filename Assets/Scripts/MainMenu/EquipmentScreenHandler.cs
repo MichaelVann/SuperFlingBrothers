@@ -90,4 +90,19 @@ public class EquipmentScreenHandler : MonoBehaviour
             RefreshInventory();
         }
     }
+
+    public void SellEquipment(EquipmentPanel a_equipmentPanel)
+    {
+        for (int i = 0; i < m_equipmentItemPanels.Count; i++)
+        {
+            if (m_equipmentItemPanels[i] == a_equipmentPanel)
+            {
+                GameObject.Destroy(a_equipmentPanel.gameObject);
+                m_equipmentItemPanels.RemoveAt(i);
+                m_gameHandlerRef.SellEquipment(a_equipmentPanel.m_equipmentRef);
+                break;
+            }
+        }
+        RefreshInventory();
+    }
 }

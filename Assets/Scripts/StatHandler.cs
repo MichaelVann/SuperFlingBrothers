@@ -77,6 +77,31 @@ public class CharacterStatHandler
         return m_returnString;
     }
 
+    public static Color GetStatColor(eCharacterStatIndices a_index)
+    {
+        Color returnColor = new Color();
+        switch (a_index)
+        {
+            case eCharacterStatIndices.strength:
+                returnColor = Color.yellow;
+                break;
+            case eCharacterStatIndices.dexterity:
+                returnColor = Color.green;
+                break;
+            case eCharacterStatIndices.constitution:
+                returnColor = Color.red;
+                break;
+            case eCharacterStatIndices.protection:
+                returnColor = Color.grey;
+                break;
+            case eCharacterStatIndices.count:
+                break;
+            default:
+                break;
+        }
+        return returnColor;
+    }
+
     public static string GetStatName(int a_index)
     {
         return GetStatName((eCharacterStatIndices)a_index);
