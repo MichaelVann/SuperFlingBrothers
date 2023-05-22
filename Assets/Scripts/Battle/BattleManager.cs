@@ -103,6 +103,7 @@ public class BattleManager : MonoBehaviour
     public eEndGameType m_endGameType;
 
     public float m_score = 0f;
+    List<Equipment> m_equipmentCollected;
     public float m_xpEarned = 0f;
 
     public int m_enemyCount = 0;
@@ -138,6 +139,7 @@ public class BattleManager : MonoBehaviour
     public void SetScore(float a_value) { m_score = Mathf.Round(a_value*100f)/100f; }
 
     public void ChangeScore(float a_change) { SetScore(m_score + a_change); }
+    public void PickUpEquipment(Equipment a_equipment) {m_equipmentCollected.Add(a_equipment);}
     public void ChangeXp(float a_change) { m_xpEarned += a_change; }
     public void ChangeInvaderStrength(int a_change) { m_invaderStrengthChange += a_change; }
 
@@ -196,6 +198,7 @@ public class BattleManager : MonoBehaviour
         m_turnFreezeTimer = m_turnFreezeTimerMax;
         m_coreEnemySpawnLocation = new Vector3(0f, -1.6f, 0f);
         m_enemySpawnPointsRefs = new List<GameObject>();
+        m_equipmentCollected = new List<Equipment>();
         SetupEnvironmentalEffects();
     }
 
@@ -446,7 +449,12 @@ public class BattleManager : MonoBehaviour
         //    m_score += m_gameHandlerRef.m_battleDifficulty;
         //}
         m_gameHandlerRef.m_dnaEarnedLastGame = m_score;
+        m_gameHandlerRef.m_equipmentCollectedLastGame = m_equipmentCollected.Count;
         m_gameHandlerRef.m_invaderStrengthChangeLastGame = m_invaderStrengthChange;
+        for (int i = 0; i < m_equipmentCollected.Count; i++)
+        {
+            m_gameHandlerRef.PickUpEquipment(m_equipmentCollected[i]);
+        }
         //Go to post game screen
         SetTimeScale(1f);
         CalculateFinishedGame();
@@ -465,6 +473,7 @@ public class BattleManager : MonoBehaviour
             if (m_endGameType == eEndGameType.lose)
             {
                 SetScore(0f);
+                m_equipmentCollected.Clear();
             }
         }
     }

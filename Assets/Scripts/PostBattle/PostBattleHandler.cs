@@ -16,6 +16,7 @@ public class PostBattleHandler : MonoBehaviour
     public GameObject m_winBonusRef;
     public Text m_XPBonusText;
     public Text m_goldBonusText;
+    public Text m_equipmentCollectedText;
 
     eEndGameType m_winResult = eEndGameType.lose;
 
@@ -68,6 +69,7 @@ public class PostBattleHandler : MonoBehaviour
         m_totalGoldTextRef.SetDesiredValue(m_gameHandlerRef.GetCurrentCash());
         m_xpGainedTextRef.text = "" + m_gameHandlerRef.m_xpEarnedLastGame;
         m_levelsGainedTextRef.text = "" + (m_gameHandlerRef.m_playerStatHandler.m_level - m_gameHandlerRef.m_playerLevelAtStartOfBattle);
+        m_equipmentCollectedText.text = "" + m_gameHandlerRef.m_equipmentCollectedLastGame;
     }
 
     // Update is called once per frame

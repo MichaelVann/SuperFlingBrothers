@@ -69,6 +69,7 @@ public class GameHandler : MonoBehaviour
     public int m_invaderStrengthChangeLastGame = 0;
     public int m_playerLevelAtStartOfBattle = 0;
     public float m_dnaEarnedLastGame = 0f;
+    public int m_equipmentCollectedLastGame = 0;
     public BodyPart m_lastBodyPartSelectedForBattle;
     public int m_lastXpBonus = 0;
     public int m_lastDnaBonus = 0;

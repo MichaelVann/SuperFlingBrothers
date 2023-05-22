@@ -238,7 +238,7 @@ public class Player : Damageable
         else if (equipmentDrop != null && !equipmentDrop.m_movingToTargetPos)
         {
             
-            m_gameHandlerRef.PickUpEquipment(a_collider.gameObject.GetComponent<EquipmentDrop>().m_equipment);
+            m_battleManagerRef.PickUpEquipment(a_collider.gameObject.GetComponent<EquipmentDrop>().m_equipment);
         }
     }
 
