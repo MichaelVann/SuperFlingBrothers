@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : Damageable
 {
@@ -242,6 +243,16 @@ public class Player : Damageable
         }
     }
 
+    void SpawnBlockText(float a_value)
+    {
+        RisingFadingText damageText = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(m_damageTextYOffset, 0), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
+        damageText.SetImageEnabled(false);
+        damageText.SetGravityAffected(true);
+        damageText.SetTextContent("Block " + a_value);
+        damageText.gameObject.GetComponent<Text>().fontSize = 14;
+        damageText.SetOriginalColor(Color.gray);
+    }
+
     public override void Damage(float a_damage)
     {
         if (m_battleManagerRef.m_endingGame)
@@ -263,6 +274,14 @@ public class Player : Damageable
             }
             m_shieldRef.delayTimer = 0f;
         }
+        float armourProtectionAmount = m_statHandler.m_stats[(int)eCharacterStatIndices.protection].finalValue * 0.1f;
+        float blockedAmount = armourProtectionAmount > damage ? damage : armourProtectionAmount;
+        if (blockedAmount > 0f)
+        {
+            SpawnBlockText(blockedAmount);
+        }
+        damage -= blockedAmount;
+        damage = Mathf.Clamp(damage, 0f, float.MaxValue);
         base.Damage(damage);
         m_battleManagerRef.m_healthBarRef.SetBarValue(m_health);
     }
