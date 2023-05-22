@@ -46,6 +46,7 @@ public class EquipmentScreenHandler : MonoBehaviour
 
     public void RefreshInventory()
     {
+        m_gameHandlerRef.m_equipmentCollectedLastGame = 0;
         m_noEquipmentText.SetActive(m_equipmentItemPanels.Count < 1);
         for (int i = 0; i < m_equipmentItemPanels.Count; i++)
         {
@@ -84,6 +85,9 @@ public class EquipmentScreenHandler : MonoBehaviour
     {
         m_inventoryPanelRef.SetActive(a_open);
         m_openedEquipmentSlotId = a_slotId;
-        RefreshInventory();
+        if (a_open)
+        {
+            RefreshInventory();
+        }
     }
 }
