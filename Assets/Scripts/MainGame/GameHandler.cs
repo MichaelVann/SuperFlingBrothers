@@ -5,11 +5,12 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-//Version 15
 
 
 public class GameHandler : MonoBehaviour
 {
+    public const float _VERSION_NUMBER = 15.1f;
+
     static internal bool DEBUG_MODE = true;
 
     // -- BALANCE VARIABLES --

@@ -10,11 +10,13 @@ public class TitleScreenHandler : MonoBehaviour
     public Text m_statAllocationNotifierTextRef;
     public GameObject m_equipmentNotifierRef;
     public Text m_equipmentNotifierTextRef;
+    public Text m_versionNumberText;
 
     // Start is called before the first frame update
     void Start()
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        m_versionNumberText.text = "Version " + GameHandler._VERSION_NUMBER;
     }
 
     // Update is called once per frame
