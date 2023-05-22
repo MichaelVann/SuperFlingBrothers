@@ -52,8 +52,30 @@ public class EquipmentPanel : MonoBehaviour
         for (int i = 0; i < m_equipmentRef.m_stats.Count; i++)
         {
             m_statTextRefs[i].text = CharacterStatHandler.GetStatName(m_equipmentRef.m_stats[i].statType) + ": " + m_equipmentRef.m_stats[i].value;
+            Color textColor = new Color();
+            switch (m_equipmentRef.m_stats[i].statType)
+            {
+                case eCharacterStatIndices.strength:
+                    textColor = Color.yellow;
+                    break;
+                case eCharacterStatIndices.dexterity:
+                    textColor = Color.green;
+                    break;
+                case eCharacterStatIndices.constitution:
+                    textColor = Color.red;
+                    break;
+                case eCharacterStatIndices.protection:
+                    textColor = Color.gray;
+                    break;
+                case eCharacterStatIndices.count:
+                    break;
+                default:
+                    break;
+            }
+            m_statTextRefs[i].color = textColor;
+
         }
-        
+
         //m_costTextRef.text = "" + m_upgradeRef.m_cost;
         m_levelTextRef.text = "" + m_equipmentRef.m_level;
 

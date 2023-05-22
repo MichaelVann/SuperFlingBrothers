@@ -210,7 +210,9 @@ public class Player : Damageable
 
     public void OnTriggerEnter2D(Collider2D a_collider)
     {
-        if (a_collider.gameObject.GetComponent<Coin>())
+        Coin coin = a_collider.gameObject.GetComponent<Coin>();
+        EquipmentDrop equipmentDrop = a_collider.gameObject.GetComponent<EquipmentDrop>();
+        if (coin != null && !coin.m_movingToTargetPos)
         {
             m_battleManagerRef.ChangeScore(m_battleManagerRef.m_coinValue);
 
@@ -233,8 +235,9 @@ public class Player : Damageable
             m_coinValueText.SetTextContent("+" + m_cumulativeCoinValue);
             Destroy(a_collider.gameObject);
         }
-        else if (a_collider.gameObject.GetComponent<EquipmentDrop>())
+        else if (equipmentDrop != null && !equipmentDrop.m_movingToTargetPos)
         {
+            
             m_gameHandlerRef.PickUpEquipment(a_collider.gameObject.GetComponent<EquipmentDrop>().m_equipment);
         }
     }

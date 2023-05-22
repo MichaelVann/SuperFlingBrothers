@@ -17,6 +17,7 @@ public class EquipmentScreenHandler : MonoBehaviour
 
     List<EquipmentPanel> m_equipmentItemPanels;
 
+    public GameObject m_noEquipmentText;
 
     // Start is called before the first frame update
     void Start()
@@ -45,6 +46,7 @@ public class EquipmentScreenHandler : MonoBehaviour
 
     public void RefreshInventory()
     {
+        m_noEquipmentText.SetActive(m_equipmentItemPanels.Count < 1);
         for (int i = 0; i < m_equipmentItemPanels.Count; i++)
         {
             m_equipmentItemPanels[i].Refresh();
@@ -63,10 +65,7 @@ public class EquipmentScreenHandler : MonoBehaviour
 
     public void SetEquipStatus(Equipment a_equipment)
     {
-        //Equipable slotEquipable = a_equipped ? a_equipment : null;
         m_gameHandlerRef.m_playerStatHandler.EquipEquipment(a_equipment, m_openedEquipmentSlotId);
-        //m_gameHandlerRef.m_equipablesEquipped[m_openedEquipableSlotId] = slotEquipable;
-        //a_equipment.m_equipped = a_equipped;
         CloseInventoryPanel();
         RefreshEquipmentSlots();
     }

@@ -54,9 +54,11 @@ public class Enemy : Damageable
     float m_flingAccuracy = 20f;
     bool m_flinging;
 
-    float m_coinSpawnOffset = 0.3f;
+    //Loot
+    float m_lootSpawnOffset = 0.3f;
     int m_coinsToSpawn = 3;
-    float m_closestCoinSpawnAngle = 15f;
+    float m_closestLootSpawnAngle = 15f;
+    float m_equipmentDropRate = 0.1f;
 
     Vector2 m_duplicationPositionClampMax = new Vector2(1.956f,2.84f);
     Vector2 m_duplicationPositionClampMin = new Vector2(-1.956f,-3.46f);
@@ -231,25 +233,25 @@ public class Enemy : Damageable
         VisionConeUpdate();
     }
 
-    private void SpawnCoins()
+    private void SpawnLoot(GameObject a_lootTemplate, int a_lootToSpawn = 1)
     {
         float[] spawnDirection;
 
-        for (int i = 0; i < m_coinsToSpawn; i++)
+        for (int i = 0; i < a_lootToSpawn; i++)
         {
-            spawnDirection = new float[m_coinsToSpawn];
+            spawnDirection = new float[a_lootToSpawn];
 
             spawnDirection[i] = UnityEngine.Random.Range(0f, 360f);
             for (int j = 0; j < i; j++)
             {
-                if ((spawnDirection[i] - spawnDirection[j] <= m_closestCoinSpawnAngle) || (spawnDirection[i] - spawnDirection[j] >= 360f - m_closestCoinSpawnAngle))
+                if ((spawnDirection[i] - spawnDirection[j] <= m_closestLootSpawnAngle) || (spawnDirection[i] - spawnDirection[j] >= 360f - m_closestLootSpawnAngle))
                 {
                     spawnDirection[i] = UnityEngine.Random.Range(0f, 360f);
                     j--;
                 }
             }
 
-            Vector3 spawnLocation = new Vector3(m_coinSpawnOffset, 0f, 0f);
+            Vector3 spawnLocation = new Vector3(m_lootSpawnOffset, 0f, 0f);
             spawnLocation = Quaternion.AngleAxis(spawnDirection[i], Vector3.forward) * spawnLocation;
             spawnLocation = transform.position + spawnLocation;
 
@@ -272,8 +274,8 @@ public class Enemy : Damageable
             }
 
             spawnLocation = new Vector3(Mathf.Clamp(spawnLocation.x, -xClamp, xClamp), Mathf.Clamp(spawnLocation.y, -3.52f, 3.52f), spawnLocation.z);
-            GameObject coin = Instantiate<GameObject>(m_coinPrefab, transform.position, new Quaternion());
-            coin.GetComponent<Coin>().Init(spawnLocation);
+            GameObject loot = Instantiate<GameObject>(a_lootTemplate, transform.position, new Quaternion());
+            loot.GetComponent<Loot>().Init(spawnLocation);
         }
     }
 
@@ -303,7 +305,13 @@ public class Enemy : Damageable
 
 
         //Spawn coins
-        SpawnCoins();
+        SpawnLoot(m_coinPrefab, m_coinsToSpawn);
+        int equipmentDrops = 0;
+        while (UnityEngine.Random.Range(0f, 1f) < m_equipmentDropRate)
+        {
+            equipmentDrops++;
+        }
+        SpawnLoot(m_equipmentDropPrefab, equipmentDrops);
 
         if (UnityEngine.Random.Range(0f,1f) < 0.1f)
         {
