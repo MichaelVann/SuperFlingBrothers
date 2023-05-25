@@ -45,14 +45,16 @@ public class PostBattleHandler : MonoBehaviour
             case eEndGameType.win:
                 m_resultTextRef.text ="Victory!";
                 //m_gameHandlerRef.m_lastXpBonus = m_gameHandlerRef.m_lastDnaBonus = Mathf.RoundToInt(Mathf.Pow(m_gameHandlerRef.m_battleDifficulty, 1.1f));
-                m_gameHandlerRef.m_lastXpBonus = (int)m_gameHandlerRef.m_xpEarnedLastGame;
-                m_gameHandlerRef.m_lastDnaBonus = (int)m_gameHandlerRef.m_dnaEarnedLastGame;
+                float bonusMult = Mathf.Pow(1.022f, m_gameHandlerRef.m_battleDifficulty);
+                bonusMult = VLib.TruncateFloatsDecimalPlaces(bonusMult, 2);
+                m_gameHandlerRef.m_lastXpBonus = (int)(m_gameHandlerRef.m_xpEarnedLastGame * bonusMult);
+                m_gameHandlerRef.m_lastDnaBonus = (int)(m_gameHandlerRef.m_dnaEarnedLastGame);
                 m_gameHandlerRef.m_dnaEarnedLastGame += m_gameHandlerRef.m_lastDnaBonus;
-                m_goldBonusText.text = "DNA x2";// + m_gameHandlerRef.m_lastDnaBonus;
+                m_goldBonusText.text = "" + m_gameHandlerRef.m_lastDnaBonus + "(x" + (1 + bonusMult) + ")";
                 m_gameHandlerRef.m_xpEarnedLastGame += m_gameHandlerRef.m_lastXpBonus;
                 m_gameHandlerRef.m_playerStatHandler.ChangeXP((int)m_gameHandlerRef.m_lastXpBonus);
 
-                m_XPBonusText.text = "XP x2";// +m_gameHandlerRef.m_lastXpBonus;
+                m_XPBonusText.text = "" + m_gameHandlerRef.m_lastXpBonus + "(x" + (1 + bonusMult) + ")";
 
                 break;
             case eEndGameType.lose:

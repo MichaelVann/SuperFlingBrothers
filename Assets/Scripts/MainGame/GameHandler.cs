@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 15.1f;
+    public const float _VERSION_NUMBER = 15.2f;
 
     static internal bool DEBUG_MODE = true;
 
@@ -226,9 +226,9 @@ public class GameHandler : MonoBehaviour
     void SetupEquipment()
     {
         m_equipmentInventory = new Equipment[128];
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 3; i++)
         {
-            //m_equipmentInventory[i] = new Equipment(0);
+            m_equipmentInventory[i] = new Equipment(0);
         }
         //Equipment test = m_equipmentInventory[0];
         //test.m_level = 5;
