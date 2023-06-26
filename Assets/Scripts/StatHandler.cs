@@ -92,7 +92,7 @@ public class CharacterStatHandler
                 returnColor = Color.red;
                 break;
             case eCharacterStatIndices.protection:
-                returnColor = Color.grey;
+                returnColor = Color.cyan;
                 break;
             case eCharacterStatIndices.count:
                 break;
@@ -313,7 +313,7 @@ public class CharacterStatHandler
 
     public void UpdatePlayerLevel()
     {
-        if (m_XP >= m_maxXP)
+        while (m_XP >= m_maxXP)
         {
             m_XP -= m_maxXP;
             int levelPlusOne = m_level + 1;

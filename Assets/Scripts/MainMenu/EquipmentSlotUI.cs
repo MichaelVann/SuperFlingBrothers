@@ -33,6 +33,7 @@ public class EquipmentSlotUI : MonoBehaviour
             {
                 m_statTexts[i].gameObject.SetActive(true);
                 m_statTexts[i].text = m_equipmentRef.m_stats[i].statType.ToString() + ": " + m_equipmentRef.m_stats[i].value;
+                m_statTexts[i].color = CharacterStatHandler.GetStatColor(m_equipmentRef.m_stats[i].statType);
             }
         }
         else
