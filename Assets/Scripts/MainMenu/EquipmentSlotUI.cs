@@ -31,6 +31,7 @@ public class EquipmentSlotUI : MonoBehaviour
             m_portraitRef.SetEquipmentRef(m_equipmentRef);
             for (int i = 0; i < m_equipmentRef.m_stats.Count; i++)
             {
+                m_statTexts[i].gameObject.SetActive(true);
                 m_statTexts[i].text = m_equipmentRef.m_stats[i].statType.ToString() + ": " + m_equipmentRef.m_stats[i].value;
             }
         }
