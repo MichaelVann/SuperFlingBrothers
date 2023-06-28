@@ -25,7 +25,7 @@ public class EquipmentScreenHandler : MonoBehaviour
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_equipmentItemPanels = new List<EquipmentPanel>();
         RefreshEquipmentSlots();
-        for (int i = 0; i < m_gameHandlerRef.m_equipmentInventory.Length; i++)
+        for (int i = 0; i < m_gameHandlerRef.m_equipmentInventory.Count; i++)
         {
             if (m_gameHandlerRef.m_equipmentInventory[i] != null)
             {

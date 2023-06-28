@@ -86,11 +86,7 @@ public class GameHandler : MonoBehaviour
         Count
     }
 
-    public Equipment[] m_equipmentInventory;
-    //public UpgradeItem m_enemyVectorsUpgrade;
-    //public UpgradeItem m_playerVectorUpgrade;
-    //public UpgradeItem m_shieldUpgrade;
-    //public UpgradeItem m_extraTurnUpgrade;
+    public List<Equipment> m_equipmentInventory;
 
     public struct Shield
     {
@@ -225,10 +221,10 @@ public class GameHandler : MonoBehaviour
 
     void SetupEquipment()
     {
-        m_equipmentInventory = new Equipment[128];
+        m_equipmentInventory = new List<Equipment>();
         for (int i = 0; i < 3; i++)
         {
-            m_equipmentInventory[i] = new Equipment(0);
+            m_equipmentInventory.Add(new Equipment(0));
         }
         //Equipment test = m_equipmentInventory[0];
         //test.m_level = 5;
@@ -257,26 +253,27 @@ public class GameHandler : MonoBehaviour
         return returnValue;
     }
 
+    public int EquipmentComparison(Equipment a_first, Equipment a_second)
+    {
+        int returnVal = 0;
+        returnVal = a_first.m_level - a_second.m_level;
+        return returnVal;
+    }
+
     internal void PickUpEquipment(Equipment a_equipment)
     {
-        for (int i = 0; i < m_equipmentInventory.Length; i++)
-        {
-            if (m_equipmentInventory[i] == null)
-            {
-                m_equipmentInventory[i] = a_equipment;
-                break;
-            }
-        }
+        m_equipmentInventory.Add(a_equipment);
+        m_equipmentInventory.Sort(EquipmentComparison);
     }
 
     internal void SellEquipment(Equipment a_equipment)
     {
-        for (int i = 0; i < m_equipmentInventory.Length; i++)
+        for (int i = 0; i < m_equipmentInventory.Count; i++)
         {
             if (m_equipmentInventory[i] == a_equipment)
             {
                 ChangeCash(m_equipmentInventory[i].m_goldValue);
-                m_equipmentInventory[i] = null;
+                m_equipmentInventory.RemoveAt(i);
                 break;
             }
         }
