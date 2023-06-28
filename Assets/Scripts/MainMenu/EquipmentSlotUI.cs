@@ -7,6 +7,7 @@ public class EquipmentSlotUI : MonoBehaviour
 {
     public Text m_levelText;
     public Text m_nameText;
+    public Text[] m_statNameTexts;
     public Text[] m_statTexts;
     public EquipmentPortrait m_portraitRef;
 
@@ -19,28 +20,31 @@ public class EquipmentSlotUI : MonoBehaviour
     {
         for (int i = 0; i < m_statTexts.Length; i++)
         {
-            m_statTexts[i].gameObject.SetActive(false);
+            m_statNameTexts[i].color = CharacterStatHandler.GetStatColor(i);
         }
     }
 
     public void Refresh()
     {
+
         bool valid = m_equipmentRef != null;
         if (m_equipmentRef != null)
         {
             m_portraitRef.SetEquipmentRef(m_equipmentRef);
             for (int i = 0; i < m_equipmentRef.m_stats.Count; i++)
             {
-                m_statTexts[i].gameObject.SetActive(true);
-                m_statTexts[i].text = m_equipmentRef.m_stats[i].statType.ToString() + ": " + m_equipmentRef.m_stats[i].value;
-                m_statTexts[i].color = CharacterStatHandler.GetStatColor(m_equipmentRef.m_stats[i].statType);
+                //m_statTexts[i].gameObject.SetActive(true);
+                int index = (int)m_equipmentRef.m_stats[i].statType;
+                m_statTexts[index].text = "" + m_equipmentRef.m_stats[i].value;
+                m_statTexts[index].color = Color.white; //CharacterStatHandler.GetStatColor(m_equipmentRef.m_stats[i].statType);
             }
         }
         else
         {
             for (int i = 0; i < m_statTexts.Length; i++)
             {
-                m_statTexts[i].text = "";
+                m_statTexts[i].text = "0";
+                m_statTexts[i].color = Color.white;
             }
         }
 

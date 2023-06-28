@@ -13,7 +13,9 @@ public class EquipmentPanel : MonoBehaviour
     //
     public Text m_nameTextRef;
     public Text m_rarityTextRef;
+    public Text[] m_statNameTextRefs;
     public Text[] m_statTextRefs;
+    public Text[] m_statDeltaTextRefs;
     public Text m_abilityTextRef;
     public Text m_goldValueTextRef;
 
@@ -36,11 +38,18 @@ public class EquipmentPanel : MonoBehaviour
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_equipmentRef = a_equipment;
+
+        for (int i = 0; i < m_statNameTextRefs.Length; i++)
+        {
+            m_statNameTextRefs[i].color = CharacterStatHandler.GetStatColor(i);
+        }
     }
 
     public void Refresh()
     {
         //m_imageRef.sprite = m_upgradeScreenHandler.m_upgradeSprites[m_upgradeID];
+        float[] statDeltas = new float[4];
+
         m_nameTextRef.text = m_equipmentRef.m_name;
         m_rarityTextRef.text = m_equipmentRef.m_rarityTier.name;
         m_rarityTextRef.color = m_equipmentRef.m_rarityTier.color;
@@ -48,14 +57,28 @@ public class EquipmentPanel : MonoBehaviour
 
         for (int i = 0; i < m_statTextRefs.Length; i++)
         {
-            m_statTextRefs[i].text = "";
+            m_statTextRefs[i].text = "0";
         }
 
         for (int i = 0; i < m_equipmentRef.m_stats.Count; i++)
         {
-            m_statTextRefs[i].text = CharacterStatHandler.GetStatName(m_equipmentRef.m_stats[i].statType) + ": " + m_equipmentRef.m_stats[i].value;
-            m_statTextRefs[i].color = CharacterStatHandler.GetStatColor(m_equipmentRef.m_stats[i].statType);
+            int index = (int)m_equipmentRef.m_stats[i].statType;
+            m_statTextRefs[index].text = "" + m_equipmentRef.m_stats[i].value;
+            statDeltas[index] += m_equipmentRef.m_stats[i].value;
+            m_statTextRefs[i].color = Color.white;// CharacterStatHandler.GetStatColor(m_equipmentRef.m_stats[i].statType);
+        }
 
+        Equipment openedEquipment = m_gameHandlerRef.m_playerStatHandler.m_equippedEquiment[m_equipmentScreenHandlerRef.m_openedEquipmentSlotId];
+        for (int i = 0; openedEquipment != null && i < openedEquipment.m_stats.Count; i++)
+        {
+            int index = (int)openedEquipment.m_stats[i].statType;
+            statDeltas[index] -= openedEquipment.m_stats[i].value;
+        }
+
+        for (int i = 0; i < m_statDeltaTextRefs.Length; i++)
+        {
+            m_statDeltaTextRefs[i].text = "(" + statDeltas[i] + ")";
+            m_statDeltaTextRefs[i].color = statDeltas[i] < 0 ? Color.red : (statDeltas[i] > 0 ? Color.green : Color.white);
         }
 
         //m_costTextRef.text = "" + m_upgradeRef.m_cost;

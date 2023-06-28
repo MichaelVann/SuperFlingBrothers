@@ -481,7 +481,7 @@ public class BattleManager : MonoBehaviour
     void UpdateGameEnding()
     {
         m_gameEndTimer += Time.deltaTime;
-        m_fadeToBlackRef.color = new Color(0f, 0f, 0f, m_gameEndTimer / m_maxGameEndTimer);
+        m_fadeToBlackRef.color = new Color(0f, 0f, 0f, Mathf.Pow(m_gameEndTimer / m_maxGameEndTimer,3f));
         if (m_gameEndTimer >= m_maxGameEndTimer)
         {
             FinishGame();

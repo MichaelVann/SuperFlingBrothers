@@ -86,7 +86,7 @@ public class CharacterStatHandler
                 returnColor = Color.yellow;
                 break;
             case eCharacterStatIndices.dexterity:
-                returnColor = Color.green;
+                returnColor = new Color(0f, 0.75f, 0f);
                 break;
             case eCharacterStatIndices.constitution:
                 returnColor = Color.red;
@@ -100,6 +100,11 @@ public class CharacterStatHandler
                 break;
         }
         return returnColor;
+    }
+
+    public static Color GetStatColor(int a_index)
+    {
+        return GetStatColor((eCharacterStatIndices)a_index);
     }
 
     public static string GetStatName(int a_index)
