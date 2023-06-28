@@ -41,6 +41,7 @@ public class Loot : MonoBehaviour
         //If the player has won the game
         if (m_battleManagerRef.m_endingGame && m_battleManagerRef.m_endGameType == eEndGameType.win)
         {
+            GetComponent<CircleCollider2D>().enabled = true;
             //Fly the coin towards the player
             if (m_playerRef == null)
             {
@@ -48,8 +49,10 @@ public class Loot : MonoBehaviour
             }
             if (m_playerRef != null)
             {
-                transform.position += (m_playerRef.transform.position - transform.position).normalized * m_endSpeed * Time.deltaTime;
-                m_endSpeed = Mathf.Pow(m_endSpeed, 1.003f);
+                Vector3 deltaPos = m_playerRef.transform.position - transform.position;
+                transform.position += deltaPos.normalized * m_endSpeed * Time.deltaTime;
+                m_endSpeed = Mathf.Pow(m_endSpeed, 1.002f);
+                m_endSpeed = Mathf.Clamp(m_endSpeed, 0f, 30f);
                 m_movingToTargetPos = false;
             }
 
