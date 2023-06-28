@@ -25,6 +25,22 @@ public class EquipmentScreenHandler : MonoBehaviour
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_equipmentItemPanels = new List<EquipmentPanel>();
         RefreshEquipmentSlots();
+        InstantiateEquipmentInventory();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    void InstantiateEquipmentInventory()
+    {
+        for (int i = 0; i < m_equipmentItemPanels.Count; i++)
+        {
+            GameObject.Destroy(m_equipmentItemPanels[i].gameObject);
+        }
+        m_equipmentItemPanels.Clear();
         for (int i = 0; i < m_gameHandlerRef.m_equipmentInventory.Count; i++)
         {
             if (m_gameHandlerRef.m_equipmentInventory[i] != null)
@@ -37,15 +53,11 @@ public class EquipmentScreenHandler : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
 
     public void RefreshInventory()
     {
+        m_gameHandlerRef.SortEquipmentInventory();
+        InstantiateEquipmentInventory();
         m_gameHandlerRef.m_equipmentCollectedLastGame = 0;
         m_noEquipmentText.SetActive(m_equipmentItemPanels.Count < 1);
         for (int i = 0; i < m_equipmentItemPanels.Count; i++)

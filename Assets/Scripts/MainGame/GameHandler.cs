@@ -256,14 +256,26 @@ public class GameHandler : MonoBehaviour
     public int EquipmentComparison(Equipment a_first, Equipment a_second)
     {
         int returnVal = 0;
-        returnVal = a_first.m_level - a_second.m_level;
-        return returnVal;
+        int[] vals = new int[2];
+        for (int i = 0; i < 2; i++)
+        {
+            Equipment evaluatedEquipment = i == 0 ? a_first : a_second;
+            vals[i] = evaluatedEquipment.m_level;
+            vals[i] += 1000 * (evaluatedEquipment.m_equipped ? 1 : 0);
+        }
+        returnVal = vals[0] > vals[1] ? 1 : (vals[0] < vals[1] ? -1 : 0);
+        return returnVal * -1;
+    }
+
+    internal void SortEquipmentInventory()
+    {
+        m_equipmentInventory.Sort(EquipmentComparison);
     }
 
     internal void PickUpEquipment(Equipment a_equipment)
     {
         m_equipmentInventory.Add(a_equipment);
-        m_equipmentInventory.Sort(EquipmentComparison);
+        SortEquipmentInventory();
     }
 
     internal void SellEquipment(Equipment a_equipment)
