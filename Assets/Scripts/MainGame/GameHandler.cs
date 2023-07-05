@@ -260,7 +260,7 @@ public class GameHandler : MonoBehaviour
         for (int i = 0; i < 2; i++)
         {
             Equipment evaluatedEquipment = i == 0 ? a_first : a_second;
-            vals[i] = evaluatedEquipment.m_level;
+            vals[i] = evaluatedEquipment.m_goldValue;
             vals[i] += 1000 * (evaluatedEquipment.m_equipped ? 1 : 0);
         }
         returnVal = vals[0] > vals[1] ? 1 : (vals[0] < vals[1] ? -1 : 0);

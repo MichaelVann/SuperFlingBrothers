@@ -86,6 +86,16 @@ public class Loot : MonoBehaviour
         }
     }
 
+    public void OnTriggerStay2D(Collider2D a_collider)
+    {
+        if (a_collider.gameObject.GetComponent<Nucleus>())
+        {
+            Vector3 nucleusPos = a_collider.gameObject.transform.position;
+
+            transform.position += (transform.position - nucleusPos).normalized * 0.05f;
+        }
+    }
+
     public void OnTriggerEnter2D(Collider2D a_collider)
     {
         //If the coin collides with the player
@@ -94,5 +104,6 @@ public class Loot : MonoBehaviour
             //Destroy the coin
             Destroy(this.gameObject);
         }
+
     }
 }
