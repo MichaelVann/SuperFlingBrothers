@@ -29,7 +29,10 @@ public class BattleManager : MonoBehaviour
     public GameObject m_escapeZoneRef;
     public Button m_extraTurnButtonRef;
     public GameObject m_extraTurnButtonLockImageRef;
-    public GameObject m_wallTriangles;
+    public GameObject m_wallTriangleRef;
+    public GameObject m_gravityWellRef;
+    float m_wallXOffset = 2.11f;
+    float m_wallYSpace = 5f;
 
     public Text m_enemyCountText;
     public Text m_levelDifficultyText;
@@ -88,6 +91,7 @@ public class BattleManager : MonoBehaviour
     internal struct EnvironmentalEffects
     {
         internal bool wallTriangles;
+        internal bool gravityWells;
     }
     EnvironmentalEffects m_environmentalEffects;
 
@@ -186,8 +190,38 @@ public class BattleManager : MonoBehaviour
     void SetupEnvironmentalEffects()
     {
         m_environmentalEffects = new EnvironmentalEffects();
-        m_environmentalEffects.wallTriangles = UnityEngine.Random.Range(0f,1f) <= 0.1f;
-        m_wallTriangles.SetActive(m_environmentalEffects.wallTriangles);
+        m_environmentalEffects.wallTriangles = UnityEngine.Random.Range(0f,1f) <= 0.3f;
+        m_environmentalEffects.gravityWells =  UnityEngine.Random.Range(0f,1f) <= 0.3f;
+
+        if (m_environmentalEffects.wallTriangles)
+        {
+            int triangleCount = UnityEngine.Random.Range(1,9)*2;
+            for (int i = 0; i < triangleCount; i++)
+            {
+                Vector3 pos = new Vector3();
+                pos.x = m_wallXOffset * (i%2 == 0 ? -1f : 1f);
+                float yGap = m_wallYSpace / (float)((triangleCount / 2)+1);
+                pos.y = (m_wallYSpace/2f) - yGap * ((i/2)+1);
+
+                float rotation = 90f * (i % 2 == 0 ? -1f : 1f);
+                Instantiate<GameObject>(m_wallTriangleRef, pos, Quaternion.Euler(0f,0f,rotation), m_gameViewRef.transform);
+            }
+            //m_wallTriangles.SetActive(m_environmentalEffects.wallTriangles);
+        }
+
+        if (m_environmentalEffects.gravityWells)
+        {
+            int gravityWellCount = VLib.vRandom(1,4);
+            for (int i = 0; i < gravityWellCount; i++)
+            {
+                Vector3 pos = new Vector3();
+                pos.x = VLib.vRandom(-m_wallXOffset, m_wallXOffset);
+                pos.y = VLib.vRandom(-m_wallYSpace/2f, m_wallYSpace/2f);
+
+                Instantiate<GameObject>(m_gravityWellRef, pos, new Quaternion(), m_gameViewRef.transform);
+            }
+        }
+        
     }
 
     void Awake()
