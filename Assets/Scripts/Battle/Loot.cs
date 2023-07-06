@@ -51,7 +51,7 @@ public class Loot : MonoBehaviour
             {
                 Vector3 deltaPos = m_playerRef.transform.position - transform.position;
                 transform.position += deltaPos.normalized * m_endSpeed * Time.deltaTime;
-                m_endSpeed = Mathf.Pow(m_endSpeed, 1.002f);
+                m_endSpeed = Mathf.Pow(m_endSpeed, 1f + 2f * Time.deltaTime);
                 m_endSpeed = Mathf.Clamp(m_endSpeed, 0f, 30f);
                 m_movingToTargetPos = false;
             }
