@@ -238,8 +238,13 @@ public class Player : Damageable
         }
         else if (equipmentDrop != null && !equipmentDrop.m_movingToTargetPos)
         {
-            
             m_battleManagerRef.PickUpEquipment(a_collider.gameObject.GetComponent<EquipmentDrop>().m_equipment);
+            RisingFadingText equipmentRFT = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(m_damageTextYOffset/2f, m_damageTextYOffset*1.5f), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
+            equipmentRFT.SetImageEnabled(true);
+            equipmentRFT.SetOriginalColor(Color.blue);
+            equipmentRFT.SetOriginalScale(1.2f);
+            equipmentRFT.SetLifeTimerMax(1.35f);
+            equipmentRFT.SetTextContent("+1 Eq");
         }
     }
 
