@@ -8,12 +8,14 @@ public class EquipmentScreenHandler : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
     public EquipmentSlotUI[] m_equipmentSlotUIRefs;
+    public EquipmentSlotUI m_inventoryEquipmentSlotUIRef;
     public int m_openedEquipmentSlotId = -1;
 
     public GameObject m_inventoryPanelRef;
 
     public GameObject m_inventoryContentRef;
     public GameObject m_equipmentPanelTemplate;
+    public GameObject m_equipmentOverview;
 
     List<EquipmentPanel> m_equipmentItemPanels;
 
@@ -64,6 +66,8 @@ public class EquipmentScreenHandler : MonoBehaviour
         {
             m_equipmentItemPanels[i].Refresh();
         }
+        m_inventoryEquipmentSlotUIRef.SetEquipmentRef(m_gameHandlerRef.m_playerStatHandler.m_equippedEquiment[m_openedEquipmentSlotId]);
+        m_inventoryEquipmentSlotUIRef.Refresh();
     }
 
 
@@ -96,6 +100,7 @@ public class EquipmentScreenHandler : MonoBehaviour
     public void SetInventoryPanelStatus(bool a_open, int a_slotId = -1)
     {
         m_inventoryPanelRef.SetActive(a_open);
+        m_equipmentOverview.SetActive(!a_open);
         m_openedEquipmentSlotId = a_slotId;
         if (a_open)
         {
