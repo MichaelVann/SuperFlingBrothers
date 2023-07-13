@@ -15,11 +15,13 @@ public class Enemy : Damageable
     public GameObject m_velocityIndicatorRef;
     public GameObject m_visionConeRef;
     public Sprite m_idleBacteriaSprite;
+    public Sprite[] m_enemySprites;
     public Sprite m_idleBacteriaShadowSprite;
     public enum eEnemyType
     {
         //Null = -1,
         Idler,
+        Dasher,
         Dodger,
         Striker,
         Count
@@ -30,6 +32,7 @@ public class Enemy : Damageable
         public Enemy.eEnemyType type;
         public int difficulty;
         public bool flinger;
+        public bool dasher;
         public bool dodger;
         public bool duplicator;
         public bool canRotate;
@@ -81,7 +84,7 @@ public class Enemy : Damageable
         switch (m_enemyType)
         {
             case eEnemyType.Idler:
-                m_originalColor = Color.yellow;
+                m_originalColor = Color.white;
                 m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue /= 2f;
                 transform.localScale *= 1f;
                 m_rigidBody.mass *= 0.45f;
@@ -91,18 +94,23 @@ public class Enemy : Damageable
                 capsuleCollider.offset = new Vector2(-0.013965f, -0.09077191f);
                 capsuleCollider.size = new Vector2(0.75793f, 2.911544f);
                 m_spriteRenderer.sprite = m_idleBacteriaSprite;
-                m_spriteRenderer.color = Color.white;
+                //m_spriteRenderer.color = Color.white;
                 m_shadowRef.GetComponent<SpriteRenderer>().sprite = m_idleBacteriaShadowSprite;
                 m_flingReadinessIndicatorRef.SetActive(false);
                 m_nucleusDrainTimer = new vTimer(1.0f, false, false);
                 break;
-            case eEnemyType.Striker:
-                m_originalColor = Color.red;
-                m_visionConeRef.SetActive(true);
+            case eEnemyType.Dasher:
+                m_spriteRenderer.sprite = m_enemySprites[0];
+                m_originalColor = Color.yellow;
+                m_flingAccuracy = 360f;
                 break;
             case eEnemyType.Dodger:
                 m_originalColor = Color.green;
                 m_flingAccuracy = 360f;
+                break;
+            case eEnemyType.Striker:
+                m_originalColor = Color.red;
+                m_visionConeRef.SetActive(true);
                 break;
             case eEnemyType.Count:
                 break;
@@ -323,7 +331,11 @@ public class Enemy : Damageable
 
     public void Fling()
     {
-        if (m_playerRef)
+        if (m_typeTrait.dasher)
+        {
+                Fling(m_rigidBody.velocity.normalized, m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].finalValue);
+        }
+        else if (m_playerRef)
         {
             Vector3 playerPos = m_playerRef.transform.position;
 
@@ -342,33 +354,43 @@ public class Enemy : Damageable
     private void FlingUpdate()
     {
         Vector3 playerPos = m_playerRef.transform.position;
-
-        if ((playerPos - transform.position).magnitude <= m_sightRadius)
+        if (m_typeTrait.dasher)
         {
-            if (m_typeTrait.flinger)
-            {
-                m_visionConeRef.SetActive(true);
-            }
-            for (int i = 0; i < m_exclamationMarkRefs.Length; i++)
-            {
-                m_exclamationMarkRefs[i].SetActive(true);
-            }
             m_flingTimer += Time.deltaTime;
             if (m_flingTimer >= m_flingTimerMax)
             {
                 m_flingTimer -= m_flingTimerMax;
-
                 Fling();
             }
-            return;
         }
         else
         {
-            for (int i = 0; i < m_exclamationMarkRefs.Length; i++)
+            if ((playerPos - transform.position).magnitude <= m_sightRadius)
             {
-                m_exclamationMarkRefs[i].SetActive(false);
+                if (m_typeTrait.flinger)
+                {
+                    m_visionConeRef.SetActive(true);
+                }
+                for (int i = 0; i < m_exclamationMarkRefs.Length; i++)
+                {
+                    m_exclamationMarkRefs[i].SetActive(true);
+                }
+                m_flingTimer += Time.deltaTime;
+                if (m_flingTimer >= m_flingTimerMax)
+                {
+                    m_flingTimer -= m_flingTimerMax;
+                    Fling();
+                }
+                return;
             }
-            m_visionConeRef.SetActive(false);
+            else
+            {
+                for (int i = 0; i < m_exclamationMarkRefs.Length; i++)
+                {
+                    m_exclamationMarkRefs[i].SetActive(false);
+                }
+                m_visionConeRef.SetActive(false);
+            }
         }
     }
 
@@ -377,7 +399,7 @@ public class Enemy : Damageable
     {
         if (m_playerRef)
         {
-            if (m_typeTrait.flinger || m_typeTrait.dodger)
+            if ((m_typeTrait.dasher && m_rigidBody.velocity.magnitude > Mathf.Epsilon) || m_typeTrait.flinger || m_typeTrait.dodger)
             {
                 FlingUpdate();
             }
@@ -388,6 +410,4 @@ public class Enemy : Damageable
     {
         base.Fling(a_flingVector, a_flingStrength);
     }
-
-
 }

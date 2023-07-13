@@ -13,13 +13,13 @@ public class Test
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 16.1f;
+    public const float _VERSION_NUMBER = 16.2f;
 
     static internal bool DEBUG_MODE = true;
 
     // -- BALANCE VARIABLES --
 
-    static internal float GAME_enemyXPRewardScale = 40f;
+    static internal float GAME_enemyXPRewardScale = 20f;
     static internal float BATTLE_CoinValue = 1f;
     static internal float BATTLE_ShadowAngle = 135f;
     //Damageables
@@ -165,6 +165,7 @@ public class GameHandler : MonoBehaviour
         {
             m_enemyTypeTraits[i].type = Enemy.eEnemyType.Idler;
             m_enemyTypeTraits[i].difficulty = 1;
+            m_enemyTypeTraits[i].dasher = false;
             m_enemyTypeTraits[i].flinger = false;
             m_enemyTypeTraits[i].dodger = false;
             m_enemyTypeTraits[i].duplicator = false;
@@ -175,9 +176,14 @@ public class GameHandler : MonoBehaviour
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Idler].difficulty = 1;
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Idler].canRotate = true;
 
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dasher].type = Enemy.eEnemyType.Dasher;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dasher].dasher = true;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dasher].difficulty = 3;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dasher].duplicator = true;
+
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].type = Enemy.eEnemyType.Dodger;
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].dodger = true;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].difficulty = 4;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].difficulty = 5;
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].duplicator = true;
 
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].type = Enemy.eEnemyType.Striker;
