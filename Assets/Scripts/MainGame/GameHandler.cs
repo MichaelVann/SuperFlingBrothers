@@ -5,7 +5,11 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+[Serializable]
+public class Test
+{
+    public float x;
+}
 
 public class GameHandler : MonoBehaviour
 {
@@ -109,6 +113,8 @@ public class GameHandler : MonoBehaviour
         public CharacterStatHandler statHandler;
         public List<Stock> stockList;
         public UpgradeItem[] upgrades;
+        public List<Equipment> equipmentList;
+        public Test[] test;
         public string bodyFirstName;
         public string bodyLastName;
     }
@@ -366,10 +372,17 @@ public class GameHandler : MonoBehaviour
 
     public void SaveGame()
     {
+        Test[] test = new Test[4];
+        //test[0] = new Test();
+        //test[0].x = 5;
+
         m_saveData.cash = m_cash;
-        m_saveData.statHandler = m_playerStatHandler;
+        m_saveData.statHandler = new CharacterStatHandler();
+        m_saveData.statHandler.Copy(m_playerStatHandler);
         m_saveData.stockList = m_stockHandler.m_stockList;
         m_saveData.upgrades = m_upgrades;
+        m_saveData.equipmentList = m_equipmentInventory;
+        m_saveData.test = test;
         m_saveData.bodyFirstName = m_humanBody.m_firstName;
         m_saveData.bodyLastName = m_humanBody.m_lastName;
 
@@ -394,6 +407,13 @@ public class GameHandler : MonoBehaviour
         for (int i = 0; i < m_upgrades.Length; i++)
         {
             m_upgrades[i].Copy(m_saveData.upgrades[i]);
+        }
+
+        m_equipmentInventory = m_saveData.equipmentList;
+
+        for (int i = 0; i < m_equipmentInventory.Count; i++)
+        {
+            m_equipmentInventory[i] = m_saveData.equipmentList[i];
         }
         SetupShield();
     }

@@ -21,6 +21,8 @@ public class EquipmentScreenHandler : MonoBehaviour
 
     public GameObject m_noEquipmentText;
 
+    private bool m_inited = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,12 +30,21 @@ public class EquipmentScreenHandler : MonoBehaviour
         m_equipmentItemPanels = new List<EquipmentPanel>();
         RefreshEquipmentSlots();
         InstantiateEquipmentInventory();
+        m_inited = true;
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    private void OnEnable()
+    {
+        if (m_inited)
+        {
+            RefreshEquipmentSlots();
+        }
     }
 
     void InstantiateEquipmentInventory()
@@ -66,7 +77,7 @@ public class EquipmentScreenHandler : MonoBehaviour
         {
             m_equipmentItemPanels[i].Refresh();
         }
-        m_inventoryEquipmentSlotUIRef.SetEquipmentRef(m_gameHandlerRef.m_playerStatHandler.m_equippedEquiment[m_openedEquipmentSlotId]);
+        m_inventoryEquipmentSlotUIRef.SetEquipmentRef(m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId]);
         m_inventoryEquipmentSlotUIRef.Refresh();
     }
 
@@ -75,7 +86,7 @@ public class EquipmentScreenHandler : MonoBehaviour
     {
         for (int i = 0; i < m_equipmentSlotUIRefs.Length; i++)
         {
-            m_equipmentSlotUIRefs[i].SetEquipmentRef(m_gameHandlerRef.m_playerStatHandler.m_equippedEquiment[i]);
+            m_equipmentSlotUIRefs[i].SetEquipmentRef(m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[i]);
             m_equipmentSlotUIRefs[i].Refresh();
         }
     }

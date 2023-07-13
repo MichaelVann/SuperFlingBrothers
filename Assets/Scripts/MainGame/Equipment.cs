@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-
+[Serializable]
 public class Equipment
 {
     public enum eRarityTier
@@ -19,26 +19,40 @@ public class Equipment
         Count
     }
 
+    [Serializable]
     public struct RarityTier
     {
         public eRarityTier level;
         public Color color;
         public string name;
     }
+    [SerializeField]
     public bool m_equipped = false;
+    [SerializeField]
     public int m_equippedSlotId = -1;
+    [SerializeField]
     public int m_level = 0;
+    [SerializeField]
     public RarityTier m_rarityTier;
+    [SerializeField]
     public string m_name;
+    [SerializeField]
     public int m_goldValue = 0;
 
+    [Serializable]
     public struct EquipmentStat
     {
         public eCharacterStatIndices statType;
         public float value;
     }
 
+    //[SerializeReference]
     public List<EquipmentStat> m_stats;
+
+    public void Copy(Equipment a_equipment)
+    {
+
+    }
 
     public void SetEquipStatus(bool a_equipped, int a_equippedSlot)
     {
