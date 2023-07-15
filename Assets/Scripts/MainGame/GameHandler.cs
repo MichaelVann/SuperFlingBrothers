@@ -13,7 +13,7 @@ public class Test
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 16.2f;
+    public const float _VERSION_NUMBER = 16.3f;
 
     static internal bool DEBUG_MODE = true;
 

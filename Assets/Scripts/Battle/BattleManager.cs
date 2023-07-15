@@ -353,6 +353,13 @@ public class BattleManager : MonoBehaviour
         //Make sure that we're not trying to spawn more enemies than there are available spawn points
         enemiesToSpawn = enemiesToSpawn < m_enemySpawnPointsRefs.Count ? enemiesToSpawn : m_enemySpawnPointsRefs.Count;
 
+        List<int> spawnSpots = new List<int>();
+        List<int> processedSpawnSpots = new List<int>();
+
+
+
+
+
         //Do a first pass to add some basic enemies to the level
         for (int i = 0; i < enemiesToSpawn && difficultyBudget > 0; i++)
         {
@@ -360,6 +367,43 @@ public class BattleManager : MonoBehaviour
             difficultyBudget -= GameHandler.m_enemyTypeTraits[minimumDifficulty].difficulty;
         }
 
+        for (int i = 0; i < enemiesToSpawn; i++)
+        {
+            spawnSpots.Add(spawnLocationsTypes[i]);
+        }
+
+        while (spawnSpots.Count > 0)
+        {
+            bool viable = false;
+            int roll = VLib.vRandom(0, spawnSpots.Count - 1);
+
+            if (spawnSpots[roll] + 1 < GameHandler.m_enemyTypeTraits.Length)
+            {
+                //Find the upgrade cost of upgrading this enemy to the next enemy
+                int currentLevelDifficulty = spawnSpots[roll] < 0 ? 0 : GameHandler.m_enemyTypeTraits[spawnSpots[roll]].difficulty;
+
+                int nextLevelDifficulty = GameHandler.m_enemyTypeTraits[spawnSpots[roll] + 1].difficulty;
+                int upgradeCost = nextLevelDifficulty - currentLevelDifficulty;
+
+                //Check whether we can upgrade the enemy with the current budget
+                bool upgradeAvailable = difficultyBudget >= upgradeCost && nextLevelDifficulty <= m_maxEnemyDifficulty;
+
+                if (upgradeAvailable)
+                {
+                    spawnSpots[roll]++;
+                    difficultyBudget -= upgradeCost;
+                    viable = true;
+                }
+            }
+
+            if (!viable)
+            {
+                processedSpawnSpots.Add(spawnSpots[roll]);
+                spawnSpots.RemoveAt(roll);
+            }
+        }
+
+        /*
         //Go through and upgrade the enemies from top down, upgrading the first enemy as much as possible then moving to the second, and so forth
         for (int i = 0; i < spawnLocationsTypes.Length; i++)
         {
@@ -397,15 +441,16 @@ public class BattleManager : MonoBehaviour
                 upgradeAvailable = (enoughDifficulty && notOverDifficultyCap);
             }
         }
+        */
 
         //Spawn the enemies in by iterating through spawnLocationsTypes and spawning the corresponding enemy at the corresponding location
-        for (int i = 0; i < spawnLocationsTypes.Length; i++)
+        for (int i = 0; i < processedSpawnSpots.Count; i++)
         {
-            if (spawnLocationsTypes[i] < 0)
+            if (processedSpawnSpots[i] < 0)
             {
                 break;
             }
-            Enemy.eEnemyType enemyType = (Enemy.eEnemyType)(spawnLocationsTypes[i]);
+            Enemy.eEnemyType enemyType = (Enemy.eEnemyType)(processedSpawnSpots[i]);
 
             Debug.Log(enemyType);
 
