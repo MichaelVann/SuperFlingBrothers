@@ -311,7 +311,6 @@ public class Enemy : Damageable
 
         m_battleManagerRef.ChangeEnemyCount(-1);
 
-
         //Spawn coins
         SpawnLoot(m_coinPrefab, m_coinsToSpawn);
         int equipmentDrops = 0;
@@ -348,7 +347,6 @@ public class Enemy : Damageable
                 Fling(aimDisturbance, m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].finalValue);
             }
         }
-       
     }
 
     private void FlingUpdate()

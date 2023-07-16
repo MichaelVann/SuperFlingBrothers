@@ -119,7 +119,7 @@ public class EquipmentScreenHandler : MonoBehaviour
         }
     }
 
-    public void SellEquipment(EquipmentPanel a_equipmentPanel)
+    public void SellEquipment(EquipmentPanel a_equipmentPanel, bool a_refreshInventory = true)
     {
         for (int i = 0; i < m_equipmentItemPanels.Count; i++)
         {
@@ -130,6 +130,29 @@ public class EquipmentScreenHandler : MonoBehaviour
                 m_gameHandlerRef.SellEquipment(a_equipmentPanel.m_equipmentRef);
                 break;
             }
+        }
+        if (a_refreshInventory)
+        {
+            RefreshInventory();
+        }
+    }
+
+    public void SellAllUnequippedEquipment()
+    {
+        List<EquipmentPanel> equipmentPanelList = new List<EquipmentPanel>();
+
+        for (int i = 0; i < m_equipmentItemPanels.Count; i++)
+        {
+            if (!m_equipmentItemPanels[i].m_equipmentRef.m_equipped)
+            {
+                equipmentPanelList.Add(m_equipmentItemPanels[i]);
+            }
+        }
+
+        while (equipmentPanelList.Count > 0)
+        {
+            SellEquipment(equipmentPanelList[0],false);
+            equipmentPanelList.RemoveAt(0);
         }
         RefreshInventory();
     }

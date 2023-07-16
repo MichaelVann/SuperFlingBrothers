@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 16.3f;
+    public const float _VERSION_NUMBER = 16.5f;
 
     static internal bool DEBUG_MODE = true;
 
@@ -343,6 +343,10 @@ public class GameHandler : MonoBehaviour
         {
             m_playerStatHandler = new CharacterStatHandler();
             m_playerStatHandler.Init();
+        }
+        if (Input.GetKeyUp(KeyCode.H))
+        {
+            PickUpEquipment(new Equipment(m_playerStatHandler.m_level));
         }
         m_stockHandler.Update();
         //BATTLE_ShadowAngle = Mathf.Sin(Time.unscaledTime)*360f;
