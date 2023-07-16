@@ -356,10 +356,6 @@ public class BattleManager : MonoBehaviour
         List<int> spawnSpots = new List<int>();
         List<int> processedSpawnSpots = new List<int>();
 
-
-
-
-
         //Do a first pass to add some basic enemies to the level
         for (int i = 0; i < enemiesToSpawn && difficultyBudget > 0; i++)
         {
@@ -403,6 +399,7 @@ public class BattleManager : MonoBehaviour
             }
         }
 
+        /////// OLD Spawning system
         /*
         //Go through and upgrade the enemies from top down, upgrading the first enemy as much as possible then moving to the second, and so forth
         for (int i = 0; i < spawnLocationsTypes.Length; i++)
