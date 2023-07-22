@@ -17,6 +17,7 @@ public class Enemy : Damageable
     public Sprite m_idleBacteriaSprite;
     public Sprite[] m_enemySprites;
     public Sprite m_idleBacteriaShadowSprite;
+    public FlingPieIndicator m_flingPieIndicatorRef;
     public enum eEnemyType
     {
         //Null = -1,
@@ -74,6 +75,7 @@ public class Enemy : Damageable
         m_typeTrait = new TypeTrait();
         m_flingTimer -= UnityEngine.Random.Range(0f, 0.3f);
         m_damageTextColor = Color.yellow;
+        m_flingPieIndicatorRef.SetPieFillAmount(0);
     }
 
     public void SetUpType(eEnemyType a_type)
@@ -98,6 +100,7 @@ public class Enemy : Damageable
                 m_shadowRef.GetComponent<SpriteRenderer>().sprite = m_idleBacteriaShadowSprite;
                 m_flingReadinessIndicatorRef.SetActive(false);
                 m_nucleusDrainTimer = new vTimer(1.0f, false, false);
+                m_flingPieIndicatorRef.gameObject.SetActive(false);
                 break;
             case eEnemyType.Dasher:
                 m_spriteRenderer.sprite = m_enemySprites[0];
@@ -351,6 +354,7 @@ public class Enemy : Damageable
 
     private void FlingUpdate()
     {
+        m_flingPieIndicatorRef.SetPieFillAmount(m_flingTimer / m_flingTimerMax);
         Vector3 playerPos = m_playerRef.transform.position;
         if (m_typeTrait.dasher)
         {
@@ -390,6 +394,7 @@ public class Enemy : Damageable
                 m_visionConeRef.SetActive(false);
             }
         }
+
     }
 
     //AI
