@@ -9,6 +9,8 @@ public class EquipmentScreenHandler : MonoBehaviour
     GameHandler m_gameHandlerRef;
     public EquipmentSlotUI[] m_equipmentSlotUIRefs;
     public EquipmentSlotUI m_inventoryEquipmentSlotUIRef;
+    public Text m_equipmentAbilityReadoutText;
+    public Text m_equipmentAbilityNameText;
     public int m_openedEquipmentSlotId = -1;
 
     public GameObject m_inventoryPanelRef;
@@ -79,6 +81,11 @@ public class EquipmentScreenHandler : MonoBehaviour
         }
         m_inventoryEquipmentSlotUIRef.SetEquipmentRef(m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId]);
         m_inventoryEquipmentSlotUIRef.Refresh();
+        if (m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId] != null)
+        {
+            m_equipmentAbilityNameText.text = m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId].m_activeAbility.GetName();
+            m_equipmentAbilityReadoutText.text = m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId].m_activeAbility.GetAbilityDescription();
+        }
     }
 
 
@@ -94,7 +101,8 @@ public class EquipmentScreenHandler : MonoBehaviour
     public void SetEquipStatus(Equipment a_equipment)
     {
         m_gameHandlerRef.m_playerStatHandler.EquipEquipment(a_equipment, m_openedEquipmentSlotId);
-        CloseInventoryPanel();
+        //CloseInventoryPanel();
+        RefreshInventory();
         RefreshEquipmentSlots();
     }
 
@@ -105,7 +113,9 @@ public class EquipmentScreenHandler : MonoBehaviour
 
     public void CloseInventoryPanel()
     {
+        RefreshEquipmentSlots();
         SetInventoryPanelStatus(false);
+
     }
 
     public void SetInventoryPanelStatus(bool a_open, int a_slotId = -1)

@@ -21,7 +21,7 @@ public class Player : Damageable
 
     float m_hitTimeSlowdownRate = 0.05f;
 
-    float m_upperLowerFlingPositionBounds = 3.7f;
+    float m_upperLowerFlingPositionBounds = 3.0f;
 
     public SpriteRenderer m_invalidFlingCross;
 

@@ -49,6 +49,8 @@ public class Equipment
     //[SerializeReference]
     public List<EquipmentStat> m_stats;
 
+    public ActiveAbility m_activeAbility;
+
     public void Copy(Equipment a_equipment)
     {
 
@@ -101,6 +103,8 @@ public class Equipment
     {
         m_name = VLib.GenerateRandomizedName(4,8);
         m_level = a_level;
+
+        //Repetitively attempt to uptier the rarity
         while (UnityEngine.Random.Range(0f,1f) <= 0.25f && m_rarityTier.level < eRarityTier.Count-1)
         {
             m_rarityTier.level++;
@@ -131,6 +135,8 @@ public class Equipment
             m_stats[index] = statToEdit;
             points--;
         }
+
+        m_activeAbility = new ActiveAbility();
     }
 
     public Equipment(int a_level)

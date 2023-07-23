@@ -10,6 +10,8 @@ public static class VLib
     static string[] m_consonants = { "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "r", "s", "t", "v", "w", "z", };// "x", "q", "ch", "kh", "gh" };
     static string[] m_vowels = { "a", "e", "i", "o", "u" };//, "oo", "ou", "ee" };
 
+    public static string GetEnumName<T>(T a_type) { return Enum.GetName(typeof(T), a_type); }
+
     public static float TruncateFloatsDecimalPlaces(float a_float, int a_decimalsToKeep)
     {
         float multiplier = Mathf.Pow(10, a_decimalsToKeep);
@@ -106,9 +108,9 @@ public static class VLib
         return (a_value % a_mod + a_mod) % a_mod;
     }
 
-    public static int vRandom(int a_inclusiveMin, int a_exclusiveMax)
+    public static int vRandom(int a_inclusiveMin, int a_inclusiveMax)
     {
-        return UnityEngine.Random.Range(a_inclusiveMin, a_exclusiveMax);
+        return UnityEngine.Random.Range(a_inclusiveMin, a_inclusiveMax+1);
     }
 
     public static float vRandom(float a_inclusiveMin, float a_inclusiveMax)
@@ -130,17 +132,17 @@ public static class VLib
     {
         string name = "";
         int length = vRandom(a_minimumLength, a_maximumLength);
-        int startWithVowel = vRandom(0, 2);
+        int startWithVowel = vRandom(0, 1);
 
         for (int i = 0; i < length; i++)
         {
             if (i % 2 == startWithVowel)
             {
-                name += m_consonants[vRandom(0, m_consonants.Length)];
+                name += m_consonants[vRandom(0, m_consonants.Length-1)];
             }
             else
             {
-                name += m_vowels[vRandom(0, m_vowels.Length)];
+                name += m_vowels[vRandom(0, m_vowels.Length-1)];
             }
             if (i == 0)
             {

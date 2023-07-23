@@ -27,12 +27,13 @@ public class BattleManager : MonoBehaviour
     public GameObject m_enemyTemplate;
     public GameObject m_gameViewRef;
     public GameObject m_escapeZoneRef;
-    public Button m_extraTurnButtonRef;
     public GameObject m_extraTurnButtonLockImageRef;
     public GameObject m_wallTriangleRef;
     public GameObject m_gravityWellRef;
     float m_wallXOffset = 2.11f;
     float m_wallYSpace = 5f;
+
+    public Button[] m_abilityButtons;
 
     public Text m_enemyCountText;
     public Text m_levelDifficultyText;
@@ -84,9 +85,12 @@ public class BattleManager : MonoBehaviour
 
     bool m_startingSequence = true;
 
-    //Extra Turn Upgrade
-    int m_extraTurnsRemaining = 1;
-    bool m_usingExtraTurn;
+    //Active Abilities
+    ActiveAbility[] m_activeAbilities;
+
+    //Prepared Abilities
+    //int m_extraTurnsRemaining = 1;
+    //bool m_usingExtraTurn;
 
     internal struct EnvironmentalEffects
     {
@@ -97,7 +101,6 @@ public class BattleManager : MonoBehaviour
 
     //Pre Game
     bool m_runningPregame = true;
-
 
     //End Game
     public bool m_endingGame = false;
@@ -147,25 +150,78 @@ public class BattleManager : MonoBehaviour
     public void ChangeXp(float a_change) { m_xpEarned += a_change; }
     public void ChangeInvaderStrength(int a_change) { m_invaderStrengthChange += a_change; }
 
-    public void PrepareExtraTurn()
+    public void RefreshAbilityButtons()
     {
-        if (m_extraTurnsRemaining >= 1)
+        for (int i = 0; i < m_abilityButtons.Length; i++)
         {
-            m_usingExtraTurn = !m_usingExtraTurn;
-            UpdateExtraTurnUIState();
+            if (m_activeAbilities[i] != null)
+            {
+                m_abilityButtons[i].interactable = m_activeAbilities[i].m_ammo > 0;
+                if (m_activeAbilities[i].m_reactive)
+                {
+                    Color buttonColor = Color.grey;
+                    if (m_abilityButtons[i].interactable)
+                    {
+                        buttonColor = m_activeAbilities[i].m_active ? Color.red : Color.green;
+                    }
+                    m_abilityButtons[i].GetComponent<Image>().color = buttonColor;
+                }
+                m_abilityButtons[i].GetComponentInChildren<Text>().text = m_activeAbilities[i].GetName() + $" ({m_activeAbilities[i].m_ammo})";
+            }
+            else
+            {
+                m_abilityButtons[i].gameObject.SetActive(false);
+            }
         }
+    }
+
+    public void ActivateAbility(int a_id)
+    {
+        //ActiveAbility equipment = m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[a_id].m_activeAbilityType;
+        ActiveAbility abil = m_activeAbilities[a_id];
+        if (abil.m_reactive)
+        {
+            switch (abil.m_abilityType)
+            {
+                case ActiveAbility.eAbilityType.ExtraTurn:
+                    abil.m_active = !abil.m_active;
+                    //TODO: Enable outline around button or something, showing ability is prepared
+                    break;
+                case ActiveAbility.eAbilityType.Count:
+                    break;
+                default:
+                    break;
+            }
+        }
+        else if (abil.m_ammo >= 1)
+        {
+           
+        }
+        RefreshAbilityButtons();
     }
 
     public void UseExtraTurn()
     {
-        if (m_usingExtraTurn)
+        for (int i = 0; i < m_activeAbilities.Length; i++)
         {
-            m_extraTurnsRemaining--;
-            m_turnFreezeTimer = m_turnFreezeTimerMax;
-            m_turnFreezingTimer = m_turnFreezingTimerMax/2f;
-            m_usingExtraTurn = false;
-            UpdateExtraTurnUIState();
+            if (m_activeAbilities[i] != null)
+            {
+                if (m_activeAbilities[i].m_abilityType == ActiveAbility.eAbilityType.ExtraTurn && m_activeAbilities[i].m_active)
+                {
+                    m_activeAbilities[i].m_ammo--;
+                    m_turnFreezeTimer = m_turnFreezeTimerMax;
+                    m_turnFreezingTimer = m_turnFreezingTimerMax / 2f;
+                    m_activeAbilities[i].m_active = false;
+                    UpdateExtraTurnUIState();
+                    RefreshAbilityButtons();
+                    break;
+                }
+            }
         }
+        //if (m_activeAbilities.m_abilityExtraTurn.m_active)
+        //{
+            
+        //}
     }
 
     public void CalculateFinishedGame()
@@ -251,6 +307,7 @@ public class BattleManager : MonoBehaviour
         m_gameHandlerRef.m_xpEarnedLastGame = 0;
 
         InitialiseUpgrades();
+        InitialiseAbilities();
 
         SpawnPlayer();
         foreach (SpriteRenderer spriteRendererRef in m_enemySpawnPointContainerRef.GetComponentsInChildren<SpriteRenderer>())
@@ -264,20 +321,20 @@ public class BattleManager : MonoBehaviour
 
     void UpdateExtraTurnUIState()
     {
-        bool enabled = m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.extraTurn].m_owned && m_extraTurnsRemaining > 0;
+        //bool enabled = m_activeAbilities.m_abilityExtraTurn != null;//m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.extraTurn].m_owned && m_extraTurnsRemaining > 0;
 
-        m_extraTurnButtonRef.interactable = enabled;
-        m_extraTurnButtonLockImageRef.SetActive(!enabled);
-        m_extraTurnButtonRef.GetComponentInChildren<Text>().text = "Extra Turn: " + m_extraTurnsRemaining;
-
-        if (enabled)
-        {
-            m_extraTurnButtonRef.gameObject.GetComponent<Image>().color = m_usingExtraTurn ? Color.green : Color.red;
-        }
-        else
-        {
-            m_extraTurnButtonRef.gameObject.GetComponent<Image>().color = Color.grey;
-        }
+        //m_extraTurnButtonRef.interactable = enabled;
+        //m_extraTurnButtonLockImageRef.SetActive(!enabled);
+        //m_extraTurnButtonRef.GetComponentInChildren<Text>().text = "Extra Turn: " + m_activeAbilities.m_abilityExtraTurn.m_ammo;
+        //
+        //if (enabled)
+        //{
+        //    m_extraTurnButtonRef.gameObject.GetComponent<Image>().color = m_activeAbilities.m_abilityExtraTurn.m_active ? Color.green : Color.red;
+        //}
+        //else
+        //{
+        //    m_extraTurnButtonRef.gameObject.GetComponent<Image>().color = Color.grey;
+        //}
     }
 
     void InitialiseUpgrades()
@@ -292,13 +349,19 @@ public class BattleManager : MonoBehaviour
             m_healthBarRef.gameObject.transform.localPosition = new Vector3(0f, m_healthbarMainPos, 0f);
             m_shieldBarRef.gameObject.SetActive(false);
         }
+    }
 
-        //Extra turn
-        if (m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.extraTurn].m_owned)
+    void InitialiseAbilities()
+    {
+        m_activeAbilities = new ActiveAbility[4];
+        for (int i = 0; i < m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment.Length; i++)
         {
-            m_extraTurnsRemaining = m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.extraTurn].m_level;
+            m_activeAbilities[i] = m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[i] != null ? new ActiveAbility(m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[i].m_activeAbility) : null;
         }
+
         UpdateExtraTurnUIState();
+        RefreshAbilityButtons();
+
     }
 
     public void SpawnPlayer()
@@ -336,8 +399,8 @@ public class BattleManager : MonoBehaviour
             }
         }
         //Find minimum spawns needed to equal or exceed the available budget
-        int minimumSpawnsNeeded = Mathf.CeilToInt((float)m_gameHandlerRef.m_battleDifficulty / (float)(m_maxEnemyDifficulty)); 
-        int maximumSpawns = Mathf.CeilToInt((float)m_gameHandlerRef.m_battleDifficulty / (float)GameHandler.m_enemyTypeTraits[0].difficulty);
+        int minimumSpawnsNeeded = Mathf.CeilToInt((float)m_gameHandlerRef.m_battleDifficulty / (float)(m_maxEnemyDifficulty));
+        int maximumSpawns = 2 * minimumSpawnsNeeded;// Mathf.CeilToInt((float)m_gameHandlerRef.m_battleDifficulty / (float)GameHandler.m_enemyTypeTraits[0].difficulty);
 
         //Roll an amount of enemies to be spawned between the minimum and maximum needed enemies
         m_enemiesToSpawn = UnityEngine.Random.Range(minimumSpawnsNeeded, maximumSpawns);

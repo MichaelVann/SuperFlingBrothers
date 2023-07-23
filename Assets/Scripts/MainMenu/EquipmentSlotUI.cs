@@ -10,6 +10,7 @@ public class EquipmentSlotUI : MonoBehaviour
     public Text[] m_statNameTexts;
     public Text[] m_statTexts;
     public EquipmentPortrait m_portraitRef;
+    public Text m_abilityTextRef;
 
     Equipment m_equipmentRef;
 
@@ -45,11 +46,13 @@ public class EquipmentSlotUI : MonoBehaviour
                 m_statTexts[index].text = "" + m_equipmentRef.m_stats[i].value;
                 m_statTexts[index].color = Color.green; //CharacterStatHandler.GetStatColor(m_equipmentRef.m_stats[i].statType);
             }
+            m_abilityTextRef.text = m_equipmentRef.m_activeAbility.GetName();
         }
 
         m_levelText.text = valid ? "Level: " + m_equipmentRef.m_level : "";
         m_nameText.text = valid ? m_equipmentRef.m_name : "";
         m_nameText.color = valid ? m_equipmentRef.m_rarityTier.color : Color.white;
+
 
         m_portraitRef.gameObject.SetActive(valid);
     }
