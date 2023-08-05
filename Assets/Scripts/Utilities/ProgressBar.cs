@@ -8,6 +8,7 @@ public class ProgressBar : MonoBehaviour
     float m_progress = 0f;
 
     public SpriteRenderer m_progressBarRef;
+    public SpriteRenderer m_barOccluder;
     Vector3 m_originalScale;
 
     bool m_healthColoring = true;
@@ -30,7 +31,8 @@ public class ProgressBar : MonoBehaviour
     void Update()
     {
         float healthPercentage = m_progress / m_progressMax;
-        m_progressBarRef.gameObject.transform.localScale = new Vector3(m_originalScale.x * healthPercentage, m_originalScale.y,1f);
+        //m_progressBarRef.gameObject.transform.localScale = new Vector3(m_originalScale.x * healthPercentage, m_originalScale.y,1f);
+        m_barOccluder.gameObject.transform.localScale = new Vector3(m_originalScale.x * (1f-healthPercentage), m_originalScale.y,1f);
         if (m_healthColoring)
         {
             Color barColor = VLib.PercentageToColor(healthPercentage);
