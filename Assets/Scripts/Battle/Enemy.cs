@@ -92,15 +92,11 @@ public class Enemy : Damageable
                 m_rigidBody.mass *= 0.45f;
                 m_rigidBody.drag = 0.1f;
                 m_rigidBody.freezeRotation = false;
-                CapsuleCollider2D capsuleCollider = GetComponent<CapsuleCollider2D>();
-                capsuleCollider.offset = new Vector2(-0.013965f, -0.09077191f);
-                capsuleCollider.size = new Vector2(0.75793f, 2.911544f);
-                m_spriteRenderer.sprite = m_idleBacteriaSprite;
                 //m_spriteRenderer.color = Color.white;
                 m_shadowRef.GetComponent<SpriteRenderer>().sprite = m_idleBacteriaShadowSprite;
-                m_flingReadinessIndicatorRef.SetActive(false);
+                //m_flingReadinessIndicatorRef.SetActive(false);
                 m_nucleusDrainTimer = new vTimer(1.0f, false, false);
-                m_flingPieIndicatorRef.gameObject.SetActive(false);
+                //m_flingPieIndicatorRef.gameObject.SetActive(false);
                 break;
             case eEnemyType.Dasher:
                 m_spriteRenderer.sprite = m_enemySprites[0];

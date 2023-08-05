@@ -25,6 +25,7 @@ public class BattleManager : MonoBehaviour
     public GameObject m_gameHandlerTemplate;
     public GameObject m_playerTemplate;
     public GameObject m_enemyTemplate;
+    public GameObject m_idleEnemyTemplate;
     public GameObject m_gameViewRef;
     public GameObject m_escapeZoneRef;
     public GameObject m_extraTurnButtonLockImageRef;
@@ -372,7 +373,22 @@ public class BattleManager : MonoBehaviour
 
     public void SpawnEnemy(Vector3 a_spawnLocation, Enemy.eEnemyType a_type)
     {
-        GameObject enemyObj = Instantiate<GameObject>(m_enemyTemplate, a_spawnLocation, Quaternion.identity, m_gameViewRef.transform);
+        GameObject enemyObj;
+        GameObject template;
+        switch (a_type)
+        {
+            case Enemy.eEnemyType.Idler:
+                template = m_idleEnemyTemplate; 
+                break;
+            case Enemy.eEnemyType.Dasher:
+            case Enemy.eEnemyType.Dodger:
+            case Enemy.eEnemyType.Striker:
+            case Enemy.eEnemyType.Count:
+            default:
+                template = m_enemyTemplate;
+                break;
+        }
+        enemyObj = Instantiate<GameObject>(template, a_spawnLocation, Quaternion.identity, m_gameViewRef.transform);
         Enemy enemy = enemyObj.GetComponent<Enemy>();
         enemy.SetUpType(a_type);
     }
