@@ -84,6 +84,7 @@ public class EquipmentPanel : MonoBehaviour
         //m_costTextRef.text = "" + m_upgradeRef.m_cost;
         m_levelTextRef.text = "" + m_equipmentRef.m_level;
         m_goldValueTextRef.text = "" + m_equipmentRef.m_goldValue;
+        m_abilityTextRef.text = m_equipmentRef.m_activeAbility.GetName();
 
         SetEquipButtonStatus();
         m_equipmentPortrait.SetEquipmentRef(m_equipmentRef);

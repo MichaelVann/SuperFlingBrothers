@@ -188,6 +188,10 @@ public class BattleManager : MonoBehaviour
                     abil.m_active = !abil.m_active;
                     //TODO: Enable outline around button or something, showing ability is prepared
                     break;
+                case ActiveAbility.eAbilityType.Projectile:
+                    abil.m_active = !abil.m_active;
+                    //TODO: Enable outline around button or something, showing ability is prepared
+                    break;
                 case ActiveAbility.eAbilityType.Count:
                     break;
                 default:
@@ -196,7 +200,16 @@ public class BattleManager : MonoBehaviour
         }
         else if (abil.m_ammo >= 1)
         {
-           
+            switch (abil.m_abilityType)
+            {
+                //case ActiveAbility.eAbilityType.Projectile:
+                //    m_player.ShootProjectile(abil);
+                //    break;
+                case ActiveAbility.eAbilityType.Count:
+                    break;
+                default:
+                    break;
+            }
         }
         RefreshAbilityButtons();
     }
@@ -213,16 +226,31 @@ public class BattleManager : MonoBehaviour
                     m_turnFreezeTimer = m_turnFreezeTimerMax;
                     m_turnFreezingTimer = m_turnFreezingTimerMax / 2f;
                     m_activeAbilities[i].m_active = false;
-                    UpdateExtraTurnUIState();
                     RefreshAbilityButtons();
                     break;
                 }
             }
         }
-        //if (m_activeAbilities.m_abilityExtraTurn.m_active)
-        //{
-            
-        //}
+    }
+
+    internal bool AttemptToFirePlayerProjectile()
+    {
+        bool projFired = false;
+        for (int i = 0; i < m_activeAbilities.Length; i++)
+        {
+            if (m_activeAbilities[i] != null)
+            {
+                if (m_activeAbilities[i].m_abilityType == ActiveAbility.eAbilityType.Projectile && m_activeAbilities[i].m_active)
+                {
+                    projFired = true;
+                    m_activeAbilities[i].m_ammo--;
+                    m_activeAbilities[i].m_active = false;
+                    RefreshAbilityButtons();
+                    break;
+                }
+            }
+        }
+        return projFired;   
     }
 
     public void CalculateFinishedGame()
@@ -320,24 +348,6 @@ public class BattleManager : MonoBehaviour
         m_levelDifficultyText.text = "Level Difficulty: " + m_gameHandlerRef.m_battleDifficulty;
     }
 
-    void UpdateExtraTurnUIState()
-    {
-        //bool enabled = m_activeAbilities.m_abilityExtraTurn != null;//m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.extraTurn].m_owned && m_extraTurnsRemaining > 0;
-
-        //m_extraTurnButtonRef.interactable = enabled;
-        //m_extraTurnButtonLockImageRef.SetActive(!enabled);
-        //m_extraTurnButtonRef.GetComponentInChildren<Text>().text = "Extra Turn: " + m_activeAbilities.m_abilityExtraTurn.m_ammo;
-        //
-        //if (enabled)
-        //{
-        //    m_extraTurnButtonRef.gameObject.GetComponent<Image>().color = m_activeAbilities.m_abilityExtraTurn.m_active ? Color.green : Color.red;
-        //}
-        //else
-        //{
-        //    m_extraTurnButtonRef.gameObject.GetComponent<Image>().color = Color.grey;
-        //}
-    }
-
     void InitialiseUpgrades()
     {
         //Shield
@@ -360,9 +370,7 @@ public class BattleManager : MonoBehaviour
             m_activeAbilities[i] = m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[i] != null ? new ActiveAbility(m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[i].m_activeAbility) : null;
         }
 
-        UpdateExtraTurnUIState();
         RefreshAbilityButtons();
-
     }
 
     public void SpawnPlayer()

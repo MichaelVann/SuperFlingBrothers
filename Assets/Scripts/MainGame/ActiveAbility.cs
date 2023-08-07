@@ -16,6 +16,7 @@ public class ActiveAbility
     public enum eAbilityType
     {
         ExtraTurn,
+        Projectile,
         Count
     }
     public eAbilityType m_abilityType;
@@ -35,6 +36,13 @@ public class ActiveAbility
                 m_level = 1;
                 break;
 
+            case eAbilityType.Projectile:
+                m_reactive = true;
+                m_cooldown = 1;
+                m_ammo = 5;
+                m_level = 1;
+                break;
+
             case eAbilityType.Count:
                 break;
             default:
@@ -49,6 +57,9 @@ public class ActiveAbility
         {
             case eAbilityType.ExtraTurn:
                 description = "Extra Turn: Gives the user an extra turn on collision with the enemy, potentially giving a much needed moment of composure.";
+                break;
+            case eAbilityType.Projectile:
+                description = "Projectile: Shoots out a projectile in the direction of movement.";
                 break;
             case eAbilityType.Count:
                 break;
@@ -70,6 +81,7 @@ public class ActiveAbility
 
     public void CopyAbility(ActiveAbility a_ability)
     {
+        m_abilityType = a_ability.m_abilityType;
         m_cooldown = a_ability.m_cooldown;
         m_ammo = a_ability.m_ammo;
         m_reactive = a_ability.m_reactive;

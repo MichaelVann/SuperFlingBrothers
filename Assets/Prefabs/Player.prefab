@@ -205,6 +205,8 @@ MonoBehaviour:
   m_shadowRef: {fileID: 5224392033240955529}
   m_velocityIndicatorRef: {fileID: 1596501203008148464}
   m_invalidFlingCross: {fileID: 56368311167889690}
+  m_projectileTemplate: {fileID: 5729473741156534773, guid: 8362540b33c102d42b3e5678ee3cad9b,
+    type: 3}
   m_shieldSpriteRenderer: {fileID: 5964736507153317789}
 --- !u!1 &4917926080148449389
 GameObject:
@@ -385,7 +387,7 @@ PrefabInstance:
     - target: {fileID: 385445514796161427, guid: 688cedeb614fed54b951ebf40cfa3a62,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 722886592494067440, guid: 688cedeb614fed54b951ebf40cfa3a62,
         type: 3}
@@ -556,7 +558,7 @@ PrefabInstance:
     - target: {fileID: 3871167508993658042, guid: 688cedeb614fed54b951ebf40cfa3a62,
         type: 3}
       propertyPath: m_RootOrder
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 3871167509479106003, guid: 688cedeb614fed54b951ebf40cfa3a62,
         type: 3}

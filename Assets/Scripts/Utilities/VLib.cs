@@ -97,6 +97,11 @@ public static class VLib
         return new Vector2(x, y);
     }
 
+    public static Quaternion Vector2DirectionToQuaternion(Vector2 a_vector2)
+    {
+        return Quaternion.Euler(0f,0f,Vector2ToEulerAngle(a_vector2));
+    }
+
     public static float Vector2ToEulerAngle(Vector2 a_vector2)
     {
         float angle = Vector2.SignedAngle(new Vector2(0f,1f), a_vector2);

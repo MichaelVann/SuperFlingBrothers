@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,6 +25,8 @@ public class Player : Damageable
     float m_upperLowerFlingPositionBounds = 3.0f;
 
     public SpriteRenderer m_invalidFlingCross;
+
+    public GameObject m_projectileTemplate;
 
     //Coins
     float m_cumulativeCoinValue = 0f;
@@ -80,6 +83,11 @@ public class Player : Damageable
         base.Fling(a_flingVector, a_flingStrength);
         m_flinging = false;
         m_battleManagerRef.SetFrozen(false);
+
+        if (m_battleManagerRef.AttemptToFirePlayerProjectile())
+        {
+            ShootProjectile(a_flingVector);
+        }
     }
 
     void HandleFlinging()
@@ -207,6 +215,12 @@ public class Player : Damageable
             default:
                 break;
         }
+    }
+
+    internal void ShootProjectile(Vector3 a_shootVector)
+    {
+        GameObject projectile = Instantiate<GameObject>(m_projectileTemplate,transform.position, VLib.Vector2DirectionToQuaternion(a_shootVector));
+        projectile.GetComponent<Projectile>().Initialise(a_shootVector, m_rigidBody.velocity, m_statHandler.GetStatFinalValue((int)eCharacterStatIndices.strength));
     }
 
     public void OnTriggerEnter2D(Collider2D a_collider)

@@ -49,6 +49,7 @@ public class Equipment
     //[SerializeReference]
     public List<EquipmentStat> m_stats;
 
+    [SerializeReference]
     public ActiveAbility m_activeAbility;
 
     public void Copy(Equipment a_equipment)
