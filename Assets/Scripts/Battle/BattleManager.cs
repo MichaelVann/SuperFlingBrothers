@@ -532,7 +532,7 @@ public class BattleManager : MonoBehaviour
         {
             if (processedSpawnSpots[i] < 0)
             {
-                break;
+                continue;
             }
             Enemy.eEnemyType enemyType = (Enemy.eEnemyType)(processedSpawnSpots[i]);
 

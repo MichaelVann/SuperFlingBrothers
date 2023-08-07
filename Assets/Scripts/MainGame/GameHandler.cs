@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 17.3f;
+    public const float _VERSION_NUMBER = 17.4f;
 
     static internal bool DEBUG_MODE = true;
 
@@ -61,7 +61,7 @@ public class GameHandler : MonoBehaviour
 
     //Current Battle
     public BodyPart m_bodyPartSelectedForBattle;
-    internal int m_battleDifficulty = 8;
+    internal int m_battleDifficulty = 2;
     internal int m_maxEnemyDifficulty = 8;
 
     //Last Game

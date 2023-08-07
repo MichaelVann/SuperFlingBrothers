@@ -11,6 +11,7 @@ public class EquipmentSlotUI : MonoBehaviour
     public Text[] m_statTexts;
     public EquipmentPortrait m_portraitRef;
     public Text m_abilityTextRef;
+    public Text m_itemValueTextRef;
 
     Equipment m_equipmentRef;
 
@@ -47,6 +48,11 @@ public class EquipmentSlotUI : MonoBehaviour
                 m_statTexts[index].color = Color.green; //CharacterStatHandler.GetStatColor(m_equipmentRef.m_stats[i].statType);
             }
             m_abilityTextRef.text = m_equipmentRef.m_activeAbility.GetName();
+            m_itemValueTextRef.text = "" + m_equipmentRef.m_goldValue;
+        }
+        else
+        {
+            m_itemValueTextRef.text = "0";
         }
 
         m_levelText.text = valid ? "Level: " + m_equipmentRef.m_level : "";
