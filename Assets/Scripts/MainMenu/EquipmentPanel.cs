@@ -132,4 +132,9 @@ public class EquipmentPanel : MonoBehaviour
     {
         m_equipmentScreenHandlerRef.SellEquipment(this);
     }
+
+    public void OpenEquipmentDigest()
+    {
+        m_equipmentScreenHandlerRef.SetEquipmentDigestStatus(true, m_equipmentRef);
+    }
 }
