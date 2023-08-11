@@ -112,6 +112,9 @@ public class Equipment
         }
         UpdateRarityTier();
 
+        m_activeAbility = new ActiveAbility(m_rarityTier.level);
+
+
         int points = 10 + (int)((float)(a_level)*2f);
         points = (int)(points*Mathf.Pow(1.25f, (float)m_rarityTier.level));
         m_goldValue = points;
@@ -137,7 +140,6 @@ public class Equipment
             points--;
         }
 
-        m_activeAbility = new ActiveAbility();
     }
 
     public Equipment(int a_level)

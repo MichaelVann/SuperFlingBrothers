@@ -19,12 +19,66 @@ public class ActiveAbility
         Projectile,
         Count
     }
+
+    public enum eAffix
+    {
+        bouncePowerup,
+        Count
+    }
+
+    [SerializeReference]
+    internal List<eAffix> m_affixes;
+
     public eAbilityType m_abilityType;
 
     public string GetName() { return VLib.GetEnumName(m_abilityType); }
 
-    private void RollNewAbility()
+    public bool HasAffix(eAffix a_affix)
     {
+        bool retVal = false;
+        for (int i = 0; i < m_affixes.Count; i++)
+        {
+            if (m_affixes[i] == a_affix)
+            {
+                retVal = true;
+            }
+        }
+        return retVal;
+    }
+
+    private void RollAffixes(Equipment.eRarityTier a_rarity)
+    {
+        List<eAffix> potentialAffixes = new List<eAffix>();
+
+        switch (m_abilityType)
+        {
+            case eAbilityType.ExtraTurn:
+                break;
+            case eAbilityType.Projectile:
+                potentialAffixes.Add(eAffix.bouncePowerup);
+                break;
+            case eAbilityType.Count:
+                break;
+            default:
+                break;
+        }
+
+        int affixsNeeded = (int)a_rarity;
+
+        while (affixsNeeded > 0 && potentialAffixes.Count > 0)
+        {
+            affixsNeeded--;
+
+            int affixIndex = VLib.vRandom(0, potentialAffixes.Count - 1);
+
+            m_affixes.Add(potentialAffixes[affixIndex]);
+            potentialAffixes.RemoveAt(affixIndex);
+        }
+    }
+
+    private void RollNewAbility(Equipment.eRarityTier a_rarity)
+    {
+        m_affixes = new List<eAffix>();
         m_abilityType = (eAbilityType)VLib.vRandom(0, (int)(eAbilityType.Count-1));
 
         switch (m_abilityType)
@@ -47,6 +101,10 @@ public class ActiveAbility
                 break;
             default:
                 break;
+        }
+        if (a_rarity > Equipment.eRarityTier.Normal)
+        {
+            RollAffixes(a_rarity);
         }
     }
 
@@ -71,12 +129,17 @@ public class ActiveAbility
 
     public ActiveAbility()
     {
-        RollNewAbility();
+        RollNewAbility(Equipment.eRarityTier.Normal);
     }
 
     public ActiveAbility(ActiveAbility a_ability)
     {
         CopyAbility(a_ability);
+    }
+
+    public ActiveAbility(Equipment.eRarityTier a_rarity)
+    {
+        RollNewAbility(a_rarity);
     }
 
     public void CopyAbility(ActiveAbility a_ability)
@@ -87,6 +150,7 @@ public class ActiveAbility
         m_reactive = a_ability.m_reactive;
         m_active = a_ability.m_active;
         m_level = a_ability.m_level;
+        m_affixes = a_ability.m_affixes;
     }
 
 }

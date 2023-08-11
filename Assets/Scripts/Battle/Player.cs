@@ -84,10 +84,22 @@ public class Player : Damageable
         m_flinging = false;
         m_battleManagerRef.SetFrozen(false);
 
-        if (m_battleManagerRef.AttemptToFirePlayerProjectile())
+        //Handle Projectile Shooting
+        for (int i = 0; i < m_battleManagerRef.m_activeAbilities.Length; i++)
         {
-            ShootProjectile(a_flingVector);
+            if (m_battleManagerRef.m_activeAbilities[i] != null)
+            {
+                ActiveAbility abil = m_battleManagerRef.m_activeAbilities[i];
+                if (abil.m_abilityType == ActiveAbility.eAbilityType.Projectile && abil.m_active)
+                {
+                    abil.m_ammo--;
+                    abil.m_active = false;
+                    ShootProjectile(a_flingVector, abil);
+                    break;
+                }
+            }
         }
+        m_battleManagerRef.RefreshAbilityButtons();
     }
 
     void HandleFlinging()
@@ -217,10 +229,10 @@ public class Player : Damageable
         }
     }
 
-    internal void ShootProjectile(Vector3 a_shootVector)
+    internal void ShootProjectile(Vector3 a_shootVector, ActiveAbility a_ability)
     {
         GameObject projectile = Instantiate<GameObject>(m_projectileTemplate,transform.position, VLib.Vector2DirectionToQuaternion(a_shootVector));
-        projectile.GetComponent<Projectile>().Initialise(a_shootVector, m_rigidBody.velocity, m_statHandler.GetStatFinalValue((int)eCharacterStatIndices.strength));
+        projectile.GetComponent<Projectile>().Initialise(a_shootVector, m_rigidBody.velocity, m_statHandler.GetStatFinalValue((int)eCharacterStatIndices.strength), a_ability.HasAffix(ActiveAbility.eAffix.bouncePowerup));
     }
 
     public void OnTriggerEnter2D(Collider2D a_collider)

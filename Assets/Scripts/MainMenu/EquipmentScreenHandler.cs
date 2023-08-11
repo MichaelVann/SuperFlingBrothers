@@ -12,6 +12,7 @@ public class EquipmentScreenHandler : MonoBehaviour
     public Text m_equipmentAbilityReadoutText;
     public Text m_equipmentAbilityNameText;
     public int m_openedEquipmentSlotId = -1;
+    public GameObject m_equipmentDigestRef;
 
     public GameObject m_inventoryPanelRef;
 
@@ -88,6 +89,16 @@ public class EquipmentScreenHandler : MonoBehaviour
         }
     }
 
+    internal void SetEquipmentDigestStatus(bool a_open, Equipment a_equipment = null)
+    {
+        m_equipmentDigestRef.SetActive(a_open);
+
+        if (a_open)
+        {
+            m_equipmentDigestRef.GetComponent<EquipmentDigest>().SetEquipmentRef(a_equipment);
+            m_equipmentDigestRef.GetComponent<EquipmentDigest>().Refresh();
+        }
+    }
 
     public void RefreshEquipmentSlots()
     {

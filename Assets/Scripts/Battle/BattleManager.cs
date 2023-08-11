@@ -87,7 +87,7 @@ public class BattleManager : MonoBehaviour
     bool m_startingSequence = true;
 
     //Active Abilities
-    ActiveAbility[] m_activeAbilities;
+    public ActiveAbility[] m_activeAbilities;
 
     //Prepared Abilities
     //int m_extraTurnsRemaining = 1;
@@ -178,6 +178,14 @@ public class BattleManager : MonoBehaviour
 
     public void ActivateAbility(int a_id)
     {
+        for (int i = 0; i < m_activeAbilities.Length; i++)
+        {
+            if (m_activeAbilities[i] != null)
+            {
+                m_activeAbilities[i].m_active = false;
+            }
+        }
+
         //ActiveAbility equipment = m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[a_id].m_activeAbilityType;
         ActiveAbility abil = m_activeAbilities[a_id];
         if (abil.m_reactive)
@@ -231,26 +239,6 @@ public class BattleManager : MonoBehaviour
                 }
             }
         }
-    }
-
-    internal bool AttemptToFirePlayerProjectile()
-    {
-        bool projFired = false;
-        for (int i = 0; i < m_activeAbilities.Length; i++)
-        {
-            if (m_activeAbilities[i] != null)
-            {
-                if (m_activeAbilities[i].m_abilityType == ActiveAbility.eAbilityType.Projectile && m_activeAbilities[i].m_active)
-                {
-                    projFired = true;
-                    m_activeAbilities[i].m_ammo--;
-                    m_activeAbilities[i].m_active = false;
-                    RefreshAbilityButtons();
-                    break;
-                }
-            }
-        }
-        return projFired;   
     }
 
     public void CalculateFinishedGame()
