@@ -26,7 +26,9 @@ public class ActiveAbility
         Count
     }
 
+
     [SerializeReference]
+
     internal List<eAffix> m_affixes;
 
     public eAbilityType m_abilityType;

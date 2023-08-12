@@ -203,6 +203,9 @@ MonoBehaviour:
   m_healthBarRef: {fileID: 8534694074675028641}
   m_shieldBarRef: {fileID: 4050723281028377219}
   m_shadowRef: {fileID: 5224392033240955529}
+  m_bloodSplatterTemplate: {fileID: 7807048133602009176, guid: c631414070a14bf4896914ce6b7193b1,
+    type: 3}
+  m_bloodColor: {r: 1, g: 0, b: 0, a: 1}
   m_velocityIndicatorRef: {fileID: 1596501203008148464}
   m_invalidFlingCross: {fileID: 56368311167889690}
   m_projectileTemplate: {fileID: 5729473741156534773, guid: 8362540b33c102d42b3e5678ee3cad9b,
@@ -397,7 +400,7 @@ PrefabInstance:
     - target: {fileID: 777475744291209355, guid: 688cedeb614fed54b951ebf40cfa3a62,
         type: 3}
       propertyPath: m_RootOrder
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 813094912303961245, guid: 688cedeb614fed54b951ebf40cfa3a62,
         type: 3}
@@ -558,7 +561,7 @@ PrefabInstance:
     - target: {fileID: 3871167508993658042, guid: 688cedeb614fed54b951ebf40cfa3a62,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3871167509479106003, guid: 688cedeb614fed54b951ebf40cfa3a62,
         type: 3}

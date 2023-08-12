@@ -29,6 +29,8 @@ public class Damageable : BaseObject
     public ProgressBar m_shieldBarRef;
     public GameObject m_shadowRef;
 
+    public GameObject m_bloodSplatterTemplate;
+    public Color m_bloodColor;
     //Fling
     bool m_secondFling = true;
     float m_bumpFlingStrengthMult = GameHandler.DAMAGEABLE_bumpFlingStrengthMult;
@@ -198,6 +200,11 @@ public class Damageable : BaseObject
     public virtual void Die()
     {
         Instantiate(m_explosionPrefab, transform.position, new Quaternion());
+        if (m_bloodSplatterTemplate != null)
+        {
+            GameObject blood = Instantiate(m_bloodSplatterTemplate, transform.position, new Quaternion());
+            blood.GetComponent<SpriteRenderer>().color = m_bloodColor;
+        }
         Destroy(gameObject);
     }
 
