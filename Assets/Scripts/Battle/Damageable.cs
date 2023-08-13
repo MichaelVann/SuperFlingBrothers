@@ -185,6 +185,7 @@ public class Damageable : BaseObject
     public virtual void Damage(float a_damage)
     {
         ChangeHealth(-a_damage);
+        Bleed(a_damage/m_maxHealth);
     }
 
     public void Heal(float a_healing)
@@ -197,14 +198,20 @@ public class Damageable : BaseObject
         Damage(1f);
     }
 
-    public virtual void Die()
+    private void Bleed(float a_bleedAmount)
     {
-        Instantiate(m_explosionPrefab, transform.position, new Quaternion());
         if (m_bloodSplatterTemplate != null)
         {
             GameObject blood = Instantiate(m_bloodSplatterTemplate, transform.position, new Quaternion());
             blood.GetComponent<SpriteRenderer>().color = m_bloodColor;
+            blood.transform.localScale *= a_bleedAmount * 1f;
         }
+    }
+
+    public virtual void Die()
+    {
+        Instantiate(m_explosionPrefab, transform.position, new Quaternion());
+        //Bleed();
         Destroy(gameObject);
     }
 
