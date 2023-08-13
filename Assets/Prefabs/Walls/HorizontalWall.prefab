@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3007795293990088286}
   - component: {fileID: 7983449298170971728}
   - component: {fileID: 8702286306938388581}
+  - component: {fileID: 7623154580554104753}
   m_Layer: 0
   m_Name: HorizontalWall
   m_TagString: Untagged
@@ -109,6 +110,21 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 8, y: 5.33}
   m_EdgeRadius: 0
+--- !u!114 &7623154580554104753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4589403742881125862}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6969371a1f666564882bff8d6c346210, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_wallCrackTemplate: {fileID: 131125055868080294, guid: e478f913f42c63344a9ff58487c3fc2c,
+    type: 3}
+  m_direction: 2
 --- !u!1 &6515933793407455297
 GameObject:
   m_ObjectHideFlags: 0
@@ -203,3 +219,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33365bb7fecd1b642af96fc95402adea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_height: 0
