@@ -21,6 +21,7 @@ public class GravityWell : MonoBehaviour
             Rigidbody2D otherRigidbody = m_affectedRigidBodies[i];
 
             Vector3 forceVector = (transform.position - otherRigidbody.transform.position).normalized;
+            //forceVector = Quaternion.AngleAxis(90f, Vector3.forward) * forceVector;
             float strength = 1f / (transform.position - otherRigidbody.transform.position).magnitude;
             strength *= 100f;
             strength = Mathf.Clamp(strength, 0f, 300f);
