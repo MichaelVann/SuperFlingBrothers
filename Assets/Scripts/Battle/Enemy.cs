@@ -24,6 +24,7 @@ public class Enemy : Damageable
         Idler,
         Dasher,
         Dodger,
+        Healer,
         Striker,
         Count
     }public eEnemyType m_enemyType;
@@ -37,6 +38,7 @@ public class Enemy : Damageable
         public bool dodger;
         public bool duplicator;
         public bool canRotate;
+        public bool healer;
     } TypeTrait m_typeTrait;
 
     float m_duplicationTimer = 0f;
@@ -107,6 +109,10 @@ public class Enemy : Damageable
                 m_originalColor = Color.green;
                 m_flingAccuracy = 360f;
                 break;
+            case eEnemyType.Healer:
+                m_originalColor = Color.white;
+                m_flingAccuracy = 360f;
+                break;
             case eEnemyType.Striker:
                 m_originalColor = Color.red;
                 m_visionConeRef.SetActive(true);
@@ -173,7 +179,8 @@ public class Enemy : Damageable
 
     public override void OnCollisionEnter2D(Collision2D a_collision)
     {
-        base.OnCollisionEnter2D(a_collision);
+        bool runningBaseCollision = true;
+        Enemy oppEnemy = a_collision.gameObject.GetComponent<Enemy>();
         if (a_collision.gameObject.GetComponent<Pocket>())
         {
             switch (m_gameHandlerRef.m_currentGameMode)
@@ -201,6 +208,20 @@ public class Enemy : Damageable
             m_rigidBody.constraints = RigidbodyConstraints2D.FreezePosition;
             m_rigidBody.freezeRotation = true;
             m_nucleusDrainTimer.SetActive(true);
+        }
+        else if (oppEnemy != null)
+        {
+            if (oppEnemy.m_typeTrait.healer)
+            {
+                runningBaseCollision = false;
+                Heal(oppEnemy.m_statHandler.m_stats[(int)eCharacterStatIndices.strength].finalValue * oppEnemy.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
+            }
+            runningBaseCollision = !m_typeTrait.healer;
+        }
+
+        if (runningBaseCollision)
+        {
+            base.OnCollisionEnter2D(a_collision);
         }
     }
 

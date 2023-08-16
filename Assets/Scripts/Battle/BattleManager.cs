@@ -26,6 +26,7 @@ public class BattleManager : MonoBehaviour
     public GameObject m_playerTemplate;
     public GameObject m_enemyTemplate;
     public GameObject m_idleEnemyTemplate;
+    public GameObject m_healerEnemyTemplate;
     public GameObject m_gameViewRef;
     public GameObject m_escapeZoneRef;
     public GameObject m_extraTurnButtonLockImageRef;
@@ -375,6 +376,9 @@ public class BattleManager : MonoBehaviour
         {
             case Enemy.eEnemyType.Idler:
                 template = m_idleEnemyTemplate; 
+                break;
+            case Enemy.eEnemyType.Healer:
+                template = m_healerEnemyTemplate;
                 break;
             case Enemy.eEnemyType.Dasher:
             case Enemy.eEnemyType.Dodger:

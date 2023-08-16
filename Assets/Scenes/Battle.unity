@@ -5714,6 +5714,8 @@ MonoBehaviour:
     type: 3}
   m_idleEnemyTemplate: {fileID: 8952112373810028054, guid: 4a54d43343975d14580a393a4a9ad67c,
     type: 3}
+  m_healerEnemyTemplate: {fileID: 1314937454806128022, guid: 345c504a2703d95478da1891aa3efaa1,
+    type: 3}
   m_gameViewRef: {fileID: 428581281}
   m_escapeZoneRef: {fileID: 859947576}
   m_extraTurnButtonLockImageRef: {fileID: 2094838600}

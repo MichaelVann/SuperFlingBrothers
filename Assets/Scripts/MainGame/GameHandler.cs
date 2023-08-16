@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 17.8f;
+    public const float _VERSION_NUMBER = 17.9f;
 
     static internal bool DEBUG_MODE = true;
 
@@ -180,6 +180,12 @@ public class GameHandler : MonoBehaviour
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].dodger = true;
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].difficulty = 5;
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].duplicator = true;
+
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Healer].type = Enemy.eEnemyType.Healer;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Healer].dodger = true;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Healer].difficulty = 8;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Healer].duplicator = false;
+        m_enemyTypeTraits[(int)Enemy.eEnemyType.Healer].healer = true;
 
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].type = Enemy.eEnemyType.Striker;
         m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].flinger = true;
