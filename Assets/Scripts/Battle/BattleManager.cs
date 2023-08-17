@@ -32,6 +32,7 @@ public class BattleManager : MonoBehaviour
     public GameObject m_extraTurnButtonLockImageRef;
     public GameObject m_wallTriangleRef;
     public GameObject m_gravityWellRef;
+    public Material m_whiteFlashMaterialRef;
     float m_wallXOffset = 2.11f;
     float m_wallYSpace = 5f;
 

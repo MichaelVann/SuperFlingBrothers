@@ -52,6 +52,8 @@ public class Damageable : BaseObject
     //float m_damageColourTimer = 0f;
     float m_damageColourTimerMax = 0.1f;
 
+    protected Material m_defaultMaterialRef;
+
     public float GetHealthPercentage() { return m_health / m_maxHealth; }
 
     public override void Awake()
@@ -64,6 +66,7 @@ public class Damageable : BaseObject
         m_originalColor = m_spriteRenderer.color;
         m_rigidBody.mass = m_originalMass = GameHandler.DAMAGEABLE_defaultMass;
         m_damageColourOverrideTimer = new vTimer(m_damageColourTimerMax,false);
+        m_defaultMaterialRef = m_spriteRenderer.material;
         UpdateLocalStatsFromStatHandler();
     }
 
@@ -231,10 +234,12 @@ public class Damageable : BaseObject
     {
         if (m_damageColourOverrideRunning)
         {
+            m_spriteRenderer.material = m_battleManagerRef.m_whiteFlashMaterialRef;
             m_spriteRenderer.color = new Color(2f, 0f,0f,1f);
             if (m_damageColourOverrideTimer.Update())
             {
                 m_damageColourOverrideRunning = false;
+                m_spriteRenderer.material = m_defaultMaterialRef;
                 m_damageColourOverrideTimer.Reset();
                 UpdateHealthColor();
             }
