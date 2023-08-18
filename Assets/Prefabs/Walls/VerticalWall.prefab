@@ -52,7 +52,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 7fdabe45d9e0417479f07dcfbe494cf4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -124,6 +124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_wallCrackTemplate: {fileID: 131125055868080294, guid: e478f913f42c63344a9ff58487c3fc2c,
     type: 3}
+  m_direction: 0
 --- !u!1 &5749871598404497442
 GameObject:
   m_ObjectHideFlags: 0

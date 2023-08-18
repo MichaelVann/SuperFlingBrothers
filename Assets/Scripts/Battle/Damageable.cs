@@ -235,7 +235,7 @@ public class Damageable : BaseObject
         if (m_damageColourOverrideRunning)
         {
             m_spriteRenderer.material = m_battleManagerRef.m_whiteFlashMaterialRef;
-            m_spriteRenderer.color = new Color(2f, 0f,0f,1f);
+            //m_spriteRenderer.color = new Color(2f, 0f,0f,1f);
             if (m_damageColourOverrideTimer.Update())
             {
                 m_damageColourOverrideRunning = false;

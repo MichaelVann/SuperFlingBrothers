@@ -293,7 +293,8 @@ public class BattleManager : MonoBehaviour
                 pos.x = VLib.vRandom(-m_wallXOffset, m_wallXOffset);
                 pos.y = VLib.vRandom(-m_wallYSpace/2f, m_wallYSpace/2f);
 
-                Instantiate<GameObject>(m_gravityWellRef, pos, new Quaternion(), m_gameViewRef.transform);
+                GameObject gravityWell = Instantiate<GameObject>(m_gravityWellRef, new Vector3(), new Quaternion(), m_gameViewRef.transform);
+                gravityWell.transform.localPosition = pos;
             }
         }
         

@@ -216,7 +216,7 @@ public class Enemy : Damageable
                 runningBaseCollision = false;
                 Heal(oppEnemy.m_statHandler.m_stats[(int)eCharacterStatIndices.strength].finalValue * oppEnemy.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
             }
-            runningBaseCollision = !m_typeTrait.healer;
+            runningBaseCollision = false;// !m_typeTrait.healer;
         }
 
         if (runningBaseCollision)
