@@ -28,6 +28,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: Healer
       objectReference: {fileID: 0}
+    - target: {fileID: 5265095099627222991, guid: 8c1a46675eabcda4e93b7fa4171e3d18,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 2.128429
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265095099627222991, guid: 8c1a46675eabcda4e93b7fa4171e3d18,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 2.3018172
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265095099627222991, guid: 8c1a46675eabcda4e93b7fa4171e3d18,
+        type: 3}
+      propertyPath: m_Offset.x
+      value: 0.021945152
+      objectReference: {fileID: 0}
+    - target: {fileID: 5265095099627222991, guid: 8c1a46675eabcda4e93b7fa4171e3d18,
+        type: 3}
+      propertyPath: m_Offset.y
+      value: -0.0015199184
+      objectReference: {fileID: 0}
     - target: {fileID: 5599424530306179847, guid: 8c1a46675eabcda4e93b7fa4171e3d18,
         type: 3}
       propertyPath: m_RootOrder
@@ -87,7 +107,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 47d510d77d3cbf9469006c248f0ba701,
+      objectReference: {fileID: 21300000, guid: 9c6245f8d33820d4e83dde79eedf6e09,
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c1a46675eabcda4e93b7fa4171e3d18, type: 3}

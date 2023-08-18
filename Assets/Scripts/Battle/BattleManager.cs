@@ -184,43 +184,50 @@ public class BattleManager : MonoBehaviour
         {
             if (m_activeAbilities[i] != null)
             {
-                m_activeAbilities[i].m_active = false;
+                if(i == a_id)
+                {
+                    ActiveAbility abil = m_activeAbilities[a_id];
+                    if (abil.m_reactive)
+                    {
+                        switch (abil.m_abilityType)
+                        {
+                            case ActiveAbility.eAbilityType.ExtraTurn:
+                                abil.m_active = !abil.m_active;
+                                //TODO: Enable outline around button or something, showing ability is prepared
+                                break;
+                            case ActiveAbility.eAbilityType.Projectile:
+                                abil.m_active = !abil.m_active;
+                                //TODO: Enable outline around button or something, showing ability is prepared
+                                break;
+                            case ActiveAbility.eAbilityType.Count:
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else if (abil.m_ammo >= 1)
+                    {
+                        switch (abil.m_abilityType)
+                        {
+                            //case ActiveAbility.eAbilityType.Projectile:
+                            //    m_player.ShootProjectile(abil);
+                            //    break;
+                            case ActiveAbility.eAbilityType.Count:
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    m_activeAbilities[i].m_active = false;
+                }
             }
         }
 
         //ActiveAbility equipment = m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[a_id].m_activeAbilityType;
-        ActiveAbility abil = m_activeAbilities[a_id];
-        if (abil.m_reactive)
-        {
-            switch (abil.m_abilityType)
-            {
-                case ActiveAbility.eAbilityType.ExtraTurn:
-                    abil.m_active = !abil.m_active;
-                    //TODO: Enable outline around button or something, showing ability is prepared
-                    break;
-                case ActiveAbility.eAbilityType.Projectile:
-                    abil.m_active = !abil.m_active;
-                    //TODO: Enable outline around button or something, showing ability is prepared
-                    break;
-                case ActiveAbility.eAbilityType.Count:
-                    break;
-                default:
-                    break;
-            }
-        }
-        else if (abil.m_ammo >= 1)
-        {
-            switch (abil.m_abilityType)
-            {
-                //case ActiveAbility.eAbilityType.Projectile:
-                //    m_player.ShootProjectile(abil);
-                //    break;
-                case ActiveAbility.eAbilityType.Count:
-                    break;
-                default:
-                    break;
-            }
-        }
+        
         RefreshAbilityButtons();
     }
 
