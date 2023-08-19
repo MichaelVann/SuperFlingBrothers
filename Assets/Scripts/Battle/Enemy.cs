@@ -41,6 +41,9 @@ public class Enemy : Damageable
         public bool healer;
     } TypeTrait m_typeTrait;
 
+    public static Enemy.TypeTrait[] m_enemyTypeTraits = new Enemy.TypeTrait[(int)Enemy.eEnemyType.Count];
+
+
     float m_duplicationTimer = 0f;
     float m_duplicationTimerMax = 12f;
 
@@ -82,7 +85,7 @@ public class Enemy : Damageable
 
     public void SetUpType(eEnemyType a_type)
     {
-        m_typeTrait = GameHandler.m_enemyTypeTraits[(int)a_type];
+        m_typeTrait = m_enemyTypeTraits[(int)a_type];
         m_enemyType = a_type;
         m_visionConeRef.SetActive(false);
         switch (m_enemyType)
@@ -127,6 +130,45 @@ public class Enemy : Damageable
         m_rigidBody.freezeRotation = !m_typeTrait.canRotate;
         UpdateLocalStatsFromStatHandler();
         UpdateHealthColor();
+    }
+
+    public static void SetUpEnemyTypes()
+    {
+        for (int i = 0; i < (int)Enemy.eEnemyType.Count; i++)
+        {
+            m_enemyTypeTraits[i].type = Enemy.eEnemyType.Idler;
+            m_enemyTypeTraits[i].difficulty = 1;
+            m_enemyTypeTraits[i].dasher = false;
+            m_enemyTypeTraits[i].flinger = false;
+            m_enemyTypeTraits[i].dodger = false;
+            m_enemyTypeTraits[i].duplicator = false;
+            m_enemyTypeTraits[i].canRotate = false;
+        }
+
+        m_enemyTypeTraits[(int)eEnemyType.Idler].type = Enemy.eEnemyType.Idler;
+        m_enemyTypeTraits[(int)eEnemyType.Idler].difficulty = 1;
+        m_enemyTypeTraits[(int)eEnemyType.Idler].canRotate = true;
+
+        m_enemyTypeTraits[(int)eEnemyType.Dasher].type = Enemy.eEnemyType.Dasher;
+        m_enemyTypeTraits[(int)eEnemyType.Dasher].dasher = true;
+        m_enemyTypeTraits[(int)eEnemyType.Dasher].difficulty = 3;
+        //m_enemyTypeTraits[(int)eEnemyType.Dasher].duplicator = true;
+
+        m_enemyTypeTraits[(int)eEnemyType.Dodger].type = Enemy.eEnemyType.Dodger;
+        m_enemyTypeTraits[(int)eEnemyType.Dodger].dodger = true;
+        m_enemyTypeTraits[(int)eEnemyType.Dodger].difficulty = 5;
+        //m_enemyTypeTraits[(int)eEnemyType.Dodger].duplicator = true;
+
+        m_enemyTypeTraits[(int)eEnemyType.Healer].type = Enemy.eEnemyType.Healer;
+        m_enemyTypeTraits[(int)eEnemyType.Healer].dodger = true;
+        m_enemyTypeTraits[(int)eEnemyType.Healer].difficulty = 8;
+        m_enemyTypeTraits[(int)eEnemyType.Healer].duplicator = false;
+        m_enemyTypeTraits[(int)eEnemyType.Healer].healer = true;
+
+        m_enemyTypeTraits[(int)eEnemyType.Striker].type = Enemy.eEnemyType.Striker;
+        m_enemyTypeTraits[(int)eEnemyType.Striker].flinger = true;
+        m_enemyTypeTraits[(int)eEnemyType.Striker].difficulty = 12;
+        //m_enemyTypeTraits[(int)eEnemyType.Striker].duplicator = true;
     }
 
     public override void Start()

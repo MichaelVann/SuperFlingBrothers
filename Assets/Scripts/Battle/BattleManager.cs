@@ -165,7 +165,7 @@ public class BattleManager : MonoBehaviour
                     Color buttonColor = Color.grey;
                     if (m_abilityButtons[i].interactable)
                     {
-                        buttonColor = m_activeAbilities[i].m_active ? Color.red : Color.green;
+                        buttonColor = m_activeAbilities[i].m_active ? Color.blue : Color.grey;
                     }
                     m_abilityButtons[i].GetComponent<Image>().color = buttonColor;
                 }
@@ -413,10 +413,10 @@ public class BattleManager : MonoBehaviour
         //Find the highest spawnable enemy with the current difficulty available for the battle
         while (!highestSpawnableEnemyFound)
         {
-            if (m_maxEnemyDifficulty >= GameHandler.m_enemyTypeTraits[highestSpawnableEnemyIndex].difficulty || highestSpawnableEnemyIndex == 0)
+            if (m_maxEnemyDifficulty >= Enemy.m_enemyTypeTraits[highestSpawnableEnemyIndex].difficulty || highestSpawnableEnemyIndex == 0)
             {
                 highestSpawnableEnemyFound = true;
-                m_maxEnemyDifficulty = GameHandler.m_enemyTypeTraits[highestSpawnableEnemyIndex].difficulty;
+                m_maxEnemyDifficulty = Enemy.m_enemyTypeTraits[highestSpawnableEnemyIndex].difficulty;
             }
             else
             {
@@ -448,7 +448,7 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < enemiesToSpawn && difficultyBudget > 0; i++)
         {
             spawnLocationsTypes[i] = minimumDifficulty;
-            difficultyBudget -= GameHandler.m_enemyTypeTraits[minimumDifficulty].difficulty;
+            difficultyBudget -= Enemy.m_enemyTypeTraits[minimumDifficulty].difficulty;
         }
 
         for (int i = 0; i < enemiesToSpawn; i++)
@@ -461,12 +461,12 @@ public class BattleManager : MonoBehaviour
             bool viable = false;
             int roll = VLib.vRandom(0, spawnSpots.Count - 1);
 
-            if (spawnSpots[roll] + 1 < GameHandler.m_enemyTypeTraits.Length)
+            if (spawnSpots[roll] + 1 < Enemy.m_enemyTypeTraits.Length)
             {
                 //Find the upgrade cost of upgrading this enemy to the next enemy
-                int currentLevelDifficulty = spawnSpots[roll] < 0 ? 0 : GameHandler.m_enemyTypeTraits[spawnSpots[roll]].difficulty;
+                int currentLevelDifficulty = spawnSpots[roll] < 0 ? 0 : Enemy.m_enemyTypeTraits[spawnSpots[roll]].difficulty;
 
-                int nextLevelDifficulty = GameHandler.m_enemyTypeTraits[spawnSpots[roll] + 1].difficulty;
+                int nextLevelDifficulty = Enemy.m_enemyTypeTraits[spawnSpots[roll] + 1].difficulty;
                 int upgradeCost = nextLevelDifficulty - currentLevelDifficulty;
 
                 //Check whether we can upgrade the enemy with the current budget

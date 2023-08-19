@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
+    public Light m_lightRef;
     internal float m_damage = 1f;
     internal float m_speed = 10f;
     public bool m_playerDamaging = false;
@@ -11,7 +12,9 @@ public class Projectile : MonoBehaviour
     bool m_bouncePowerUp = false;
     Rigidbody2D m_rigidbody;
     int m_powerUpLevel = 0;
-    int m_maxPowerUpLevel = 1;
+    int m_maxPowerUpLevel = 3;
+    ActiveAbility m_parentAbility;
+    bool m_healsNucleus = true;
 
     // Start is called before the first frame update
     void Awake()
@@ -25,11 +28,15 @@ public class Projectile : MonoBehaviour
         //transform.rotation = VLib.Vector2DirectionToQuaternion(m_rigidbody.velocity);
     }
 
-    public void Initialise(Vector2 a_shootVector, Vector2 a_parentVelocity, float a_damage, bool a_bouncePowerUp)
+    public void Initialise(ActiveAbility a_ability, Vector2 a_shootVector, Vector2 a_parentVelocity, float a_damage)
     {
+        m_parentAbility = a_ability;
         m_rigidbody.velocity = a_parentVelocity + a_shootVector.normalized * m_speed;
         m_damage = a_damage;
-        m_bouncePowerUp = a_bouncePowerUp;
+        if (m_parentAbility.HasAffix(ActiveAbility.eAffix.bouncePowerup))
+        {
+            m_bouncePowerUp = true;
+        }
     }
 
     public void OnCollisionEnter2D(Collision2D a_collision)
@@ -38,7 +45,15 @@ public class Projectile : MonoBehaviour
         {
             if (a_collision.gameObject.GetComponent<Damageable>())
             {
-                a_collision.gameObject.GetComponent<Damageable>().Damage(m_damage * m_rigidbody.mass);
+                float effect = m_damage * m_rigidbody.mass;
+                if (a_collision.gameObject.GetComponent<Nucleus>())
+                {
+                    a_collision.gameObject.GetComponent<Damageable>().Heal(effect);
+                }
+                else
+                {
+                    a_collision.gameObject.GetComponent<Damageable>().Damage(effect);
+                }
                 Destroy(this.gameObject);
             }
         }
@@ -47,7 +62,23 @@ public class Projectile : MonoBehaviour
         {
             m_powerUpLevel++;
             m_damage *= 2f;
-            gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+            Color powerColor = Color.white;
+            switch (m_powerUpLevel)
+            {
+                case 1:
+                    powerColor = Color.yellow;
+                    break;
+                case 2:
+                    powerColor = new Color(1f, 137f/256f, 0f,1f); //Orange
+                    break;
+                case 3:
+                    powerColor = Color.red; //Orange
+                    break;
+                default:
+                    break;
+            }
+            gameObject.GetComponent<SpriteRenderer>().color = powerColor;
+            m_lightRef.color = powerColor;
         }
     }
 }

@@ -17,9 +17,10 @@ public class Nucleus : Damageable
     {
         base.Start();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        int difficulty = m_gameHandlerRef.m_battleDifficulty < 10 ? 10 : m_gameHandlerRef.m_battleDifficulty;
-        float exponent = 0.3f;
-        m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue *= Mathf.Pow(difficulty, exponent) /Mathf.Pow(10f, exponent);
+        //int difficulty = m_gameHandlerRef.m_battleDifficulty < 10 ? 10 : m_gameHandlerRef.m_battleDifficulty;
+        //float exponent = 0.3f;
+        //m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue *= Mathf.Pow(difficulty, exponent) /Mathf.Pow(10f, exponent);
+        m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue = 1000f;
         UpdateLocalStatsFromStatHandler();
 
     }

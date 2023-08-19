@@ -232,7 +232,9 @@ public class Player : Damageable
     internal void ShootProjectile(Vector3 a_shootVector, ActiveAbility a_ability)
     {
         GameObject projectile = Instantiate<GameObject>(m_projectileTemplate,transform.position, VLib.Vector2DirectionToQuaternion(a_shootVector));
-        projectile.GetComponent<Projectile>().Initialise(a_shootVector, m_rigidBody.velocity, m_statHandler.GetStatFinalValue((int)eCharacterStatIndices.strength), a_ability.HasAffix(ActiveAbility.eAffix.bouncePowerup));
+        Projectile projectileComp = projectile.GetComponent<Projectile>();
+
+        projectileComp.Initialise(a_ability, a_shootVector, m_rigidBody.velocity, m_statHandler.GetStatFinalValue((int)eCharacterStatIndices.strength));
     }
 
     public void OnTriggerEnter2D(Collider2D a_collider)

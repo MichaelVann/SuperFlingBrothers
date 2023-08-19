@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 18.2f;
+    public const float _VERSION_NUMBER = 18.3f;
 
     static internal bool DEBUG_MODE = true;
 
@@ -100,7 +100,6 @@ public class GameHandler : MonoBehaviour
 
     StockHandler m_stockHandler;
 
-    public static Enemy.TypeTrait[] m_enemyTypeTraits = new Enemy.TypeTrait[(int)Enemy.eEnemyType.Count];
 
     [Serializable]
     struct SaveData
@@ -145,7 +144,7 @@ public class GameHandler : MonoBehaviour
         SetupUpgrades();
         SetupEquipment();
         SetupShield();
-        SetUpEnemyTypes();
+        Enemy.SetUpEnemyTypes();
         if (m_autoLoadDataOnLaunch)
         {
             LoadGame();
@@ -154,44 +153,7 @@ public class GameHandler : MonoBehaviour
         //Battle
     }
 
-    private void SetUpEnemyTypes()
-    {
-        for (int i = 0; i < (int)Enemy.eEnemyType.Count; i++)
-        {
-            m_enemyTypeTraits[i].type = Enemy.eEnemyType.Idler;
-            m_enemyTypeTraits[i].difficulty = 1;
-            m_enemyTypeTraits[i].dasher = false;
-            m_enemyTypeTraits[i].flinger = false;
-            m_enemyTypeTraits[i].dodger = false;
-            m_enemyTypeTraits[i].duplicator = false;
-            m_enemyTypeTraits[i].canRotate = false;
-        }
 
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Idler].type = Enemy.eEnemyType.Idler;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Idler].difficulty = 1;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Idler].canRotate = true;
-
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dasher].type = Enemy.eEnemyType.Dasher;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dasher].dasher = true;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dasher].difficulty = 3;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dasher].duplicator = true;
-
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].type = Enemy.eEnemyType.Dodger;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].dodger = true;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].difficulty = 5;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Dodger].duplicator = true;
-
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Healer].type = Enemy.eEnemyType.Healer;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Healer].dodger = true;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Healer].difficulty = 8;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Healer].duplicator = false;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Healer].healer = true;
-
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].type = Enemy.eEnemyType.Striker;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].flinger = true;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].difficulty = 12;
-        m_enemyTypeTraits[(int)Enemy.eEnemyType.Striker].duplicator = true;
-    }
 
     private void SetupHumanBody()
     {

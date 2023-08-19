@@ -119,7 +119,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 697123258622822519}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6969371a1f666564882bff8d6c346210, type: 3}
+  m_Script: {fileID: 11500000, guid: 21fe80d4a4acee14ab8dd9e316ef90d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_wallCrackTemplate: {fileID: 131125055868080294, guid: e478f913f42c63344a9ff58487c3fc2c,

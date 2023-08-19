@@ -7814,16 +7814,6 @@ PrefabInstance:
       propertyPath: m_SortingLayer
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6401465947331615681, guid: 2eeca16652b58a1458d7025c898f83b9,
-        type: 3}
-      propertyPath: m_SortingOrder
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6401465947331615681, guid: 2eeca16652b58a1458d7025c898f83b9,
-        type: 3}
-      propertyPath: m_SortingLayerID
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 7320604616780206386, guid: 2eeca16652b58a1458d7025c898f83b9,
         type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
