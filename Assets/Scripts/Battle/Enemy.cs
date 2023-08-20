@@ -34,7 +34,7 @@ public class Enemy : Damageable
         public Enemy.eEnemyType type;
         public int difficulty;
         public bool flinger;
-        public bool dasher;
+        public bool inertiaDasher;
         public bool dodger;
         public bool duplicator;
         public bool canRotate;
@@ -80,7 +80,6 @@ public class Enemy : Damageable
         m_typeTrait = new TypeTrait();
         m_flingTimer -= UnityEngine.Random.Range(0f, 0.3f);
         m_damageTextColor = Color.yellow;
-        m_flingPieIndicatorRef.SetPieFillAmount(0);
     }
 
     public void SetUpType(eEnemyType a_type)
@@ -104,8 +103,8 @@ public class Enemy : Damageable
                 //m_flingPieIndicatorRef.gameObject.SetActive(false);
                 break;
             case eEnemyType.Dasher:
-                m_spriteRenderer.sprite = m_enemySprites[0];
-                m_originalColor = Color.yellow;
+                //m_spriteRenderer.sprite = m_enemySprites[0];
+                //m_originalColor = Color.yellow;
                 m_flingAccuracy = 360f;
                 break;
             case eEnemyType.Dodger:
@@ -117,7 +116,7 @@ public class Enemy : Damageable
                 m_flingAccuracy = 360f;
                 break;
             case eEnemyType.Striker:
-                m_originalColor = Color.red;
+                //m_originalColor = Color.red;
                 m_visionConeRef.SetActive(true);
                 break;
             case eEnemyType.Count:
@@ -138,7 +137,7 @@ public class Enemy : Damageable
         {
             m_enemyTypeTraits[i].type = Enemy.eEnemyType.Idler;
             m_enemyTypeTraits[i].difficulty = 1;
-            m_enemyTypeTraits[i].dasher = false;
+            m_enemyTypeTraits[i].inertiaDasher = false;
             m_enemyTypeTraits[i].flinger = false;
             m_enemyTypeTraits[i].dodger = false;
             m_enemyTypeTraits[i].duplicator = false;
@@ -150,7 +149,7 @@ public class Enemy : Damageable
         m_enemyTypeTraits[(int)eEnemyType.Idler].canRotate = true;
 
         m_enemyTypeTraits[(int)eEnemyType.Dasher].type = Enemy.eEnemyType.Dasher;
-        m_enemyTypeTraits[(int)eEnemyType.Dasher].dasher = true;
+        m_enemyTypeTraits[(int)eEnemyType.Dasher].inertiaDasher = true;
         m_enemyTypeTraits[(int)eEnemyType.Dasher].difficulty = 3;
         //m_enemyTypeTraits[(int)eEnemyType.Dasher].duplicator = true;
 
@@ -174,6 +173,7 @@ public class Enemy : Damageable
     public override void Start()
     {
         base.Start();
+        m_flingPieIndicatorRef.SetPieFillAmount(0);
         m_playerRef = FindObjectOfType<Player>();
         m_velocityIndicatorRef.SetActive(m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.enemyVector].m_owned);
         for (int i = 0; i < m_exclamationMarkRefs.Length; i++)
@@ -264,6 +264,11 @@ public class Enemy : Damageable
         if (runningBaseCollision)
         {
             base.OnCollisionEnter2D(a_collision);
+        }
+
+        if (m_typeTrait.inertiaDasher)
+        {
+            m_rigidBody.rotation = VLib.Vector2ToEulerAngle(m_rigidBody.velocity);
         }
     }
 
@@ -392,7 +397,7 @@ public class Enemy : Damageable
 
     public void Fling()
     {
-        if (m_typeTrait.dasher)
+        if (m_typeTrait.inertiaDasher)
         {
                 Fling(m_rigidBody.velocity.normalized, m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].finalValue);
         }
@@ -415,7 +420,7 @@ public class Enemy : Damageable
     {
         m_flingPieIndicatorRef.SetPieFillAmount(m_flingTimer / m_flingTimerMax);
         Vector3 playerPos = m_playerRef.transform.position;
-        if (m_typeTrait.dasher)
+        if (m_typeTrait.inertiaDasher)
         {
             m_flingTimer += Time.deltaTime;
             if (m_flingTimer >= m_flingTimerMax)
@@ -461,7 +466,7 @@ public class Enemy : Damageable
     {
         if (m_playerRef)
         {
-            if ((m_typeTrait.dasher && m_rigidBody.velocity.magnitude > Mathf.Epsilon) || m_typeTrait.flinger || m_typeTrait.dodger)
+            if ((m_typeTrait.inertiaDasher && m_rigidBody.velocity.magnitude > Mathf.Epsilon) || m_typeTrait.flinger || m_typeTrait.dodger)
             {
                 FlingUpdate();
             }

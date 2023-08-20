@@ -39,6 +39,6 @@ public class FlingReadynessIndicator : MonoBehaviour
 
         float colorFactor = Mathf.Pow(flingPercentage, 5f);
 
-        m_spriteRenderer.color = new Color(colorFactor, colorFactor / 1.7f, 0f, 1f);
+        m_spriteRenderer.color = new Color(colorFactor, colorFactor / 1.7f, 0f, colorFactor);
     }
 }

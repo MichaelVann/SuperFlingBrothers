@@ -237,8 +237,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6918673320962415756}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.39, z: 23.827763}
-  m_LocalScale: {x: 0.36319566, y: 0.36319566, z: 0.050847393}
+  m_LocalPosition: {x: 0, y: -0.01, z: 0}
+  m_LocalScale: {x: 1.1088363, y: 1.1088363, z: 0.1552371}
   m_Children: []
   m_Father: {fileID: 5599424530306179847}
   m_RootOrder: 12
@@ -279,10 +279,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1254617887
+  m_SortingLayer: 2
   m_SortingOrder: 9
-  m_Sprite: {fileID: 21300000, guid: f6c7f3f13a7880540b50fb8b6d530432, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 3add03b83cba9e94fb83f2e918643e6b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -533,6 +533,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: FlingReadinessIndicator
+      objectReference: {fileID: 0}
+    - target: {fileID: 5994689010069112227, guid: 4ef8918e9669b9442a3ac51c5f4405db,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4ef8918e9669b9442a3ac51c5f4405db, type: 3}
@@ -848,7 +853,7 @@ PrefabInstance:
     - target: {fileID: 8700043686000929545, guid: 688cedeb614fed54b951ebf40cfa3a62,
         type: 3}
       propertyPath: m_Color.b
-      value: 0.3986262
+      value: 0.72998697
       objectReference: {fileID: 0}
     - target: {fileID: 8700043686000929545, guid: 688cedeb614fed54b951ebf40cfa3a62,
         type: 3}
@@ -858,7 +863,7 @@ PrefabInstance:
     - target: {fileID: 8700043686000929545, guid: 688cedeb614fed54b951ebf40cfa3a62,
         type: 3}
       propertyPath: m_Color.r
-      value: 0.39337844
+      value: 0.72659314
       objectReference: {fileID: 0}
     - target: {fileID: 8934994329586549912, guid: 688cedeb614fed54b951ebf40cfa3a62,
         type: 3}
