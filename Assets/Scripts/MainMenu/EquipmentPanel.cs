@@ -18,6 +18,7 @@ public class EquipmentPanel : MonoBehaviour
     public Text[] m_statDeltaTextRefs;
     public Text m_abilityTextRef;
     public Text m_goldValueTextRef;
+    public Image m_outline;
 
     //public Text m_costTextRef;
     //public GameObject m_levelDisplayRef;
@@ -120,6 +121,11 @@ public class EquipmentPanel : MonoBehaviour
         }
         m_equipButtonRef.gameObject.GetComponent<Image>().color = equipButtonColor;
         m_equipButtonTextRef.text = equipButtonString;
+    }
+
+    internal void SetSelected(bool a_selected)
+    {
+        m_outline.color = a_selected ? Color.yellow : Color.black;
     }
 
     public void AttemptToEquip()

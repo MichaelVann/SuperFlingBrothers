@@ -1578,6 +1578,7 @@ MonoBehaviour:
   - {fileID: 4154013699730144104}
   m_abilityTextRef: {fileID: 688625369728871021}
   m_goldValueTextRef: {fileID: 8521817642979227380}
+  m_outline: {fileID: 6517576350697401536}
   m_levelTextRef: {fileID: 3748715917039260939}
   m_equipmentPortrait: {fileID: 1079616144255651448}
   m_equipButtonRef: {fileID: 4515766722859613353}

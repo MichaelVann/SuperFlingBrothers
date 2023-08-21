@@ -69,7 +69,6 @@ public class EquipmentScreenHandler : MonoBehaviour
         }
     }
 
-
     public void RefreshInventory()
     {
         m_gameHandlerRef.SortEquipmentInventory();
@@ -80,18 +79,42 @@ public class EquipmentScreenHandler : MonoBehaviour
         {
             m_equipmentItemPanels[i].Refresh();
         }
-        m_inventoryEquipmentSlotUIRef.SetEquipmentRef(m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId]);
+
+        //Top Panel
+        SetTopPanelEquipmentRef(m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId]);
+        //m_inventoryEquipmentSlotUIRef.SetEquipmentRef(m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId]);
+        //m_inventoryEquipmentSlotUIRef.Refresh();
+        //if (m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId] != null)
+        //{
+        //    m_equipmentAbilityNameText.text = m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId].m_activeAbility.GetName();
+        //    m_equipmentAbilityReadoutText.text = m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId].m_activeAbility.GetAbilityDescription();
+        //}
+    }
+
+    internal void SetTopPanelEquipmentRef(Equipment a_equipment)
+    {
+        m_inventoryEquipmentSlotUIRef.SetEquipmentRef(a_equipment);
         m_inventoryEquipmentSlotUIRef.Refresh();
-        if (m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId] != null)
+        if (a_equipment != null)
         {
-            m_equipmentAbilityNameText.text = m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId].m_activeAbility.GetName();
-            m_equipmentAbilityReadoutText.text = m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId].m_activeAbility.GetAbilityDescription();
+            m_equipmentAbilityNameText.text = a_equipment.m_activeAbility.GetName();
+            m_equipmentAbilityReadoutText.text = a_equipment.m_activeAbility.GetAbilityDescription();
+        }
+        else
+        {
+            m_equipmentAbilityNameText.text = "";
+            m_equipmentAbilityReadoutText.text = "";
+        }
+        for (int i = 0; i < m_equipmentItemPanels.Count; i++)
+        {
+            m_equipmentItemPanels[i].SetSelected(m_equipmentItemPanels[i].m_equipmentRef == a_equipment);
         }
     }
 
     internal void SetEquipmentDigestStatus(bool a_open, Equipment a_equipment = null)
     {
-        m_equipmentDigestRef.SetActive(a_open);
+        SetTopPanelEquipmentRef(a_equipment);
+        //m_equipmentDigestRef.SetActive(a_open);
 
         if (a_open)
         {

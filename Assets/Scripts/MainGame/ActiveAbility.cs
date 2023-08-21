@@ -26,6 +26,11 @@ public class ActiveAbility
         Count
     }
 
+    static string[] m_affixDescriptions = {
+        "Bounce Power Up: Everytime this projectile bounces it doubles in power."
+     };
+
+
 
     [SerializeReference]
 
