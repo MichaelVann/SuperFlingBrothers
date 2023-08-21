@@ -219,6 +219,11 @@ public class Enemy : Damageable
         }
     }
 
+    void UpdateRotation()
+    {
+        m_rigidBody.rotation = VLib.Vector2ToEulerAngle(m_rigidBody.velocity);
+    }
+
     public override void OnCollisionEnter2D(Collision2D a_collision)
     {
         bool runningBaseCollision = true;
@@ -268,7 +273,7 @@ public class Enemy : Damageable
 
         if (m_typeTrait.inertiaDasher)
         {
-            m_rigidBody.rotation = VLib.Vector2ToEulerAngle(m_rigidBody.velocity);
+            UpdateRotation();
         }
     }
 
@@ -399,7 +404,8 @@ public class Enemy : Damageable
     {
         if (m_typeTrait.inertiaDasher)
         {
-                Fling(m_rigidBody.velocity.normalized, m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].finalValue);
+            Fling(m_rigidBody.velocity.normalized, m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].finalValue);
+            UpdateRotation();
         }
         else if (m_playerRef)
         {

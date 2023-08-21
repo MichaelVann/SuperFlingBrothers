@@ -21,6 +21,8 @@ public class FlingPieIndicator : MonoBehaviour
             m_spriteRenderer = GetComponent<SpriteRenderer>();
         }
         m_spriteRenderer.material.SetFloat("_Arc1", (1f-a_value)*360f);
-        m_spriteRenderer.color = VLib.PercentageToColor(1f-a_value);
+        Color color = VLib.PercentageToColor(1f - a_value);
+        color.a = a_value;
+        m_spriteRenderer.color = color;
     }
 }

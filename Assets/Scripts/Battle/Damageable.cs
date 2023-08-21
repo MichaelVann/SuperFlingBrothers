@@ -31,6 +31,9 @@ public class Damageable : BaseObject
 
     public GameObject m_bloodSplatterTemplate;
     public Color m_bloodColor;
+
+    public GameObject m_puffOfSmokeTemplate;
+
     //Fling
     bool m_secondFling = true;
     float m_bumpFlingStrengthMult = GameHandler.DAMAGEABLE_bumpFlingStrengthMult;
@@ -92,7 +95,7 @@ public class Damageable : BaseObject
 
     void UpdateMass()
     {
-        m_rigidBody.mass = m_originalMass * 0.33f + (GetHealthPercentage() * 0.77f);
+        //m_rigidBody.mass = m_originalMass * 0.33f + (GetHealthPercentage() * 0.77f);
     }
 
     protected void UpdateHealthColor()
@@ -117,7 +120,9 @@ public class Damageable : BaseObject
 
     public virtual void Fling(Vector3 a_flingVector, float a_flingStrength)
     {
-        a_flingStrength *= (0.67f + (GetHealthPercentage() * 0.33f));
+        GameObject smoke = Instantiate<GameObject>(m_puffOfSmokeTemplate, transform.position, new Quaternion());
+        smoke.transform.localScale *= a_flingStrength/ 200f;
+        //a_flingStrength *= (0.67f + (GetHealthPercentage() * 0.33f));
         if (m_secondFling)
         {
             if (m_clearVelocityOption)
