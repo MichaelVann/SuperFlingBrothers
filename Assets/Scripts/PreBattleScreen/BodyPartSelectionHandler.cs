@@ -113,6 +113,16 @@ public class BodyPartSelectionHandler : MonoBehaviour
             PinchZoom();
             PanCamera();
         }
+        if (Input.GetKey(KeyCode.KeypadPlus))
+        {
+            m_currentZoom *= 1f + Time.deltaTime;
+            ApplyZoomAndPan();
+        }
+        else if (Input.GetKey(KeyCode.KeypadMinus))
+        {
+            m_currentZoom *= 1f - Time.deltaTime;
+            ApplyZoomAndPan();
+        }
     }
 
     void ToggleNodeAndLineVisibility(bool a_visible)

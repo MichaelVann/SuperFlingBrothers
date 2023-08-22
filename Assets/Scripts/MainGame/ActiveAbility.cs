@@ -121,7 +121,11 @@ public class ActiveAbility
         switch (m_abilityType)
         {
             case eAbilityType.ExtraTurn:
-                description = "Extra Turn: Gives the user an extra turn on collision with the enemy, potentially giving a much needed moment of composure.";
+                description = "Extra Turn: Gives the user an extra turn on collision with the enemy.";
+                //description += "\n\nTest";
+                //description += "\n\nTest";
+                //description += "\n\nTest";
+
                 break;
             case eAbilityType.Projectile:
                 description = "Projectile: Shoots out a projectile in the direction of movement.";
@@ -131,6 +135,12 @@ public class ActiveAbility
             default:
                 break;
         }
+
+        for (int i = 0; i < m_affixes.Count; i++)
+        {
+            description += "\n" + m_affixDescriptions[(int)m_affixes[i]];
+        }
+
         return description;
     }
 

@@ -79,6 +79,7 @@ public class Damageable : BaseObject
         {
             m_shieldBarRef.SetHealthColoring(false);
         }
+
     }
 
     protected void UpdateLocalStatsFromStatHandler()
@@ -102,6 +103,7 @@ public class Damageable : BaseObject
     {
         float divider = 0.8f + 0.2f*GetHealthPercentage();
         m_spriteRenderer.color = new Color(m_originalColor.r * divider, m_originalColor.g * divider, m_originalColor.b * divider, m_originalColor.a);
+        if (m_healthBarRef) { m_healthBarRef.SetProgressValue(m_health); }
     }
 
     void SecondFlingUpdate()
@@ -187,6 +189,8 @@ public class Damageable : BaseObject
         }
         UpdateMass();
         UpdateHealthColor();
+        if (m_healthBarRef) { m_healthBarRef.SetProgressValue(m_health); }
+
     }
 
     //Damages the damageable
@@ -257,7 +261,6 @@ public class Damageable : BaseObject
         m_lastMomentumMagnitude = m_rigidBody.velocity.magnitude * m_rigidBody.mass;
         SecondFlingUpdate();
 
-        if (m_healthBarRef) { m_healthBarRef.SetProgressValue(m_health); }
 
         DamageColourOverrideUpdate();
         float eulerAnglesForShadow = transform.eulerAngles.z + GameHandler.BATTLE_ShadowAngle;

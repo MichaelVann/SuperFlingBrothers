@@ -38,6 +38,7 @@ public class Player : Damageable
     bool m_shieldEnabled = false;
     GameHandler.Shield m_shieldRef;
     float m_maxShieldOpacity = 0.64f;
+    float m_projectileDamageMult = 3f;
 
     public override void Awake()
     {
@@ -234,7 +235,7 @@ public class Player : Damageable
         GameObject projectile = Instantiate<GameObject>(m_projectileTemplate,transform.position, VLib.Vector2DirectionToQuaternion(a_shootVector));
         Projectile projectileComp = projectile.GetComponent<Projectile>();
 
-        projectileComp.Initialise(a_ability, a_shootVector, m_rigidBody.velocity, m_statHandler.GetStatFinalValue((int)eCharacterStatIndices.strength));
+        projectileComp.Initialise(a_ability, a_shootVector, m_rigidBody.velocity, m_statHandler.GetStatFinalValue((int)eCharacterStatIndices.strength) * m_projectileDamageMult);
     }
 
     public void OnTriggerEnter2D(Collider2D a_collider)

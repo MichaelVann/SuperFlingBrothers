@@ -9,7 +9,10 @@ public class WallCrack : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GetComponent<SpriteRenderer>().sprite = m_decals[VLib.vRandom(0, m_decals.Length-1)];
+        SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.sprite = m_decals[VLib.vRandom(0, m_decals.Length-1)];
+        float shade = VLib.vRandom(0.1f, 0.3f);
+        spriteRenderer.color = new Color(shade*2f, shade*1.3f, shade, 1f);
     }
 
 

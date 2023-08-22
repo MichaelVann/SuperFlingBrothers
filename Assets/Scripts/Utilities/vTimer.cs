@@ -31,6 +31,7 @@ public class vTimer
     public void Reset()
     {
         m_timer = 0f;
+        m_finished = false;
     }
 
     public bool Update()
