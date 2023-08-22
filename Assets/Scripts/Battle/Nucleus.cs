@@ -22,6 +22,7 @@ public class Nucleus : Damageable
         //m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue *= Mathf.Pow(difficulty, exponent) /Mathf.Pow(10f, exponent);
         m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue = 1000f;
         UpdateLocalStatsFromStatHandler();
+        if (m_healthBarRef) { m_healthBarRef.SetProgressValue(m_health); }
 
     }
 

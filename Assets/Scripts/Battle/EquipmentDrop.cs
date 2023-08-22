@@ -8,6 +8,7 @@ public class EquipmentDrop : Loot
     public Equipment m_equipment;
     GameHandler m_gameHandlerRef;
     public SpriteRenderer m_rarityRingSpriteRendererRef;
+    public Light m_lightRef;
     // Start is called before the first frame update
     override public void Start()
     {
@@ -15,6 +16,7 @@ public class EquipmentDrop : Loot
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_equipment = new Equipment(m_gameHandlerRef.m_playerStatHandler.m_level);
         m_rarityRingSpriteRendererRef.color = m_equipment.m_rarityTier.color;
+        m_lightRef.color = m_equipment.m_rarityTier.color;
     }
 
     // Update is called once per frame
