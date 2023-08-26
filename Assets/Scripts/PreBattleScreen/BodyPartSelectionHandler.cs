@@ -14,10 +14,6 @@ public class BodyPartSelectionHandler : MonoBehaviour
     public Text m_partInfoInvaderHealthText;
     public NodeInfoPanelHandler m_nodeInfoPanel;
 
-    //List<BodyPartUI> m_bodyPartUIList;
-    List<BodyPartInterface> m_bodyPartInterfaceList;
-    public List<GameObject> m_nodeContainers;
-    public List<GameObject> m_lineContainers;
     public GameObject m_lineContainer;
     public GameObject m_nodeContainer;
 
@@ -72,11 +68,11 @@ public class BodyPartSelectionHandler : MonoBehaviour
         //    SetUpPartNodes();
         //}
 
-        m_bodyPartInterfaceList = new List<BodyPartInterface>();
-        for (int i = 0; i < m_bodyPartUIObjectRefs.Length; i++)
-        {
-            m_bodyPartInterfaceList.Add(m_bodyPartUIObjectRefs[i].GetComponent<BodyPartInterface>());
-        }
+        //m_bodyPartInterfaceList = new List<BodyPartInterface>();
+        //for (int i = 0; i < m_bodyPartUIObjectRefs.Length; i++)
+        //{
+        //    m_bodyPartInterfaceList.Add(m_bodyPartUIObjectRefs[i].GetComponent<BodyPartInterface>());
+        //}
 
         //for (int i = 0; i < m_bodyPartUIList.Count; i++)
         //{
@@ -95,13 +91,6 @@ public class BodyPartSelectionHandler : MonoBehaviour
             ToggleNodeAndLineVisibility(true);
             m_selectedBodyPart = m_humanBodyRef.m_bodyPartList[m_selectedBodyPartIndex];
         }
-    }
-
-    public void SetUpBodyPartNodes(int a_partIndex)
-    {
-        m_humanBodyRef.m_bodyPartList[a_partIndex].SetUpFromUI(m_bodyPartInterfaceList[a_partIndex].m_nodeList, m_bodyPartInterfaceList[a_partIndex].m_maxEnemyDifficulty);
-
-        //m_humanBodyRef.SetUpBodyPartNodes(m_bodyPartInterfaceList);
     }
 
     // Update is called once per frame
@@ -240,7 +229,7 @@ public class BodyPartSelectionHandler : MonoBehaviour
         m_selectedBattleNodeId = a_id;
         m_selectedBodyPartIndex = a_bodypartID;
         Debug.Log(m_selectedBodyPartIndex + "," + m_selectedBattleNodeId);
-        m_selectedBattleNode = m_humanBodyRef.m_bodyPartList[m_selectedBodyPartIndex].m_nodes[m_selectedBattleNodeId];
+        //m_selectedBattleNode = m_humanBodyRef.m_bodyPartList[m_selectedBodyPartIndex].m_nodes[m_selectedBattleNodeId];
         m_selectedUIBattleNode = a_selectedNode;
         m_selectedUIBattleNode.SetSelectionRingActive(true);
         SetNodeInfoPanelOpenState(true);

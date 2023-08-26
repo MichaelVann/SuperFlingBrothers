@@ -213,6 +213,6 @@ public class BodyPartInterface : MonoBehaviour
             }
 
         }
-        m_bodyPartSelectionHandler.SetUpBodyPartNodes(m_bodyPartID);
+        //m_bodyPartSelectionHandler.SetUpBodyPartNodes(m_bodyPartID);
     }
 }
