@@ -141,6 +141,7 @@ public class GameHandler : MonoBehaviour
         m_stockHandler = new StockHandler(this);
 
         SetupHumanBody();
+
         SetupUpgrades();
         SetupEquipment();
         SetupShield();
@@ -152,8 +153,6 @@ public class GameHandler : MonoBehaviour
 
         //Battle
     }
-
-
 
     private void SetupHumanBody()
     {
@@ -276,10 +275,10 @@ public class GameHandler : MonoBehaviour
         if (m_bodyPartSelectedForBattle != null)
         {
             m_lastBodyPartSelectedForBattle = m_bodyPartSelectedForBattle;
-            m_lastBodyPartSelectedForBattle.ChangeInvaderStrength(m_invaderStrengthChangeLastGame);
+            //m_lastBodyPartSelectedForBattle.ChangeInvaderStrength(m_invaderStrengthChangeLastGame);
             if (m_lastGameResult == eEndGameType.lose || m_lastGameResult == eEndGameType.escape)
             {
-                m_lastBodyPartSelectedForBattle.Damage(1);
+                //m_lastBodyPartSelectedForBattle.Damage(1);
             }
             else if (m_lastGameResult == eEndGameType.win)
             {

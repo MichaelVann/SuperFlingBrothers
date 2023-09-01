@@ -8,10 +8,9 @@ public class UIBattleNode : MonoBehaviour
 
     GameHandler m_gameHandlerRef;
     public List<GameObject> m_connectionList;
-    BodyPartSelectionHandler m_bodySelectionHandlerRef;
+    //BodyPartSelectionHandler m_bodySelectionHandlerRef;
     internal BattleNode m_battleNodeRef;
-    BodyPart m_parentBodyPartRef;
-    BodyPartInterface m_parentBodyPartInterfaceRef;
+    MapNodeConnection m_owningConnection;
 
     public int m_invaders = 0;
     public int m_id = 0;
@@ -27,21 +26,25 @@ public class UIBattleNode : MonoBehaviour
     void Start()
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_bodySelectionHandlerRef = FindObjectOfType<BodyPartSelectionHandler>();
-        m_parentBodyPartRef = m_gameHandlerRef.m_humanBody.m_bodyPartList[m_parentBodyPartID];
-        //m_battleNodeRef = m_parentBodyPartRef.m_nodes[m_id];
         m_selectionRing.SetActive(false);
+    }
+
+    public void SetUp(MapNodeConnection a_connection, BattleNode a_battleNodeRef)
+    {
+        m_owningConnection = a_connection;
+        m_battleNodeRef = a_battleNodeRef;
+        m_difficulty = m_battleNodeRef.m_difficulty;
+        m_difficultyBoostTier = m_battleNodeRef.m_difficultyBoostTier;
     }
 
     // Update is called once per frame
     void Update()
     {
-        //SetUpLines();
     }
 
     public void Select()
     {
-        m_bodySelectionHandlerRef.SelectNode(m_id,m_parentBodyPartID, this);
+        m_owningConnection.SelectBattleNode(this);
     }
 
     void OnMouseUpAsButton()

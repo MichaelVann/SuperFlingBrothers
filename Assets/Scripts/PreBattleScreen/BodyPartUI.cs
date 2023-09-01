@@ -7,12 +7,26 @@ public class BodyPartUI : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    public List<UIBattleNode> m_UIBattleNodeList;
-    public GameObject m_nodesContainerRef;
-    public GameObject m_lockImageRef;
+    public MapNode[] m_mapNodes;
+    public MapNodeConnection[] m_mapNodeConnections;
+    GameHandler m_gameHandlerRef;
+    MapHandler m_mapHandlerRef;
+    BodyPart m_bodyPartRef;
+
+
+    //Battle Nodes
+
 
     void Start()
     {
+        m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        m_mapHandlerRef = FindObjectOfType<MapHandler>();
+        m_bodyPartRef = m_gameHandlerRef.m_humanBody.m_activeBodyPart;
+        for (int i = 0; i < m_mapNodes.Length; i++)
+        {
+            m_mapNodes[i].SetTown(m_bodyPartRef.m_towns[i]);
+        }
+        Refresh();
         //UIBattleNode[] battleNodes = m_nodesContainerRef.GetComponentsInChildren<UIBattleNode>();
         //for (int i = 0; i < battleNodes.Length; i++)
         //{
@@ -28,11 +42,22 @@ public class BodyPartUI : MonoBehaviour
 
     public void SetUp(BodyPart a_part)
     {
-        m_lockImageRef.SetActive(!a_part.m_unlocked);
-        for (int i = 0; i < m_UIBattleNodeList.Count; i++)
+        
+    }
+
+
+    public void SelectNode(UIBattleNode a_selectedNode)
+    {
+        m_mapHandlerRef.SelectNode(a_selectedNode);
+    }
+
+
+
+    public void Refresh()
+    {
+        for (int i = 0; i < m_mapNodes.Length; i++)
         {
-            m_UIBattleNodeList[i].gameObject.SetActive(a_part.m_unlocked);
+            m_mapNodes[i].Refresh();
         }
-        GetComponent<Button>().interactable = a_part.m_unlocked;
     }
 }

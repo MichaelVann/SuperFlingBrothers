@@ -5,6 +5,7 @@ using UnityEngine;
 public class MapHandler : MonoBehaviour
 {
     //Zoom
+    GameHandler m_gameHandlerRef;
     Camera m_cameraRef;
 
     Vector3 m_humanBodyStartPos;
@@ -25,19 +26,50 @@ public class MapHandler : MonoBehaviour
     static float m_zoomProgress = 0f;
     static float m_zoomTime = 0.5f;
 
+    public BodyPart.eType m_viewedBodyPartType = BodyPart.eType.Hand;
+    public GameObject[] m_bodyPartMapPrefabs;
+    public GameObject m_viewedBodyPart;
+
+    public GameObject m_partInfoPanel;
+    public NodeInfoPanelHandler m_nodeInfoPanel;
+
     bool m_wasPinchingLastFrame = false;
     float m_lastPinchDistance;
 
     bool m_wasPanning = false;
     Vector3 m_lastPanPos;
 
+    //Selected BattleNode
+    int m_selectedBattleNodeId = -1;
+    public BattleNode m_selectedBattleNode;
+    UIBattleNode m_selectedUIBattleNode;
+
     // Start is called before the first frame update
     void Awake()
     {
+        m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_cameraRef = FindObjectOfType<Camera>();
         m_startingCameraSize = m_cameraRef.orthographicSize;
         m_startingCameraZPos = m_cameraRef.transform.position.z;
+        //m_mapNodeList = FindObjectsOfType<MapNode>();
         m_currentZoomLocation = m_cameraRef.transform.position;
+        m_viewedBodyPartType = m_gameHandlerRef.m_humanBody.m_activeBodyPart.m_type;
+        switch (m_viewedBodyPartType)
+        {
+            case BodyPart.eType.Chest:
+                break;
+            case BodyPart.eType.Shoulder:
+                break;
+            case BodyPart.eType.ForeArm:
+                break;
+            case BodyPart.eType.Hand:
+                m_viewedBodyPart = Instantiate<GameObject>(m_bodyPartMapPrefabs[0], transform);
+                break;
+            case BodyPart.eType.Count:
+                break;
+            default:
+                break;
+        }
     }
 
     // Update is called once per frame
@@ -63,39 +95,47 @@ public class MapHandler : MonoBehaviour
         }
     }
 
+    public void SelectNode(UIBattleNode a_selectedNode)
+    {
+        //if (!m_initialZoomed)
+        //{
+        //    return;
+        //}
+        DeselectUINode();
+        //m_selectedBattleNodeId = a_id;
+        //m_selectedBodyPartIndex = a_bodypartID;
+        //Debug.Log(m_selectedBodyPartIndex + "," + m_selectedBattleNodeId);
+        m_selectedBattleNode = a_selectedNode.m_battleNodeRef;
+        m_selectedUIBattleNode = a_selectedNode;
+        m_selectedUIBattleNode.SetSelectionRingActive(true);
+        SetNodeInfoPanelOpenState(true, m_selectedBattleNode);
+    }
+
+
+    public void DeselectUINode()
+    {
+        if (m_selectedUIBattleNode != null)
+        {
+            m_selectedUIBattleNode.SetSelectionRingActive(false);
+            m_selectedUIBattleNode = null;
+            SetNodeInfoPanelOpenState(false, m_selectedBattleNode);
+        }
+    }
+
+    public void SetNodeInfoPanelOpenState(bool a_open, BattleNode a_battleNode)
+    {
+        m_nodeInfoPanel.gameObject.SetActive(a_open);
+        m_nodeInfoPanel.SetUp(a_battleNode);
+        m_partInfoPanel.SetActive(!a_open);
+
+    }
+
     void ApplyZoomAndPan()
     {
         m_cameraRef.transform.position = m_currentZoomLocation;// * m_currentZoom;
         Debug.Log(m_currentZoomLocation);
         m_cameraRef.orthographicSize = m_startingCameraSize/m_currentZoom;// new Vector3(m_currentZoom, m_currentZoom, 1f);
     }
-
-    //void UpdateInitialZoom()
-    //{
-    //    if (m_zooming)
-    //    {
-    //        m_zoomProgress += Time.deltaTime / m_zoomTime;
-    //        m_zoomProgress = Mathf.Clamp(m_zoomProgress, 0f, 1f);
-    //        m_currentZoom = m_startingZoom + m_zoomProgress * (m_targetZoom - m_startingZoom);
-
-    //        float lerp = m_zoomProgress;// * (1f + (m_targetZoom - m_currentZoom));
-
-    //        m_currentZoomLocation = new Vector3(Mathf.Lerp(m_startingZoomLocation.x, m_zoomTargetLocation.x, lerp), Mathf.Lerp(m_startingZoomLocation.y, m_zoomTargetLocation.y, lerp), 0f);
-
-    //        ApplyZoomAndPan();
-
-    //        if (m_zoomProgress >= 1f)
-    //        {
-    //            m_zooming = false;
-    //            m_zoomProgress = 0f;
-    //            m_initialZoomed = m_zoomingIn ? true : false;
-    //            if (m_initialZoomed)
-    //            {
-    //                //ToggleNodeAndLineVisibility(true);
-    //            }
-    //        }
-    //    }
-    //}
 
     void PinchZoom()
     {

@@ -8,6 +8,7 @@ public class PreBattleManager : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
     public GameObject m_bodyPartSelectionRef;
+    public MapHandler m_mapHandlerRef;
     public GameObject m_gameModeSelectionRef;
     public Text m_battleDifficultyText;
 
@@ -37,7 +38,7 @@ public class PreBattleManager : MonoBehaviour
     {
         m_gameModeSelectionRef.SetActive(true);
         m_bodyPartSelectionRef.SetActive(false);
-        m_battleDifficultyText.text = "" + m_bodyPartSelectionRef.GetComponent<BodyPartSelectionHandler>().m_selectedBattleNode.m_difficulty;
+        m_battleDifficultyText.text = "ERROR";// "" + m_bodyPartSelectionRef.GetComponent<BodyPartSelectionHandler>().m_selectedBattleNode.m_difficulty;
 
     }
 
@@ -49,14 +50,12 @@ public class PreBattleManager : MonoBehaviour
 
     public void Play()
     {
-        m_gameHandlerRef.SetBodyPartSelectedForBattle(m_bodyPartSelectionRef.GetComponent<BodyPartSelectionHandler>().m_selectedBodyPart);
-        m_gameHandlerRef.SetBattleDifficulty(m_bodyPartSelectionRef.GetComponent<BodyPartSelectionHandler>().m_selectedBattleNode.m_difficulty);
-        int maxEnemyDifficulty = m_bodyPartSelectionRef.GetComponent<BodyPartSelectionHandler>().m_selectedBodyPart.m_maxEnemyDifficulty;
+        //m_gameHandlerRef.SetBodyPartSelectedForBattle(m_bodyPartSelectionRef.GetComponent<BodyPartSelectionHandler>().m_selectedBodyPart);
+        m_gameHandlerRef.SetBattleDifficulty(m_mapHandlerRef.m_selectedBattleNode.m_difficulty);
+        int maxEnemyDifficulty = m_gameHandlerRef.m_humanBody.m_maxEnemyDifficulty;
         m_gameHandlerRef.SetMaxEnemyDifficulty(maxEnemyDifficulty);
         m_gameHandlerRef.ChangeScene(GameHandler.eScene.battle);
-        //m_gameHandlerRef.m_battleAllowedEnemyTypes[(int)Enemy.eEnemyType.Idler] = true;
-        //m_gameHandlerRef.m_battleAllowedEnemyTypes[(int)Enemy.eEnemyType.Striker] = true;
-        //m_gameHandlerRef.m_battleAllowedEnemyTypes[(int)Enemy.eEnemyType.Dodger] = true;
+
     }
 
     public void ReturnToMainMenu()

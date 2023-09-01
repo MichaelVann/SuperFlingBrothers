@@ -8,8 +8,10 @@ public class HumanBody
     public string m_firstName;
     public string m_lastName;
     public BodyPart[] m_bodyPartList;
-
-    float m_basePartHealth = 100;
+    public BodyPart m_activeBodyPart;
+    public Town m_playerResidingTown;
+    //float m_basePartHealth = 100;
+    public int m_maxEnemyDifficulty = 12;
 
     public bool m_bodyInitialised = false;
 
@@ -21,6 +23,7 @@ public class HumanBody
         string[] names = VLib.GenerateRandomPersonsName();
         m_firstName = names[0];
         m_lastName = names[1];
+        m_activeBodyPart = m_bodyPartList[(int)BodyPart.eType.Hand];
     }
 
     private void SetUpBodyParts()
@@ -36,68 +39,16 @@ public class HumanBody
     {
         ref BodyPart part = ref a_part;
         int invaderStrength = 0;
-        BodyPart.Health health = new BodyPart.Health();
-        health.max = 0;
+        //BodyPart.Health health = new BodyPart.Health();
+        //health.max = 0;
         bool unlocked = false;
 
-        switch ((BodyPart.eType)a_index)
-        {
-            case BodyPart.eType.Chest:
-                health.max = 1.8f;
-                break;
-            case BodyPart.eType.Face:
-                health.max = 0.5f;
-                break;
-            case BodyPart.eType.Head:
-                health.max = 0.5f;
-                break;
-            case BodyPart.eType.Neck:
-                health.max = 0.5f;
-                break;
-            case BodyPart.eType.Pelvis:
-                health.max = 0.6f;
-                break;
-            case BodyPart.eType.Waist:
-                health.max = 1f;
-                break;
-            case BodyPart.eType.LeftFoot:
-            case BodyPart.eType.RightFoot:
-                health.max = 0.4f;
-                unlocked = true;
-                break;
-            case BodyPart.eType.LeftForeArm:
-            case BodyPart.eType.RightForeArm:
-                health.max = 0.4f;
-                break;
-            case BodyPart.eType.LeftHand:
-            case BodyPart.eType.RightHand:
-                health.max = 0.4f;
-                unlocked = true;
-                break;
-            case BodyPart.eType.LeftKnee:
-            case BodyPart.eType.RightKnee:
-                health.max = 0.6f;
-                break;
-            case BodyPart.eType.LeftShoulder:
-            case BodyPart.eType.RightShoulder:
-                health.max = 0.7f;
-                break;
-            case BodyPart.eType.LeftThigh:
-            case BodyPart.eType.RightThigh:
-                health.max = 0.6f;
-                break;
-
-            case BodyPart.eType.Count:
-                break;
-            default:
-                break;
-        }
         if (unlocked)
         {
             invaderStrength = 50;
         }
-        health.value = health.max *= m_basePartHealth;
+        //health.value = health.max *= m_basePartHealth;
 
-        a_part = new BodyPart((BodyPart.eType)a_index, health, invaderStrength, unlocked);
+        a_part = new BodyPart((BodyPart.eType)a_index, invaderStrength, unlocked);
     }
 }
