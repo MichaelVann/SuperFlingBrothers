@@ -107,6 +107,7 @@ public class MapHandler : MonoBehaviour
         //Debug.Log(m_selectedBodyPartIndex + "," + m_selectedBattleNodeId);
         m_selectedBattleNode = a_selectedNode.m_battleNodeRef;
         m_selectedUIBattleNode = a_selectedNode;
+        m_gameHandlerRef.SetSelectedBattle(a_selectedNode.m_battleNodeRef);
         m_selectedUIBattleNode.SetSelectionRingActive(true);
         SetNodeInfoPanelOpenState(true, m_selectedBattleNode);
     }

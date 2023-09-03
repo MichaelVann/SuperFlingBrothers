@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 19.0f;
+    public const float _VERSION_NUMBER = 19.1f;
 
     static internal bool DEBUG_MODE = true;
 
@@ -60,18 +60,18 @@ public class GameHandler : MonoBehaviour
     public HumanBody m_humanBody;
 
     //Current Battle
-    public BodyPart m_bodyPartSelectedForBattle;
+    public BattleNode m_attemptedBattleNode;
     internal int m_battleDifficulty = 2;
     internal int m_maxEnemyDifficulty = 8;
 
     //Last Game
+    public BattleNode m_lastAttemptedBattleNode;
     public eEndGameType m_lastGameResult = eEndGameType.lose;
     public float m_xpEarnedLastGame = 0f;
     public int m_invaderStrengthChangeLastGame = 0;
     public int m_playerLevelAtStartOfBattle = 0;
     public float m_dnaEarnedLastGame = 0f;
     public int m_equipmentCollectedLastGame = 0;
-    public BodyPart m_lastBodyPartSelectedForBattle;
     public int m_lastXpBonus = 0;
     public int m_lastDnaBonus = 0;
 
@@ -120,7 +120,7 @@ public class GameHandler : MonoBehaviour
     public void SetGameMode(eGameMode a_gameMode) { m_currentGameMode = a_gameMode; }
     public void ChangeCash(float a_change) { m_cash += a_change; }
 
-    public void SetBodyPartSelectedForBattle(BodyPart a_bodyPart) { m_bodyPartSelectedForBattle = a_bodyPart; }
+    public void SetSelectedBattle(BattleNode a_battleNode) { m_attemptedBattleNode = a_battleNode; }
 
     public float GetCurrentCash() { return m_cash; }
 
@@ -272,17 +272,16 @@ public class GameHandler : MonoBehaviour
   
     public void CalculateFinishedGame()
     {
-        if (m_bodyPartSelectedForBattle != null)
+        if (m_attemptedBattleNode != null)
         {
-            m_lastBodyPartSelectedForBattle = m_bodyPartSelectedForBattle;
-            //m_lastBodyPartSelectedForBattle.ChangeInvaderStrength(m_invaderStrengthChangeLastGame);
+            m_lastAttemptedBattleNode = m_attemptedBattleNode;
             if (m_lastGameResult == eEndGameType.lose || m_lastGameResult == eEndGameType.escape)
             {
-                //m_lastBodyPartSelectedForBattle.Damage(1);
+                m_lastAttemptedBattleNode.m_owningConnection.m_virusBalance -= 0.1f;
             }
             else if (m_lastGameResult == eEndGameType.win)
             {
-
+                m_lastAttemptedBattleNode.m_owningConnection.m_virusBalance += 0.1f;
             }
         }
 

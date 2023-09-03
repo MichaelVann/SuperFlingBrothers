@@ -7,12 +7,17 @@ public class MapNode : MonoBehaviour
 {
     BodyPartUI m_bodyPartUIRef;
     Town m_townRef;
+    GameHandler m_gameHandlerRef;
     public bool m_overrun = false;
     public string m_name;
     public TextMeshPro m_text;
     public List<MapNodeConnection> m_connectionList;
+    bool m_playersResidingTown;
 
     public void AddConnection(MapNodeConnection a_mapConnection) { m_connectionList.Add(a_mapConnection); }
+
+    public Town GetTown() { return m_townRef; }
+
     public void SetTown(Town a_town)
     {
         m_townRef = a_town;
@@ -22,13 +27,25 @@ public class MapNode : MonoBehaviour
     public void Awake()
     {
         m_bodyPartUIRef = FindObjectOfType<BodyPartUI>();
+        m_gameHandlerRef = FindObjectOfType<GameHandler>();
         //m_connectionList = new List<MapNodeConnection>();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        GetComponent<SpriteRenderer>().color = m_overrun ? Color.green : Color.red;
+        if (m_townRef == m_gameHandlerRef.m_humanBody.m_playerResidingTown)
+        {
+            m_playersResidingTown = true;
+        }
+        if (m_playersResidingTown)
+        {
+            GetComponent<SpriteRenderer>().color = Color.white;
+        }
+        else
+        {
+            GetComponent<SpriteRenderer>().color = m_overrun ? Color.green : Color.red;
+        }
         //m_name = "Town";
         //m_text.text = m_name;
     }

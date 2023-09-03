@@ -24,6 +24,16 @@ public class HumanBody
         m_firstName = names[0];
         m_lastName = names[1];
         m_activeBodyPart = m_bodyPartList[(int)BodyPart.eType.Hand];
+        m_playerResidingTown = m_activeBodyPart.FindTownByName("Teston");
+        RefreshBodyParts();
+    }
+
+    private void RefreshBodyParts()
+    {
+        for (int i = 0; i < m_bodyPartList.Length; i++)
+        {
+            m_bodyPartList[i].Refresh();
+        }
     }
 
     private void SetUpBodyParts()
@@ -49,6 +59,6 @@ public class HumanBody
         }
         //health.value = health.max *= m_basePartHealth;
 
-        a_part = new BodyPart((BodyPart.eType)a_index, invaderStrength, unlocked);
+        a_part = new BodyPart((BodyPart.eType)a_index, invaderStrength, unlocked, this);
     }
 }

@@ -23,6 +23,7 @@ public class MapNodeConnection : MonoBehaviour
     static Vector3[] m_linePositionsHolder;
 
     bool m_isaFront = false;
+    bool m_spawningBattles = false;
 
     public void Awake()
     {
@@ -32,17 +33,14 @@ public class MapNodeConnection : MonoBehaviour
         m_linePositionsHolder = new Vector3[2];
         m_createdLineRenderers = new List<GameObject>();
 
-        if (m_mapNodes[0] && m_mapNodes[1])
-        {
-            transform.position = m_mapNodes[0].transform.position + m_mapNodes[1].transform.position;
-            transform.position /= 2f;
-        }
+
 
         for (int i = 0; i < m_mapNodes.Length; i++)
         {
             m_mapNodes[i].AddConnection(this);
         }
-        m_isaFront = m_mapNodes[0].m_overrun != m_mapNodes[1].m_overrun;
+        //CalculateIfIsFront();
+
 
         m_representedTownConnection = m_gameHandlerRef.m_humanBody.m_activeBodyPart.FindConnection(gameObject.name);
     }
@@ -52,11 +50,59 @@ public class MapNodeConnection : MonoBehaviour
     {
         //FindAdjacentConnections();
         SetUpLines();
-        SetUpBattleNodes();
+        if (m_spawningBattles)
+        {
+            SetUpBattleNodes();
+        }
+    }
+
+    void CalculateIfIsFront()
+    {
+        m_isaFront = m_mapNodes[0].m_overrun != m_mapNodes[1].m_overrun;
+        bool firstTownIsPlayers = (m_mapNodes[0].GetTown() == m_gameHandlerRef.m_humanBody.m_playerResidingTown);
+        bool secondTownIsPlayers = (m_mapNodes[1].GetTown() == m_gameHandlerRef.m_humanBody.m_playerResidingTown);
+        m_spawningBattles = m_isaFront && (firstTownIsPlayers || secondTownIsPlayers);
+    }
+
+    void CalculatePosition()
+    {
+        if (m_mapNodes[0] && m_mapNodes[1])
+        {
+            if (m_isaFront)
+            {
+                Vector3 friendlyTownPos;
+                Vector3 enemyTownPos;
+
+                if (m_mapNodes[1].GetTown().m_overrun)
+                {
+                    friendlyTownPos = m_mapNodes[0].transform.position;
+                    enemyTownPos = m_mapNodes[1].transform.position;
+                }
+                else
+                {
+                    friendlyTownPos = m_mapNodes[1].transform.position;
+                    enemyTownPos = m_mapNodes[0].transform.position;
+                }
+
+                transform.position = Vector3.Lerp(friendlyTownPos, enemyTownPos, m_representedTownConnection.m_virusBalance);
+            }
+            else
+            {
+                transform.position = m_mapNodes[0].transform.position + m_mapNodes[1].transform.position;
+                transform.position /= 2f;
+            }
+        }
     }
 
     void SetUpBattleNodes()
     {
+        if (m_nodeGameobjectList.Count > 0)
+        {
+            for (int i = 0; i < m_nodeGameobjectList.Count; i++)
+            {
+                Destroy(m_nodeGameobjectList[i].gameObject);
+            }
+        }
         Vector3 connectionLine = m_mapNodes[0].transform.position - m_mapNodes[1].transform.position;
         if (m_mapNodes[1].m_overrun)
         {
@@ -78,7 +124,7 @@ public class MapNodeConnection : MonoBehaviour
                 Vector3 spawnPos = -frontLine / 2f + VLib.vRandom(0f, 1f) * frontLine;
                 Vector3 difficultyOffsetVector = -connectionLine/2f;
                 BattleNode battleNode = m_representedTownConnection.m_battles[i];
-                difficultyOffsetVector += connectionLine * battleNode.GetDifficultyPercent();
+                difficultyOffsetVector += connectionLine * Mathf.Clamp(battleNode.GetDifficultyPercent(), 0f, 1f);
                 //difficultyOffsetVector *= 0.1f;
                 spawnPos += difficultyOffsetVector;
                 nodeGameObject.transform.localPosition = spawnPos/2f;
@@ -283,7 +329,8 @@ public class MapNodeConnection : MonoBehaviour
 
     public void Refresh()
     {
-        m_isaFront = m_mapNodes[0].m_overrun != m_mapNodes[1].m_overrun;
+        CalculateIfIsFront();
+        CalculatePosition();
         SetUpLines();
     }
 
