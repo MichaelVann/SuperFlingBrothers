@@ -6598,12 +6598,6 @@ MonoBehaviour:
   m_xpEarned: 0
   m_enemyCount: 0
   m_pocketDamage: 2
---- !u!1 &2068011777 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1186015346955249711, guid: 4b8785191c480f0458d55cd78531c855,
-    type: 3}
-  m_PrefabInstance: {fileID: 1528747288880566610}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2094838600
 GameObject:
   m_ObjectHideFlags: 0
@@ -7096,11 +7090,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1528747289406136553, guid: 4b8785191c480f0458d55cd78531c855,
-        type: 3}
-      propertyPath: m_shadowRef
-      value: 
-      objectReference: {fileID: 2068011777}
     - target: {fileID: 1528747289406136555, guid: 4b8785191c480f0458d55cd78531c855,
         type: 3}
       propertyPath: m_Enabled
