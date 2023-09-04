@@ -310,7 +310,10 @@ MonoBehaviour:
     type: 3}
   m_healthBarRef: {fileID: 103979471725879489}
   m_shieldBarRef: {fileID: 0}
-  m_shadowRef: {fileID: 0}
+  m_shadowRef: {fileID: 1186015346955249711}
+  m_bloodSplatterTemplate: {fileID: 0}
+  m_bloodColor: {r: 0, g: 0, b: 0, a: 0}
+  m_puffOfSmokeTemplate: {fileID: 0}
 --- !u!1001 &1528747289635460575
 PrefabInstance:
   m_ObjectHideFlags: 0
