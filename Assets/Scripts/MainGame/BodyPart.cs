@@ -66,10 +66,10 @@ public class TownConnection
     //Front
     bool m_frontActive;
     public List<BattleNode> m_battles;
-    int m_battlesToSpawn = 4;
-    public float m_virusBalance = 0f;
+    int m_battlesToSpawn = 7;
+    public float m_virusBalance = 0.85f;
 
-    public int m_frontDifficulty = 20;
+    public int m_frontDifficulty = 50;
     public int m_frontMinDifficulty;
 
     public TownConnection(Town a_townA, Town a_townB, string a_name)
@@ -78,9 +78,9 @@ public class TownConnection
         m_townB = a_townB;
         m_name = a_name;
         m_battles = new List<BattleNode>();
-        m_virusBalance = 0.9f;
+        //m_virusBalance = 0.1f;
 
-        m_frontMinDifficulty = m_frontDifficulty / 2;
+        m_frontMinDifficulty = 10;
 
         Refresh();
 
@@ -177,7 +177,7 @@ public class BodyPart
                 m_towns.Add(teston);
                 m_townConnections.Add(new TownConnection(m_towns[0], m_towns[1], "TipTes"));
                 Town newKhul = new Town("New Khul", 100f, this);
-                newKhul.m_overrun = true;
+                //newKhul.m_overrun = true;
                 m_towns.Add(newKhul);
                 m_townConnections.Add(new TownConnection(m_towns[1], m_towns[2], "NK Tes"));
                 Town oldKhul = new Town("Old Khul", 100f, this);

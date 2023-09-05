@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class MapNodeConnection : MonoBehaviour
@@ -12,6 +13,7 @@ public class MapNodeConnection : MonoBehaviour
     public GameObject[] m_anchorPoints; //These are always drawn to if the connection is activated
     List<GameObject> m_createdLineRenderers;
     BodyPartUI m_owningBodyPart;
+    public Collider2D m_colliderRef;
 
     //Battle Nodes
     public GameObject m_UIBattleNodeTemplate;
@@ -24,6 +26,12 @@ public class MapNodeConnection : MonoBehaviour
 
     bool m_isaFront = false;
     bool m_spawningBattles = false;
+
+    Vector3 m_connectionLine;
+    Vector3 m_frontStartPos;
+    Vector3 m_frontEndPos;
+
+    public TextMeshPro m_winningPercentText;
 
     public void Awake()
     {
@@ -62,6 +70,11 @@ public class MapNodeConnection : MonoBehaviour
         bool firstTownIsPlayers = (m_mapNodes[0].GetTown() == m_gameHandlerRef.m_humanBody.m_playerResidingTown);
         bool secondTownIsPlayers = (m_mapNodes[1].GetTown() == m_gameHandlerRef.m_humanBody.m_playerResidingTown);
         m_spawningBattles = m_isaFront && (firstTownIsPlayers || secondTownIsPlayers);
+        m_winningPercentText.gameObject.SetActive(m_isaFront);
+        if (m_isaFront)
+        {
+            m_winningPercentText.text = "" + (m_representedTownConnection.m_virusBalance * 100) + "/" + 100;
+        }
     }
 
     void CalculatePosition()
@@ -84,7 +97,12 @@ public class MapNodeConnection : MonoBehaviour
                     enemyTownPos = m_mapNodes[0].transform.position;
                 }
 
-                transform.position = Vector3.Lerp(friendlyTownPos, enemyTownPos, m_representedTownConnection.m_virusBalance);
+                m_connectionLine = enemyTownPos - friendlyTownPos;
+
+                m_frontStartPos = friendlyTownPos + m_connectionLine.normalized * 0.25f;
+                m_frontEndPos = enemyTownPos - m_connectionLine.normalized * 0.25f;
+
+                transform.position = Vector3.Lerp(m_frontStartPos, m_frontEndPos, m_representedTownConnection.m_virusBalance);
             }
             else
             {
@@ -103,31 +121,46 @@ public class MapNodeConnection : MonoBehaviour
                 Destroy(m_nodeGameobjectList[i].gameObject);
             }
         }
-        Vector3 connectionLine = m_mapNodes[0].transform.position - m_mapNodes[1].transform.position;
+
+
+        MapNode friendlyTown = null;
+        MapNode enemyTown = null;
+
         if (m_mapNodes[1].m_overrun)
         {
-            connectionLine *= -1;
+            friendlyTown = m_mapNodes[0];
+            enemyTown = m_mapNodes[1];
+            //connectionLine *= -1;
         }
-        connectionLine = connectionLine.normalized;
-        Vector3 frontLine = new Vector3(connectionLine.y, -connectionLine.x, connectionLine.z);
+        else
+        {
+            friendlyTown = m_mapNodes[0];
+            enemyTown = m_mapNodes[1];
+        }
+
+        //Find a 90 degree front line
+        Vector3 frontLine = new Vector3(m_connectionLine.normalized.y, -m_connectionLine.normalized.x, m_connectionLine.normalized.z);
 
         for (int i = 0; i < m_representedTownConnection.m_battles.Count; i++)
         {
-            GameObject nodeGameObject = Instantiate<GameObject>(m_UIBattleNodeTemplate, this.transform);
+            GameObject nodeGameObject = Instantiate<GameObject>(m_UIBattleNodeTemplate);//, this.transform);
 
             bool validSpawnFound = false;
             int spawnAttempts = 0;
 
             while (!validSpawnFound)
             {
-
-                Vector3 spawnPos = -frontLine / 2f + VLib.vRandom(0f, 1f) * frontLine;
-                Vector3 difficultyOffsetVector = -connectionLine/2f;
                 BattleNode battleNode = m_representedTownConnection.m_battles[i];
-                difficultyOffsetVector += connectionLine * Mathf.Clamp(battleNode.GetDifficultyPercent(), 0f, 1f);
-                //difficultyOffsetVector *= 0.1f;
+                Vector3 spawnPos = new Vector3();// -frontLine / 2f + VLib.vRandom(0f, 1f) * frontLine;
+                Vector3 horizontalOffsetVector = -frontLine / 2f + VLib.vRandom(0f, 1f) * frontLine;
+                horizontalOffsetVector *= 0.5f;
+                Vector3 difficultyOffsetVector = Vector3.Lerp(m_frontStartPos, m_frontEndPos, Mathf.Clamp(battleNode.GetDifficultyPercent(), 0f, 1f));// -m_connectionLine.normalized/2f;
+                //difficultyOffsetVector += m_connectionLine.normalized * Mathf.Clamp(battleNode.GetDifficultyPercent(), 0f, 1f);
+                //difficultyOffsetVector *= 0.2f;
+                //spawnPos =  difficultyOffsetVector;
                 spawnPos += difficultyOffsetVector;
-                nodeGameObject.transform.localPosition = spawnPos/2f;
+                spawnPos += horizontalOffsetVector;
+                nodeGameObject.transform.localPosition = spawnPos;
 
                 validSpawnFound = true;
                 spawnAttempts++;
@@ -147,9 +180,13 @@ public class MapNodeConnection : MonoBehaviour
                         break;
                     }
                 }
-                if (!validSpawnFound)
+
+                float nameDistMag = (nodeGameObject.transform.position - transform.position).magnitude;
+                float nameAllowedRadius = 0.12f;// node.GetComponent<CircleCollider2D>().radius * transform.;
+
+                if (nameDistMag < nameAllowedRadius && spawnAttempts <= m_maxNodeSpawnAttempts)
                 {
-                    continue;
+                    validSpawnFound = false;
                 }
             }
 

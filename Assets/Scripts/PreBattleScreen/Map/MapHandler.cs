@@ -21,14 +21,15 @@ public class MapHandler : MonoBehaviour
     float m_startingCameraSize;
     float m_startingCameraZPos;
     static Vector3 m_startingZoomLocation;
-    static Vector3 m_currentZoomLocation;
+    static Vector3 m_currentZoomLocation = new Vector3(0f,0f,-110f);
     static Vector3 m_zoomTargetLocation;
     static float m_zoomProgress = 0f;
     static float m_zoomTime = 0.5f;
 
     public BodyPart.eType m_viewedBodyPartType = BodyPart.eType.Hand;
     public GameObject[] m_bodyPartMapPrefabs;
-    public GameObject m_viewedBodyPart;
+    public BodyPartUI m_viewedBodyPartUI;
+
 
     public GameObject m_partInfoPanel;
     public NodeInfoPanelHandler m_nodeInfoPanel;
@@ -38,6 +39,8 @@ public class MapHandler : MonoBehaviour
 
     bool m_wasPanning = false;
     Vector3 m_lastPanPos;
+
+    MapNode m_residingMapNode;
 
     //Selected BattleNode
     int m_selectedBattleNodeId = -1;
@@ -52,7 +55,7 @@ public class MapHandler : MonoBehaviour
         m_startingCameraSize = m_cameraRef.orthographicSize;
         m_startingCameraZPos = m_cameraRef.transform.position.z;
         //m_mapNodeList = FindObjectsOfType<MapNode>();
-        m_currentZoomLocation = m_cameraRef.transform.position;
+        //m_currentZoomLocation = m_cameraRef.transform.position;
         m_viewedBodyPartType = m_gameHandlerRef.m_humanBody.m_activeBodyPart.m_type;
         switch (m_viewedBodyPartType)
         {
@@ -63,13 +66,24 @@ public class MapHandler : MonoBehaviour
             case BodyPart.eType.ForeArm:
                 break;
             case BodyPart.eType.Hand:
-                m_viewedBodyPart = Instantiate<GameObject>(m_bodyPartMapPrefabs[0], transform);
+                m_viewedBodyPartUI = Instantiate<GameObject>(m_bodyPartMapPrefabs[0], transform).GetComponent<BodyPartUI>();
+                m_viewedBodyPartUI.Initialise();
                 break;
             case BodyPart.eType.Count:
                 break;
             default:
                 break;
         }
+        //ApplyZoomAndPan();
+
+    }
+
+    public void Start()
+    {
+        m_residingMapNode = m_viewedBodyPartUI.GetResidingMapNode();
+        m_currentZoomLocation = m_residingMapNode.transform.position;
+        m_currentZoomLocation.z = m_startingCameraZPos;
+        ApplyZoomAndPan();
     }
 
     // Update is called once per frame

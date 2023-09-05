@@ -10170,7 +10170,7 @@ MonoBehaviour:
   m_viewedBodyPartType: 3
   m_bodyPartMapPrefabs:
   - {fileID: 419227572800290133, guid: 2f5a18bed90d7f243b411ac955177df1, type: 3}
-  m_viewedBodyPart: {fileID: 0}
+  m_viewedBodyPartUI: {fileID: 0}
   m_partInfoPanel: {fileID: 106784318}
   m_nodeInfoPanel: {fileID: 1587965098}
 --- !u!1 &1113452749
