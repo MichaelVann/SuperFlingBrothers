@@ -69,8 +69,8 @@ public class TownConnection
     int m_battlesToSpawn = 7;
     public float m_warfrontBalance = 0.5f;
 
-    public int m_battleDifficulty = 50;
-    public int m_battleMinDifficulty;
+    public int m_battleMaxDifficulty = 60;
+    public int m_battleMinDifficulty = 1;
 
     public Town GetFriendlyTown() { return m_townB.m_overrun ? m_townA : m_townB; }
     public Town GetEnemyTown() { return m_townA.m_overrun ? m_townA : m_townB; }
@@ -82,8 +82,6 @@ public class TownConnection
         m_name = a_name;
         m_battles = new List<BattleNode>();
 
-        m_battleMinDifficulty = 10;
-
         Refresh();
         m_warfrontBalance = 0.9f;
     }
@@ -92,7 +90,7 @@ public class TownConnection
     {
         m_warfrontBalance += a_change;
         m_warfrontBalance = Mathf.Clamp(m_warfrontBalance, 0f, 1f);
-        m_warfrontBalance = (float)Math.Round(m_warfrontBalance, 2);
+        m_warfrontBalance = (float)Math.Round(m_warfrontBalance, 4);
         if (m_warfrontBalance <= 0f)
         {
             m_townA.m_owningBodyPartRef.ExchangeFront(this, false);
@@ -108,7 +106,7 @@ public class TownConnection
         m_battles.Clear();
         for (int i = 0; i < m_battlesToSpawn; i++)
         {
-            m_battles.Add(new BattleNode(i, m_battleMinDifficulty, m_battleDifficulty, this));
+            m_battles.Add(new BattleNode(i, m_battleMinDifficulty, m_battleMaxDifficulty, this));
         }
     }
 
@@ -142,9 +140,50 @@ public class Town
         m_owningBodyPartRef = a_bodyPart;
     }
 
+    public bool IsFrontLineTown()
+    {
+        bool retVal = false;
+        for (int i = 0; i < m_connectedWarFronts.Count; i++)
+        {
+            if (m_connectedWarFronts[i].m_frontActive)
+            {
+                retVal = true;
+                break;
+            }
+        }
+        return retVal;
+    }
+
     public void Refresh()
     {
 
+    }
+
+    public List<Town> FindConnectedTowns()
+    {
+        List<Town> connectedTowns = new List<Town>();
+        for (int i = 0; i < m_connectedWarFronts.Count; i++)
+        {
+            TownConnection connection = m_connectedWarFronts[i];
+            Town opposingTown = connection.m_townA != this ? connection.m_townA : connection.m_townB;
+            connectedTowns.Add(opposingTown);
+        }
+        return connectedTowns;
+    }
+
+    public Town FindFallBackTown()
+    {
+        Town fallbackTown = null;
+        List<Town> connectedTowns = FindConnectedTowns();
+        for (int i = 0; i < connectedTowns.Count; i++)
+        {
+            if (!connectedTowns[i].m_overrun)
+            {
+                fallbackTown = connectedTowns[i];
+                break;
+            }
+        }
+        return fallbackTown;
     }
 }
 
@@ -194,20 +233,34 @@ public class BodyPart
             case eType.ForeArm:
                 break;
             case eType.Hand:
-                Town tipton = new Town("Tipton", 100f, this);
-                tipton.m_overrun = true;
-                m_towns.Add(tipton);
-                Town teston = new Town("Teston", 100f, this);
-                m_towns.Add(teston);
+                Town tipton0 = new Town("Tipton", 100f, this);
+                tipton0.m_overrun = true;
+                m_towns.Add(tipton0);
+
+                Town teston1 = new Town("Teston", 100f, this);
+                m_towns.Add(teston1);
                 m_townConnections.Add(new TownConnection(m_towns[0], m_towns[1], "TipTes"));
-                Town newKhul = new Town("New Khul", 100f, this);
-                //newKhul.m_overrun = true;
-                m_towns.Add(newKhul);
+
+                Town newKhul2 = new Town("New Khul", 100f, this);
+                m_towns.Add(newKhul2);
                 m_townConnections.Add(new TownConnection(m_towns[1], m_towns[2], "NK Tes"));
-                Town oldKhul = new Town("Old Khul", 100f, this);
-                //oldKhul.m_overrun = true;
-                m_towns.Add(oldKhul);
+
+                Town oldKhul3 = new Town("Old Khul", 100f, this);
+                m_towns.Add(oldKhul3);
                 m_townConnections.Add(new TownConnection(m_towns[2], m_towns[3], "NK OK"));
+
+                Town palmSprings4 = new Town("Palm Springs", 100f, this);
+                m_towns.Add(palmSprings4);
+                m_townConnections.Add(new TownConnection(m_towns[4], m_towns[2], "PS NK"));
+                m_townConnections.Add(new TownConnection(m_towns[4], m_towns[3], "PS OK"));
+
+                Town wriston5 = new Town("Wriston", 100f, this);
+                m_towns.Add(wriston5);
+                m_townConnections.Add(new TownConnection(m_towns[5], m_towns[4], "Wris PS"));
+
+                Town tendonsKeep6 = new Town("Tendon's Keep", 100f, this);
+                m_towns.Add(tendonsKeep6);
+                m_townConnections.Add(new TownConnection(m_towns[6], m_towns[5], "TK Wris"));
 
                 break;
             case eType.Count:
@@ -258,9 +311,35 @@ public class BodyPart
 
     public void ExchangeFront(TownConnection a_connection, bool a_won)
     {
+
+
+        //m_owningHumanBodyRef.m_playerResidingTown = m_suitableTowns[VLib.vRandom(0, m_suitableTowns.Count - 1)].GetFriendlyTown();
+
+
         a_connection.m_townA.m_overrun = !a_won;
         a_connection.m_townB.m_overrun = !a_won;
+
+        Town playersTown = null;
+
+        if (a_connection.m_townA == m_owningHumanBodyRef.m_playerResidingTown)
+        {
+            playersTown = a_connection.m_townA;
+        }
+        else if (a_connection.m_townB == m_owningHumanBodyRef.m_playerResidingTown)
+        {
+            playersTown = a_connection.m_townB;
+        }
+
+        if (playersTown != null)
+        {
+            if (!playersTown.IsFrontLineTown() || playersTown.m_overrun)
+            {
+                TaskPlayerToResidingTown();
+            }
+        }
+
         Refresh();
+
     }
 
     public void TaskPlayerToResidingTown()

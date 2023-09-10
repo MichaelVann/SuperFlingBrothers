@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 19.4f;
+    public const float _VERSION_NUMBER = 19.5f;
 
     static internal bool DEBUG_MODE = true;
 
@@ -276,20 +276,21 @@ public class GameHandler : MonoBehaviour
         {
             m_lastAttemptedBattleNode = m_attemptedBattleNode;
 
-            float warfrontBalanceChange = 0f;
+            //if (m_lastGameResult == eEndGameType.lose || m_lastGameResult == eEndGameType.escape)
+            //{
+            //    warfrontBalanceChange -= warfrontBalanceChangeAmount;
+            //}
+            float warfrontBalanceChange = -0.05f;
 
-            if (m_lastGameResult == eEndGameType.lose || m_lastGameResult == eEndGameType.escape)
+            if (m_lastGameResult == eEndGameType.win)
             {
-                warfrontBalanceChange -= 0.1f;
-            }
-            else if (m_lastGameResult == eEndGameType.win)
-            {
-                warfrontBalanceChange += 0.1f;
+                float warfrontBalanceChangeAmount = m_lastAttemptedBattleNode.m_difficulty / m_lastAttemptedBattleNode.m_owningConnection.m_battleMaxDifficulty;
+                warfrontBalanceChangeAmount *= -warfrontBalanceChange;//Turn to percentage
+                warfrontBalanceChange += warfrontBalanceChangeAmount;
             }
 
             m_lastAttemptedBattleNode.m_owningConnection.ChangeWarfrontBalance(warfrontBalanceChange);
         }
-
     }
 
     void Update()

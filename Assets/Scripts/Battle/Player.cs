@@ -174,10 +174,13 @@ public class Player : Damageable
         }
     }
 
-    public override void OnCollisionEnter2D(Collision2D a_collision)
+    public override bool OnCollisionEnter2D(Collision2D a_collision)
     {
         Enemy enemy = a_collision.gameObject.GetComponent<Enemy>();
         EscapeZone escapeZone = a_collision.gameObject.GetComponent<EscapeZone>();
+        bool runningBaseCollision = false;
+        bool tookDamage = false;
+
         if (enemy)//If collided with an enemy
         {
             if (m_health <= m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue / 3f)//
@@ -210,9 +213,16 @@ public class Player : Damageable
                     TakePocketDamage();
                     PocketFling(a_collision.gameObject.transform.position);
                 }
+                else if (a_collision.gameObject.GetComponent<Enemy>() != null)
+                {
+                    if (!a_collision.gameObject.GetComponent<Enemy>().m_playerVulnerable)
+                    {
+                        runningBaseCollision = true;
+                    }
+                }
                 else
                 {
-                    base.OnCollisionEnter2D(a_collision);
+                    runningBaseCollision = true;
                 }
                 break;
             case GameHandler.eGameMode.Pockets:
@@ -228,6 +238,12 @@ public class Player : Damageable
             default:
                 break;
         }
+
+        if (runningBaseCollision)
+        {
+            tookDamage = base.OnCollisionEnter2D(a_collision);
+        }
+        return tookDamage;
     }
 
     internal void ShootProjectile(Vector3 a_shootVector, ActiveAbility a_ability)

@@ -227,16 +227,19 @@ public class Damageable : BaseObject
         Destroy(gameObject);
     }
 
-    public virtual void OnCollisionEnter2D(Collision2D a_collision)
+    public virtual bool OnCollisionEnter2D(Collision2D a_collision)
     {
+        bool tookDamage = false;
         Damageable oppDamageable = a_collision.gameObject.GetComponent<Damageable>();
         if (oppDamageable)
         {
             if (oppDamageable.m_lastMomentumMagnitude >= m_lastMomentumMagnitude)
             {
                 Damage(oppDamageable.m_statHandler.m_stats[(int)eCharacterStatIndices.strength].finalValue * oppDamageable.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
+                tookDamage = true;
             }
         }
+        return tookDamage;
     }
 
     private void DamageColourOverrideUpdate()

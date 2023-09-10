@@ -38,9 +38,22 @@ public class BodyPartUI : MonoBehaviour
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_mapHandlerRef = FindObjectOfType<MapHandler>();
         m_bodyPartRef = m_gameHandlerRef.m_humanBody.m_activeBodyPart;
+        m_mapNodes = FindObjectsOfType<MapNode>();
+        m_mapNodeConnections = FindObjectsOfType<MapNodeConnection>();
+        AssignTownsToMapNodes();
+    }
+
+    void AssignTownsToMapNodes()
+    {
         for (int i = 0; i < m_mapNodes.Length; i++)
         {
-            m_mapNodes[i].SetTown(m_bodyPartRef.m_towns[i]);
+            for (int j = 0; j < m_bodyPartRef.m_towns.Count; j++)
+            {
+                if (m_mapNodes[i].m_name == m_bodyPartRef.m_towns[j].m_name)
+                {
+                    m_mapNodes[i].SetTown(m_bodyPartRef.m_towns[j]);
+                }
+            }
         }
     }
 

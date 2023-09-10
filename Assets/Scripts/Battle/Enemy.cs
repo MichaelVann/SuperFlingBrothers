@@ -43,6 +43,10 @@ public class Enemy : Damageable
 
     public static Enemy.TypeTrait[] m_enemyTypeTraits = new Enemy.TypeTrait[(int)Enemy.eEnemyType.Count];
 
+    //Player Vulnerability
+    internal bool m_playerVulnerable = false;
+    const float m_playerVulnerableLength = 0.3f;
+    vTimer m_playerVulnerableTimer;
 
     float m_duplicationTimer = 0f;
     float m_duplicationTimerMax = 12f;
@@ -80,6 +84,8 @@ public class Enemy : Damageable
         m_typeTrait = new TypeTrait();
         m_flingTimer -= UnityEngine.Random.Range(0f, 0.3f);
         m_damageTextColor = Color.yellow;
+
+        m_playerVulnerableTimer = new vTimer(m_playerVulnerableLength, true);
     }
 
     public void SetUpType(eEnemyType a_type)
@@ -224,10 +230,12 @@ public class Enemy : Damageable
         m_rigidBody.rotation = VLib.Vector2ToEulerAngle(m_rigidBody.velocity);
     }
 
-    public override void OnCollisionEnter2D(Collision2D a_collision)
+    public override bool OnCollisionEnter2D(Collision2D a_collision)
     {
         bool runningBaseCollision = true;
         Enemy oppEnemy = a_collision.gameObject.GetComponent<Enemy>();
+        Player oppPlayer = a_collision.gameObject.GetComponent<Player>();
+        bool tookDamage = true;
         if (a_collision.gameObject.GetComponent<Pocket>())
         {
             switch (m_gameHandlerRef.m_currentGameMode)
@@ -268,13 +276,24 @@ public class Enemy : Damageable
 
         if (runningBaseCollision)
         {
-            base.OnCollisionEnter2D(a_collision);
+            tookDamage = base.OnCollisionEnter2D(a_collision);
+            if (tookDamage && oppPlayer != null)
+            {
+                m_playerVulnerableTimer.Reset();
+                m_playerVulnerable = true;
+            }
         }
 
         if (m_typeTrait.inertiaDasher)
         {
             UpdateRotation();
         }
+        return tookDamage;
+    }
+
+    public override void Damage(float a_damage)
+    {
+        base.Damage(a_damage);
     }
 
     private void VisionConeUpdate()
@@ -292,6 +311,11 @@ public class Enemy : Damageable
     public override void Update()
     {
         base.Update();
+        if (m_playerVulnerableTimer.Update())
+        {
+            m_playerVulnerable = false;
+        }
+
         if (m_typeTrait.duplicator)
         {
             DuplicationUpdate();

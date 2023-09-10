@@ -27,8 +27,9 @@ public class Nucleus : Damageable
         base.Update();
     }
 
-    public override void OnCollisionEnter2D(Collision2D a_collision)
+    public override bool OnCollisionEnter2D(Collision2D a_collision)
     {
+        bool tookDamage = false;
         Player oppPlayer = a_collision.gameObject.GetComponent<Player>();
         if (oppPlayer)
         {
@@ -39,8 +40,9 @@ public class Nucleus : Damageable
         }
         else
         {
-            base.OnCollisionEnter2D(a_collision);
+            tookDamage = base.OnCollisionEnter2D(a_collision);
         }
+        return tookDamage;
     }
 
     public override void Die()
