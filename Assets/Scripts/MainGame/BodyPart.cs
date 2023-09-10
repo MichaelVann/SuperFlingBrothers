@@ -60,17 +60,20 @@ public class BattleNode
 public class TownConnection
 {
     public string m_name;
-    Town m_townA;
-    Town m_townB;
+    public Town m_townA;
+    public Town m_townB;
 
     //Front
-    bool m_frontActive;
+    public bool m_frontActive;
     public List<BattleNode> m_battles;
     int m_battlesToSpawn = 7;
-    public float m_virusBalance = 0.85f;
+    public float m_warfrontBalance = 0.5f;
 
-    public int m_frontDifficulty = 50;
-    public int m_frontMinDifficulty;
+    public int m_battleDifficulty = 50;
+    public int m_battleMinDifficulty;
+
+    public Town GetFriendlyTown() { return m_townB.m_overrun ? m_townA : m_townB; }
+    public Town GetEnemyTown() { return m_townA.m_overrun ? m_townA : m_townB; }
 
     public TownConnection(Town a_townA, Town a_townB, string a_name)
     {
@@ -78,26 +81,47 @@ public class TownConnection
         m_townB = a_townB;
         m_name = a_name;
         m_battles = new List<BattleNode>();
-        //m_virusBalance = 0.1f;
 
-        m_frontMinDifficulty = 10;
+        m_battleMinDifficulty = 10;
 
         Refresh();
+        m_warfrontBalance = 0.9f;
+    }
 
-        if (m_frontActive)
+    public void ChangeWarfrontBalance(float a_change)
+    {
+        m_warfrontBalance += a_change;
+        m_warfrontBalance = Mathf.Clamp(m_warfrontBalance, 0f, 1f);
+        m_warfrontBalance = (float)Math.Round(m_warfrontBalance, 2);
+        if (m_warfrontBalance <= 0f)
         {
-            for (int i = 0; i < m_battlesToSpawn; i++)
-            {
-                m_battles.Add(new BattleNode(i, m_frontMinDifficulty, m_frontDifficulty, this));
-            }
+            m_townA.m_owningBodyPartRef.ExchangeFront(this, false);
+        }
+        else if (m_warfrontBalance >= 1f)
+        {
+            m_townA.m_owningBodyPartRef.ExchangeFront(this, true);
+        }
+    }
+
+    void SpawnBattles()
+    {
+        m_battles.Clear();
+        for (int i = 0; i < m_battlesToSpawn; i++)
+        {
+            m_battles.Add(new BattleNode(i, m_battleMinDifficulty, m_battleDifficulty, this));
         }
     }
 
     public void Refresh()
     {
-        if (m_townA.m_overrun != m_townB.m_overrun)
+        if (m_townA.m_overrun != m_townB.m_overrun)//And is now
         {
             m_frontActive = true;
+            SpawnBattles();
+        }
+        else
+        {
+            m_frontActive = false;
         }
     }
 }
@@ -229,5 +253,31 @@ public class BodyPart
         {
             m_townConnections[i].Refresh();
         }
+        TaskPlayerToResidingTown();
     }
+
+    public void ExchangeFront(TownConnection a_connection, bool a_won)
+    {
+        a_connection.m_townA.m_overrun = !a_won;
+        a_connection.m_townB.m_overrun = !a_won;
+        Refresh();
+    }
+
+    public void TaskPlayerToResidingTown()
+    {
+        List<TownConnection> m_suitableTowns = new List<TownConnection>();
+        for (int i = 0; i < m_townConnections.Count; i++)
+        {
+            if (m_townConnections[i].m_frontActive)
+            {
+                m_suitableTowns.Add(m_townConnections[i]);
+            }
+        }
+
+        if (m_suitableTowns.Count > 0)
+        {
+            m_owningHumanBodyRef.m_playerResidingTown = m_suitableTowns[VLib.vRandom(0, m_suitableTowns.Count - 1)].GetFriendlyTown();
+        }
+    }
+
 }

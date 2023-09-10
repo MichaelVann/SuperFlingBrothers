@@ -28,6 +28,7 @@ public class MapNode : MonoBehaviour
     {
         m_bodyPartUIRef = FindObjectOfType<BodyPartUI>();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        m_name = gameObject.name;
         //m_connectionList = new List<MapNodeConnection>();
     }
 

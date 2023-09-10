@@ -1485,13 +1485,18 @@ PrefabInstance:
     - target: {fileID: -5734804408771480649, guid: e22b773e1c7f83b4a953156ce2a4ecda,
         type: 3}
       propertyPath: m_anchorPoints.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -5734804408771480649, guid: e22b773e1c7f83b4a953156ce2a4ecda,
         type: 3}
       propertyPath: m_anchorPoints.Array.data[0]
       value: 
       objectReference: {fileID: 4771752244115996756}
+    - target: {fileID: -5734804408771480649, guid: e22b773e1c7f83b4a953156ce2a4ecda,
+        type: 3}
+      propertyPath: m_anchorPoints.Array.data[1]
+      value: 
+      objectReference: {fileID: 4771752242610593002}
     - target: {fileID: -5734804408771480649, guid: e22b773e1c7f83b4a953156ce2a4ecda,
         type: 3}
       propertyPath: m_adjacentConnections.Array.size

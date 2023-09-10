@@ -73,7 +73,7 @@ public class MapNodeConnection : MonoBehaviour
         m_winningPercentText.gameObject.SetActive(m_isaFront);
         if (m_isaFront)
         {
-            m_winningPercentText.text = "" + (m_representedTownConnection.m_virusBalance * 100) + "/" + 100;
+            m_winningPercentText.text = "" + (m_representedTownConnection.m_warfrontBalance * 100) + "/" + 100;
         }
     }
 
@@ -99,10 +99,12 @@ public class MapNodeConnection : MonoBehaviour
 
                 m_connectionLine = enemyTownPos - friendlyTownPos;
 
-                m_frontStartPos = friendlyTownPos + m_connectionLine.normalized * 0.25f;
-                m_frontEndPos = enemyTownPos - m_connectionLine.normalized * 0.25f;
+                float bufferSize = 0.15f;
 
-                transform.position = Vector3.Lerp(m_frontStartPos, m_frontEndPos, m_representedTownConnection.m_virusBalance);
+                m_frontStartPos = friendlyTownPos + m_connectionLine.normalized * bufferSize;
+                m_frontEndPos = enemyTownPos - m_connectionLine.normalized * bufferSize;
+
+                transform.position = Vector3.Lerp(m_frontStartPos, m_frontEndPos, m_representedTownConnection.m_warfrontBalance);
             }
             else
             {

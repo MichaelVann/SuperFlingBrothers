@@ -14,11 +14,11 @@ public class MapHandler : MonoBehaviour
     static bool m_zoomingIn = false;
     static bool m_zooming = false;
     static float m_startingZoom = 5f;
-    static float m_currentZoom = 1f;
+    static float m_currentZoom = 5f;
     static float m_targetZoom = 0f;
     static float m_minZoom = 1f;
     static float m_maxZoom = 5f;
-    float m_startingCameraSize;
+    static float m_startingCameraSize = 5f;
     float m_startingCameraZPos;
     static Vector3 m_startingZoomLocation;
     static Vector3 m_currentZoomLocation = new Vector3(0f,0f,-110f);
@@ -52,7 +52,7 @@ public class MapHandler : MonoBehaviour
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_cameraRef = FindObjectOfType<Camera>();
-        m_startingCameraSize = m_cameraRef.orthographicSize;
+        //m_startingCameraSize = m_cameraRef.orthographicSize;
         m_startingCameraZPos = m_cameraRef.transform.position.z;
         //m_mapNodeList = FindObjectsOfType<MapNode>();
         //m_currentZoomLocation = m_cameraRef.transform.position;
@@ -74,8 +74,7 @@ public class MapHandler : MonoBehaviour
             default:
                 break;
         }
-        //ApplyZoomAndPan();
-
+        ApplyZoomAndPan();
     }
 
     public void Start()
