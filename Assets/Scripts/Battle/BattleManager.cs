@@ -103,8 +103,9 @@ public class BattleManager : MonoBehaviour
 
     internal struct EnvironmentalEffects
     {
-        internal bool wallTriangles;
-        internal bool gravityWells;
+        internal bool wallTrianglesEnabled;
+        internal bool gravityWellsEnabled;
+        internal List<GameObject> m_gravityWellList;
     }
     EnvironmentalEffects m_environmentalEffects;
 
@@ -278,10 +279,10 @@ public class BattleManager : MonoBehaviour
     void SetupEnvironmentalEffects()
     {
         m_environmentalEffects = new EnvironmentalEffects();
-        m_environmentalEffects.wallTriangles = UnityEngine.Random.Range(0f,1f) <= 0.3f;
-        m_environmentalEffects.gravityWells =  UnityEngine.Random.Range(0f,1f) <= 0.3f;
+        m_environmentalEffects.wallTrianglesEnabled = UnityEngine.Random.Range(0f,1f) <= 0.3f;
+        m_environmentalEffects.gravityWellsEnabled =  UnityEngine.Random.Range(0f,1f) <= 0.3f;
 
-        if (m_environmentalEffects.wallTriangles)
+        if (m_environmentalEffects.wallTrianglesEnabled)
         {
             int triangleCount = UnityEngine.Random.Range(1,9)*2;
             for (int i = 0; i < triangleCount; i++)
@@ -297,17 +298,41 @@ public class BattleManager : MonoBehaviour
             //m_wallTriangles.SetActive(m_environmentalEffects.wallTriangles);
         }
 
-        if (m_environmentalEffects.gravityWells)
+        if (m_environmentalEffects.gravityWellsEnabled)
         {
+            m_environmentalEffects.m_gravityWellList = new List<GameObject>();
+
             int gravityWellCount = VLib.vRandom(1,4);
             for (int i = 0; i < gravityWellCount; i++)
             {
+                bool spawnFound = false;
                 Vector3 pos = new Vector3();
-                pos.x = VLib.vRandom(-m_wallXOffset, m_wallXOffset);
-                pos.y = VLib.vRandom(-m_wallYSpace/2f, m_wallYSpace/2f);
-
-                GameObject gravityWell = Instantiate<GameObject>(m_gravityWellRef, new Vector3(), new Quaternion(), m_gameViewRef.transform);
-                gravityWell.transform.localPosition = pos;
+                int spawnAttempts = 0;
+                while (!spawnFound && spawnAttempts < 20)
+                {
+                    spawnAttempts++;
+                    spawnFound = true;
+                    pos.x = VLib.vRandom(-m_wallXOffset, m_wallXOffset);
+                    pos.y = VLib.vRandom(-m_wallYSpace / 2f, m_wallYSpace / 2f);
+                    for (int j = 0; j < m_environmentalEffects.m_gravityWellList.Count; j++)
+                    {
+                        Vector3 deltaVec = m_environmentalEffects.m_gravityWellList[j].transform.localPosition - pos;
+                        float deltaMag = deltaVec.magnitude;
+                        if (deltaMag < 0.88f)
+                        {
+                            spawnFound = false;
+                        }
+                        print(deltaMag);
+                    }
+                    if (spawnFound)
+                    {
+                        //m_environmentalEffects.m_gravityWellList
+                        GameObject gravityWell = Instantiate<GameObject>(m_gravityWellRef, new Vector3(), new Quaternion(), m_gameViewRef.transform);
+                        gravityWell.transform.localPosition = pos;
+                        m_environmentalEffects.m_gravityWellList.Add(gravityWell);
+                        break;
+                    }
+                }
             }
         }
         
@@ -395,7 +420,7 @@ public class BattleManager : MonoBehaviour
             case Enemy.eEnemyType.Healer:
                 template = m_healerEnemyTemplate;
                 break;
-            case Enemy.eEnemyType.Dasher:
+            case Enemy.eEnemyType.InertiaDasher:
                 template = m_dasherEnemyTemplate;
                 break;
             case Enemy.eEnemyType.Dodger:

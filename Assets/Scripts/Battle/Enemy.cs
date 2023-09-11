@@ -22,7 +22,7 @@ public class Enemy : Damageable
     {
         //Null = -1,
         Idler,
-        Dasher,
+        InertiaDasher,
         Dodger,
         Healer,
         Striker,
@@ -60,6 +60,9 @@ public class Enemy : Damageable
     float m_xpTextYOffset = 0.2f;
 
     float m_sightRadius = 4f;
+
+    //Rotation
+    float m_desiredRigidbodyRotation = 0f;
 
     //Flinging
     public float m_flingTimer = 0f;
@@ -101,14 +104,13 @@ public class Enemy : Damageable
                 transform.localScale *= 1f;
                 m_rigidBody.mass *= 0.45f;
                 m_rigidBody.drag = 0.1f;
-                m_rigidBody.freezeRotation = false;
                 //m_spriteRenderer.color = Color.white;
                 m_shadowRef.GetComponent<SpriteRenderer>().sprite = m_idleBacteriaShadowSprite;
                 //m_flingReadinessIndicatorRef.SetActive(false);
                 m_nucleusDrainTimer = new vTimer(1.0f, false, false);
                 //m_flingPieIndicatorRef.gameObject.SetActive(false);
                 break;
-            case eEnemyType.Dasher:
+            case eEnemyType.InertiaDasher:
                 //m_spriteRenderer.sprite = m_enemySprites[0];
                 //m_originalColor = Color.yellow;
                 m_flingAccuracy = 360f;
@@ -154,9 +156,11 @@ public class Enemy : Damageable
         m_enemyTypeTraits[(int)eEnemyType.Idler].difficulty = 1;
         m_enemyTypeTraits[(int)eEnemyType.Idler].canRotate = true;
 
-        m_enemyTypeTraits[(int)eEnemyType.Dasher].type = Enemy.eEnemyType.Dasher;
-        m_enemyTypeTraits[(int)eEnemyType.Dasher].inertiaDasher = true;
-        m_enemyTypeTraits[(int)eEnemyType.Dasher].difficulty = 3;
+        m_enemyTypeTraits[(int)eEnemyType.InertiaDasher].type = Enemy.eEnemyType.InertiaDasher;
+        m_enemyTypeTraits[(int)eEnemyType.InertiaDasher].inertiaDasher = true;
+        m_enemyTypeTraits[(int)eEnemyType.InertiaDasher].difficulty = 3;
+        m_enemyTypeTraits[(int)eEnemyType.InertiaDasher].canRotate = true;
+
         //m_enemyTypeTraits[(int)eEnemyType.Dasher].duplicator = true;
 
         m_enemyTypeTraits[(int)eEnemyType.Dodger].type = Enemy.eEnemyType.Dodger;
@@ -225,9 +229,14 @@ public class Enemy : Damageable
         }
     }
 
+    void SetDesiredRotationFromVelocity()
+    {
+        m_desiredRigidbodyRotation = VLib.Vector2ToEulerAngle(m_rigidBody.velocity);
+    }
+
     void UpdateRotation()
     {
-        m_rigidBody.rotation = VLib.Vector2ToEulerAngle(m_rigidBody.velocity);
+        m_rigidBody.MoveRotation(m_desiredRigidbodyRotation);// VLib.Vector2ToEulerAngle(m_rigidBody.velocity));
     }
 
     public override bool OnCollisionEnter2D(Collision2D a_collision)
@@ -286,7 +295,7 @@ public class Enemy : Damageable
 
         if (m_typeTrait.inertiaDasher)
         {
-            UpdateRotation();
+            SetDesiredRotationFromVelocity();
         }
         return tookDamage;
     }
@@ -319,6 +328,10 @@ public class Enemy : Damageable
         if (m_typeTrait.duplicator)
         {
             DuplicationUpdate();
+        }
+        if (m_typeTrait.inertiaDasher)
+        {
+            UpdateRotation();
         }
         AIUpdate();
         m_healthBarRef.transform.localEulerAngles = -transform.localEulerAngles;
@@ -429,7 +442,7 @@ public class Enemy : Damageable
         if (m_typeTrait.inertiaDasher)
         {
             Fling(m_rigidBody.velocity.normalized, m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].finalValue);
-            UpdateRotation();
+            SetDesiredRotationFromVelocity();
         }
         else if (m_playerRef)
         {

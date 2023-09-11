@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 19.5f;
+    public const float _VERSION_NUMBER = 19.6f;
 
     static internal bool DEBUG_MODE = true;
 
@@ -62,7 +62,7 @@ public class GameHandler : MonoBehaviour
     //Current Battle
     public BattleNode m_attemptedBattleNode;
     internal int m_battleDifficulty = 2;
-    internal int m_maxEnemyDifficulty = 8;
+    internal int m_maxEnemyDifficulty; //Set from humanbody
 
     //Last Game
     public BattleNode m_lastAttemptedBattleNode;
@@ -284,7 +284,7 @@ public class GameHandler : MonoBehaviour
 
             if (m_lastGameResult == eEndGameType.win)
             {
-                float warfrontBalanceChangeAmount = m_lastAttemptedBattleNode.m_difficulty / m_lastAttemptedBattleNode.m_owningConnection.m_battleMaxDifficulty;
+                float warfrontBalanceChangeAmount = (float)m_lastAttemptedBattleNode.m_difficulty / (float)m_lastAttemptedBattleNode.m_owningConnection.m_battleMaxDifficulty;
                 warfrontBalanceChangeAmount *= -warfrontBalanceChange;//Turn to percentage
                 warfrontBalanceChange += warfrontBalanceChangeAmount;
             }
