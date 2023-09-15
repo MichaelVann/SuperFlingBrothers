@@ -15,6 +15,7 @@ public class HumanBody
 
     public bool m_bodyInitialised = false;
 
+
     public void SetBodyPartLockedStatus(BodyPart.eType a_type, bool a_unlocked) { m_bodyPartList[(int)a_type].m_unlocked = a_unlocked; }
 
     public HumanBody()

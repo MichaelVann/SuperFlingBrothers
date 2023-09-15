@@ -24,7 +24,7 @@ public class MapNodeConnection : MonoBehaviour
 
     static Vector3[] m_linePositionsHolder;
 
-    bool m_isaFront = false;
+    public bool m_isaFront = false;
     bool m_spawningBattles = false;
 
     Vector3 m_connectionLine;
@@ -40,8 +40,6 @@ public class MapNodeConnection : MonoBehaviour
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_linePositionsHolder = new Vector3[2];
         m_createdLineRenderers = new List<GameObject>();
-
-
 
         for (int i = 0; i < m_mapNodes.Length; i++)
         {
@@ -354,7 +352,7 @@ public class MapNodeConnection : MonoBehaviour
         {
             for (int i = 0; i < m_anchorPoints.Length; i++)
             {
-                CreateLine(m_anchorPoints[i].transform.position, Color.red);
+                //CreateLine(m_anchorPoints[i].transform.position, Color.red);
             }
             for (int i = 0; i < m_adjacentConnections.Count; i++)
             {

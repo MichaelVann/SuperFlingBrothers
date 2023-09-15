@@ -9,6 +9,7 @@ public class BodyPartUI : MonoBehaviour
 
     public MapNode[] m_mapNodes;
     public MapNodeConnection[] m_mapNodeConnections;
+    public MapConnectionAnchor[] m_mapConnectionAnchors;
     GameHandler m_gameHandlerRef;
     MapHandler m_mapHandlerRef;
     BodyPart m_bodyPartRef;
@@ -19,7 +20,10 @@ public class BodyPartUI : MonoBehaviour
 
     void Start()
     {
-        Refresh();
+        for (int i = 0; i < m_mapNodes.Length; i++)
+        {
+            m_mapNodes[i].Refresh();
+        }
     }
 
     // Update is called once per frame
@@ -39,6 +43,7 @@ public class BodyPartUI : MonoBehaviour
         m_mapHandlerRef = FindObjectOfType<MapHandler>();
         m_bodyPartRef = m_gameHandlerRef.m_humanBody.m_activeBodyPart;
         m_mapNodes = FindObjectsOfType<MapNode>();
+        m_mapConnectionAnchors = FindObjectsOfType<MapConnectionAnchor>();
         m_mapNodeConnections = FindObjectsOfType<MapNodeConnection>();
         AssignTownsToMapNodes();
     }
@@ -88,6 +93,10 @@ public class BodyPartUI : MonoBehaviour
         for (int i = 0; i < m_mapNodes.Length; i++)
         {
             m_mapNodes[i].Refresh();
+        }
+        for (int i = 0; i < m_mapConnectionAnchors.Length; i++)
+        {
+            m_mapConnectionAnchors[i].Refresh();
         }
     }
 }

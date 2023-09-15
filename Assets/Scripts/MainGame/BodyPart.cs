@@ -201,6 +201,8 @@ public class BodyPart
 
     public int m_invaderStrength;
 
+    bool m_lost = false;
+
     public enum eType
     {
         Chest,
@@ -210,6 +212,7 @@ public class BodyPart
 
         Count
     }
+
     public eType m_type;
     public static string GetPartName(BodyPart.eType a_type) { return Enum.GetName(typeof(BodyPart.eType), a_type); }
 
@@ -248,6 +251,7 @@ public class BodyPart
                 Town oldKhul3 = new Town("Old Khul", 100f, this);
                 m_towns.Add(oldKhul3);
                 m_townConnections.Add(new TownConnection(m_towns[2], m_towns[3], "NK OK"));
+                m_townConnections.Add(new TownConnection(m_towns[1], m_towns[3], "Tes OK"));
 
                 Town palmSprings4 = new Town("Palm Springs", 100f, this);
                 m_towns.Add(palmSprings4);
@@ -261,6 +265,37 @@ public class BodyPart
                 Town tendonsKeep6 = new Town("Tendon's Keep", 100f, this);
                 m_towns.Add(tendonsKeep6);
                 m_townConnections.Add(new TownConnection(m_towns[6], m_towns[5], "TK Wris"));
+
+                Town phalangeCentral7 = new Town("Phalange Central", 100f, this);
+                m_towns.Add(phalangeCentral7);
+                m_townConnections.Add(new TownConnection(m_towns[7], m_towns[3], "PC OK"));
+
+                Town nailCoast8 = new Town("Nail Coast", 100f, this);
+                m_towns.Add(nailCoast8);
+                m_townConnections.Add(new TownConnection(m_towns[8], m_towns[7], "PC NC"));
+
+                Town aresEye9 = new Town("Ares Eye", 100f, this);
+                m_towns.Add(aresEye9);
+                m_townConnections.Add(new TownConnection(m_towns[9], m_towns[4], "Ares PS"));
+                m_townConnections.Add(new TownConnection(aresEye9, wriston5, "Ares Wris"));
+
+                Town pinkerton10 = new Town("Pinkerton", 100f, this);
+                m_towns.Add(pinkerton10);
+                m_townConnections.Add(new TownConnection(m_towns[10], m_towns[2], "Pink NK"));
+
+                Town indexPoint11 = new Town("Index Point", 100f, this);
+                m_towns.Add(indexPoint11);
+                m_townConnections.Add(new TownConnection(indexPoint11, oldKhul3, "IP OK"));
+                //m_townConnections.Add(new TownConnection(m_towns[11], m_towns[3], "IP OK"));
+
+                Town archersNook12 = new Town("Archer's Nook", 100f, this);
+                m_towns.Add(archersNook12);
+                m_townConnections.Add(new TownConnection(archersNook12, palmSprings4, "PS AN"));
+                //m_townConnections.Add(new TownConnection(m_towns[11], m_towns[3], "IP OK"));
+
+                Town thoom13 = new Town("Thoom", 100f, this);
+                m_towns.Add(thoom13);
+                m_townConnections.Add(new TownConnection(thoom13, archersNook12, "AN Tho"));
 
                 break;
             case eType.Count:
@@ -344,6 +379,16 @@ public class BodyPart
 
     public void TaskPlayerToResidingTown()
     {
+        if (m_owningHumanBodyRef.m_playerResidingTown.m_overrun)
+        {
+            Town fallbackTown = m_owningHumanBodyRef.m_playerResidingTown.FindFallBackTown();
+            if (fallbackTown != null)
+            {
+                m_owningHumanBodyRef.m_playerResidingTown = fallbackTown;
+                return;
+            }
+        }
+
         List<TownConnection> m_suitableTowns = new List<TownConnection>();
         for (int i = 0; i < m_townConnections.Count; i++)
         {
@@ -357,6 +402,9 @@ public class BodyPart
         {
             m_owningHumanBodyRef.m_playerResidingTown = m_suitableTowns[VLib.vRandom(0, m_suitableTowns.Count - 1)].GetFriendlyTown();
         }
+        else if (m_owningHumanBodyRef.m_playerResidingTown.m_overrun)
+        {
+            m_lost = true;
+        }
     }
-
 }

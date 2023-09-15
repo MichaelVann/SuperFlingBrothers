@@ -50,10 +50,11 @@ public class Damageable : BaseObject
     internal float m_health;
     internal float m_maxHealth;
 
-    bool m_damageColourOverrideRunning = false;
-    vTimer m_damageColourOverrideTimer;
-    //float m_damageColourTimer = 0f;
-    float m_damageColourTimerMax = 0.1f;
+
+    //Damage flash
+    bool m_damageFlashOverrideRunning = false;
+    vTimer m_damageFlashOverrideTimer;
+    float m_damageFlashTimerMax = 0.1f;
 
     protected Material m_defaultMaterialRef;
 
@@ -68,7 +69,7 @@ public class Damageable : BaseObject
         m_statHandler.Init();
         m_originalColor = m_spriteRenderer.color;
         m_rigidBody.mass = m_originalMass = GameHandler.DAMAGEABLE_defaultMass;
-        m_damageColourOverrideTimer = new vTimer(m_damageColourTimerMax,false);
+        m_damageFlashOverrideTimer = new vTimer(m_damageFlashTimerMax,false);
         m_defaultMaterialRef = m_spriteRenderer.material;
         UpdateLocalStatsFromStatHandler();
     }
@@ -142,9 +143,9 @@ public class Damageable : BaseObject
         }
     }
 
-    private void StartDamageColourTimer()
+    private void StartDamageFlashTimer()
     {
-        m_damageColourOverrideRunning = true;
+        m_damageFlashOverrideRunning = true;
         //m_damageColourTimer = 0f;
     }
 
@@ -158,7 +159,7 @@ public class Damageable : BaseObject
 
         if (a_change < 0f)
         {
-            StartDamageColourTimer();
+            StartDamageFlashTimer();
         }
 
         //If the damageables health is above it's minimum health
@@ -242,17 +243,16 @@ public class Damageable : BaseObject
         return tookDamage;
     }
 
-    private void DamageColourOverrideUpdate()
+    private void DamageFlashOverrideUpdate()
     {
-        if (m_damageColourOverrideRunning)
+        if (m_damageFlashOverrideRunning)
         {
             m_spriteRenderer.material = m_battleManagerRef.m_whiteFlashMaterialRef;
-            //m_spriteRenderer.color = new Color(2f, 0f,0f,1f);
-            if (m_damageColourOverrideTimer.Update())
+            if (m_damageFlashOverrideTimer.Update())
             {
-                m_damageColourOverrideRunning = false;
+                m_damageFlashOverrideRunning = false;
                 m_spriteRenderer.material = m_defaultMaterialRef;
-                m_damageColourOverrideTimer.Reset();
+                m_damageFlashOverrideTimer.Reset();
                 UpdateHealthColor();
             }
         }
@@ -265,7 +265,7 @@ public class Damageable : BaseObject
         SecondFlingUpdate();
 
 
-        DamageColourOverrideUpdate();
+        DamageFlashOverrideUpdate();
         float eulerAnglesForShadow = transform.eulerAngles.z + GameHandler.BATTLE_ShadowAngle;
         float x = Mathf.Sin(eulerAnglesForShadow * Mathf.PI / 180f) / transform.localScale.x;
         float y = Mathf.Cos(eulerAnglesForShadow * Mathf.PI / 180f) / transform.localScale.y;

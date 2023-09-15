@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 244442031107567433}
+  - component: {fileID: 8364496112780947331}
   m_Layer: 0
   m_Name: ConAnchor
   m_TagString: Untagged
@@ -30,3 +31,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8364496112780947331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 244442031107567478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc28fa5590a9a744894db95b4bcdadad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_mapNodeConnections: []
+  m_lineRendererRef: {fileID: 3369574120247004627, guid: f72864b9e2be3694d9b5b71b625e1020,
+    type: 3}
