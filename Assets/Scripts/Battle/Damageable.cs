@@ -8,6 +8,7 @@ public class Damageable : BaseObject
     protected GameHandler m_gameHandlerRef;
     protected BattleManager m_battleManagerRef;
 
+    public Vector3 m_lastVelocity;
     public float m_lastMomentumMagnitude = 0f;
     protected float m_damagePerSpeedDivider = GameHandler.DAMAGEABLE_damagePerSpeedDivider;
 
@@ -50,6 +51,7 @@ public class Damageable : BaseObject
     internal float m_health;
     internal float m_maxHealth;
 
+    protected bool m_rotateToAlignToVelocity = false;
 
     //Damage flash
     bool m_damageFlashOverrideRunning = false;
@@ -81,6 +83,11 @@ public class Damageable : BaseObject
             m_shieldBarRef.SetHealthColoring(false);
         }
 
+    }
+
+    void UpdateRotationToFollowVelocity()
+    {
+        m_rigidBody.MoveRotation(VLib.Vector2ToEulerAngle(m_rigidBody.velocity));// VLib.Vector2ToEulerAngle(m_rigidBody.velocity));
     }
 
     protected void UpdateLocalStatsFromStatHandler()
@@ -149,6 +156,15 @@ public class Damageable : BaseObject
         //m_damageColourTimer = 0f;
     }
 
+    protected void SpawnDamageText(float a_value)
+    {
+        RisingFadingText damageText = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(0f, m_damageTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
+        damageText.SetImageEnabled(false);
+        damageText.SetGravityAffected(true);
+        damageText.SetTextContent(a_value);
+        damageText.SetOriginalColor(a_value >= 0f ? m_healTextColor : m_damageTextColor);
+    }
+
     private void ChangeHealth(float a_change)
     {
          //If the game is ending, disable damage
@@ -173,11 +189,7 @@ public class Damageable : BaseObject
             Instantiate(m_collisionSparkPrefab, transform.position, new Quaternion(), transform);
 
             //Spawn damage text
-            RisingFadingText damageText = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(0f, m_damageTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
-            damageText.SetImageEnabled(false);
-            damageText.SetGravityAffected(true);
-            damageText.SetTextContent(a_change);
-            damageText.SetOriginalColor(a_change >= 0f ? m_healTextColor : m_damageTextColor);
+            SpawnDamageText(a_change);
         }
 
         //If the dmgble is below minimum health
@@ -228,15 +240,41 @@ public class Damageable : BaseObject
         Destroy(gameObject);
     }
 
+    public float GetChanceToHit(Vector2 a_contactPoint)
+    {
+        Vector3 positionVector = new Vector3(transform.position.x, transform.position.y, 0f);
+        Vector3 contactVector = new Vector3(a_contactPoint.x, a_contactPoint.y, 0f) - positionVector;
+        float velocityAngle = VLib.Vector2ToEulerAngle(m_lastVelocity.normalized);
+        float contactAngle = VLib.Vector2ToEulerAngle(contactVector);
+        float glance = Mathf.DeltaAngle(velocityAngle, contactAngle);
+        if (glance < 0f)
+        {
+            glance *= -1f;
+        }
+        glance /= 180f;
+        glance = 1f - glance;
+        //SpawnDamageText(glance);
+        float chanceToHit = m_lastMomentumMagnitude * (glance);
+        return chanceToHit;
+    }
+
     public virtual bool OnCollisionEnter2D(Collision2D a_collision)
     {
         bool tookDamage = false;
         Damageable oppDamageable = a_collision.gameObject.GetComponent<Damageable>();
         if (oppDamageable)
         {
-            if (oppDamageable.m_lastMomentumMagnitude >= m_lastMomentumMagnitude)
+            Vector2 contactPoint = a_collision.GetContact(0).point;
+            float contactStrength = GetChanceToHit(contactPoint);
+
+            float oppContactStrength = oppDamageable.GetChanceToHit(contactPoint);
+            if (oppContactStrength >= contactStrength)
             {
-                Damage(oppDamageable.m_statHandler.m_stats[(int)eCharacterStatIndices.strength].finalValue * oppDamageable.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
+                //Damage(oppDamageable.m_statHandler.m_stats[(int)eCharacterStatIndices.strength].finalValue * oppDamageable.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
+
+                float oppStrength = oppDamageable.m_statHandler.m_stats[(int)eCharacterStatIndices.strength].finalValue;
+                float oppSpeed = 1f / m_damagePerSpeedDivider;
+                Damage(oppStrength * oppSpeed * oppContactStrength);
                 tookDamage = true;
             }
         }
@@ -261,6 +299,7 @@ public class Damageable : BaseObject
     public override void Update()
     {
         base.Update();
+        m_lastVelocity = m_rigidBody.velocity;
         m_lastMomentumMagnitude = m_rigidBody.velocity.magnitude * m_rigidBody.mass;
         SecondFlingUpdate();
 
@@ -270,6 +309,16 @@ public class Damageable : BaseObject
         float x = Mathf.Sin(eulerAnglesForShadow * Mathf.PI / 180f) / transform.localScale.x;
         float y = Mathf.Cos(eulerAnglesForShadow * Mathf.PI / 180f) / transform.localScale.y;
         m_shadowRef.transform.localPosition = new Vector3(x, y) * BattleManager.m_shadowDistance;
+
+        if (m_rotateToAlignToVelocity)
+        {
+            UpdateRotationToFollowVelocity();
+        }
+
+        if (!m_rigidBody.freezeRotation)
+        {
+            m_healthBarRef.transform.localEulerAngles = -transform.localEulerAngles;
+        }
     }
 
     protected void TakePocketDamage()

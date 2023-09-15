@@ -147,7 +147,7 @@ public class MapHandler : MonoBehaviour
     void ApplyZoomAndPan()
     {
         m_cameraRef.transform.position = m_currentZoomLocation;// * m_currentZoom;
-        Debug.Log(m_currentZoomLocation);
+        //Debug.Log(m_currentZoomLocation);
         m_cameraRef.orthographicSize = m_startingCameraSize/m_currentZoom;// new Vector3(m_currentZoom, m_currentZoom, 1f);
     }
 

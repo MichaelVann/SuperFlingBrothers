@@ -40,6 +40,7 @@ public class Player : Damageable
     float m_maxShieldOpacity = 0.64f;
     float m_projectileDamageMult = 3f;
 
+
     public override void Awake()
     {
         base.Awake();
@@ -49,6 +50,9 @@ public class Player : Damageable
         m_flingLine.startWidth = 0.05f;
         m_flingLine.endWidth = 0.02f;
         m_cameraRef = FindObjectOfType<Camera>();
+        //m_rotateToAlignToVelocity = true;
+        //m_rigidBody.freezeRotation = false;
+
     }
 
     public override void Start()

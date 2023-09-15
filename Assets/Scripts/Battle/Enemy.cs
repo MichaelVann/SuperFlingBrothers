@@ -102,8 +102,8 @@ public class Enemy : Damageable
                 m_originalColor = Color.white;
                 m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue /= 2f;
                 transform.localScale *= 1f;
-                m_rigidBody.mass *= 0.45f;
-                m_rigidBody.drag = 0.1f;
+                m_rigidBody.mass *= 0.75f;
+                m_rigidBody.drag = 1f;
                 //m_spriteRenderer.color = Color.white;
                 m_shadowRef.GetComponent<SpriteRenderer>().sprite = m_idleBacteriaShadowSprite;
                 //m_flingReadinessIndicatorRef.SetActive(false);
@@ -114,6 +114,7 @@ public class Enemy : Damageable
                 //m_spriteRenderer.sprite = m_enemySprites[0];
                 //m_originalColor = Color.yellow;
                 m_flingAccuracy = 360f;
+                m_rotateToAlignToVelocity = true;
                 break;
             case eEnemyType.Dodger:
                 m_originalColor = Color.green;
@@ -135,6 +136,7 @@ public class Enemy : Damageable
         m_xpReward = (int)(m_typeTrait.difficulty * GameHandler.GAME_enemyXPRewardScale);
         m_scoreValue = 0f;// (float)(m_xpReward) * m_coinToXPRatio;
         m_rigidBody.freezeRotation = !m_typeTrait.canRotate;
+        //m_rotateToAlignToVelocity = m_typeTrait.canRotate;
         UpdateLocalStatsFromStatHandler();
         UpdateHealthColor();
     }
@@ -234,11 +236,6 @@ public class Enemy : Damageable
         m_desiredRigidbodyRotation = VLib.Vector2ToEulerAngle(m_rigidBody.velocity);
     }
 
-    void UpdateRotation()
-    {
-        m_rigidBody.MoveRotation(m_desiredRigidbodyRotation);// VLib.Vector2ToEulerAngle(m_rigidBody.velocity));
-    }
-
     public override bool OnCollisionEnter2D(Collision2D a_collision)
     {
         bool runningBaseCollision = true;
@@ -329,12 +326,8 @@ public class Enemy : Damageable
         {
             DuplicationUpdate();
         }
-        if (m_typeTrait.inertiaDasher)
-        {
-            UpdateRotation();
-        }
+
         AIUpdate();
-        m_healthBarRef.transform.localEulerAngles = -transform.localEulerAngles;
 
         if (m_enemyType == eEnemyType.Idler)
         {

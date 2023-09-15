@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 19.7f;
+    public const float _VERSION_NUMBER = 19.8f;
 
     static internal bool DEBUG_MODE = true;
 

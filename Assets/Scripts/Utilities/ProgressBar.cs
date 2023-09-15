@@ -13,8 +13,6 @@ public class ProgressBar : MonoBehaviour
     const float m_maxLagIncrement = 300f;
     const float m_lagDelay = 0.23f;
 
-
-
     public SpriteRenderer m_progressBarRef;
     public SpriteRenderer m_barOccluder;
     public GameObject m_whiteLagBar;
