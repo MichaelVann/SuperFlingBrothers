@@ -50,7 +50,7 @@ public class Equipment
     public List<EquipmentStat> m_stats;
 
     [SerializeReference]
-    public ActiveAbility m_activeAbility;
+    public EquipmentAbility m_activeAbility;
 
     public void Copy(Equipment a_equipment)
     {
@@ -112,13 +112,12 @@ public class Equipment
         }
         UpdateRarityTier();
 
-        m_activeAbility = new ActiveAbility(m_rarityTier.level);
-
+        m_activeAbility = new EquipmentAbility(m_rarityTier.level);
 
         int points = 10 + (int)((float)(a_level)*2f);
         points = (int)(points*Mathf.Pow(1.25f, (float)m_rarityTier.level));
         m_goldValue = points;
-        int statsChosenCount = 2;
+        int statsChosenCount = VLib.vRandom(1,m_stats.Count-1);
         for (int i = 0; i < (int)eCharacterStatIndices.count; i++)
         {
             EquipmentStat newStat = new EquipmentStat();

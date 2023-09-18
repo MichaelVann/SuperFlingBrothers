@@ -112,7 +112,7 @@ public class TownConnection
 
     public void Refresh()
     {
-        if (m_townA.m_overrun != m_townB.m_overrun)//And is now
+        if (m_townA.m_overrun != m_townB.m_overrun)
         {
             m_frontActive = true;
             SpawnBattles();

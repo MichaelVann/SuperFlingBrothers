@@ -20,17 +20,19 @@ public class ProgressBar : MonoBehaviour
 
     bool m_healthColoring = true;
 
-
     public void SetMaxProgressValue(float a_value) { m_progressMax = a_value; }
     public void SetHealthColoring(bool a_value) { m_healthColoring = a_value; }
     public void SetProgressValue(float a_value)
     {
-        if (m_lagEffect && a_value < m_progress)
+        if (m_lagEffect && (a_value < m_progress))
         {
-            m_preProgress = a_value;
-            m_lagTimer.Reset();
-            m_lagTimer.SetActive(true);
-            m_lagging = true;
+            if (a_value != m_preProgress)
+            {
+                m_preProgress = a_value;
+                m_lagTimer.Reset();
+                m_lagTimer.SetActive(true);
+                m_lagging = true;
+            }
         }
         else
         {
@@ -38,7 +40,6 @@ public class ProgressBar : MonoBehaviour
             m_preProgress = a_value;
         }
     }
-
 
     void Awake()
     {

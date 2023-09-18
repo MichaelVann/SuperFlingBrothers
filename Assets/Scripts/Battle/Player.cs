@@ -35,11 +35,9 @@ public class Player : Damageable
     RisingFadingText m_coinValueText;
 
     public SpriteRenderer m_shieldSpriteRenderer;
-    bool m_shieldEnabled = false;
-    GameHandler.Shield m_shieldRef;
+    //GameHandler.Shield m_shieldRef;
     float m_maxShieldOpacity = 0.64f;
     float m_projectileDamageMult = 3f;
-
 
     public override void Awake()
     {
@@ -63,24 +61,64 @@ public class Player : Damageable
         m_statHandler = m_gameHandlerRef.m_playerStatHandler;
         UpdateLocalStatsFromStatHandler();
         m_damageTextColor = Color.red;
-        SetupShield();
+        SetupEquipmentShield();
         //Fling(new Vector3(0f, -600f, 0f), 1f);
         m_velocityIndicatorRef.SetActive(m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.playerVector].m_owned);
+        m_battleManagerRef.InitialiseUpgrades();
     }
 
-    void SetupShield()
+    void SetupEquipmentShield()
     {
-        m_shieldRef = m_gameHandlerRef.m_playerShield;
-        bool shieldOwned = m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.shield].m_owned;
+        List<EquipmentAbility> shieldAbilities = FindEquipmentAbilities(EquipmentAbility.eAbilityType.Shield);
+
+        int cumulativeLevel = 0;
+        
+        for (int i = 0; i < shieldAbilities.Count; i++)
+        {
+            cumulativeLevel += shieldAbilities[i].m_level;
+        }
+        SetUpShield(cumulativeLevel);
+        bool shieldOwned = cumulativeLevel > 0;
         if (shieldOwned)
         {
-            m_shieldEnabled = true;
-            m_shieldRef.delayTimer = 0f;
-            m_shieldRef.value = m_gameHandlerRef.m_playerShield.capacity;
+            m_shield.enabled = true;
+            m_shield.delayTimer = 0f;
+            m_shield.value = m_shield.capacity;
         }
         m_shieldSpriteRenderer.gameObject.SetActive(shieldOwned);
         m_shieldBarRef.gameObject.SetActive(shieldOwned);
-        m_shieldBarRef.SetMaxProgressValue(m_shieldRef.capacity);
+        m_shieldBarRef.SetMaxProgressValue(m_shield.capacity);
+    }
+
+    EquipmentAbility FindActiveEquipmentAbility(EquipmentAbility.eAbilityType a_abilityType)
+    {
+        EquipmentAbility ability = null;
+        List<EquipmentAbility> abilityList = FindEquipmentAbilities(a_abilityType);
+        for (int i = 0; i < abilityList.Count; i++)
+        {
+            if (abilityList[i].m_activated && abilityList[i].m_abilityType == a_abilityType)
+            {
+                ability = abilityList[i];
+            }
+        }
+        return ability;
+    }
+
+    List<EquipmentAbility> FindEquipmentAbilities(EquipmentAbility.eAbilityType a_abilityType)
+    {
+        List<EquipmentAbility> abilities = new List<EquipmentAbility>();
+        for (int i = 0; i < m_battleManagerRef.m_activeAbilities.Length; i++)
+        {
+            if (m_battleManagerRef.m_activeAbilities[i] != null)
+            {
+                EquipmentAbility abil = m_battleManagerRef.m_activeAbilities[i];
+                if (abil.m_abilityType == a_abilityType)
+                {
+                    abilities.Add(abil);
+                }
+            }
+        }
+        return abilities;
     }
 
     public override void Fling(Vector3 a_flingVector, float a_flingStrength)
@@ -90,20 +128,28 @@ public class Player : Damageable
         m_battleManagerRef.SetFrozen(false);
 
         //Handle Projectile Shooting
-        for (int i = 0; i < m_battleManagerRef.m_activeAbilities.Length; i++)
+        EquipmentAbility abil = FindActiveEquipmentAbility(EquipmentAbility.eAbilityType.Projectile);
+        if (abil != null)
         {
-            if (m_battleManagerRef.m_activeAbilities[i] != null)
-            {
-                ActiveAbility abil = m_battleManagerRef.m_activeAbilities[i];
-                if (abil.m_abilityType == ActiveAbility.eAbilityType.Projectile && abil.m_active)
-                {
-                    abil.m_ammo--;
-                    abil.m_active = false;
-                    ShootProjectile(a_flingVector, abil);
-                    break;
-                }
-            }
+            abil.m_ammo--;
+            abil.m_activated = false;
+            ShootProjectile(a_flingVector, abil);
         }
+
+        //for (int i = 0; i < m_battleManagerRef.m_activeAbilities.Length; i++)
+        //{
+        //    if (m_battleManagerRef.m_activeAbilities[i] != null)
+        //    {
+        //        EquipmentAbility abil = m_battleManagerRef.m_activeAbilities[i];
+        //        if (abil.m_abilityType == EquipmentAbility.eAbilityType.Projectile && abil.m_activated)
+        //        {
+        //            abil.m_ammo--;
+        //            abil.m_activated = false;
+        //            ShootProjectile(a_flingVector, abil);
+        //            break;
+        //        }
+        //    }
+        //}
         m_battleManagerRef.RefreshAbilityButtons();
     }
 
@@ -250,7 +296,7 @@ public class Player : Damageable
         return tookDamage;
     }
 
-    internal void ShootProjectile(Vector3 a_shootVector, ActiveAbility a_ability)
+    internal void ShootProjectile(Vector3 a_shootVector, EquipmentAbility a_ability)
     {
         GameObject projectile = Instantiate<GameObject>(m_projectileTemplate,transform.position, VLib.Vector2DirectionToQuaternion(a_shootVector));
         Projectile projectileComp = projectile.GetComponent<Projectile>();
@@ -314,19 +360,19 @@ public class Player : Damageable
             return;
         }
         float damage = a_damage;
-        if (m_shieldEnabled)
+        if (m_shield.enabled)
         {
-            if (m_shieldRef.value >= damage)
+            if (m_shield.value >= damage)
             {
-                m_shieldRef.value -= damage;
+                m_shield.value -= damage;
                 damage = 0f;
             }
             else
             {
-                damage -= m_shieldRef.value;
-                m_shieldRef.value = 0f;
+                damage -= m_shield.value;
+                m_shield.value = 0f;
             }
-            m_shieldRef.delayTimer = 0f;
+            m_shield.delayTimer = 0f;
         }
         float armourProtectionAmount = m_statHandler.m_stats[(int)eCharacterStatIndices.protection].finalValue * 0.1f;
         float blockedAmount = armourProtectionAmount > damage ? damage : armourProtectionAmount;
@@ -343,25 +389,25 @@ public class Player : Damageable
     void UpdateShieldOpacity()
     {
         Color shieldColor = m_shieldSpriteRenderer.color;
-        shieldColor.a = m_maxShieldOpacity * m_shieldRef.value/m_shieldRef.capacity;
+        shieldColor.a = m_maxShieldOpacity * m_shield.value/ m_shield.capacity;
         m_shieldSpriteRenderer.color = shieldColor;
-        m_shieldBarRef.SetProgressValue(m_shieldRef.value);
+        m_shieldBarRef.SetProgressValue(m_shield.value);
     }
 
     void ShieldUpdate()
     {
-        if (m_shieldEnabled)
+        if (m_shield.enabled)
         {
-            if (m_shieldRef.delayTimer <= m_shieldRef.delay)
+            if (m_shield.delayTimer <= m_shield.delay)
             {
-                m_shieldRef.delayTimer += Time.deltaTime;
+                m_shield.delayTimer += Time.deltaTime;
             }
-            else if (m_shieldRef.capacity >= m_shieldRef.value)
+            else if (m_shield.capacity >= m_shield.value)
             {
-                m_shieldRef.value = Mathf.Clamp(m_shieldRef.value + m_shieldRef.rechargeRate * Time.deltaTime, 0f, m_shieldRef.capacity);
+                m_shield.value = Mathf.Clamp(m_shield.value + m_shield.rechargeRate * Time.deltaTime, 0f, m_shield.capacity);
             }
             UpdateShieldOpacity();
-            m_battleManagerRef.m_shieldBarRef.SetBarValue(m_shieldRef.value);
+            m_battleManagerRef.m_shieldBarRef.SetBarValue(m_shield.value);
         }
     }
 

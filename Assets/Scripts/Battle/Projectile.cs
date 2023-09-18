@@ -13,7 +13,7 @@ public class Projectile : MonoBehaviour
     Rigidbody2D m_rigidbody;
     int m_powerUpLevel = 0;
     int m_maxPowerUpLevel = 3;
-    ActiveAbility m_parentAbility;
+    EquipmentAbility m_parentAbility;
     bool m_healsNucleus = true;
 
     // Start is called before the first frame update
@@ -28,12 +28,12 @@ public class Projectile : MonoBehaviour
         //transform.rotation = VLib.Vector2DirectionToQuaternion(m_rigidbody.velocity);
     }
 
-    public void Initialise(ActiveAbility a_ability, Vector2 a_shootVector, Vector2 a_parentVelocity, float a_damage)
+    public void Initialise(EquipmentAbility a_ability, Vector2 a_shootVector, Vector2 a_parentVelocity, float a_damage)
     {
         m_parentAbility = a_ability;
         m_rigidbody.velocity = a_parentVelocity + a_shootVector.normalized * m_speed;
         m_damage = a_damage;
-        if (m_parentAbility.HasAffix(ActiveAbility.eAffix.bouncePowerup))
+        if (m_parentAbility.HasAffix(EquipmentAbility.eAffix.bouncePowerup))
         {
             m_bouncePowerUp = true;
         }

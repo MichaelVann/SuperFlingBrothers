@@ -95,7 +95,7 @@ public class BattleManager : MonoBehaviour
     bool m_startingSequence = true;
 
     //Active Abilities
-    public ActiveAbility[] m_activeAbilities;
+    public EquipmentAbility[] m_activeAbilities;
 
     //Prepared Abilities
     //int m_extraTurnsRemaining = 1;
@@ -172,7 +172,7 @@ public class BattleManager : MonoBehaviour
                     Color buttonColor = Color.grey;
                     if (m_abilityButtons[i].interactable)
                     {
-                        buttonColor = m_activeAbilities[i].m_active ? Color.blue : Color.grey;
+                        buttonColor = m_activeAbilities[i].m_activated ? Color.blue : Color.grey;
                     }
                     m_abilityButtons[i].GetComponent<Image>().color = buttonColor;
                 }
@@ -193,20 +193,20 @@ public class BattleManager : MonoBehaviour
             {
                 if(i == a_id)
                 {
-                    ActiveAbility abil = m_activeAbilities[a_id];
+                    EquipmentAbility abil = m_activeAbilities[a_id];
                     if (abil.m_reactive)
                     {
                         switch (abil.m_abilityType)
                         {
-                            case ActiveAbility.eAbilityType.ExtraTurn:
-                                abil.m_active = !abil.m_active;
+                            case EquipmentAbility.eAbilityType.ExtraTurn:
+                                abil.m_activated = !abil.m_activated;
                                 //TODO: Enable outline around button or something, showing ability is prepared
                                 break;
-                            case ActiveAbility.eAbilityType.Projectile:
-                                abil.m_active = !abil.m_active;
+                            case EquipmentAbility.eAbilityType.Projectile:
+                                abil.m_activated = !abil.m_activated;
                                 //TODO: Enable outline around button or something, showing ability is prepared
                                 break;
-                            case ActiveAbility.eAbilityType.Count:
+                            case EquipmentAbility.eAbilityType.Count:
                                 break;
                             default:
                                 break;
@@ -219,7 +219,7 @@ public class BattleManager : MonoBehaviour
                             //case ActiveAbility.eAbilityType.Projectile:
                             //    m_player.ShootProjectile(abil);
                             //    break;
-                            case ActiveAbility.eAbilityType.Count:
+                            case EquipmentAbility.eAbilityType.Count:
                                 break;
                             default:
                                 break;
@@ -228,7 +228,7 @@ public class BattleManager : MonoBehaviour
                 }
                 else
                 {
-                    m_activeAbilities[i].m_active = false;
+                    m_activeAbilities[i].m_activated = false;
                 }
             }
         }
@@ -244,12 +244,12 @@ public class BattleManager : MonoBehaviour
         {
             if (m_activeAbilities[i] != null)
             {
-                if (m_activeAbilities[i].m_abilityType == ActiveAbility.eAbilityType.ExtraTurn && m_activeAbilities[i].m_active)
+                if (m_activeAbilities[i].m_abilityType == EquipmentAbility.eAbilityType.ExtraTurn && m_activeAbilities[i].m_activated)
                 {
                     m_activeAbilities[i].m_ammo--;
                     m_turnFreezeTimer = m_turnFreezeTimerMax;
                     m_turnFreezingTimer = m_turnFreezingTimerMax / 2f;
-                    m_activeAbilities[i].m_active = false;
+                    m_activeAbilities[i].m_activated = false;
                     RefreshAbilityButtons();
                     break;
                 }
@@ -291,7 +291,7 @@ public class BattleManager : MonoBehaviour
                 pos.x = m_wallXOffset * (i%2 == 0 ? -1f : 1f);
                 float yGap = m_wallYSpace / (float)((triangleCount / 2)+1);
                 pos.y = (m_wallYSpace/2f) - yGap * ((i/2)+1);
-
+                pos.z = m_gameViewRef.transform.position.z;
                 float rotation = 90f * (i % 2 == 0 ? -1f : 1f);
                 Instantiate<GameObject>(m_wallTriangleRef, pos, Quaternion.Euler(0f,0f,rotation), m_gameViewRef.transform);
             }
@@ -364,7 +364,6 @@ public class BattleManager : MonoBehaviour
         m_gameHandlerRef.m_playerLevelAtStartOfBattle = m_gameHandlerRef.m_playerStatHandler.m_level;
         m_gameHandlerRef.m_xpEarnedLastGame = 0;
 
-        InitialiseUpgrades();
         InitialiseAbilities();
 
         SpawnPlayer();
@@ -377,12 +376,12 @@ public class BattleManager : MonoBehaviour
         m_levelDifficultyText.text = "Level Difficulty: " + m_gameHandlerRef.m_battleDifficulty;
     }
 
-    void InitialiseUpgrades()
+    public void InitialiseUpgrades()
     {
         //Shield
-        if (m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.shield].m_owned)
+        if (m_player.m_shield.enabled)
         {
-            m_shieldBarRef.Init(m_gameHandlerRef.m_playerShield.capacity);
+            m_shieldBarRef.Init(m_player.m_shield.capacity);
         }
         else
         {
@@ -393,10 +392,10 @@ public class BattleManager : MonoBehaviour
 
     void InitialiseAbilities()
     {
-        m_activeAbilities = new ActiveAbility[4];
+        m_activeAbilities = new EquipmentAbility[4];
         for (int i = 0; i < m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment.Length; i++)
         {
-            m_activeAbilities[i] = m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[i] != null ? new ActiveAbility(m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[i].m_activeAbility) : null;
+            m_activeAbilities[i] = m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[i] != null ? new EquipmentAbility(m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[i].m_activeAbility) : null;
         }
 
         RefreshAbilityButtons();

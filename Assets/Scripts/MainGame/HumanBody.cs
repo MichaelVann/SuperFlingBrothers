@@ -29,7 +29,7 @@ public class HumanBody
         RefreshBodyParts();
     }
 
-    private void RefreshBodyParts()
+    internal void RefreshBodyParts()
     {
         for (int i = 0; i < m_bodyPartList.Length; i++)
         {

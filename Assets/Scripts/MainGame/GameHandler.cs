@@ -81,22 +81,13 @@ public class GameHandler : MonoBehaviour
     {
         enemyVector,
         playerVector,
-        shield,
         extraTurn,
         Count
     }
 
     public List<Equipment> m_equipmentInventory;
 
-    public struct Shield
-    {
-        public float delay;
-        public float rechargeRate;
-        public float capacity;
 
-        public float value;
-        public float delayTimer;
-    } public Shield m_playerShield;
 
     StockHandler m_stockHandler;
 
@@ -144,7 +135,6 @@ public class GameHandler : MonoBehaviour
 
         SetupUpgrades();
         SetupEquipment();
-        SetupShield();
         Enemy.SetUpEnemyTypes();
         if (m_autoLoadDataOnLaunch)
         {
@@ -157,13 +147,6 @@ public class GameHandler : MonoBehaviour
     private void SetupHumanBody()
     {
         m_humanBody = new HumanBody();
-    }
-
-    private void SetupShield()
-    {
-        m_playerShield.capacity = 5f * m_upgrades[(int)UpgradeId.shield].m_level;
-        m_playerShield.delay = 3f;
-        m_playerShield.rechargeRate = 1.6f * m_upgrades[(int)UpgradeId.shield].m_level;
     }
 
     void SetupUpgrades()
@@ -180,11 +163,11 @@ public class GameHandler : MonoBehaviour
         m_upgrades[(int)UpgradeId.playerVector].SetDescription("Shows the direction of player movement.");
         m_upgrades[(int)UpgradeId.playerVector].SetCost(20);
 
-        m_upgrades[(int)UpgradeId.shield] = new UpgradeItem();
-        m_upgrades[(int)UpgradeId.shield].SetName("Shield");
-        m_upgrades[(int)UpgradeId.shield].SetDescription("Enables a shield that protects the user from a limited amount of damage.");
-        m_upgrades[(int)UpgradeId.shield].SetCost(100);
-        m_upgrades[(int)UpgradeId.shield].SetHasLevels(true);
+        //m_upgrades[(int)UpgradeId.shield] = new UpgradeItem();
+        //m_upgrades[(int)UpgradeId.shield].SetName("Shield");
+        //m_upgrades[(int)UpgradeId.shield].SetDescription("Enables a shield that protects the user from a limited amount of damage.");
+        //m_upgrades[(int)UpgradeId.shield].SetCost(100);
+        //m_upgrades[(int)UpgradeId.shield].SetHasLevels(true);
 
         m_upgrades[(int)UpgradeId.extraTurn] = new UpgradeItem();
         m_upgrades[(int)UpgradeId.extraTurn].SetName("Extra Turn");
@@ -218,11 +201,6 @@ public class GameHandler : MonoBehaviour
                 upgrade.SetOwned(true);
             }
             returnValue =  true;
-        }
-
-        if (a_upgradeID == (int)UpgradeId.shield)
-        {
-            SetupShield();
         }
         return returnValue;
     }
@@ -290,6 +268,7 @@ public class GameHandler : MonoBehaviour
             }
 
             m_lastAttemptedBattleNode.m_owningConnection.ChangeWarfrontBalance(warfrontBalanceChange);
+            m_humanBody.RefreshBodyParts();
         }
     }
 
@@ -398,7 +377,5 @@ public class GameHandler : MonoBehaviour
                 m_playerStatHandler.m_equippedEquipment[m_equipmentInventory[i].m_equippedSlotId] = m_equipmentInventory[i];
             }
         }
-
-        SetupShield();
     }
 }

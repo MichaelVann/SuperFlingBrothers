@@ -5,23 +5,28 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class ActiveAbility
+public class EquipmentAbility
 {
     //public bool m_enabled = false;
-    public int m_cooldown;
-    public int m_ammo;
-    public bool m_reactive = false;
-    public bool m_active = false;
-    int m_level;
+    internal int m_cooldown;
+    internal int m_ammo;
+    internal bool m_reactive = false;
+    internal bool m_passive = false;
+    internal bool m_activated = false;
+    internal int m_level;
+
+
     public enum eAbilityType
     {
         ExtraTurn,
         Projectile,
+        Shield,
         Count
     }
 
     public enum eAffix
     {
+        //-Projectile-
         bouncePowerup,
         Count
     }
@@ -104,6 +109,11 @@ public class ActiveAbility
                 m_level = 1;
                 break;
 
+            case eAbilityType.Shield:
+                m_activated = false;
+                m_level = 1;
+                break;
+
             case eAbilityType.Count:
                 break;
             default:
@@ -130,6 +140,9 @@ public class ActiveAbility
             case eAbilityType.Projectile:
                 description = "Projectile: Shoots out a projectile in the direction of movement.";
                 break;
+            case eAbilityType.Shield:
+                description = "Shield: Protects the user from a limited amount of damage, and recharges overtime.";
+                break;
             case eAbilityType.Count:
                 break;
             default:
@@ -144,28 +157,28 @@ public class ActiveAbility
         return description;
     }
 
-    public ActiveAbility()
+    public EquipmentAbility()
     {
         RollNewAbility(Equipment.eRarityTier.Normal);
     }
 
-    public ActiveAbility(ActiveAbility a_ability)
+    public EquipmentAbility(EquipmentAbility a_ability)
     {
         CopyAbility(a_ability);
     }
 
-    public ActiveAbility(Equipment.eRarityTier a_rarity)
+    public EquipmentAbility(Equipment.eRarityTier a_rarity)
     {
         RollNewAbility(a_rarity);
     }
 
-    public void CopyAbility(ActiveAbility a_ability)
+    public void CopyAbility(EquipmentAbility a_ability)
     {
         m_abilityType = a_ability.m_abilityType;
         m_cooldown = a_ability.m_cooldown;
         m_ammo = a_ability.m_ammo;
         m_reactive = a_ability.m_reactive;
-        m_active = a_ability.m_active;
+        m_activated = a_ability.m_activated;
         m_level = a_ability.m_level;
         m_affixes = a_ability.m_affixes;
     }

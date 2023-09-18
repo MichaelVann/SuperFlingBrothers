@@ -66,7 +66,7 @@ public class EquipmentDigest : MonoBehaviour
 
         for (int i = 0; i < m_affixTexts.Length && i < m_equipmentRef.m_activeAbility.m_affixes.Count; i++)
         {
-            m_affixTexts[i].text = VLib.GetEnumName<ActiveAbility.eAffix>(m_equipmentRef.m_activeAbility.m_affixes[i]);
+            m_affixTexts[i].text = VLib.GetEnumName<EquipmentAbility.eAffix>(m_equipmentRef.m_activeAbility.m_affixes[i]);
         }
 
     }

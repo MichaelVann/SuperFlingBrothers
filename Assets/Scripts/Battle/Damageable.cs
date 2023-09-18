@@ -35,7 +35,20 @@ public class Damageable : BaseObject
 
     public GameObject m_puffOfSmokeTemplate;
 
+    public struct Shield
+    {
+        internal bool enabled;
+        internal float delay;
+        internal float delayTimer;
+        internal float rechargeRate;
+
+        internal float value;
+        internal float capacity;
+    }
+    internal Shield m_shield;
+
     //Fling
+    bool m_secondFlingEnabled = false;
     bool m_secondFling = true;
     float m_bumpFlingStrengthMult = GameHandler.DAMAGEABLE_bumpFlingStrengthMult;
     float m_secondFlingTimer = 0f;
@@ -82,7 +95,13 @@ public class Damageable : BaseObject
         {
             m_shieldBarRef.SetHealthColoring(false);
         }
+    }
 
+    protected void SetUpShield(int a_level)
+    {
+        m_shield.delay = 3f;
+        m_shield.capacity += 5f * a_level;
+        m_shield.rechargeRate = 1.6f;
     }
 
     void UpdateRotationToFollowVelocity()
