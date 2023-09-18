@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 19.8f;
+    public const float _VERSION_NUMBER = 19.10f;
 
     static internal bool DEBUG_MODE = true;
 
@@ -87,10 +87,7 @@ public class GameHandler : MonoBehaviour
 
     public List<Equipment> m_equipmentInventory;
 
-
-
     StockHandler m_stockHandler;
-
 
     [Serializable]
     struct SaveData
@@ -151,7 +148,7 @@ public class GameHandler : MonoBehaviour
 
     void SetupUpgrades()
     {
-        m_upgrades = new UpgradeItem[4];
+        m_upgrades = new UpgradeItem[(int)UpgradeId.Count];
 
         m_upgrades[(int)UpgradeId.enemyVector] = new UpgradeItem();
         m_upgrades[(int)UpgradeId.enemyVector].SetName("Enemy Vectors");

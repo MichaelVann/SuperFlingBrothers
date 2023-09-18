@@ -12,6 +12,16 @@ public static class VLib
 
     public static string GetEnumName<T>(T a_type) { return Enum.GetName(typeof(T), a_type); }
 
+    public static string FirstLetterToUpperCaseOrConvertNullToEmptyString(this string s)
+    {
+        if (string.IsNullOrEmpty(s))
+            return string.Empty;
+
+        char[] a = s.ToCharArray();
+        a[0] = char.ToUpper(a[0]);
+        return new string(a);
+    }
+
     public static float TruncateFloatsDecimalPlaces(float a_float, int a_decimalsToKeep)
     {
         float multiplier = Mathf.Pow(10, a_decimalsToKeep);

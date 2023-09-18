@@ -54,6 +54,8 @@ public class CharacterStatHandler
     [SerializeReference]
     public Equipment[] m_equippedEquipment;
 
+    const float m_equipmentStatEffectMult = 0.1f;
+
     const float m_baseHealthScale = 4f;
 
     public void Copy(CharacterStatHandler a_statHandler)
@@ -211,26 +213,6 @@ public class CharacterStatHandler
             a_equipment.m_equippedSlotId = -1;
             m_equippedEquipment[a_slotId] = null;
         }
-
-
-
-        //if (m_equippedEquipables[a_slotId] != null)
-        //{
-        //    m_equippedEquipables[a_slotId].m_equipped = false;
-
-        //    if (m_equippedEquipables[a_slotId] == a_equipable)
-        //    {
-        //        unequiping = true;
-        //        m_equippedEquipables[a_slotId].m_equipped = false;
-        //        m_equippedEquipables[a_slotId] = null;
-        //    }
-        //}
-        //if (!unequiping)
-        //{
-        //    m_equippedEquipables[a_slotId] = a_equipable;
-        //    a_equipable.m_equipped = true;
-        //    a_equipable.SetEquipStatus(true, a_slotId);
-        //}
         UpdateStats();
     }
 
@@ -270,7 +252,7 @@ public class CharacterStatHandler
             }
             for (int j = 0; j < m_equippedEquipment[i].m_stats.Count; j++)
             {
-                m_stats[(int)m_equippedEquipment[i].m_stats[j].statType].equipmentAddedValue += m_equippedEquipment[i].m_stats[j].value;
+                m_stats[(int)m_equippedEquipment[i].m_stats[j].statType].equipmentAddedValue += m_equippedEquipment[i].m_stats[j].value * m_equipmentStatEffectMult;
             }
         }
 

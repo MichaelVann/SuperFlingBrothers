@@ -42,7 +42,7 @@ public class BattleManager : MonoBehaviour
     float m_wallXOffset = 2.11f;
     float m_wallYSpace = 5f;
 
-    public Button[] m_abilityButtons;
+    public AbilityButton[] m_abilityButtons;
 
     public Text m_enemyCountText;
     public Text m_levelDifficultyText;
@@ -164,24 +164,8 @@ public class BattleManager : MonoBehaviour
     {
         for (int i = 0; i < m_abilityButtons.Length; i++)
         {
-            if (m_activeAbilities[i] != null)
-            {
-                m_abilityButtons[i].interactable = m_activeAbilities[i].m_ammo > 0;
-                if (m_activeAbilities[i].m_reactive)
-                {
-                    Color buttonColor = Color.grey;
-                    if (m_abilityButtons[i].interactable)
-                    {
-                        buttonColor = m_activeAbilities[i].m_activated ? Color.blue : Color.grey;
-                    }
-                    m_abilityButtons[i].GetComponent<Image>().color = buttonColor;
-                }
-                m_abilityButtons[i].GetComponentInChildren<Text>().text = m_activeAbilities[i].GetName() + $" ({m_activeAbilities[i].m_ammo})";
-            }
-            else
-            {
-                m_abilityButtons[i].gameObject.SetActive(false);
-            }
+            m_abilityButtons[i].SetAbilityRef(m_activeAbilities[i]);
+            m_abilityButtons[i].Refresh();
         }
     }
 

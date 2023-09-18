@@ -125,6 +125,23 @@ public class EquipmentAbility
         }
     }
 
+    public string GetAffixNames()
+    {
+        string description = "";
+        for (int i = 0; i < m_affixes.Count; i++)
+        {
+            string name = "";
+            if(i > 0)
+            {
+                name = " ";
+            }
+            name += VLib.GetEnumName(m_affixes[i]);
+            name = name.FirstLetterToUpperCaseOrConvertNullToEmptyString();
+            description += name;
+        }
+        return description;
+    }
+
     public string GetAbilityDescription()
     {
         string description = "";
