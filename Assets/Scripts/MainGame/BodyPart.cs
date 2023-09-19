@@ -201,7 +201,7 @@ public class BodyPart
 
     public int m_invaderStrength;
 
-    bool m_lost = false;
+    internal bool m_lost = false;
 
     public enum eType
     {

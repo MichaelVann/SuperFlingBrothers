@@ -34,6 +34,9 @@ public class MapHandler : MonoBehaviour
     public GameObject m_partInfoPanel;
     public NodeInfoPanelHandler m_nodeInfoPanel;
 
+    // UI Popup
+    public GameObject m_lostNotificationRef;
+
     bool m_wasPinchingLastFrame = false;
     float m_lastPinchDistance;
 
@@ -75,6 +78,13 @@ public class MapHandler : MonoBehaviour
                 break;
         }
         ApplyZoomAndPan();
+
+        if (m_gameHandlerRef.m_humanBody.m_activeBodyPart.m_lost)
+        {
+            // UI Popup: lost notification
+            m_lostNotificationRef.SetActive(true);
+
+        };
     }
 
     public void Start()
@@ -198,5 +208,12 @@ public class MapHandler : MonoBehaviour
         {
             m_wasPanning = false;
         }
+    }
+
+    public void DismissNotification()
+    {
+        // button closes notif - setactive(false);
+        m_lostNotificationRef.SetActive(false);
+
     }
 }
