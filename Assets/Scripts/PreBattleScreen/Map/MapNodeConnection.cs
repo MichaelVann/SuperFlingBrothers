@@ -31,6 +31,8 @@ public class MapNodeConnection : MonoBehaviour
     Vector3 m_frontStartPos;
     Vector3 m_frontEndPos;
 
+    public Material m_roadMaterial;
+
     public TextMeshPro m_winningPercentText;
 
     public void Awake()
@@ -47,19 +49,24 @@ public class MapNodeConnection : MonoBehaviour
         }
         //CalculateIfIsFront();
 
-
         m_representedTownConnection = m_gameHandlerRef.m_humanBody.m_activeBodyPart.FindConnection(gameObject.name);
+
+        SetUpLines();
+        if (m_spawningBattles)
+        {
+            SetUpBattleNodes();
+        }
     }
 
     // Start is called before the first frame update
     void Start()
     {
         //FindAdjacentConnections();
-        SetUpLines();
-        if (m_spawningBattles)
-        {
-            SetUpBattleNodes();
-        }
+        //SetUpLines();
+        //if (m_spawningBattles)
+        //{
+        //    SetUpBattleNodes();
+        //}
     }
 
     void CalculateIfIsFront()
@@ -308,11 +315,16 @@ public class MapNodeConnection : MonoBehaviour
         }
     }
 
-    void CreateLine(Vector3 a_endPosition, Color a_startColor, Color a_endColor)
+    void CreateLine(Vector3 a_startPos, Vector3 a_endPos, Color a_startColor, Color a_endColor, Material a_lineMat = null)
     {
-        m_linePositionsHolder[0] = transform.position;
-        m_linePositionsHolder[1] = a_endPosition;
+        m_linePositionsHolder[0] = a_startPos;
+        m_linePositionsHolder[1] = a_endPos;
         LineRenderer lineRenderer = Instantiate<GameObject>(m_lineRendererRef, this.transform).GetComponent<LineRenderer>();
+        if (a_lineMat != null)
+        {
+            lineRenderer.material = a_lineMat;
+            //lineRenderer.material.SetTextureScale("_MainTex", new Vector2(0.1f,0.1f));
+        }
         m_createdLineRenderers.Add(lineRenderer.gameObject);
 
         lineRenderer.startColor = a_startColor;
@@ -321,9 +333,40 @@ public class MapNodeConnection : MonoBehaviour
         lineRenderer.SetPositions(m_linePositionsHolder);
     }
 
-    void CreateLine(Vector3 a_endPosition, Color a_lineColor)
+    void CreateLine(Vector3 a_endPosition, Color a_lineColor, Material a_lineMat = null)
     {
-        CreateLine(a_endPosition, a_lineColor, a_lineColor);
+      CreateLine(transform.position, a_endPosition, a_lineColor, a_lineColor, a_lineMat);
+    }
+
+    internal void CreateFrontLine(Vector3 a_endPos)
+    {
+        CreateLine(transform.position, a_endPos, Color.green, Color.green);
+
+        Vector3 frontDirection = a_endPos - transform.position;
+        Vector3 perpA = frontDirection.RotateVector3In2D(90f);
+        Vector3 perpB = frontDirection.RotateVector3In2D(-90f);
+        Vector3 enemyTownPos = m_mapNodes[0].m_overrun ? m_mapNodes[0].transform.position : m_mapNodes[1].transform.position;
+        Vector3 enemyTowndirection = transform.position - enemyTownPos;
+
+
+        float angleA = Vector3.Angle(perpA, enemyTowndirection);
+        float angleB = Vector3.Angle(perpB, enemyTowndirection);
+
+        Vector3 offsetVector = Vector3.zero;
+
+        if (angleA >= angleB)
+        {
+            offsetVector = perpA;
+        }
+        else
+        {
+            offsetVector = perpB;
+        }
+
+        offsetVector = offsetVector.normalized;
+        offsetVector *= m_lineRendererRef.GetComponent<LineRenderer>().startWidth;
+
+        CreateLine(transform.position - offsetVector, a_endPos - offsetVector, Color.red, Color.red);
     }
 
     void ClearUpLines()
@@ -344,9 +387,9 @@ public class MapNodeConnection : MonoBehaviour
         {
             Color lineColor = Color.white;
 
-            lineColor = Color.grey;//m_mapNodes[i].m_occupied ? Color.green : Color.red;
+            lineColor = m_mapNodes[i].m_overrun ? Color.green : Color.red;
 
-            CreateLine(m_mapNodes[i].transform.position, lineColor);
+            CreateLine(m_mapNodes[i].transform.position, lineColor, m_roadMaterial);
         }
         if (m_isaFront)
         {
@@ -358,7 +401,7 @@ public class MapNodeConnection : MonoBehaviour
             {
                 if (m_adjacentConnections[i].m_isaFront)
                 {
-                    CreateLine(m_adjacentConnections[i].transform.position, Color.red);
+                    CreateFrontLine(m_adjacentConnections[i].transform.position);
                 }
             }
         }

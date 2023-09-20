@@ -54,8 +54,7 @@ public class MapNode : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        
+    { 
     }
 
     public void Refresh()

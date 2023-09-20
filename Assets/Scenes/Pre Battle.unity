@@ -14859,6 +14859,7 @@ MonoBehaviour:
   m_partInfoPanel: {fileID: 106784318}
   m_nodeInfoPanel: {fileID: 1587965098}
   m_lostNotificationRef: {fileID: 1648571037}
+  m_backdropRef: {fileID: 1355088786}
 --- !u!1 &1106309557
 GameObject:
   m_ObjectHideFlags: 0
@@ -16882,7 +16883,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1355088786}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.45929, y: 0.41910213, z: 1}
   m_ConstrainProportionsScale: 0
@@ -26785,7 +26786,7 @@ SceneRoots:
   - {fileID: 776085103}
   - {fileID: 1104909345}
   - {fileID: 1717753159}
-  - {fileID: 1355088788}
   - {fileID: 2134720752}
   - {fileID: 523509056}
   - {fileID: 1975865021}
+  - {fileID: 1355088788}

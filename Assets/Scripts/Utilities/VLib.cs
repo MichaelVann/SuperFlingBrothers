@@ -112,6 +112,21 @@ public static class VLib
         return Quaternion.Euler(0f,0f,Vector2ToEulerAngle(a_vector2));
     }
 
+
+    public static Vector3 RotateVector3In2D(this Vector3 a_vector3, float a_angle)
+    {
+        Vector3 returnVector = a_vector3;
+        returnVector = Quaternion.AngleAxis(a_angle, Vector3.forward) * returnVector;
+        return returnVector;
+    }
+
+    public static float AngleBetweenVector3s(Vector3 a_vectorA, Vector3 a_vectorB)
+    {
+        float angle = 0f;
+        
+        return angle;
+    }
+
     public static float Vector2ToEulerAngle(Vector2 a_vector2)
     {
         float angle = Vector2.SignedAngle(new Vector2(0f,1f), a_vector2);
@@ -259,4 +274,5 @@ public static class VLib
 
         return generatedNames;
     }
+
 }

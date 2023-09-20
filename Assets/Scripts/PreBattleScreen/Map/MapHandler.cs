@@ -21,7 +21,7 @@ public class MapHandler : MonoBehaviour
     static float m_startingCameraSize = 5f;
     float m_startingCameraZPos;
     static Vector3 m_startingZoomLocation;
-    static Vector3 m_currentZoomLocation = new Vector3(0f,0f,-110f);
+    static Vector3 m_currentPan = new Vector3(0f,0f,-110f);
     static Vector3 m_zoomTargetLocation;
     static float m_zoomProgress = 0f;
     static float m_zoomTime = 0.5f;
@@ -49,6 +49,8 @@ public class MapHandler : MonoBehaviour
     int m_selectedBattleNodeId = -1;
     public BattleNode m_selectedBattleNode;
     UIBattleNode m_selectedUIBattleNode;
+    public GameObject m_backdropRef;
+    Vector3 m_backdropRefStartingSize;
 
     // Start is called before the first frame update
     void Awake()
@@ -77,7 +79,7 @@ public class MapHandler : MonoBehaviour
             default:
                 break;
         }
-        ApplyZoomAndPan();
+        //ApplyZoomAndPan();
 
         if (m_gameHandlerRef.m_humanBody.m_activeBodyPart.m_lost)
         {
@@ -90,8 +92,9 @@ public class MapHandler : MonoBehaviour
     public void Start()
     {
         m_residingMapNode = m_viewedBodyPartUI.GetResidingMapNode();
-        m_currentZoomLocation = m_residingMapNode.transform.position;
-        m_currentZoomLocation.z = m_startingCameraZPos;
+        m_currentPan = m_residingMapNode.transform.position;
+        m_currentPan.z = m_startingCameraZPos;
+        m_backdropRefStartingSize = m_backdropRef.transform.localScale;
         ApplyZoomAndPan();
     }
 
@@ -114,6 +117,11 @@ public class MapHandler : MonoBehaviour
         else if (Input.GetKey(KeyCode.KeypadMinus))
         {
             m_currentZoom *= 1f - Time.deltaTime;
+            ApplyZoomAndPan();
+        }
+        else if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            m_currentPan += new Vector3(-1*Time.deltaTime,0f,0f);
             ApplyZoomAndPan();
         }
     }
@@ -156,9 +164,11 @@ public class MapHandler : MonoBehaviour
 
     void ApplyZoomAndPan()
     {
-        m_cameraRef.transform.position = m_currentZoomLocation;// * m_currentZoom;
+        m_cameraRef.transform.position = m_currentPan;// * m_currentZoom;
+        m_backdropRef.transform.position = new Vector3(m_currentPan.x, m_currentPan.y, m_backdropRef.transform.position.z);
         //Debug.Log(m_currentZoomLocation);
         m_cameraRef.orthographicSize = m_startingCameraSize/m_currentZoom;// new Vector3(m_currentZoom, m_currentZoom, 1f);
+        m_backdropRef.transform.localScale = m_backdropRefStartingSize / m_currentZoom;
     }
 
     void PinchZoom()
@@ -197,8 +207,8 @@ public class MapHandler : MonoBehaviour
             {
                 Vector3 m_deltaPos = panPos - m_lastPanPos;
                 Debug.Log(panPos);
-                m_currentZoomLocation -= m_deltaPos;
-                m_currentZoomLocation.z = m_startingCameraZPos;
+                m_currentPan -= m_deltaPos;
+                m_currentPan.z = m_startingCameraZPos;
             }
             m_wasPanning = true;
             ApplyZoomAndPan();

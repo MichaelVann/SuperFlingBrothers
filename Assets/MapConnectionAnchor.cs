@@ -75,7 +75,8 @@ public class MapConnectionAnchor : MonoBehaviour
         {
             if (m_mapNodeConnections[i].m_isaFront)
             {
-                CreateLine(m_mapNodeConnections[i].transform.position, Color.red, Color.red);
+                m_mapNodeConnections[i].CreateFrontLine(transform.position);
+                //CreateLine(m_mapNodeConnections[i].transform.position, Color.green, Color.green);
             }
         }
     }
