@@ -18,6 +18,10 @@ public class Enemy : Damageable
     public Sprite[] m_enemySprites;
     public Sprite m_idleBacteriaShadowSprite;
     public FlingPieIndicator m_flingPieIndicatorRef;
+    public GameObject m_flingDirectionIndicatorRef;
+
+    Vector3 m_nextFlingDirection;
+
     public enum eEnemyType
     {
         //Null = -1,
@@ -113,16 +117,14 @@ public class Enemy : Damageable
             case eEnemyType.InertiaDasher:
                 //m_spriteRenderer.sprite = m_enemySprites[0];
                 //m_originalColor = Color.yellow;
-                m_flingAccuracy = 360f;
+                //m_flingAccuracy = 360f;
                 m_rotateToAlignToVelocity = true;
                 break;
             case eEnemyType.Dodger:
                 m_originalColor = Color.green;
-                m_flingAccuracy = 360f;
                 break;
             case eEnemyType.Healer:
                 m_originalColor = Color.white;
-                m_flingAccuracy = 360f;
                 break;
             case eEnemyType.Striker:
                 //m_originalColor = Color.red;
@@ -136,6 +138,22 @@ public class Enemy : Damageable
         m_xpReward = (int)(m_typeTrait.difficulty * GameHandler.GAME_enemyXPRewardScale);
         m_scoreValue = 0f;// (float)(m_xpReward) * m_coinToXPRatio;
         m_rigidBody.freezeRotation = !m_typeTrait.canRotate;
+        if (m_typeTrait.dodger)
+        {
+            m_flingAccuracy = 360f;
+            m_flingDirectionIndicatorRef.SetActive(true);
+        }
+        else
+        {
+            m_flingDirectionIndicatorRef.SetActive(false);
+        }
+
+
+
+        //Store next fling direction ahead of time, rotate fling direction indicator towards it
+        FindNextRandomFlingDirection();
+
+
         //m_rotateToAlignToVelocity = m_typeTrait.canRotate;
         UpdateLocalStatsFromStatHandler();
         UpdateHealthColor();
@@ -234,6 +252,13 @@ public class Enemy : Damageable
     void SetDesiredRotationFromVelocity()
     {
         m_desiredRigidbodyRotation = VLib.Vector2ToEulerAngle(m_rigidBody.velocity);
+    }
+
+    void FindNextRandomFlingDirection()
+    {
+        float angle = VLib.vRandom(0f, 360f);
+        m_nextFlingDirection = VLib.RotateVector3In2D(new Vector3(1f,0f,0f), angle);
+        m_flingDirectionIndicatorRef.transform.localRotation = VLib.Vector2DirectionToQuaternion(m_nextFlingDirection);
     }
 
     public override bool OnCollisionEnter2D(Collision2D a_collision)
@@ -432,10 +457,17 @@ public class Enemy : Damageable
 
     public void Fling()
     {
+        float flingStrength = m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].finalValue;
+
         if (m_typeTrait.inertiaDasher)
         {
-            Fling(m_rigidBody.velocity.normalized, m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].finalValue);
+            Fling(m_rigidBody.velocity.normalized, flingStrength);
             SetDesiredRotationFromVelocity();
+        }
+        else if (m_typeTrait.dodger)
+        {
+            Fling(m_nextFlingDirection, flingStrength);
+            FindNextRandomFlingDirection();
         }
         else if (m_playerRef)
         {
@@ -447,7 +479,7 @@ public class Enemy : Damageable
 
                 Vector3 aimDisturbance = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, m_flingAccuracy) - m_flingAccuracy / 2f, Vector3.forward) * accurateFlingVector;
 
-                Fling(aimDisturbance, m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].finalValue);
+                Fling(aimDisturbance, flingStrength);
             }
         }
     }

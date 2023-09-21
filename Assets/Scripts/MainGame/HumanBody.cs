@@ -26,6 +26,8 @@ public class HumanBody
     public string m_name;
     public bool m_unlocked;
 
+    internal int m_battlesCompleted = 0;
+
     //public int m_invaderStrength;
 
     internal bool m_lost = false;

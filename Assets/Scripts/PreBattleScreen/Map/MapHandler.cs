@@ -31,8 +31,6 @@ public class MapHandler : MonoBehaviour
     public GameObject m_bodyMapPrefab;
     public HumanBodyUI m_viewedBodyPartUI;
 
-    public TextMeshProUGUI m_humanBodyNameText;
-
     public GameObject m_partInfoPanel;
     public NodeInfoPanelHandler m_nodeInfoPanel;
 
@@ -72,7 +70,6 @@ public class MapHandler : MonoBehaviour
             // UI Popup: lost notification
             m_lostNotificationRef.SetActive(true);
         };
-        m_humanBodyNameText.text = "Subject: " + m_gameHandlerRef.m_humanBody.GetHumansName(); 
     }
 
     public void Start()

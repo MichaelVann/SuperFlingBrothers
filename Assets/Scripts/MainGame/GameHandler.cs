@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 19.13f;
+    public const float _VERSION_NUMBER = 19.14f;
 
     static internal bool DEBUG_MODE = true;
 
@@ -266,6 +266,7 @@ public class GameHandler : MonoBehaviour
 
             m_lastAttemptedBattleNode.m_owningConnection.ChangeWarfrontBalance(warfrontBalanceChange);
             m_humanBody.Refresh();
+            m_humanBody.m_battlesCompleted++;
         }
     }
 
