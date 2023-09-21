@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MapHandler : MonoBehaviour
 {
@@ -26,10 +28,10 @@ public class MapHandler : MonoBehaviour
     static float m_zoomProgress = 0f;
     static float m_zoomTime = 0.5f;
 
-    public BodyPart.eType m_viewedBodyPartType = BodyPart.eType.Hand;
-    public GameObject[] m_bodyPartMapPrefabs;
-    public BodyPartUI m_viewedBodyPartUI;
+    public GameObject m_bodyMapPrefab;
+    public HumanBodyUI m_viewedBodyPartUI;
 
+    public TextMeshProUGUI m_humanBodyNameText;
 
     public GameObject m_partInfoPanel;
     public NodeInfoPanelHandler m_nodeInfoPanel;
@@ -61,32 +63,16 @@ public class MapHandler : MonoBehaviour
         m_startingCameraZPos = m_cameraRef.transform.position.z;
         //m_mapNodeList = FindObjectsOfType<MapNode>();
         //m_currentZoomLocation = m_cameraRef.transform.position;
-        m_viewedBodyPartType = m_gameHandlerRef.m_humanBody.m_activeBodyPart.m_type;
-        switch (m_viewedBodyPartType)
-        {
-            case BodyPart.eType.Chest:
-                break;
-            case BodyPart.eType.Shoulder:
-                break;
-            case BodyPart.eType.ForeArm:
-                break;
-            case BodyPart.eType.Hand:
-                m_viewedBodyPartUI = Instantiate<GameObject>(m_bodyPartMapPrefabs[0], transform).GetComponent<BodyPartUI>();
-                m_viewedBodyPartUI.Initialise();
-                break;
-            case BodyPart.eType.Count:
-                break;
-            default:
-                break;
-        }
+        m_viewedBodyPartUI = Instantiate(m_bodyMapPrefab, transform).GetComponent<HumanBodyUI>();
+        m_viewedBodyPartUI.Initialise();
         //ApplyZoomAndPan();
 
-        if (m_gameHandlerRef.m_humanBody.m_activeBodyPart.m_lost)
+        if (m_gameHandlerRef.m_humanBody.m_lost)
         {
             // UI Popup: lost notification
             m_lostNotificationRef.SetActive(true);
-
         };
+        m_humanBodyNameText.text = "Subject: " + m_gameHandlerRef.m_humanBody.GetHumansName(); 
     }
 
     public void Start()

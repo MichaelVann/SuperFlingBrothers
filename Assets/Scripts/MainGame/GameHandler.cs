@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 19.10f;
+    public const float _VERSION_NUMBER = 19.13f;
 
     static internal bool DEBUG_MODE = true;
 
@@ -143,7 +143,7 @@ public class GameHandler : MonoBehaviour
 
     private void SetupHumanBody()
     {
-        m_humanBody = new HumanBody();
+        m_humanBody = new HumanBody(this);
     }
 
     void SetupUpgrades()
@@ -259,13 +259,13 @@ public class GameHandler : MonoBehaviour
 
             if (m_lastGameResult == eEndGameType.win)
             {
-                float warfrontBalanceChangeAmount = (float)m_lastAttemptedBattleNode.m_difficulty / (float)m_lastAttemptedBattleNode.m_owningConnection.m_battleMaxDifficulty;
+                float warfrontBalanceChangeAmount = (float)m_lastAttemptedBattleNode.m_difficulty / (float)m_humanBody.m_battleMaxDifficulty;
                 warfrontBalanceChangeAmount *= -warfrontBalanceChange;//Turn to percentage
                 warfrontBalanceChange += warfrontBalanceChangeAmount;
             }
 
             m_lastAttemptedBattleNode.m_owningConnection.ChangeWarfrontBalance(warfrontBalanceChange);
-            m_humanBody.RefreshBodyParts();
+            m_humanBody.Refresh();
         }
     }
 

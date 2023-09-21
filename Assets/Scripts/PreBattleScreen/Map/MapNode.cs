@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class MapNode : MonoBehaviour
 {
-    BodyPartUI m_bodyPartUIRef;
+    HumanBodyUI m_bodyPartUIRef;
     Town m_townRef;
     GameHandler m_gameHandlerRef;
     public bool m_overrun = false;
@@ -26,7 +26,7 @@ public class MapNode : MonoBehaviour
 
     public void Awake()
     {
-        m_bodyPartUIRef = FindObjectOfType<BodyPartUI>();
+        m_bodyPartUIRef = FindObjectOfType<HumanBodyUI>();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_name = gameObject.name;
         m_text.text = m_name;

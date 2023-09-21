@@ -12,7 +12,7 @@ public class MapNodeConnection : MonoBehaviour
     public List<MapNodeConnection> m_adjacentConnections;
     public GameObject[] m_anchorPoints; //These are always drawn to if the connection is activated
     List<GameObject> m_createdLineRenderers;
-    BodyPartUI m_owningBodyPart;
+    HumanBodyUI m_owningBodyPart;
     public Collider2D m_colliderRef;
 
     //Battle Nodes
@@ -38,7 +38,7 @@ public class MapNodeConnection : MonoBehaviour
     public void Awake()
     {
         //m_adjacentConnections = new List<MapNodeConnection>();
-        m_owningBodyPart = FindObjectOfType<BodyPartUI>();
+        m_owningBodyPart = FindObjectOfType<HumanBodyUI>();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_linePositionsHolder = new Vector3[2];
         m_createdLineRenderers = new List<GameObject>();
@@ -49,13 +49,11 @@ public class MapNodeConnection : MonoBehaviour
         }
         //CalculateIfIsFront();
 
-        m_representedTownConnection = m_gameHandlerRef.m_humanBody.m_activeBodyPart.FindConnection(gameObject.name);
+        m_representedTownConnection = m_gameHandlerRef.m_humanBody.FindConnection(gameObject.name);
 
         SetUpLines();
-        if (m_spawningBattles)
-        {
-            SetUpBattleNodes();
-        }
+
+
     }
 
     // Start is called before the first frame update
@@ -67,6 +65,11 @@ public class MapNodeConnection : MonoBehaviour
         //{
         //    SetUpBattleNodes();
         //}
+
+        if (m_spawningBattles)
+        {
+            SetUpBattleNodes();
+        }
     }
 
     void CalculateIfIsFront()
