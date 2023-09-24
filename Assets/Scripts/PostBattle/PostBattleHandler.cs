@@ -52,7 +52,7 @@ public class PostBattleHandler : MonoBehaviour
                 m_gameHandlerRef.m_dnaEarnedLastGame += m_gameHandlerRef.m_lastDnaBonus;
                 m_goldBonusText.text = "" + m_gameHandlerRef.m_lastDnaBonus + "(x" + (1 + bonusMult) + ")";
                 m_gameHandlerRef.m_xpEarnedLastGame += m_gameHandlerRef.m_lastXpBonus;
-                m_gameHandlerRef.m_playerStatHandler.ChangeXP((int)m_gameHandlerRef.m_lastXpBonus);
+                m_gameHandlerRef.m_playerXCell.m_statHandler.ChangeXP((int)m_gameHandlerRef.m_lastXpBonus);
 
                 m_XPBonusText.text = "" + m_gameHandlerRef.m_lastXpBonus + "(x" + (1 + bonusMult) + ")";
 
@@ -70,7 +70,7 @@ public class PostBattleHandler : MonoBehaviour
         m_gameHandlerRef.ChangeCash(m_gameHandlerRef.m_dnaEarnedLastGame);
         m_totalGoldTextRef.SetDesiredValue(m_gameHandlerRef.GetCurrentCash());
         m_xpGainedTextRef.text = "" + m_gameHandlerRef.m_xpEarnedLastGame;
-        m_levelsGainedTextRef.text = "" + (m_gameHandlerRef.m_playerStatHandler.m_level - m_gameHandlerRef.m_playerLevelAtStartOfBattle);
+        m_levelsGainedTextRef.text = "" + (m_gameHandlerRef.m_playerXCell.m_statHandler.m_level - m_gameHandlerRef.m_playerLevelAtStartOfBattle);
         m_equipmentCollectedText.text = "" + m_gameHandlerRef.m_equipmentCollectedLastGame;
     }
 

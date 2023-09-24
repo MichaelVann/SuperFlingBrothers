@@ -422,7 +422,7 @@ public class Enemy : Damageable
         }
         m_dead = true;
         m_battleManagerRef.ChangeScore(m_scoreValue);
-        m_gameHandlerRef.m_playerStatHandler.ChangeXP(m_xpReward);
+        m_gameHandlerRef.m_playerXCell.m_statHandler.ChangeXP(m_xpReward);
         m_gameHandlerRef.m_xpEarnedLastGame += m_xpReward;
         m_battleManagerRef.ChangeXp(m_xpReward);
         m_battleManagerRef.ChangeInvaderStrength(-m_typeTrait.difficulty);

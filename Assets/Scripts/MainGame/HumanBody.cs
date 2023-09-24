@@ -219,7 +219,8 @@ public class HumanBody
 
     public void UpdateMaxAndMindDifficulties()
     {
-        int playerLevel = m_gameHandlerRef.m_playerStatHandler.m_level;
+        //int playerLevel = m_gameHandlerRef.m_xCellTeam.level;
+        int playerLevel = m_gameHandlerRef.m_playerXCell.m_statHandler.m_level;
         m_battleMaxDifficulty = m_startingBattleMaxDifficulty + playerLevel * 2;
         m_battleMinDifficulty = m_startingBattleMinDifficulty + playerLevel;
     }

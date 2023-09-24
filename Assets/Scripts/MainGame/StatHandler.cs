@@ -46,15 +46,10 @@ public class CharacterStatHandler
     public int m_level = 1;
     public int m_allocationPoints = 0;
 
-    public int m_DNA = 0;
     public int m_reSpecCost = 100;
 
     //[SerializeReference]
     public CharacterStat[] m_stats;
-    [SerializeReference]
-    public Equipment[] m_equippedEquipment;
-
-    const float m_equipmentStatEffectMult = 0.1f;
 
     const float m_baseHealthScale = 4f;
 
@@ -66,18 +61,12 @@ public class CharacterStatHandler
         m_level = a_statHandler.m_level;
         m_allocationPoints = a_statHandler.m_allocationPoints;
 
-        m_DNA = a_statHandler.m_DNA;
         m_reSpecCost = a_statHandler.m_reSpecCost;
 
         for (int i = 0; i < a_statHandler.m_stats.Length; i++)
         {
             m_stats[i] = a_statHandler.m_stats[i];
 
-        }
-
-        for (int i = 0; i < a_statHandler.m_equippedEquipment.Length; i++)
-        {
-            m_equippedEquipment[i] = a_statHandler.m_equippedEquipment[i];
         }
 
     }
@@ -149,8 +138,6 @@ public class CharacterStatHandler
         return GetStatName((eCharacterStatIndices)a_index);
     }
 
-    public void ChangeScore(int a_change) { m_DNA += a_change; }
-
     // Start is called before the first frame update
     public void Init()
     {
@@ -159,62 +146,10 @@ public class CharacterStatHandler
         {
             m_stats[i] = new CharacterStat();
         }
-        m_equippedEquipment = new Equipment[4];
         SetDefaultStats();
     }
 
-    public void EquipEquipment(Equipment a_equipment, int a_slotId)
-    {
-        bool unequiping = false;
-        bool equiping = false;
-        if (a_equipment.m_equipped)
-        {
-            if (m_equippedEquipment[a_slotId] == a_equipment)
-            {
-                unequiping = true;
-            }
-            else
-            {
-                if (m_equippedEquipment[a_slotId] != null)
-                {
-                    m_equippedEquipment[a_slotId].m_equipped = false;
-                    m_equippedEquipment[a_slotId].m_equippedSlotId = -1;
-                    m_equippedEquipment[a_slotId] = null;
-                }
-                equiping = true;
-                for (int i = 0; i < m_equippedEquipment.Length; i++)
-                {
-                    if (m_equippedEquipment[i] == a_equipment)
-                    {
-                        m_equippedEquipment[i] = null;
-                    }
-                }
-            }
-
-        }
-        else
-        {
-            equiping = true;
-            if (m_equippedEquipment[a_slotId] != null)
-            {
-                m_equippedEquipment[a_slotId].m_equipped = false;
-            }
-        }
-
-        if (equiping)
-        {
-            a_equipment.m_equipped = true;
-            a_equipment.m_equippedSlotId = a_slotId;
-            m_equippedEquipment[a_slotId] = a_equipment;
-        }
-        else if (unequiping)
-        {
-            a_equipment.m_equipped = false;
-            a_equipment.m_equippedSlotId = -1;
-            m_equippedEquipment[a_slotId] = null;
-        }
-        UpdateStats();
-    }
+    
 
     public void ReSpec()
     {
@@ -237,30 +172,6 @@ public class CharacterStatHandler
         m_stats[a_index] = stat;
     }
 
-    public void UpdateStats()
-    {
-        for (int i = 0; i < m_stats.Length; i++)
-        {
-            m_stats[i].equipmentAddedValue = 0f;
-        }
-
-        for (int i = 0; i < m_equippedEquipment.Length; i++)
-        {
-            if (m_equippedEquipment[i] == null)
-            {
-                continue;
-            }
-            for (int j = 0; j < m_equippedEquipment[i].m_stats.Count; j++)
-            {
-                m_stats[(int)m_equippedEquipment[i].m_stats[j].statType].equipmentAddedValue += m_equippedEquipment[i].m_stats[j].value * m_equipmentStatEffectMult;
-            }
-        }
-
-        for (int i = 0; i < m_stats.Length; i++)
-        {
-            UpdateStat(i);
-        }
-    }
 
     public void SetStatValue(eCharacterStatIndices a_index, float a_value)
     {

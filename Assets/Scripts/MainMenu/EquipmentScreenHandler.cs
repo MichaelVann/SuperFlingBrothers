@@ -81,7 +81,7 @@ public class EquipmentScreenHandler : MonoBehaviour
         }
 
         //Top Panel
-        SetTopPanelEquipmentRef(m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId]);
+        SetTopPanelEquipmentRef(m_gameHandlerRef.m_playerXCell.m_equippedEquipment[m_openedEquipmentSlotId]);
         //m_inventoryEquipmentSlotUIRef.SetEquipmentRef(m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId]);
         //m_inventoryEquipmentSlotUIRef.Refresh();
         //if (m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId] != null)
@@ -127,14 +127,14 @@ public class EquipmentScreenHandler : MonoBehaviour
     {
         for (int i = 0; i < m_equipmentSlotUIRefs.Length; i++)
         {
-            m_equipmentSlotUIRefs[i].SetEquipmentRef(m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[i]);
+            m_equipmentSlotUIRefs[i].SetEquipmentRef(m_gameHandlerRef.m_playerXCell.m_equippedEquipment[i]);
             m_equipmentSlotUIRefs[i].Refresh();
         }
     }
 
     public void SetEquipStatus(Equipment a_equipment)
     {
-        m_gameHandlerRef.m_playerStatHandler.EquipEquipment(a_equipment, m_openedEquipmentSlotId);
+        m_gameHandlerRef.m_playerXCell.EquipEquipment(a_equipment, m_openedEquipmentSlotId);
         //CloseInventoryPanel();
         RefreshInventory();
         RefreshEquipmentSlots();

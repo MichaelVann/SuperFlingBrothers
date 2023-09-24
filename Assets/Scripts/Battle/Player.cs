@@ -58,7 +58,7 @@ public class Player : Damageable
         base.Start();
         m_healthBarRef.SetMaxProgressValue(m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue);
         m_battleManagerRef = FindObjectOfType<BattleManager>();
-        m_statHandler = m_gameHandlerRef.m_playerStatHandler;
+        m_statHandler = m_gameHandlerRef.m_playerXCell.m_statHandler;
         UpdateLocalStatsFromStatHandler();
         m_damageTextColor = Color.red;
         SetupEquipmentShield();

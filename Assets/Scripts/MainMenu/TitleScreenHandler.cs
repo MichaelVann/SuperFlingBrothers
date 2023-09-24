@@ -22,16 +22,16 @@ public class TitleScreenHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        m_statAllocationNotifierRef.SetActive(m_gameHandlerRef.m_playerStatHandler.m_allocationPoints > 0);
+        m_statAllocationNotifierRef.SetActive(m_gameHandlerRef.m_playerXCell.m_statHandler.m_allocationPoints > 0);
         if (m_statAllocationNotifierRef.activeSelf)
         {
-            if (m_gameHandlerRef.m_playerStatHandler.m_allocationPoints > 9)
+            if (m_gameHandlerRef.m_playerXCell.m_statHandler.m_allocationPoints > 9)
             {
                 m_statAllocationNotifierTextRef.text = "9+";
             }
             else
             {
-                m_statAllocationNotifierTextRef.text = "" + m_gameHandlerRef.m_playerStatHandler.m_allocationPoints;
+                m_statAllocationNotifierTextRef.text = "" + m_gameHandlerRef.m_playerXCell.m_statHandler.m_allocationPoints;
             }
         }
         m_equipmentNotifierRef.SetActive(m_gameHandlerRef.m_equipmentCollectedLastGame > 0);

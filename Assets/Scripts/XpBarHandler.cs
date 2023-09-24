@@ -23,9 +23,9 @@ public class XpBarHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        m_XPBarMaskTransform.sizeDelta = new Vector2(m_xpBarLength * ((float)m_gameHandlerRef.m_playerStatHandler.m_XP / (float)m_gameHandlerRef.m_playerStatHandler.m_maxXP), m_xpBarHeight);
+        m_XPBarMaskTransform.sizeDelta = new Vector2(m_xpBarLength * ((float)m_gameHandlerRef.m_playerXCell.m_statHandler.m_XP / (float)m_gameHandlerRef.m_playerXCell.m_statHandler.m_maxXP), m_xpBarHeight);
 
-        m_XPBarValueText.text = "" + m_gameHandlerRef.m_playerStatHandler.m_XP + " / " + m_gameHandlerRef.m_playerStatHandler.m_maxXP;
-        m_levelText.text = "Level " + m_gameHandlerRef.m_playerStatHandler.m_level;
+        m_XPBarValueText.text = "" + m_gameHandlerRef.m_playerXCell.m_statHandler.m_XP + " / " + m_gameHandlerRef.m_playerXCell.m_statHandler.m_maxXP;
+        m_levelText.text = "Level " + m_gameHandlerRef.m_playerXCell.m_statHandler.m_level;
     }
 }
