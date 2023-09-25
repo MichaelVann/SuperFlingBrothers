@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class AbilityButton : MonoBehaviour
 {
     EquipmentAbility m_abilityRef;
-    Button m_buttonRef;
+    public Button m_buttonRef;
     public Text m_abilityNameText;
     public TextMeshProUGUI m_affixText;
     public void SetAbilityRef(EquipmentAbility a_ability) { m_abilityRef = a_ability; } 
@@ -15,7 +15,10 @@ public class AbilityButton : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_buttonRef = GetComponent<Button>();
+
+        //m_buttonRef = GetComponent<Button>();
+        Debug.Log("GetComponentAB");
+        Debug.Log(m_buttonRef);
     }
 
     // Update is called once per frame
@@ -28,7 +31,9 @@ public class AbilityButton : MonoBehaviour
     {
         if (m_abilityRef != null)
         {
-            m_buttonRef.interactable = m_abilityRef.m_ammo > 0;
+            bool interactable = m_abilityRef.m_ammo > 0;
+            Debug.Log("AbilityButtonOUTPUT:" + m_buttonRef);
+            m_buttonRef.interactable = interactable;
             if (m_abilityRef.m_reactive)
             {
                 Color buttonColor = Color.grey;
@@ -38,7 +43,7 @@ public class AbilityButton : MonoBehaviour
                 }
                 GetComponent<Image>().color = buttonColor;
             }
-            m_abilityNameText.text = m_abilityRef.GetName() + $" ({m_abilityRef.m_ammo})";
+            m_abilityNameText.text = m_abilityRef.GetName() + "(" + m_abilityRef.m_ammo + ")";// $" ({m_abilityRef.m_ammo})";
             m_affixText.text = m_abilityRef.GetAffixNames();
         }
         else
