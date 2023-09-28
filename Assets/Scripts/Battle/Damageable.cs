@@ -334,10 +334,8 @@ public class Damageable : BaseObject
             UpdateRotationToFollowVelocity();
         }
 
-        if (!m_rigidBody.freezeRotation)
-        {
-            m_healthBarRef.transform.localEulerAngles = -transform.localEulerAngles;
-        }
+        m_healthBarRef.transform.localEulerAngles = -transform.localEulerAngles;
+
     }
 
     protected void TakePocketDamage()

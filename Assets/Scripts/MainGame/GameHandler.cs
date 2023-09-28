@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 20.0f;
+    public const float _VERSION_NUMBER = 20.2f;
 
     static internal bool DEBUG_MODE = true;
 
@@ -90,7 +90,6 @@ public class GameHandler : MonoBehaviour
     {
         enemyVector,
         playerVector,
-        extraTurn,
         Count
     }
 
@@ -166,18 +165,6 @@ public class GameHandler : MonoBehaviour
         m_upgrades[(int)UpgradeId.playerVector].SetName("Player Vector");
         m_upgrades[(int)UpgradeId.playerVector].SetDescription("Shows the direction of player movement.");
         m_upgrades[(int)UpgradeId.playerVector].SetCost(20);
-
-        //m_upgrades[(int)UpgradeId.shield] = new UpgradeItem();
-        //m_upgrades[(int)UpgradeId.shield].SetName("Shield");
-        //m_upgrades[(int)UpgradeId.shield].SetDescription("Enables a shield that protects the user from a limited amount of damage.");
-        //m_upgrades[(int)UpgradeId.shield].SetCost(100);
-        //m_upgrades[(int)UpgradeId.shield].SetHasLevels(true);
-
-        m_upgrades[(int)UpgradeId.extraTurn] = new UpgradeItem();
-        m_upgrades[(int)UpgradeId.extraTurn].SetName("Extra Turn");
-        m_upgrades[(int)UpgradeId.extraTurn].SetDescription("Gives an extra turn that triggers on collision with the enemy.");
-        m_upgrades[(int)UpgradeId.extraTurn].SetCost(700);
-        m_upgrades[(int)UpgradeId.extraTurn].SetHasLevels(true);
     }
 
     void SetupEquipment()

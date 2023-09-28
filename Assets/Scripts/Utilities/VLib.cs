@@ -148,6 +148,17 @@ public static class VLib
         return UnityEngine.Random.Range(a_inclusiveMin, a_inclusiveMax);
     }
 
+    public static Color Randomise(this Color a_color)
+    {
+        Color newColor = new Color();
+        newColor.r = VLib.vRandom(0f, 1f);
+        newColor.g = VLib.vRandom(0f, 1f);
+        newColor.b = VLib.vRandom(0f, 1f);
+        newColor.a = 1f;
+
+        return newColor;
+    }
+
     public static Color PercentageToColor(float a_percentage)
     {
         Color returnColor = Color.white;

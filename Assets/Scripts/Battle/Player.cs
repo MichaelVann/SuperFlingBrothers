@@ -50,12 +50,12 @@ public class Player : Damageable
         m_cameraRef = FindObjectOfType<Camera>();
         //m_rotateToAlignToVelocity = true;
         //m_rigidBody.freezeRotation = false;
-
     }
 
     public override void Start()
     {
         base.Start();
+        m_originalColor = m_gameHandlerRef.m_playerXCell.m_colorShade;
         m_healthBarRef.SetMaxProgressValue(m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue);
         m_battleManagerRef = FindObjectOfType<BattleManager>();
         m_statHandler = m_gameHandlerRef.m_playerXCell.m_statHandler;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,8 +15,15 @@ public class EquipmentScreenHandler : MonoBehaviour
     public int m_openedEquipmentSlotId = -1;
     public GameObject m_equipmentDigestRef;
 
-    public GameObject m_inventoryPanelRef;
+    public GameObject m_statAllocationNotifierRef;
+    public Text m_statAllocationNotifierTextRef;
 
+    //Character
+    public GameObject m_playerStatueRef;
+    public TextMeshProUGUI m_xCellNameText;
+
+    //Inventory
+    public GameObject m_inventoryPanelRef;
     public GameObject m_inventoryContentRef;
     public GameObject m_equipmentPanelTemplate;
     public GameObject m_equipmentOverview;
@@ -34,12 +42,25 @@ public class EquipmentScreenHandler : MonoBehaviour
         RefreshEquipmentSlots();
         InstantiateEquipmentInventory();
         m_inited = true;
+        m_xCellNameText.text = "ID: " + m_gameHandlerRef.m_playerXCell.m_name.ToUpper();
+        m_playerStatueRef.GetComponent<Image>().color = m_gameHandlerRef.m_playerXCell.m_colorShade;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        m_statAllocationNotifierRef.SetActive(m_gameHandlerRef.m_playerXCell.m_statHandler.m_allocationPoints > 0);
+        if (m_statAllocationNotifierRef.activeSelf)
+        {
+            if (m_gameHandlerRef.m_playerXCell.m_statHandler.m_allocationPoints > 99)
+            {
+                m_statAllocationNotifierTextRef.text = "99+";
+            }
+            else
+            {
+                m_statAllocationNotifierTextRef.text = "" + m_gameHandlerRef.m_playerXCell.m_statHandler.m_allocationPoints;
+            }
+        }
     }
 
     private void OnEnable()
@@ -71,6 +92,7 @@ public class EquipmentScreenHandler : MonoBehaviour
 
     public void RefreshInventory()
     {
+        SetTopPanelEquipmentRef(m_gameHandlerRef.m_playerXCell.m_equippedEquipment[m_openedEquipmentSlotId]);
         m_gameHandlerRef.SortEquipmentInventory();
         InstantiateEquipmentInventory();
         m_gameHandlerRef.m_equipmentCollectedLastGame = 0;
@@ -81,7 +103,6 @@ public class EquipmentScreenHandler : MonoBehaviour
         }
 
         //Top Panel
-        SetTopPanelEquipmentRef(m_gameHandlerRef.m_playerXCell.m_equippedEquipment[m_openedEquipmentSlotId]);
         //m_inventoryEquipmentSlotUIRef.SetEquipmentRef(m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId]);
         //m_inventoryEquipmentSlotUIRef.Refresh();
         //if (m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId] != null)
@@ -99,6 +120,7 @@ public class EquipmentScreenHandler : MonoBehaviour
         {
             m_equipmentAbilityNameText.text = a_equipment.m_activeAbility.GetName();
             m_equipmentAbilityReadoutText.text = a_equipment.m_activeAbility.GetAbilityDescription();
+            a_equipment.m_newToPlayer = false;
         }
         else
         {

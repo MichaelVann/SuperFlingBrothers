@@ -39,6 +39,8 @@ public class Equipment
     [SerializeField]
     public int m_goldValue = 0;
 
+    internal bool m_newToPlayer = true;
+
     [Serializable]
     public struct EquipmentStat
     {

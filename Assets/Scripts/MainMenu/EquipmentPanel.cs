@@ -9,8 +9,7 @@ public class EquipmentPanel : MonoBehaviour
     GameHandler m_gameHandlerRef;
     EquipmentScreenHandler m_equipmentScreenHandlerRef;
     public Equipment m_equipmentRef;
-    //public int m_upgradeID;
-    //
+
     public Text m_nameTextRef;
     public Text m_rarityTextRef;
     public Text[] m_statNameTextRefs;
@@ -19,6 +18,8 @@ public class EquipmentPanel : MonoBehaviour
     public Text m_abilityTextRef;
     public Text m_goldValueTextRef;
     public Image m_outline;
+
+    public GameObject m_newEquipmentNotifierRef;
 
     //public Text m_costTextRef;
     //public GameObject m_levelDisplayRef;
@@ -89,6 +90,7 @@ public class EquipmentPanel : MonoBehaviour
 
         SetEquipButtonStatus();
         m_equipmentPortrait.SetEquipmentRef(m_equipmentRef);
+        m_newEquipmentNotifierRef.SetActive(m_equipmentRef.m_newToPlayer);
     }
 
     //    // Update is called once per frame
@@ -126,6 +128,7 @@ public class EquipmentPanel : MonoBehaviour
     internal void SetSelected(bool a_selected)
     {
         m_outline.color = a_selected ? Color.yellow : Color.black;
+        Refresh();
     }
 
     public void AttemptToEquip()

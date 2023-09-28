@@ -7,16 +7,16 @@ using UnityEngine.UI;
 public class AbilityButton : MonoBehaviour
 {
     EquipmentAbility m_abilityRef;
-    public Button m_buttonRef;
+    Button m_buttonRef;
     public Text m_abilityNameText;
     public TextMeshProUGUI m_affixText;
     public void SetAbilityRef(EquipmentAbility a_ability) { m_abilityRef = a_ability; } 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-
-        //m_buttonRef = GetComponent<Button>();
+        //m_buttonRef = null;
+        m_buttonRef = GetComponent<Button>();
         Debug.Log("GetComponentAB");
         Debug.Log(m_buttonRef);
     }

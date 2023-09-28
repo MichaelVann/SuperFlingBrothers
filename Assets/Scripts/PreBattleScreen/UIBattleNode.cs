@@ -49,6 +49,11 @@ public class UIBattleNode : MonoBehaviour
 
     void OnMouseUpAsButton()
     {
+        //Select();
+    }
+
+    public void NodePressed()
+    {
         Select();
     }
 

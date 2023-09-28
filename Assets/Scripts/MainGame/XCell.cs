@@ -9,13 +9,16 @@ public class XCell
     [SerializeReference]
     public Equipment[] m_equippedEquipment;
     const float m_equipmentStatEffectMult = 0.1f;
-
+    public Color m_colorShade;
 
     public XCell()
     {
         m_name = VLib.GenerateRandomizedName(3,3);
+        m_name += VLib.vRandom(100, 999);
         m_statHandler = new CharacterStatHandler();
         m_statHandler.Init();
+        m_colorShade = new Color();
+        m_colorShade = m_colorShade.Randomise();
         Init();
     }
 
