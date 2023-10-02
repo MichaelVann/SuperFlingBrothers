@@ -5,11 +5,14 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static GameHandler;
+using static UnityEngine.UI.CanvasScaler;
+
 [Serializable]
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 20.2f;
+    public const float _VERSION_NUMBER = 20.3f;
 
     static internal bool DEBUG_MODE = true;
 
@@ -42,27 +45,13 @@ public class GameHandler : MonoBehaviour
         ModeCount
     }
 
-    internal void AttemptToRespec()
-    {
-        if (m_playerXCell.m_statHandler.m_reSpecCost <= m_cash)
-        {
-            m_cash -= m_playerXCell.m_statHandler.m_reSpecCost;
-            m_playerXCell.m_statHandler.ReSpec();
-        }
-    }
-
     public eGameMode m_currentGameMode;
 
     private float m_cash = 0;
     
     //Player
-    internal struct XCellTeam
-    {
-        internal string name;
-        internal int level;
-    }
+
     internal XCellTeam m_xCellTeam;
-    internal XCell m_playerXCell;
     bool m_playerWasKilledLastBattle = false;
 
     //Body
@@ -78,7 +67,7 @@ public class GameHandler : MonoBehaviour
     public eEndGameType m_lastGameResult = eEndGameType.lose;
     public float m_xpEarnedLastGame = 0f;
     public int m_invaderStrengthChangeLastGame = 0;
-    public int m_playerLevelAtStartOfBattle = 0;
+    public int m_teamLevelAtStartOfBattle = 0;
     public float m_dnaEarnedLastGame = 0f;
     public int m_equipmentCollectedLastGame = 0;
     public int m_lastXpBonus = 0;
@@ -111,6 +100,15 @@ public class GameHandler : MonoBehaviour
     SaveData m_saveData;
     bool m_autoLoadDataOnLaunch = false;
 
+    internal void AttemptToRespec()
+    {
+        if (m_xCellTeam.m_statHandler.m_reSpecCost <= m_cash)
+        {
+            m_cash -= m_xCellTeam.m_statHandler.m_reSpecCost;
+            m_xCellTeam.m_statHandler.ReSpec();
+        }
+    }
+
     public void SetLastGameResult(eEndGameType a_value) { m_lastGameResult = a_value; }
 
     public void SetGameMode(eGameMode a_gameMode) { m_currentGameMode = a_gameMode; }
@@ -129,7 +127,7 @@ public class GameHandler : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
 
-        m_playerXCell = new XCell();
+        m_xCellTeam = new XCellTeam();
 
         //Stocks
         m_stockHandler = new StockHandler(this);
@@ -241,18 +239,18 @@ public class GameHandler : MonoBehaviour
   
     void KillPlayer()
     {
-        for (int i = 0; i < m_playerXCell.m_equippedEquipment.Length; i++)
+        for (int i = 0; i < m_xCellTeam.m_playerXCell.m_equippedEquipment.Length; i++)
         {
             for (int j = 0; j < m_equipmentInventory.Count; j++)
             {
-                if (m_playerXCell.m_equippedEquipment[i] == m_equipmentInventory[j])
+                if (m_xCellTeam.m_playerXCell.m_equippedEquipment[i] == m_equipmentInventory[j])
                 {
                     m_equipmentInventory.RemoveAt((int)j);
                     j--;
                 }
             }
         }
-        m_playerXCell = new XCell();
+        m_xCellTeam.m_playerXCell = new XCell();
     }
 
     public void CalculateFinishedGame()
@@ -281,8 +279,8 @@ public class GameHandler : MonoBehaviour
             }
 
             m_lastAttemptedBattleNode.m_owningConnection.ChangeWarfrontBalance(warfrontBalanceChange);
-            m_humanBody.Refresh();
             m_humanBody.m_battlesCompleted++;
+            m_humanBody.Refresh();
         }
     }
 
@@ -290,7 +288,7 @@ public class GameHandler : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.K))
         {
-            m_playerXCell.m_statHandler.ChangeXP(1);
+            m_xCellTeam.m_statHandler.m_RPGLevel.ChangeXP(1);
         }
         if (Input.GetKey(KeyCode.J))
         {
@@ -306,12 +304,12 @@ public class GameHandler : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.O))
         {
-            m_playerXCell.m_statHandler = new CharacterStatHandler();
-            m_playerXCell.m_statHandler.Init();
+            m_xCellTeam.m_playerXCell.m_statHandler = new CharacterStatHandler();
+            m_xCellTeam.m_playerXCell.m_statHandler.Init();
         }
         if (Input.GetKeyUp(KeyCode.H))
         {
-            PickUpEquipment(new Equipment(m_playerXCell.m_statHandler.m_level));
+            PickUpEquipment(new Equipment(m_xCellTeam.m_playerXCell.m_statHandler.m_RPGLevel.m_level));
         }
         m_stockHandler.Update();
         //BATTLE_ShadowAngle = Mathf.Sin(Time.unscaledTime)*360f;
@@ -346,7 +344,7 @@ public class GameHandler : MonoBehaviour
         //test[0].x = 5;
 
         m_saveData.cash = m_cash;
-        m_saveData.xCell = m_playerXCell;
+        m_saveData.xCell = m_xCellTeam.m_playerXCell;
         //m_saveData.statHandler.Copy(m_playerStatHandler);
         m_saveData.stockList = m_stockHandler.m_stockList;
         m_saveData.upgrades = m_upgrades;
@@ -364,7 +362,7 @@ public class GameHandler : MonoBehaviour
         string loadedString = File.ReadAllText(path);
         m_saveData = JsonUtility.FromJson<SaveData>(loadedString);
         m_cash = m_saveData.cash;
-        m_playerXCell = m_saveData.xCell;
+        m_xCellTeam.m_playerXCell = m_saveData.xCell;
         //m_playerStatHandler = m_saveData.statHandler;
         for (int i = 0; i < m_stockHandler.m_stockList.Count; i++)
         {
@@ -378,9 +376,9 @@ public class GameHandler : MonoBehaviour
             m_upgrades[i].Copy(m_saveData.upgrades[i]);
         }
 
-        for (int i = 0; i < m_playerXCell.m_equippedEquipment.Length; i++)
+        for (int i = 0; i < m_xCellTeam.m_playerXCell.m_equippedEquipment.Length; i++)
         {
-            m_playerXCell.m_equippedEquipment[i] = null;
+            m_xCellTeam.m_playerXCell.m_equippedEquipment[i] = null;
         }
 
         m_equipmentInventory = new List<Equipment>();
@@ -390,7 +388,7 @@ public class GameHandler : MonoBehaviour
             m_equipmentInventory.Add(m_saveData.equipmentList[i]);
             if (m_equipmentInventory[i].m_equipped)
             {
-                m_playerXCell.m_equippedEquipment[m_equipmentInventory[i].m_equippedSlotId] = m_equipmentInventory[i];
+                m_xCellTeam.m_playerXCell.m_equippedEquipment[m_equipmentInventory[i].m_equippedSlotId] = m_equipmentInventory[i];
             }
         }
     }

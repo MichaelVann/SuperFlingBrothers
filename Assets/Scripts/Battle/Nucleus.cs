@@ -17,7 +17,7 @@ public class Nucleus : Damageable
     {
         base.Start();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue = 1000f;
+        m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue = 1000f;
         UpdateLocalStatsFromStatHandler();
         if (m_healthBarRef) { m_healthBarRef.SetProgressValue(m_health); }
     }
@@ -35,7 +35,7 @@ public class Nucleus : Damageable
         {
             if (oppPlayer.m_lastMomentumMagnitude >= m_lastMomentumMagnitude)
             {
-                Heal(oppPlayer.m_statHandler.m_stats[(int)eCharacterStatIndices.strength].finalValue * oppPlayer.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
+                Heal(oppPlayer.m_statHandler.m_stats[(int)eCharacterStatIndices.strength].m_finalValue * oppPlayer.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
             }
         }
         else

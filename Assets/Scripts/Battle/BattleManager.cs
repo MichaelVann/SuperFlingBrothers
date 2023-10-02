@@ -342,10 +342,10 @@ public class BattleManager : MonoBehaviour
             m_turnsRemaining = 0;
         }
 
-        m_healthBarRef.Init(m_gameHandlerRef.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue, m_gameHandlerRef.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue);
+        m_healthBarRef.Init(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue, m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue);
 
         //Reset Trackers
-        m_gameHandlerRef.m_playerLevelAtStartOfBattle = m_gameHandlerRef.m_playerXCell.m_statHandler.m_level;
+        m_gameHandlerRef.m_teamLevelAtStartOfBattle = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_RPGLevel.m_level;
         m_gameHandlerRef.m_xpEarnedLastGame = 0;
 
         InitialiseAbilities();
@@ -377,9 +377,9 @@ public class BattleManager : MonoBehaviour
     void InitialiseAbilities()
     {
         m_activeAbilities = new EquipmentAbility[4];
-        for (int i = 0; i < m_gameHandlerRef.m_playerXCell.m_equippedEquipment.Length; i++)
+        for (int i = 0; i < m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment.Length; i++)
         {
-            m_activeAbilities[i] = m_gameHandlerRef.m_playerXCell.m_equippedEquipment[i] != null ? new EquipmentAbility(m_gameHandlerRef.m_playerXCell.m_equippedEquipment[i].m_activeAbility) : null;
+            m_activeAbilities[i] = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i] != null ? new EquipmentAbility(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i].m_activeAbility) : null;
         }
 
         RefreshAbilityButtons();

@@ -42,23 +42,24 @@ public class EquipmentScreenHandler : MonoBehaviour
         RefreshEquipmentSlots();
         InstantiateEquipmentInventory();
         m_inited = true;
-        m_xCellNameText.text = "ID: " + m_gameHandlerRef.m_playerXCell.m_name.ToUpper();
-        m_playerStatueRef.GetComponent<Image>().color = m_gameHandlerRef.m_playerXCell.m_colorShade;
+        m_xCellNameText.text = "ID: " + m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_name.ToUpper();
+        m_playerStatueRef.GetComponent<Image>().color = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_colorShade;
     }
 
     // Update is called once per frame
     void Update()
     {
-        m_statAllocationNotifierRef.SetActive(m_gameHandlerRef.m_playerXCell.m_statHandler.m_allocationPoints > 0);
+        int allocationPoints = m_gameHandlerRef.m_xCellTeam.m_statHandler.m_RPGLevel.m_allocationPoints;
+        m_statAllocationNotifierRef.SetActive(allocationPoints > 0);
         if (m_statAllocationNotifierRef.activeSelf)
         {
-            if (m_gameHandlerRef.m_playerXCell.m_statHandler.m_allocationPoints > 99)
+            if (allocationPoints > 99)
             {
                 m_statAllocationNotifierTextRef.text = "99+";
             }
             else
             {
-                m_statAllocationNotifierTextRef.text = "" + m_gameHandlerRef.m_playerXCell.m_statHandler.m_allocationPoints;
+                m_statAllocationNotifierTextRef.text = "" + allocationPoints;
             }
         }
     }
@@ -92,7 +93,7 @@ public class EquipmentScreenHandler : MonoBehaviour
 
     public void RefreshInventory()
     {
-        SetTopPanelEquipmentRef(m_gameHandlerRef.m_playerXCell.m_equippedEquipment[m_openedEquipmentSlotId]);
+        SetTopPanelEquipmentRef(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[m_openedEquipmentSlotId]);
         m_gameHandlerRef.SortEquipmentInventory();
         InstantiateEquipmentInventory();
         m_gameHandlerRef.m_equipmentCollectedLastGame = 0;
@@ -149,14 +150,14 @@ public class EquipmentScreenHandler : MonoBehaviour
     {
         for (int i = 0; i < m_equipmentSlotUIRefs.Length; i++)
         {
-            m_equipmentSlotUIRefs[i].SetEquipmentRef(m_gameHandlerRef.m_playerXCell.m_equippedEquipment[i]);
+            m_equipmentSlotUIRefs[i].SetEquipmentRef(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i]);
             m_equipmentSlotUIRefs[i].Refresh();
         }
     }
 
     public void SetEquipStatus(Equipment a_equipment)
     {
-        m_gameHandlerRef.m_playerXCell.EquipEquipment(a_equipment, m_openedEquipmentSlotId);
+        m_gameHandlerRef.m_xCellTeam.m_playerXCell.EquipEquipment(a_equipment, m_openedEquipmentSlotId);
         //CloseInventoryPanel();
         RefreshInventory();
         RefreshEquipmentSlots();

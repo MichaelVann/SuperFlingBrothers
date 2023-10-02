@@ -55,10 +55,10 @@ public class Player : Damageable
     public override void Start()
     {
         base.Start();
-        m_originalColor = m_gameHandlerRef.m_playerXCell.m_colorShade;
-        m_healthBarRef.SetMaxProgressValue(m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue);
+        m_originalColor = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_colorShade;
+        m_statHandler = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler;
+        m_healthBarRef.SetMaxProgressValue(m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue);
         m_battleManagerRef = FindObjectOfType<BattleManager>();
-        m_statHandler = m_gameHandlerRef.m_playerXCell.m_statHandler;
         UpdateLocalStatsFromStatHandler();
         m_damageTextColor = Color.red;
         SetupEquipmentShield();
@@ -205,7 +205,7 @@ public class Player : Damageable
             {
                 if (worldMousePoint.y < m_upperLowerFlingPositionBounds && worldMousePoint.y > -m_upperLowerFlingPositionBounds)
                 {
-                    Fling(deltaMousePos, m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].finalValue);
+                    Fling(deltaMousePos, m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].m_finalValue);
                 }
                 else
                 {
@@ -233,7 +233,7 @@ public class Player : Damageable
 
         if (enemy)//If collided with an enemy
         {
-            if (m_health <= m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue / 3f)//
+            if (m_health <= m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue / 3f)//
             {
                 if (!m_battleManagerRef.m_endingGame)
                 {
@@ -374,14 +374,16 @@ public class Player : Damageable
             }
             m_shield.delayTimer = 0f;
         }
-        float armourProtectionAmount = m_statHandler.m_stats[(int)eCharacterStatIndices.protection].finalValue * 0.1f;
+        float armourProtectionAmount = m_statHandler.m_stats[(int)eCharacterStatIndices.protection].m_finalValue * 0.1f;
         float blockedAmount = armourProtectionAmount > damage ? damage : armourProtectionAmount;
         if (blockedAmount > 0f)
         {
             SpawnBlockText(blockedAmount);
         }
+        m_statHandler.m_stats[(int)eCharacterStatIndices.protection].ChangeXP((int)blockedAmount);
         damage -= blockedAmount;
         damage = Mathf.Clamp(damage, 0f, float.MaxValue);
+        m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].ChangeXP((int)damage);
         base.Damage(damage);
         m_battleManagerRef.m_healthBarRef.SetBarValue(m_health);
     }
@@ -431,5 +433,10 @@ public class Player : Damageable
         {
              Damage(100f);
         }
+    }
+
+    internal void ReportDamageDealt(float m_lastDamageTaken)
+    {
+        m_statHandler.m_stats[(int)eCharacterStatIndices.strength].ChangeXP((int)m_lastDamageTaken);
     }
 }

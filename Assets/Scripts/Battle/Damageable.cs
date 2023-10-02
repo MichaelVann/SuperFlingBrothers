@@ -35,6 +35,8 @@ public class Damageable : BaseObject
 
     public GameObject m_puffOfSmokeTemplate;
 
+    protected float m_lastDamageTaken = 0f;
+
     public struct Shield
     {
         internal bool enabled;
@@ -111,7 +113,7 @@ public class Damageable : BaseObject
 
     protected void UpdateLocalStatsFromStatHandler()
     {
-        m_health = m_maxHealth = m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue;
+        m_health = m_maxHealth = m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue;
         UpdateHealthColor();
         m_healthBarRef.SetMaxProgressValue(m_maxHealth);
     }
@@ -291,10 +293,12 @@ public class Damageable : BaseObject
             {
                 //Damage(oppDamageable.m_statHandler.m_stats[(int)eCharacterStatIndices.strength].finalValue * oppDamageable.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
 
-                float oppStrength = oppDamageable.m_statHandler.m_stats[(int)eCharacterStatIndices.strength].finalValue;
+                float oppStrength = oppDamageable.m_statHandler.m_stats[(int)eCharacterStatIndices.strength].m_finalValue;
                 float oppSpeed = 1f / m_damagePerSpeedDivider;
+                float damage = oppStrength * oppSpeed * oppContactStrength;
                 Damage(oppStrength * oppSpeed * oppContactStrength);
                 tookDamage = true;
+                m_lastDamageTaken = damage;
             }
         }
         return tookDamage;

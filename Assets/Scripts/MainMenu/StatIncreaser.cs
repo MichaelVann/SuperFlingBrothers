@@ -24,19 +24,19 @@ public class StatIncreaser : MonoBehaviour
 
     public void AttemptIncrease()
     {
-        m_gameHandlerRef.m_playerXCell.m_statHandler.AttemptToIncreaseStat(m_statIndex);
+        m_gameHandlerRef.m_xCellTeam.AttemptToIncreaseStat(m_statIndex);
     }
 
     // Update is called once per frame
     void Update()
     {
-        m_increaseButtonRef.interactable = m_gameHandlerRef.m_playerXCell.m_statHandler.m_allocationPoints > 0 ? true : false;
+        m_increaseButtonRef.interactable = m_gameHandlerRef.m_xCellTeam.m_statHandler.m_RPGLevel.m_allocationPoints > 0 ? true : false;
 
-        CharacterStat m_referencedStat = m_gameHandlerRef.m_playerXCell.m_statHandler.m_stats[(int)m_statIndex];
+        CharacterStat m_referencedStat = m_gameHandlerRef.m_xCellTeam.m_statHandler.m_stats[(int)m_statIndex];
 
-        m_statCounterRef.m_text.text = "" + m_referencedStat.value;
+        m_statCounterRef.m_text.text = "" + m_referencedStat.m_value;
 
-        m_effectDescriptionTextRef.text = "+" + m_referencedStat.effectiveValue;
+        m_effectDescriptionTextRef.text = "+" + m_referencedStat.m_effectiveValue;
 
         string suffixString = "";
         switch (m_statIndex)
@@ -61,7 +61,7 @@ public class StatIncreaser : MonoBehaviour
 
         m_effectSuffixTextRef.text = suffixString;
 
-        m_totalTextRef.text = "Total: " + m_referencedStat.finalValue;
+        m_totalTextRef.text = "Total: " + m_referencedStat.m_finalValue;
     }
 
 

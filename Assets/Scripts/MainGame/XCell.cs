@@ -85,7 +85,7 @@ public class XCell
     {
         for (int i = 0; i < m_statHandler.m_stats.Length; i++)
         {
-            m_statHandler.m_stats[i].equipmentAddedValue = 0f;
+            m_statHandler.m_stats[i].m_equipmentAddedValue = 0f;
         }
 
         for (int i = 0; i < m_equippedEquipment.Length; i++)
@@ -96,7 +96,7 @@ public class XCell
             }
             for (int j = 0; j < m_equippedEquipment[i].m_stats.Count; j++)
             {
-                m_statHandler.m_stats[(int)m_equippedEquipment[i].m_stats[j].statType].equipmentAddedValue += m_equippedEquipment[i].m_stats[j].value * m_equipmentStatEffectMult;
+                m_statHandler.m_stats[(int)m_equippedEquipment[i].m_stats[j].statType].m_equipmentAddedValue += m_equippedEquipment[i].m_stats[j].value * m_equipmentStatEffectMult;
             }
         }
 

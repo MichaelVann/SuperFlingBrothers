@@ -104,7 +104,7 @@ public class Enemy : Damageable
         {
             case eEnemyType.Idler:
                 m_originalColor = Color.white;
-                m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].finalValue /= 2f;
+                m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue /= 2f;
                 transform.localScale *= 1f;
                 m_rigidBody.mass *= 0.75f;
                 m_rigidBody.drag = 1f;
@@ -300,7 +300,7 @@ public class Enemy : Damageable
             if (oppEnemy.m_typeTrait.healer)
             {
                 runningBaseCollision = false;
-                Heal(oppEnemy.m_statHandler.m_stats[(int)eCharacterStatIndices.strength].finalValue * oppEnemy.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
+                Heal(oppEnemy.m_statHandler.m_stats[(int)eCharacterStatIndices.strength].m_finalValue * oppEnemy.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
             }
             runningBaseCollision = false;// !m_typeTrait.healer;
         }
@@ -312,6 +312,7 @@ public class Enemy : Damageable
             {
                 m_playerVulnerableTimer.Reset();
                 m_playerVulnerable = true;
+                oppPlayer.ReportDamageDealt(m_lastDamageTaken);
             }
         }
 
@@ -422,7 +423,7 @@ public class Enemy : Damageable
         }
         m_dead = true;
         m_battleManagerRef.ChangeScore(m_scoreValue);
-        m_gameHandlerRef.m_playerXCell.m_statHandler.ChangeXP(m_xpReward);
+        m_gameHandlerRef.m_xCellTeam.m_statHandler.m_RPGLevel.ChangeXP(m_xpReward);
         m_gameHandlerRef.m_xpEarnedLastGame += m_xpReward;
         m_battleManagerRef.ChangeXp(m_xpReward);
         m_battleManagerRef.ChangeInvaderStrength(-m_typeTrait.difficulty);
@@ -457,7 +458,7 @@ public class Enemy : Damageable
 
     public void Fling()
     {
-        float flingStrength = m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].finalValue;
+        float flingStrength = m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].m_finalValue;
 
         if (m_typeTrait.inertiaDasher)
         {

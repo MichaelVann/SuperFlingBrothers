@@ -13,38 +13,97 @@ public enum eCharacterStatIndices
     count
 }
 
+public class RPGLevel
+{
+    public int m_XP = 0;
+    public int m_maxXP = 83;
+    public int m_level = 1;
+    public int m_allocationPoints = 0;
+
+    public void ChangeXP(int a_xpReward)
+    {
+        m_XP += a_xpReward;
+        UpdateLevel();
+    }
+
+    public RPGLevel()
+    {
+
+    }
+
+    public void UpdateLevel()
+    {
+        while (m_XP >= m_maxXP)
+        {
+            m_XP -= m_maxXP;
+            int levelPlusOne = m_level + 1;
+            //int firstPass = (int)(levelPlusOne + 300 * Mathf.Pow(2f, (float)(levelPlusOne) / 7f));
+            //m_maxXP += (int)((firstPass) / 12f);
+            float additionalXPNeeded = ((float)(levelPlusOne) + 300f * Mathf.Pow(2f, (float)(levelPlusOne) / 7f)) / 4f;
+            m_maxXP += (int)(additionalXPNeeded);
+
+            m_level++;
+            m_allocationPoints++;
+        }
+    }
+}
+
 [Serializable]
 public class CharacterStat
 {
     [SerializeField]
     public string name;
     [SerializeField]
-    public float value;
+    public float m_value;
     [SerializeField]
-    public float scale;
+    public float m_scale;
     [SerializeField]
     public float postAddedValue;
     [SerializeField]
-    public float equipmentAddedValue;
+    public float m_equipmentAddedValue;
     [SerializeField]
-    public float effectiveValue; // = ((stat.value-1f) * stat.scale);
+    public float m_parentAddedValue;
     [SerializeField]
-    public float finalValue; // = effectiveValue + stat.postAddedValue + equipmentAddedValue; 
+    public float m_effectiveValue; // = ((stat.value-1f) * stat.scale);
+    [SerializeField]
+    public float m_finalValue; // = effectiveValue + stat.postAddedValue + equipmentAddedValue; 
     [SerializeField]
     public float originalCost;
     [SerializeField]
     public float cost;
     [SerializeField]
     public float costIncreaseRate;
+
+    public RPGLevel m_RPGLevel;
+
+    public CharacterStat()
+    {
+        m_RPGLevel = new RPGLevel();
+    }
+
+    public void UpdateStat()
+    {
+        m_effectiveValue = (m_value - 1f) * m_scale;
+        m_finalValue = m_effectiveValue + postAddedValue;
+        m_finalValue += m_equipmentAddedValue;
+        m_finalValue += m_parentAddedValue;
+    }
+
+    public void ChangeXP(int a_value)
+    {
+        a_value /= 3;
+        m_RPGLevel.ChangeXP((int)a_value);
+        m_value = m_RPGLevel.m_level;
+        UpdateStat();
+    }
+
+
 }
 
 [Serializable]
 public class CharacterStatHandler
 {
-    public int m_XP = 0;
-    public int m_maxXP = 83;
-    public int m_level = 1;
-    public int m_allocationPoints = 0;
+    public RPGLevel m_RPGLevel;
 
     public int m_reSpecCost = 100;
 
@@ -56,10 +115,7 @@ public class CharacterStatHandler
     public void Copy(CharacterStatHandler a_statHandler)
     {
         Init();
-        m_XP = a_statHandler.m_XP;
-        m_maxXP = a_statHandler.m_maxXP;
-        m_level = a_statHandler.m_level;
-        m_allocationPoints = a_statHandler.m_allocationPoints;
+        m_RPGLevel = a_statHandler.m_RPGLevel;
 
         m_reSpecCost = a_statHandler.m_reSpecCost;
 
@@ -73,7 +129,7 @@ public class CharacterStatHandler
 
     public float GetStatFinalValue(int a_index)
     {
-        return m_stats[a_index].finalValue;
+        return m_stats[a_index].m_finalValue;
     }
 
     public static string GetStatName(eCharacterStatIndices a_index, bool a_shortName = true)
@@ -141,6 +197,7 @@ public class CharacterStatHandler
     // Start is called before the first frame update
     public void Init()
     {
+        m_RPGLevel = new RPGLevel();
         m_stats = new CharacterStat[(int)eCharacterStatIndices.count];
         for (int i = 0; i < m_stats.Length; i++)
         {
@@ -149,12 +206,10 @@ public class CharacterStatHandler
         SetDefaultStats();
     }
 
-    
-
     public void ReSpec()
     {
         SetDefaultStats();
-        m_allocationPoints = m_level - 1;
+        m_RPGLevel.m_allocationPoints = m_RPGLevel.m_level - 1;
         m_reSpecCost *= 10;
     }
 
@@ -165,17 +220,21 @@ public class CharacterStatHandler
 
     public void UpdateStat(int a_index)
     {
-        CharacterStat stat = m_stats[a_index];
-        stat.effectiveValue = ((stat.value - 1f) * stat.scale);
-        stat.finalValue = stat.effectiveValue + stat.postAddedValue;
-        stat.finalValue += stat.equipmentAddedValue;
-        m_stats[a_index] = stat;
+        m_stats[a_index].UpdateStat();
     }
 
+    public void SetParentValues(CharacterStatHandler a_handler)
+    {
+        for (int i = 0;i < m_stats.Length;i++)
+        {
+            m_stats[i].m_parentAddedValue = a_handler.m_stats[i].m_finalValue;
+            UpdateStat(i);
+        }
+    }
 
     public void SetStatValue(eCharacterStatIndices a_index, float a_value)
     {
-        m_stats[(int)a_index].value = a_value;
+        m_stats[(int)a_index].m_value = a_value;
         UpdateStat(a_index);
 
         switch (a_index)
@@ -195,12 +254,12 @@ public class CharacterStatHandler
 
     public void ChangeStatValue(eCharacterStatIndices a_index, float a_change)
     {
-        SetStatValue(a_index, m_stats[(int)a_index].value + a_change);
+        SetStatValue(a_index, m_stats[(int)a_index].m_value + a_change);
     }
 
     public void SetStatScale(eCharacterStatIndices a_index, float a_value)
     {
-        m_stats[(int)a_index].scale = a_value;
+        m_stats[(int)a_index].m_scale = a_value;
         UpdateStat(a_index);
     }
 
@@ -227,7 +286,7 @@ public class CharacterStatHandler
         SetStatPostAddedValue(eCharacterStatIndices.dexterity, 259f);
         SetStatScale(eCharacterStatIndices.dexterity, 4f);
 
-        m_stats[(int)eCharacterStatIndices.constitution].scale = 10f;
+        m_stats[(int)eCharacterStatIndices.constitution].m_scale = 10f;
         SetStatPostAddedValue(eCharacterStatIndices.constitution, 100f);
         SetStatScale(eCharacterStatIndices.strength, 5f);
         SetStatPostAddedValue(eCharacterStatIndices.strength, 50f);
@@ -235,38 +294,18 @@ public class CharacterStatHandler
 
     public void AttemptToIncreaseStat(eCharacterStatIndices a_index)
     {
-        if (m_allocationPoints >= 1)
+        if (m_RPGLevel.m_allocationPoints >= 1)
         {
             ChangeStatValue(a_index, 1f);
-            m_allocationPoints--;
+            m_RPGLevel.m_allocationPoints--;
         }
     }
 
-    public void ChangeXP(int a_xpReward)
+    internal void ClearPostAddedValues()
     {
-        m_XP += a_xpReward;
-        UpdatePlayerLevel();
-    }
-
-    public void UpdatePlayerLevel()
-    {
-        while (m_XP >= m_maxXP)
+        for (int i = 0; i < m_stats.Length; i++)
         {
-            m_XP -= m_maxXP;
-            int levelPlusOne = m_level + 1;
-            //int firstPass = (int)(levelPlusOne + 300 * Mathf.Pow(2f, (float)(levelPlusOne) / 7f));
-            //m_maxXP += (int)((firstPass) / 12f);
-            float additionalXPNeeded = ((float)(levelPlusOne) + 300f * Mathf.Pow(2f, (float)(levelPlusOne) / 7f))/4f;
-            m_maxXP += (int)(additionalXPNeeded);
-
-            m_level++;
-            m_allocationPoints++;
+            SetStatPostAddedValue((eCharacterStatIndices)i, 0f);
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

@@ -28,9 +28,9 @@ public class CharacterInfoReadout : MonoBehaviour
 
         for (int i = 0; i < m_statTexts.Length && i < (int)eCharacterStatIndices.count; i++)
         {
-            CharacterStat stat = m_gameHandlerRef.m_playerXCell.m_statHandler.m_stats[i];
-            m_statTexts[i].text = "" + stat.finalValue;
-            m_statTexts[i].text += "(+" + stat.equipmentAddedValue + ") (+" + stat.effectiveValue + ")";
+            CharacterStat stat = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[i];
+            m_statTexts[i].text = "" + stat.m_finalValue;
+            m_statTexts[i].text += "(+" + stat.m_equipmentAddedValue + ") (+" + stat.m_effectiveValue + ") (" + stat.m_parentAddedValue + ")";
             m_statTexts[i].color = Color.white;// CharacterStatHandler.GetStatColor((eCharacterStatIndices)i);
         }
     }
