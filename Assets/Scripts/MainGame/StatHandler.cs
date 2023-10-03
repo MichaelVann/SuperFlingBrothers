@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using UnityEngine;
 
 public enum eCharacterStatIndices
@@ -15,12 +16,12 @@ public enum eCharacterStatIndices
 
 public class RPGLevel
 {
-    public int m_XP = 0;
-    public int m_maxXP = 83;
+    public float m_XP = 0;
+    public float m_maxXP = 83;
     public int m_level = 1;
     public int m_allocationPoints = 0;
 
-    public void ChangeXP(int a_xpReward)
+    public void ChangeXP(float a_xpReward)
     {
         m_XP += a_xpReward;
         UpdateLevel();
@@ -31,15 +32,21 @@ public class RPGLevel
 
     }
 
+    public void Copy(RPGLevel a_level)
+    {
+        m_XP = a_level.m_XP;
+        m_maxXP = a_level.m_maxXP;
+        m_level = a_level.m_level;
+        m_allocationPoints = a_level.m_allocationPoints;
+    }
+
     public void UpdateLevel()
     {
         while (m_XP >= m_maxXP)
         {
             m_XP -= m_maxXP;
             int levelPlusOne = m_level + 1;
-            //int firstPass = (int)(levelPlusOne + 300 * Mathf.Pow(2f, (float)(levelPlusOne) / 7f));
-            //m_maxXP += (int)((firstPass) / 12f);
-            float additionalXPNeeded = ((float)(levelPlusOne) + 300f * Mathf.Pow(2f, (float)(levelPlusOne) / 7f)) / 4f;
+            float additionalXPNeeded = ((float)levelPlusOne + 300f * Mathf.Pow(2f, (float)(levelPlusOne) / 7f)) / 4f;
             m_maxXP += (int)(additionalXPNeeded);
 
             m_level++;
@@ -75,10 +82,12 @@ public class CharacterStat
     public float costIncreaseRate;
 
     public RPGLevel m_RPGLevel;
+    public RPGLevel m_lastSeenRPGLevel;
 
     public CharacterStat()
     {
         m_RPGLevel = new RPGLevel();
+        m_lastSeenRPGLevel = new RPGLevel();
     }
 
     public void UpdateStat()
@@ -89,10 +98,10 @@ public class CharacterStat
         m_finalValue += m_parentAddedValue;
     }
 
-    public void ChangeXP(int a_value)
+    public void ChangeXP(float a_value)
     {
-        a_value /= 3;
-        m_RPGLevel.ChangeXP((int)a_value);
+        a_value /= 3f;
+        m_RPGLevel.ChangeXP(a_value);
         m_value = m_RPGLevel.m_level;
         UpdateStat();
     }
@@ -124,7 +133,6 @@ public class CharacterStatHandler
             m_stats[i] = a_statHandler.m_stats[i];
 
         }
-
     }
 
     public float GetStatFinalValue(int a_index)

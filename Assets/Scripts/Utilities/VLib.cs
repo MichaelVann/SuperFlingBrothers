@@ -10,6 +10,7 @@ public static class VLib
     static string[] m_consonants = { "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "r", "s", "t", "v", "w", "z", };// "x", "q", "ch", "kh", "gh" };
     static string[] m_vowels = { "a", "e", "i", "o", "u" };//, "oo", "ou", "ee" };
 
+    internal static Color COLOR_yellow = new Color(1f,188f/255f,0f);
     public static string GetEnumName<T>(T a_type) { return Enum.GetName(typeof(T), a_type); }
 
     public static string FirstLetterToUpperCaseOrConvertNullToEmptyString(this string s)

@@ -204,9 +204,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47ce86e225613ae4a99b97abb6cb149a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_XPBarMaskTransform: {fileID: 7215183609877276424}
-  m_XPBarValueText: {fileID: 7215183609618805967}
-  m_levelText: {fileID: 7215183608746193664}
+  m_barMaskTransform: {fileID: 7215183609877276424}
+  m_barValueText: {fileID: 7215183609618805967}
+  m_labelText: {fileID: 7215183608746193664}
+  m_fillingBar: {fileID: 7215183608297674193}
 --- !u!1 &7215183608746193671
 GameObject:
   m_ObjectHideFlags: 0

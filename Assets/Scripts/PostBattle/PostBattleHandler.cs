@@ -52,7 +52,7 @@ public class PostBattleHandler : MonoBehaviour
                 m_gameHandlerRef.m_dnaEarnedLastGame += m_gameHandlerRef.m_lastDnaBonus;
                 m_goldBonusText.text = "" + m_gameHandlerRef.m_lastDnaBonus + "(x" + (1 + bonusMult) + ")";
                 m_gameHandlerRef.m_xpEarnedLastGame += m_gameHandlerRef.m_lastXpBonus;
-                m_gameHandlerRef.m_xCellTeam.m_statHandler.m_RPGLevel.ChangeXP((int)m_gameHandlerRef.m_lastXpBonus);
+                m_gameHandlerRef.m_xCellTeam.m_statHandler.m_RPGLevel.ChangeXP(m_gameHandlerRef.m_lastXpBonus);
 
                 m_XPBonusText.text = "" + m_gameHandlerRef.m_lastXpBonus + "(x" + (1 + bonusMult) + ")";
 

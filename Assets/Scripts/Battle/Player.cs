@@ -17,7 +17,7 @@ public class Player : Damageable
 
     bool m_hitSlowdownActive = false;
     float m_enemyHitTimer;
-    float m_enemyHitTimerMax = 0.3f;
+    float m_enemyHitTimerMax = 0.14f;
     bool invertedTime = false;
 
     float m_hitTimeSlowdownRate = 0.05f;
@@ -233,7 +233,7 @@ public class Player : Damageable
 
         if (enemy)//If collided with an enemy
         {
-            if (m_health <= m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue / 3f)//
+            if (true)//m_health <= m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue / 3f)//
             {
                 if (!m_battleManagerRef.m_endingGame)
                 {

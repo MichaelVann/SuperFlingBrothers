@@ -18,8 +18,25 @@ public class UIBar : MonoBehaviour
     float m_value = 0f;
     float m_maxValue = 0f;
 
+    public void SetBarValue(float a_value)
+    {
+        m_value = a_value;
+        UpdateBarSprite();
+    }
+
+    public void SetBarColor(Color a_color)
+    {
+        m_fillingBar.GetComponent<Image>().color = a_color;
+    }
+
+    public void SetValueTextColor(Color a_color)
+    {
+        m_barValueText.color = a_color;
+    }
+
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         //m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_barLength = m_fillingBar.GetComponent<RectTransform>().rect.width;
@@ -45,16 +62,10 @@ public class UIBar : MonoBehaviour
         Init(a_maxValue, a_maxValue);
     }
 
-    public void SetBarValue(float a_value)
-    {
-        m_value = a_value;
-        UpdateBarSprite();
-    }
-
     public void UpdateBarSprite()
     {
         m_barMaskTransform.sizeDelta = new Vector2(m_barLength * m_value / m_maxValue, m_barHeight);
-        m_barValueText.text = "" + m_value.ToString("f2") + " / " + m_maxValue.ToString("f2");
+        m_barValueText.text = "" + m_value.ToString("f0") + " / " + m_maxValue.ToString("f0");
     }
 
     public void SetLabeltext(string a_string)
