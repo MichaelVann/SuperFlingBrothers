@@ -23,6 +23,12 @@ public class XCellTeam
         m_playerXCell.m_statHandler.SetParentValues(m_statHandler);
     }
 
+    public void KillPlayer()
+    {
+        m_playerXCell = new XCell();
+        ApplyStatsToPlayer();
+    }
+
     public void AttemptToIncreaseStat(eCharacterStatIndices a_index)
     {
         m_statHandler.AttemptToIncreaseStat(a_index);

@@ -10,7 +10,7 @@ public class CharacterSkillBar : MonoBehaviour
     internal CharacterStat m_trackedStat;
 
     internal bool m_animating = false;
-    float m_animatingMaxSpeed = 10f;
+    float m_animatingMaxSpeed = 100f;
 
     // Start is called before the first frame update
     void Awake()

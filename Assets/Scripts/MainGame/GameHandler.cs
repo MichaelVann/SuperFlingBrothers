@@ -12,7 +12,7 @@ using static UnityEngine.UI.CanvasScaler;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 20.4f;
+    public const float _VERSION_NUMBER = 20.5f;
 
     static internal bool DEBUG_MODE = true;
 
@@ -250,7 +250,8 @@ public class GameHandler : MonoBehaviour
                 }
             }
         }
-        m_xCellTeam.m_playerXCell = new XCell();
+        m_xCellTeam.KillPlayer();
+
     }
 
     public void CalculateFinishedGame()

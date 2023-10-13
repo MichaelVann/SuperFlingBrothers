@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -17,6 +18,7 @@ public class BattleManager : MonoBehaviour
 {
     //Debug
     public Text m_debugText;
+    public TextMeshProUGUI m_fpsText;
 
     static public float m_shadowDistance = 0.1f;
 
@@ -345,7 +347,7 @@ public class BattleManager : MonoBehaviour
         m_healthBarRef.Init(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue, m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue);
 
         //Reset Trackers
-        m_gameHandlerRef.m_teamLevelAtStartOfBattle = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_RPGLevel.m_level;
+        m_gameHandlerRef.m_teamLevelAtStartOfBattle = m_gameHandlerRef.m_xCellTeam.m_statHandler.m_RPGLevel.m_level;
         m_gameHandlerRef.m_xpEarnedLastGame = 0;
 
         InitialiseAbilities();
@@ -675,7 +677,8 @@ public class BattleManager : MonoBehaviour
     void Update()
     {
         m_enemyCountText.text = "Enemy Count: " + m_enemyCount;
-
+        int fps = (int)(1f / Time.unscaledDeltaTime);
+        m_fpsText.text = fps + " fps";
         //Intro
         if (m_introActive)
         {
