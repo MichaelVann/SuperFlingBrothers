@@ -45,13 +45,32 @@ public class RPGLevel
         while (m_XP >= m_maxXP)
         {
             m_XP -= m_maxXP;
-            int levelPlusOne = m_level + 1;
-            float additionalXPNeeded = ((float)levelPlusOne + 300f * Mathf.Pow(2f, (float)(levelPlusOne) / 7f)) / 4f;
-            m_maxXP += (int)(additionalXPNeeded);
+            m_maxXP += GetXpNeededForLevelUP(m_level);
 
             m_level++;
             m_allocationPoints++;
         }
+    }
+
+    static float GetXpNeededForLevelUP(int a_level)
+    {
+        float xpNeeded = 0f;
+        int levelPlusOne = a_level + 1;
+        float exponent = Mathf.Pow(2f, (levelPlusOne) / 7f);
+        xpNeeded = (levelPlusOne + 300f * exponent) / 4f;
+        return xpNeeded;
+    }
+
+    public float GetXpDifference(RPGLevel a_lowerLevel, RPGLevel a_upperLevel)
+    {
+        float xpDiff = 0f;
+        for (int i = a_lowerLevel.m_level; i < a_upperLevel.m_level; i++)
+        {
+            xpDiff += GetXpNeededForLevelUP(a_lowerLevel.m_level);
+        }
+        xpDiff -= a_lowerLevel.m_XP;
+        xpDiff += a_upperLevel.m_XP;
+        return xpDiff;
     }
 }
 

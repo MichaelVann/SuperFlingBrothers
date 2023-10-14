@@ -10,7 +10,9 @@ public class CharacterSkillBar : MonoBehaviour
     internal CharacterStat m_trackedStat;
 
     internal bool m_animating = false;
-    float m_animatingMaxSpeed = 100f;
+    float m_animatingSpeed = 100f;
+    float m_currentProgress = 0f;
+    float m_totalProgress = 0f;
 
     // Start is called before the first frame update
     void Awake()
@@ -26,9 +28,8 @@ public class CharacterSkillBar : MonoBehaviour
 
     internal void Refresh()
     {
-        bool higherLevel = m_trackedStat.m_RPGLevel.m_level > m_trackedStat.m_lastSeenRPGLevel.m_level;
-        bool higherXP = m_trackedStat.m_RPGLevel.m_XP > m_trackedStat.m_lastSeenRPGLevel.m_XP;
-        if (higherLevel || higherXP)
+        m_totalProgress = m_trackedStat.m_RPGLevel.GetXpDifference(m_trackedStat.m_lastSeenRPGLevel, m_trackedStat.m_RPGLevel);
+        if (m_totalProgress > 0)
         {
             m_animating = true;
         }
@@ -61,8 +62,11 @@ public class CharacterSkillBar : MonoBehaviour
         {
             RPGLevel oldLevel = m_trackedStat.m_lastSeenRPGLevel;
             RPGLevel level = m_trackedStat.m_RPGLevel;
-
-            oldLevel.ChangeXP((int)m_animatingMaxSpeed*Time.deltaTime);
+            float speed = Mathf.Sin((m_currentProgress / m_totalProgress) * Mathf.PI) + 0.2f;
+            speed *= m_animatingSpeed;
+            float xpChange = (int)speed * Time.deltaTime;
+            oldLevel.ChangeXP(xpChange);
+            m_currentProgress += xpChange;
 
             bool higherLevel = level.m_level > oldLevel.m_level;
             bool higherXP = level.m_XP >= oldLevel.m_XP;
