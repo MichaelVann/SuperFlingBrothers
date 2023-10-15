@@ -14,7 +14,7 @@ public class Projectile : MonoBehaviour
     int m_powerUpLevel = 0;
     int m_maxPowerUpLevel = 3;
     EquipmentAbility m_parentAbility;
-    bool m_healsNucleus = true;
+    bool m_friendly = true;
 
     // Start is called before the first frame update
     void Awake()
@@ -46,14 +46,23 @@ public class Projectile : MonoBehaviour
             if (a_collision.gameObject.GetComponent<Damageable>())
             {
                 float effect = m_damage * m_rigidbody.mass;
+                bool hitFriendlyAligned = false;
                 if (a_collision.gameObject.GetComponent<Nucleus>())
                 {
-                    a_collision.gameObject.GetComponent<Damageable>().Heal(effect);
+                    hitFriendlyAligned = true;
                 }
-                else
+
+                bool damaging = hitFriendlyAligned ^ m_friendly;
+
+                if (damaging)
                 {
                     a_collision.gameObject.GetComponent<Damageable>().Damage(effect);
                 }
+                else
+                {
+                    a_collision.gameObject.GetComponent<Damageable>().Heal(effect);
+                }
+
                 Destroy(this.gameObject);
             }
         }

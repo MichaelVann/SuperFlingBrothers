@@ -42,10 +42,10 @@ public class StatIncreaser : MonoBehaviour
         switch (m_statIndex)
         {
             case eCharacterStatIndices.strength:
-                suffixString = "Damage";
+                suffixString = "Hit Damage";
                 break;
             case eCharacterStatIndices.dexterity:
-                suffixString = "μNm of Fling Strength";
+                suffixString = "Equipment Damage";
                 break;
             case eCharacterStatIndices.constitution:
                 suffixString = "Health";

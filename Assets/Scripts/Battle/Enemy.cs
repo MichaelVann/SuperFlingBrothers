@@ -458,7 +458,7 @@ public class Enemy : Damageable
 
     public void Fling()
     {
-        float flingStrength = m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].m_finalValue;
+        float flingStrength = GameHandler.BATTLE_FlingStrength;
 
         if (m_typeTrait.inertiaDasher)
         {

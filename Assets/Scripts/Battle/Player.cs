@@ -205,7 +205,7 @@ public class Player : Damageable
             {
                 if (worldMousePoint.y < m_upperLowerFlingPositionBounds && worldMousePoint.y > -m_upperLowerFlingPositionBounds)
                 {
-                    Fling(deltaMousePos, m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].m_finalValue);
+                    Fling(deltaMousePos, GameHandler.BATTLE_FlingStrength);
                 }
                 else
                 {
@@ -301,7 +301,7 @@ public class Player : Damageable
         GameObject projectile = Instantiate<GameObject>(m_projectileTemplate,transform.position, VLib.Vector2DirectionToQuaternion(a_shootVector));
         Projectile projectileComp = projectile.GetComponent<Projectile>();
 
-        projectileComp.Initialise(a_ability, a_shootVector, m_rigidBody.velocity, m_statHandler.GetStatFinalValue((int)eCharacterStatIndices.strength) * m_projectileDamageMult);
+        projectileComp.Initialise(a_ability, a_shootVector, m_rigidBody.velocity, m_statHandler.GetStatFinalValue((int)eCharacterStatIndices.dexterity) * m_projectileDamageMult);
     }
 
     public void OnTriggerEnter2D(Collider2D a_collider)

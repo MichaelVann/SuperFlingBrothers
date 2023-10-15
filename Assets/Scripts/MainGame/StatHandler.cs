@@ -310,8 +310,8 @@ public class CharacterStatHandler
             m_stats[i].name = GetStatName(i);
         }
 
-        SetStatPostAddedValue(eCharacterStatIndices.dexterity, 259f);
-        SetStatScale(eCharacterStatIndices.dexterity, 4f);
+        SetStatPostAddedValue(eCharacterStatIndices.dexterity, 50f);
+        SetStatScale(eCharacterStatIndices.dexterity, 5f);
 
         m_stats[(int)eCharacterStatIndices.constitution].m_scale = 10f;
         SetStatPostAddedValue(eCharacterStatIndices.constitution, 100f);
