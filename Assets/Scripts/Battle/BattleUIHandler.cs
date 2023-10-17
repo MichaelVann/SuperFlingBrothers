@@ -28,8 +28,8 @@ public class BattleUIHandler : MonoBehaviour
 
         switch (a_type)
         {
-            case eEndGameType.escape:
-                endTextString = "Escape!";
+            case eEndGameType.retreat:
+                endTextString = "Retreat!";
                 m_highlightColor = Color.white;
                 m_bgColor = Color.green;
                 break;

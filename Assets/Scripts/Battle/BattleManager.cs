@@ -9,7 +9,7 @@ using UnityEngine.UI;
 
 public enum eEndGameType
 {
-    escape,
+    retreat,
     win,
     lose
 }
@@ -36,7 +36,7 @@ public class BattleManager : MonoBehaviour
     public GameObject m_dodgerEnemyTemplate;
 
     public GameObject m_gameViewRef;
-    public GameObject m_escapeZoneRef;
+    public GameObject m_retreatZoneRef;
     public GameObject m_extraTurnButtonLockImageRef;
     public GameObject m_wallTriangleRef;
     public GameObject m_gravityWellRef;
@@ -597,9 +597,9 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    internal void Escape()
+    internal void Retreat()
     {
-        StartEndingGame(eEndGameType.escape);
+        StartEndingGame(eEndGameType.retreat);
     }
 
     void UpdateFreezeTimer()

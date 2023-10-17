@@ -39,11 +39,11 @@ public class PostBattleHandler : MonoBehaviour
         m_winBonusRef.SetActive(m_winResult == eEndGameType.win);
         switch (m_winResult)
         {
-            case eEndGameType.escape:
-                m_resultTextRef.text ="Escaped!";
+            case eEndGameType.retreat:
+                m_resultTextRef.text ="Retreat";
                 break;
             case eEndGameType.win:
-                m_resultTextRef.text ="Victory!";
+                m_resultTextRef.text ="Victory";
                 //m_gameHandlerRef.m_lastXpBonus = m_gameHandlerRef.m_lastDnaBonus = Mathf.RoundToInt(Mathf.Pow(m_gameHandlerRef.m_battleDifficulty, 1.1f));
                 float bonusMult = Mathf.Pow(1.022f, m_gameHandlerRef.m_battleDifficulty);
                 bonusMult = VLib.TruncateFloatsDecimalPlaces(bonusMult, 2);
@@ -58,7 +58,7 @@ public class PostBattleHandler : MonoBehaviour
 
                 break;
             case eEndGameType.lose:
-                m_resultTextRef.text = "Defeat!";
+                m_resultTextRef.text = "Defeat";
                 break;
             default:
                 break;

@@ -227,7 +227,7 @@ public class Player : Damageable
     public override bool OnCollisionEnter2D(Collision2D a_collision)
     {
         Enemy enemy = a_collision.gameObject.GetComponent<Enemy>();
-        EscapeZone escapeZone = a_collision.gameObject.GetComponent<EscapeZone>();
+        RetreatZone retreatZone = a_collision.gameObject.GetComponent<RetreatZone>();
         bool runningBaseCollision = false;
         bool tookDamage = false;
 
@@ -243,13 +243,13 @@ public class Player : Damageable
             }
             m_battleManagerRef.UseExtraTurn();
         }
-        else if (escapeZone)
+        else if (retreatZone)
         {
             if (!m_battleManagerRef.m_endingGame)
             {
-                m_battleManagerRef.Escape();
+                m_battleManagerRef.Retreat();
                 m_rigidBody.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezePositionY;
-                transform.position = escapeZone.transform.position;
+                transform.position = retreatZone.transform.position;
             }
         }
 

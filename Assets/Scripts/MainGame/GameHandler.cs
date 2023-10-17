@@ -12,7 +12,7 @@ using static UnityEngine.UI.CanvasScaler;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 20.7f;
+    public const float _VERSION_NUMBER = 20.8f;
 
     static internal bool DEBUG_MODE = true;
 
@@ -141,6 +141,10 @@ public class GameHandler : MonoBehaviour
         if (m_autoLoadDataOnLaunch)
         {
             LoadGame();
+        }
+        if (Application.isMobilePlatform)
+        {
+            Application.targetFrameRate = (int)Screen.currentResolution.refreshRateRatio.value;
         }
 
         //Battle
