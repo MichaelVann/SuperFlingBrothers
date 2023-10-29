@@ -10,11 +10,16 @@ public class Projectile : MonoBehaviour
     public bool m_playerDamaging = false;
     public bool m_enemyDamaging = false;
     bool m_bouncePowerUp = false;
+    bool m_canBounce = true;
     Rigidbody2D m_rigidbody;
     int m_powerUpLevel = 0;
     int m_maxPowerUpLevel = 3;
     EquipmentAbility m_parentAbility;
     bool m_friendly = true;
+    bool m_stunning = false;
+
+    public GameObject m_temporarySpritePrefab;
+    public Sprite m_webSpriteRef;
 
     // Start is called before the first frame update
     void Awake()
@@ -32,10 +37,15 @@ public class Projectile : MonoBehaviour
     {
         m_parentAbility = a_ability;
         m_rigidbody.velocity = a_parentVelocity + a_shootVector.normalized * m_speed;
-        m_damage = a_damage;
+        m_damage = a_ability.m_abilityType == EquipmentAbility.eAbilityType.Bullet ? a_damage : 0f;
         if (m_parentAbility.HasAffix(EquipmentAbility.eAffix.bouncePowerup))
         {
             m_bouncePowerUp = true;
+        }
+        if (m_parentAbility.m_abilityType == EquipmentAbility.eAbilityType.Snare)
+        {
+            m_stunning = true;
+            //m_canBounce = false;
         }
     }
 
@@ -52,10 +62,17 @@ public class Projectile : MonoBehaviour
                     hitFriendlyAligned = true;
                 }
 
-                bool damaging = hitFriendlyAligned ^ m_friendly;
+                bool hitEnemy = hitFriendlyAligned ^ m_friendly;
 
-                if (damaging)
+                if (hitEnemy)
                 {
+                    if (m_stunning)
+                    {
+                        float m_stunTime = 5f;
+                        a_collision.gameObject.GetComponent<Damageable>().Stun(m_stunTime);
+                        TemporarySprite web = Instantiate<GameObject>(m_temporarySpritePrefab,a_collision.gameObject.transform.position, Quaternion.identity).GetComponent<TemporarySprite>();
+                        web.Init(m_stunTime,m_webSpriteRef);
+                    }
                     a_collision.gameObject.GetComponent<Damageable>().Damage(effect);
                 }
                 else

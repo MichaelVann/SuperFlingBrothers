@@ -177,8 +177,6 @@ public class GameHandler : MonoBehaviour
         {
             m_equipmentInventory.Add(new Equipment(0));
         }
-        //Equipment test = m_equipmentInventory[0];
-        //test.m_level = 5;
     }
 
     internal bool AttemptToBuyUpgrade(int a_upgradeID)

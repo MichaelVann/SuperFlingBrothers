@@ -34,7 +34,7 @@ public class AbilityButton : MonoBehaviour
             bool interactable = m_abilityRef.m_ammo > 0;
             Debug.Log("AbilityButtonOUTPUT:" + m_buttonRef);
             m_buttonRef.interactable = interactable;
-            if (m_abilityRef.m_reactive)
+            if (!m_abilityRef.m_passive)
             {
                 Color buttonColor = Color.grey;
                 if (m_buttonRef.interactable)
@@ -43,7 +43,7 @@ public class AbilityButton : MonoBehaviour
                 }
                 GetComponent<Image>().color = buttonColor;
             }
-            m_abilityNameText.text = m_abilityRef.GetName() + "(" + m_abilityRef.m_ammo + ")";// $" ({m_abilityRef.m_ammo})";
+            m_abilityNameText.text = m_abilityRef.GetName() + (m_abilityRef.m_passive ? "" : "(" + m_abilityRef.m_ammo + ")");
             m_affixText.text = m_abilityRef.GetAffixNames();
         }
         else

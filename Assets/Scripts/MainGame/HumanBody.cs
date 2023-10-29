@@ -112,7 +112,7 @@ public class HumanBody
         m_townConnections.Add(new TownConnection(thoom13, archersNook12, "AN Tho"));
 
 
-        m_playerResidingTown = teston1;
+        TaskPlayerToResidingTown();
     }
     internal TownConnection FindConnection(string a_name)
     {
@@ -153,7 +153,6 @@ public class HumanBody
         {
             m_townConnections[i].Refresh();
         }
-        TaskPlayerToResidingTown();
     }
 
     public void ExchangeFront(TownConnection a_connection, bool a_won)
@@ -188,13 +187,16 @@ public class HumanBody
 
     public void TaskPlayerToResidingTown()
     {
-        if (m_playerResidingTown.m_overrun)
+        if (m_playerResidingTown != null)
         {
-            Town fallbackTown = m_playerResidingTown.FindFallBackTown();
-            if (fallbackTown != null)
+            if (m_playerResidingTown.m_overrun)
             {
-                m_playerResidingTown = fallbackTown;
-                return;
+                Town fallbackTown = m_playerResidingTown.FindFallBackTown();
+                if (fallbackTown != null)
+                {
+                    m_playerResidingTown = fallbackTown;
+                    return;
+                }
             }
         }
 

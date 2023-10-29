@@ -104,6 +104,20 @@ public class Player : Damageable
         return ability;
     }
 
+    EquipmentAbility FindActiveEquipmentAbility()
+    {
+        EquipmentAbility ability = null;
+        EquipmentAbility[] abilityList = m_battleManagerRef.m_activeAbilities;
+        for (int i = 0; i < abilityList.Length; i++)
+        {
+            if (abilityList[i] != null && abilityList[i].m_activated)
+            {
+                ability = abilityList[i];
+            }
+        }
+        return ability;
+    }
+
     List<EquipmentAbility> FindEquipmentAbilities(EquipmentAbility.eAbilityType a_abilityType)
     {
         List<EquipmentAbility> abilities = new List<EquipmentAbility>();
@@ -128,12 +142,22 @@ public class Player : Damageable
         m_battleManagerRef.SetFrozen(false);
 
         //Handle Projectile Shooting
-        EquipmentAbility abil = FindActiveEquipmentAbility(EquipmentAbility.eAbilityType.Projectile);
+        EquipmentAbility abil = FindActiveEquipmentAbility();
         if (abil != null)
         {
-            abil.m_ammo--;
-            abil.m_activated = false;
-            ShootProjectile(a_flingVector, abil);
+            if (abil.m_abilityType == EquipmentAbility.eAbilityType.Bullet)
+            {
+                abil.m_ammo--;
+                abil.m_activated = false;
+                ShootProjectile(a_flingVector, abil);
+            }
+            else if (abil.m_abilityType == EquipmentAbility.eAbilityType.Snare)
+            {
+                abil.m_ammo--;
+                abil.m_activated = false;
+                ShootProjectile(a_flingVector, abil);
+            }
+
         }
 
         //for (int i = 0; i < m_battleManagerRef.m_activeAbilities.Length; i++)

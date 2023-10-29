@@ -37,6 +37,11 @@ public class Damageable : BaseObject
 
     protected float m_lastDamageTaken = 0f;
 
+    RigidbodyConstraints2D m_originalConstraints;
+
+    bool m_stunned = false;
+    vTimer m_stunTimer;
+
     public struct Shield
     {
         internal bool enabled;
@@ -89,6 +94,7 @@ public class Damageable : BaseObject
         m_damageFlashOverrideTimer = new vTimer(m_damageFlashTimerMax,false);
         m_defaultMaterialRef = m_spriteRenderer.material;
         UpdateLocalStatsFromStatHandler();
+        m_originalConstraints = m_rigidBody.constraints;
     }
 
     public virtual void Start()
@@ -254,6 +260,18 @@ public class Damageable : BaseObject
         }
     }
 
+    internal void Stun(float a_stunTime)
+    {
+        m_stunTimer = new vTimer(a_stunTime, true, true);
+        SetStunStatus(true);
+    }
+
+    void SetStunStatus(bool a_stunned)
+    {
+        m_stunned = a_stunned;
+        m_rigidBody.constraints = a_stunned? RigidbodyConstraints2D.FreezeAll : m_originalConstraints;
+    }
+
     public virtual void Die()
     {
         Instantiate(m_explosionPrefab, transform.position, new Quaternion());
@@ -340,6 +358,13 @@ public class Damageable : BaseObject
 
         m_healthBarRef.transform.localEulerAngles = -transform.localEulerAngles;
 
+        if (m_stunTimer != null)
+        {
+            if (m_stunTimer.Update())
+            {
+                SetStunStatus(false);
+            }
+        }
     }
 
     protected void TakePocketDamage()

@@ -10,8 +10,7 @@ public class EquipmentAbility
     //public bool m_enabled = false;
     internal int m_cooldown;
     internal int m_ammo;
-    internal bool m_reactive = false;
-    internal bool m_passive = false;
+    internal bool m_passive = true;
     internal bool m_activated = false;
     internal int m_level;
 
@@ -19,8 +18,9 @@ public class EquipmentAbility
     public enum eAbilityType
     {
         ExtraTurn,
-        Projectile,
+        Bullet,
         Shield,
+        Snare,
         Count
     }
 
@@ -66,7 +66,7 @@ public class EquipmentAbility
         {
             case eAbilityType.ExtraTurn:
                 break;
-            case eAbilityType.Projectile:
+            case eAbilityType.Bullet:
                 potentialAffixes.Add(eAffix.bouncePowerup);
                 break;
             case eAbilityType.Count:
@@ -96,22 +96,30 @@ public class EquipmentAbility
         switch (m_abilityType)
         {
             case eAbilityType.ExtraTurn:
-                m_reactive = true;
+                m_passive = false;
                 m_cooldown = 1;
                 m_ammo = 1;
                 m_level = 1;
                 break;
 
-            case eAbilityType.Projectile:
-                m_reactive = true;
+            case eAbilityType.Bullet:
+                m_passive = false;
                 m_cooldown = 1;
                 m_ammo = 5;
                 m_level = 1;
                 break;
 
             case eAbilityType.Shield:
+                m_passive = true;
                 m_activated = false;
                 m_level = 1;
+                break;
+
+            case eAbilityType.Snare:
+                m_passive = false;
+                m_activated = false;
+                m_level = 1;
+                m_ammo = 5;
                 break;
 
             case eAbilityType.Count:
@@ -154,11 +162,15 @@ public class EquipmentAbility
                 //description += "\n\nTest";
 
                 break;
-            case eAbilityType.Projectile:
-                description = "Projectile: Shoots out a projectile in the direction of movement.";
+            case eAbilityType.Bullet:
+                description = "Bullet: Shoots out a damaging projectile in the direction of movement.";
                 break;
             case eAbilityType.Shield:
                 description = "Shield: Protects the user from a limited amount of damage, and recharges overtime.";
+                break;
+
+            case eAbilityType.Snare:
+                description = "Snare: Snares an enemy in place, stunning them.";
                 break;
             case eAbilityType.Count:
                 break;
@@ -194,7 +206,7 @@ public class EquipmentAbility
         m_abilityType = a_ability.m_abilityType;
         m_cooldown = a_ability.m_cooldown;
         m_ammo = a_ability.m_ammo;
-        m_reactive = a_ability.m_reactive;
+        m_passive = a_ability.m_passive;
         m_activated = a_ability.m_activated;
         m_level = a_ability.m_level;
         m_affixes = a_ability.m_affixes;

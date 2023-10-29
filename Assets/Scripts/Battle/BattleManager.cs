@@ -180,7 +180,7 @@ public class BattleManager : MonoBehaviour
                 if(i == a_id)
                 {
                     EquipmentAbility abil = m_activeAbilities[a_id];
-                    if (abil.m_reactive)
+                    if (!abil.m_passive)
                     {
                         switch (abil.m_abilityType)
                         {
@@ -188,9 +188,12 @@ public class BattleManager : MonoBehaviour
                                 abil.m_activated = !abil.m_activated;
                                 //TODO: Enable outline around button or something, showing ability is prepared
                                 break;
-                            case EquipmentAbility.eAbilityType.Projectile:
+                            case EquipmentAbility.eAbilityType.Bullet:
                                 abil.m_activated = !abil.m_activated;
                                 //TODO: Enable outline around button or something, showing ability is prepared
+                                break;
+                            case EquipmentAbility.eAbilityType.Snare:
+                                abil.m_activated = !abil.m_activated;
                                 break;
                             case EquipmentAbility.eAbilityType.Count:
                                 break;
