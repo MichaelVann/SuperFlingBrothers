@@ -1,8 +1,8 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class KillZone : MonoBehaviour
+public class ArmorSegment : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -18,9 +18,9 @@ public class KillZone : MonoBehaviour
 
     public void OnCollisionEnter2D(Collision2D a_collision)
     {
-        if (a_collision.gameObject.GetComponent<Damageable>())
+        if (a_collision != null)
         {
-            a_collision.gameObject.GetComponent<Damageable>().Damage(100000f, Vector2.zero);
+
         }
     }
 }

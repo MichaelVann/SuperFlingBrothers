@@ -274,7 +274,7 @@ public class Enemy : Damageable
                 case GameHandler.eGameMode.TurnLimit:
                     break;
                 case GameHandler.eGameMode.Health:
-                    TakePocketDamage();
+                    TakePocketDamage(a_collision.contacts[0].point);
                     PocketFling(a_collision.gameObject.transform.position);
                     break;
                 case GameHandler.eGameMode.Pockets:
@@ -323,9 +323,9 @@ public class Enemy : Damageable
         return tookDamage;
     }
 
-    public override void Damage(float a_damage)
+    public override void Damage(float a_damage, Vector2 a_damagePoint)
     {
-        base.Damage(a_damage);
+        base.Damage(a_damage, a_damagePoint);
     }
 
     private void VisionConeUpdate()

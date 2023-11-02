@@ -105,13 +105,6 @@ public class Damageable : BaseObject
         }
     }
 
-    protected void SetUpShield(int a_level)
-    {
-        m_shield.delay = 3f;
-        m_shield.capacity += 5f * a_level;
-        m_shield.rechargeRate = 1.6f;
-    }
-
     void UpdateRotationToFollowVelocity()
     {
         m_rigidBody.MoveRotation(VLib.Vector2ToEulerAngle(m_rigidBody.velocity));// VLib.Vector2ToEulerAngle(m_rigidBody.velocity));
@@ -234,7 +227,7 @@ public class Damageable : BaseObject
     }
 
     //Damages the damageable
-    public virtual void Damage(float a_damage)
+    public virtual void Damage(float a_damage, Vector2 a_damagePoint)
     {
         ChangeHealth(-a_damage);
         Bleed(a_damage/m_maxHealth);
@@ -247,7 +240,7 @@ public class Damageable : BaseObject
 
     public void Damage()
     {
-        Damage(1f);
+        Damage(1f, transform.position);
     }
 
     private void Bleed(float a_bleedAmount)
@@ -314,7 +307,7 @@ public class Damageable : BaseObject
                 float oppStrength = oppDamageable.m_statHandler.m_stats[(int)eCharacterStatIndices.strength].m_finalValue;
                 float oppSpeed = 1f / m_damagePerSpeedDivider;
                 float damage = oppStrength * oppSpeed * oppContactStrength;
-                Damage(oppStrength * oppSpeed * oppContactStrength);
+                Damage(oppStrength * oppSpeed * oppContactStrength, a_collision.contacts[0].point);
                 tookDamage = true;
                 m_lastDamageTaken = damage;
             }
@@ -367,9 +360,9 @@ public class Damageable : BaseObject
         }
     }
 
-    protected void TakePocketDamage()
+    protected void TakePocketDamage(Vector2 a_contactPoint)
     {
-        Damage(m_health * 0.45f + m_maxHealth * 0.05f);
+        Damage(m_health * 0.45f + m_maxHealth * 0.05f, a_contactPoint);
     }
 
     protected void PocketFling(Vector3 a_pocketPos)

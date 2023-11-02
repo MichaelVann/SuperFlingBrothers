@@ -72,6 +72,7 @@ public class PostBattleHandler : MonoBehaviour
         m_xpGainedTextRef.text = "" + m_gameHandlerRef.m_xpEarnedLastGame;
         m_levelsGainedTextRef.text = "" + (m_gameHandlerRef.m_xCellTeam.m_statHandler.m_RPGLevel.m_level - m_gameHandlerRef.m_teamLevelAtStartOfBattle);
         m_equipmentCollectedText.text = "" + m_gameHandlerRef.m_equipmentCollectedLastGame;
+        m_gameHandlerRef.UnEquipDestroyedEquipment();
     }
 
     // Update is called once per frame

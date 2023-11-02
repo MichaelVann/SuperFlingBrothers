@@ -50,7 +50,7 @@ public class EquipmentDigest : MonoBehaviour
                 m_statTexts[index].color = Color.green; //CharacterStatHandler.GetStatColor(m_equipmentRef.m_stats[i].statType);
             }
             m_abilityTextRef.text = m_equipmentRef.m_activeAbility.GetName();
-            m_itemValueTextRef.text = "" + m_equipmentRef.m_goldValue;
+            m_itemValueTextRef.text = "" + m_equipmentRef.GetGoldValue();
         }
         else
         {
@@ -59,7 +59,7 @@ public class EquipmentDigest : MonoBehaviour
 
         m_levelText.text = valid ? "Level: " + m_equipmentRef.m_level : "";
         m_nameText.text = valid ? m_equipmentRef.m_name : "";
-        m_nameText.color = valid ? m_equipmentRef.m_rarityTier.color : Color.white;
+        m_nameText.color = valid ? m_equipmentRef.m_rarity.color : Color.white;
 
 
         m_portraitRef.gameObject.SetActive(valid);

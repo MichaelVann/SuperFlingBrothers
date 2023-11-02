@@ -17,6 +17,12 @@ public class TemporarySprite : MonoBehaviour
     {
         m_lifeTimer = new vTimer(a_lifeTime);
         m_spriteRenderer.sprite = a_sprite;
+        if (transform.parent != null)
+        {
+            Vector3 parentScale = transform.parent.localScale;
+            Vector3 scale = transform.localScale;
+            transform.localScale = new Vector3(scale.x/parentScale.x, scale.y/parentScale.y, scale.z/parentScale.z);
+        }
     }
 
     // Update is called once per frame

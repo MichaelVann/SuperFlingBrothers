@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +12,7 @@ public class EquipmentPanel : MonoBehaviour
     public Equipment m_equipmentRef;
 
     public Text m_nameTextRef;
+    public TextMeshProUGUI m_healthText;
     public Text m_rarityTextRef;
     public Text[] m_statNameTextRefs;
     public Text[] m_statTextRefs;
@@ -53,9 +55,11 @@ public class EquipmentPanel : MonoBehaviour
         float[] statDeltas = new float[4];
 
         m_nameTextRef.text = m_equipmentRef.m_name;
-        m_rarityTextRef.text = m_equipmentRef.m_rarityTier.name;
-        m_rarityTextRef.color = m_equipmentRef.m_rarityTier.color;
-        m_nameTextRef.color = m_equipmentRef.m_rarityTier.color;
+        m_healthText.text = m_equipmentRef.m_health.ToString("f0") + "/" + m_equipmentRef.m_maxHealth.ToString("f0");
+        m_healthText.color = VLib.PercentageToColor(m_equipmentRef.m_health / m_equipmentRef.m_maxHealth);
+        m_rarityTextRef.text = m_equipmentRef.m_rarity.name;
+        m_rarityTextRef.color = m_equipmentRef.m_rarity.color;
+        m_nameTextRef.color = m_equipmentRef.m_rarity.color;
 
         for (int i = 0; i < m_statTextRefs.Length; i++)
         {
@@ -85,19 +89,13 @@ public class EquipmentPanel : MonoBehaviour
 
         //m_costTextRef.text = "" + m_upgradeRef.m_cost;
         m_levelTextRef.text = "" + m_equipmentRef.m_level;
-        m_goldValueTextRef.text = "" + m_equipmentRef.m_goldValue;
+        m_goldValueTextRef.text = "" + m_equipmentRef.GetGoldValue();
         m_abilityTextRef.text = m_equipmentRef.m_activeAbility.GetName();
 
         SetEquipButtonStatus();
         m_equipmentPortrait.SetEquipmentRef(m_equipmentRef);
         m_newEquipmentNotifierRef.SetActive(m_equipmentRef.m_newToPlayer);
     }
-
-    //    // Update is called once per frame
-    //    void Update()
-    //    {
-
-    //    }
 
     void SetEquipButtonStatus()
     {
@@ -106,21 +104,31 @@ public class EquipmentPanel : MonoBehaviour
         bool equipped = m_equipmentRef.m_equipped;
         m_sellButtonRef.interactable = !equipped;
         bool sameSlot = m_equipmentScreenHandlerRef.m_openedEquipmentSlotId == m_equipmentRef.m_equippedSlotId;
-        if (!equipped)
+        if (m_equipmentRef.IsBroken())
         {
-            equipButtonColor = Color.white;
-            equipButtonString = "Equip";
+            equipButtonColor = Color.grey;
+            equipButtonString = "Repair" + "(" +m_equipmentRef.GetRepairCost() + ")";
+            m_equipButtonRef.interactable = m_gameHandlerRef.GetCurrentCash() >= m_equipmentRef.GetRepairCost();
         }
-        else if (equipped && sameSlot)
+        else
         {
-            equipButtonColor = Color.yellow;
-            equipButtonString = "UnEquip";
+            if (!equipped)
+            {
+                equipButtonColor = Color.white;
+                equipButtonString = "Equip";
+            }
+            else if (equipped && sameSlot)
+            {
+                equipButtonColor = Color.yellow;
+                equipButtonString = "UnEquip";
+            }
+            else if (equipped && !sameSlot)
+            {
+                equipButtonColor = Color.red;
+                equipButtonString = "ReEquip";
+            }
         }
-        else if (equipped && !sameSlot)
-        {
-            equipButtonColor = Color.red;
-            equipButtonString = "ReEquip";
-        }
+        
         m_equipButtonRef.gameObject.GetComponent<Image>().color = equipButtonColor;
         m_equipButtonTextRef.text = equipButtonString;
     }
@@ -131,10 +139,18 @@ public class EquipmentPanel : MonoBehaviour
         Refresh();
     }
 
-    public void AttemptToEquip()
+    public void InteractButtonPressed()
     {
-        m_equipmentScreenHandlerRef.SetEquipStatus(m_equipmentRef);
-        //Refresh();
+        if (m_equipmentRef.IsBroken())
+        {
+            m_gameHandlerRef.AttemptToRepairEquipment(m_equipmentRef);
+        }
+        else
+        {
+            m_equipmentScreenHandlerRef.SetEquipStatus(m_equipmentRef);
+        }
+
+        Refresh();
     }
 
     public void SellEquipment()

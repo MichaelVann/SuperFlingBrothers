@@ -6,27 +6,22 @@ using UnityEngine.UI;
 
 public class MapHandler : MonoBehaviour
 {
-    //Zoom
     GameHandler m_gameHandlerRef;
-    Camera m_cameraRef;
 
-    Vector3 m_humanBodyStartPos;
-    Vector3 m_zoomPartVisibilityOffset;
-    static bool m_initialZoomed = false;
-    static bool m_zoomingIn = false;
-    static bool m_zooming = false;
-    static float m_startingZoom = 5f;
+    //Camera
+    Camera m_cameraRef;
+    bool m_wasPinchingLastFrame = false;
+    float m_lastPinchDistance;
+    bool m_wasPanning = false;
+    Vector3 m_lastPanPos;
     static float m_currentZoom = 5f;
-    static float m_targetZoom = 0f;
     static float m_minZoom = 1f;
     static float m_maxZoom = 5f;
     static float m_startingCameraSize = 5f;
     float m_startingCameraZPos;
-    static Vector3 m_startingZoomLocation;
     static Vector3 m_currentPan = new Vector3(0f,0f,-110f);
-    static Vector3 m_zoomTargetLocation;
-    static float m_zoomProgress = 0f;
-    static float m_zoomTime = 0.5f;
+    static Vector3 m_cameraMinBounds = new Vector3(-14f, -3, 0f);
+    static Vector3 m_cameraMaxBounds = new Vector3(2.85f, 15f, 0f);
 
     public GameObject m_bodyMapPrefab;
     public HumanBodyUI m_viewedBodyPartUI;
@@ -37,11 +32,7 @@ public class MapHandler : MonoBehaviour
     // UI Popup
     public GameObject m_lostNotificationRef;
 
-    bool m_wasPinchingLastFrame = false;
-    float m_lastPinchDistance;
 
-    bool m_wasPanning = false;
-    Vector3 m_lastPanPos;
 
     MapNode m_residingMapNode;
 
@@ -51,6 +42,9 @@ public class MapHandler : MonoBehaviour
     UIBattleNode m_selectedUIBattleNode;
     public GameObject m_backdropRef;
     Vector3 m_backdropRefStartingSize;
+
+    //Camera
+
 
     // Start is called before the first frame update
     void Awake()
@@ -102,11 +96,30 @@ public class MapHandler : MonoBehaviour
             m_currentZoom *= 1f - Time.deltaTime;
             ApplyZoomAndPan();
         }
-        else if (Input.GetKey(KeyCode.LeftArrow))
+        Vector3 debugPan = new Vector3();
+        if (Input.GetKey(KeyCode.LeftArrow))
         {
-            m_currentPan += new Vector3(-1*Time.deltaTime,0f,0f);
+            debugPan += new Vector3(-1*Time.deltaTime,0f,0f);
             ApplyZoomAndPan();
         }
+        if(Input.GetKey(KeyCode.RightArrow))
+        {
+            debugPan += new Vector3(Time.deltaTime, 0f, 0f);
+            ApplyZoomAndPan();
+        }
+        if (Input.GetKey(KeyCode.UpArrow))
+        {
+            debugPan += new Vector3(0f, Time.deltaTime, 0f);
+            ApplyZoomAndPan();
+        }
+        if (Input.GetKey(KeyCode.DownArrow))
+        {
+            debugPan += new Vector3(0f,-Time.deltaTime, 0f);
+            ApplyZoomAndPan();
+        }
+
+        debugPan *= (5f / m_currentZoom);
+        m_currentPan += debugPan;
     }
 
     public void SelectNode(UIBattleNode a_selectedNode)
@@ -145,8 +158,15 @@ public class MapHandler : MonoBehaviour
 
     }
 
+    void ClampCameraPan()
+    {
+        m_currentPan.x = Mathf.Clamp(m_currentPan.x, m_cameraMinBounds.x, m_cameraMaxBounds.x);
+        m_currentPan.y = Mathf.Clamp(m_currentPan.y, m_cameraMinBounds.y, m_cameraMaxBounds.y);
+    }
+
     void ApplyZoomAndPan()
     {
+        ClampCameraPan();
         m_cameraRef.transform.position = m_currentPan;// * m_currentZoom;
         m_backdropRef.transform.position = new Vector3(m_currentPan.x, m_currentPan.y, m_backdropRef.transform.position.z);
         //Debug.Log(m_currentZoomLocation);
@@ -189,7 +209,6 @@ public class MapHandler : MonoBehaviour
             if (m_wasPanning)
             {
                 Vector3 m_deltaPos = panPos - m_lastPanPos;
-                Debug.Log(panPos);
                 m_currentPan -= m_deltaPos;
                 m_currentPan.z = m_startingCameraZPos;
             }

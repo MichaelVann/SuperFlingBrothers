@@ -23,7 +23,7 @@ public class EquipmentPortrait : MonoBehaviour
     {
         if (m_imageRef)
         {
-            m_imageRef.color = m_equipmentRef.m_rarityTier.color;
+            m_imageRef.color = m_equipmentRef.m_rarity.color;
         }
     }
 

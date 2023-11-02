@@ -113,14 +113,17 @@ public static class VLib
         return Quaternion.Euler(0f,0f,Vector2ToEulerAngle(a_vector2));
     }
 
-
     public static Vector3 RotateVector3In2D(this Vector3 a_vector3, float a_angle)
     {
         Vector3 returnVector = a_vector3;
         returnVector = Quaternion.AngleAxis(a_angle, Vector3.forward) * returnVector;
         return returnVector;
     }
-
+    public static Vector2 ToVector2(this Vector3 a_vector3)
+    {
+        Vector2 returnVector = new Vector2(a_vector3.x, a_vector3.y);
+        return returnVector;
+    }
     public static float AngleBetweenVector3s(Vector3 a_vectorA, Vector3 a_vectorB)
     {
         float angle = 0f;
@@ -147,6 +150,26 @@ public static class VLib
     public static float vRandom(float a_inclusiveMin, float a_inclusiveMax)
     {
         return UnityEngine.Random.Range(a_inclusiveMin, a_inclusiveMax);
+    }
+
+    public static float[] vRandomSpread(int a_count,float a_deviation)
+    {
+        float[] rolls = new float[a_count];
+
+        float totalRoll = 0f;
+        for (int i = 0; i < rolls.Length; i++)
+        {
+            rolls[i] += vRandom(0f, 100f);
+            totalRoll += rolls[i];
+        }
+
+        for (int i = 0; i < rolls.Length; i++)
+        {
+            rolls[i] = rolls[i] / (totalRoll/2f);
+            rolls[i] = (1f - a_deviation) + a_deviation * rolls[i];
+        }
+
+        return rolls;
     }
 
     public static Color Randomise(this Color a_color)

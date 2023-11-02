@@ -70,10 +70,10 @@ public class Projectile : MonoBehaviour
                     {
                         float m_stunTime = 5f;
                         a_collision.gameObject.GetComponent<Damageable>().Stun(m_stunTime);
-                        TemporarySprite web = Instantiate<GameObject>(m_temporarySpritePrefab,a_collision.gameObject.transform.position, Quaternion.identity).GetComponent<TemporarySprite>();
+                        TemporarySprite web = Instantiate<GameObject>(m_temporarySpritePrefab,a_collision.gameObject.transform.position, Quaternion.identity, a_collision.gameObject.transform).GetComponent<TemporarySprite>();
                         web.Init(m_stunTime,m_webSpriteRef);
                     }
-                    a_collision.gameObject.GetComponent<Damageable>().Damage(effect);
+                    a_collision.gameObject.GetComponent<Damageable>().Damage(effect, a_collision.GetContact(0).point);
                 }
                 else
                 {

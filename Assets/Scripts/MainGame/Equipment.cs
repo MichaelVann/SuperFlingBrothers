@@ -20,9 +20,9 @@ public class Equipment
     }
 
     [Serializable]
-    public struct RarityTier
+    public struct Rarity
     {
-        public eRarityTier level;
+        public eRarityTier tier;
         public Color color;
         public string name;
     }
@@ -33,11 +33,20 @@ public class Equipment
     [SerializeField]
     public int m_level = 0;
     [SerializeField]
-    public RarityTier m_rarityTier;
+    public Rarity m_rarity;
     [SerializeField]
     public string m_name;
     [SerializeField]
     public int m_goldValue = 0;
+    const float m_scrapValueRatio = 0.1f;
+    const float m_repairEfficacy = 0.95f;
+
+
+    [SerializeField]
+    public float m_health;
+    [SerializeField]
+    public float m_maxHealth = 60f;
+
 
     internal bool m_newToPlayer = true;
 
@@ -54,9 +63,48 @@ public class Equipment
     [SerializeReference]
     public EquipmentAbility m_activeAbility;
 
+    internal int GetGoldValue() {return (int)(m_goldValue * m_scrapValueRatio + m_goldValue * (1f- m_scrapValueRatio) * m_health/m_maxHealth);}
+    internal int GetRepairCost()
+    {
+        float repairCost = m_goldValue;
+        float healthRatio = m_health / m_maxHealth;
+        float markUp = 1.5f;
+
+        repairCost *= 1f - healthRatio;
+        repairCost *= markUp;
+        return (int)repairCost; 
+    }
+    internal bool IsBroken() { return m_health <= 0; }
+
+    public Equipment(int a_level)
+    {
+        m_health = m_maxHealth;
+        m_stats = new List<EquipmentStat>();
+        m_rarity = new Rarity();
+        Roll(a_level);
+    }
+
     public void Copy(Equipment a_equipment)
     {
 
+    }
+
+    internal float Damage(float a_damage)
+    {
+        float excessDamage = 0f;
+        m_health -= a_damage;
+        if (m_health <= 0)
+        {
+            excessDamage = -m_health;
+            m_health = 0f;
+        }
+        return excessDamage;
+    }
+
+    internal void Repair()
+    {
+        m_maxHealth *= m_repairEfficacy;
+        m_health = m_maxHealth;
     }
 
     public void SetEquipStatus(bool a_equipped, int a_equippedSlot)
@@ -67,39 +115,39 @@ public class Equipment
 
     public void SetRarityTier(eRarityTier a_rarityTier)
     {
-        m_rarityTier.level = a_rarityTier;
+        m_rarity.tier = a_rarityTier;
         UpdateRarityTier();
     }
 
     public void UpdateRarityTier()
     {
-        switch (m_rarityTier.level)
+        switch (m_rarity.tier)
         {
             case eRarityTier.Normal:
-                m_rarityTier.color = Color.white;
+                m_rarity.color = Color.white;
                 break;
             case eRarityTier.Uncommon:
-                m_rarityTier.color = Color.green;
+                m_rarity.color = Color.green;
                 break;
             case eRarityTier.Magic:
-                m_rarityTier.color = Color.blue;
+                m_rarity.color = Color.blue;
                 break;
             case eRarityTier.Exquisite:
-                m_rarityTier.color = Color.magenta;
+                m_rarity.color = Color.magenta;
                 break;
             case eRarityTier.Rare:
-                m_rarityTier.color = Color.yellow;
+                m_rarity.color = Color.yellow;
                 break;
             case eRarityTier.Unique:
-                m_rarityTier.color = new Color(1, 94f / 256f, 5f / 256f);//Orange;
+                m_rarity.color = new Color(1, 94f / 256f, 5f / 256f);//Orange;
                 break;
             case eRarityTier.Legendary:
-                m_rarityTier.color = Color.red;
+                m_rarity.color = Color.red;
                 break;
             default:
                 break;
         }
-        m_rarityTier.name = m_rarityTier.level.ToString();
+        m_rarity.name = m_rarity.tier.ToString();
     }
 
     private void Roll(int a_level)
@@ -108,16 +156,16 @@ public class Equipment
         m_level = a_level;
 
         //Repetitively attempt to uptier the rarity
-        while (UnityEngine.Random.Range(0f,1f) <= 0.25f && m_rarityTier.level < eRarityTier.Count-1)
+        while (UnityEngine.Random.Range(0f,1f) <= 0.25f && m_rarity.tier < eRarityTier.Count-1)
         {
-            m_rarityTier.level++;
+            m_rarity.tier++;
         }
         UpdateRarityTier();
 
-        m_activeAbility = new EquipmentAbility(m_rarityTier.level);
+        m_activeAbility = new EquipmentAbility(this);
 
         int points = 10 + (int)((float)(a_level)*2f);
-        points = (int)(points*Mathf.Pow(1.25f, (float)m_rarityTier.level));
+        points = (int)(points*Mathf.Pow(1.25f, (float)m_rarity.tier));
         m_goldValue = points;
         int statsChosenCount = VLib.vRandom(1,m_stats.Count-1);
         for (int i = 0; i < (int)eCharacterStatIndices.count; i++)
@@ -143,10 +191,4 @@ public class Equipment
 
     }
 
-    public Equipment(int a_level)
-    {
-        m_stats = new List<EquipmentStat>();
-        m_rarityTier = new RarityTier();
-        Roll(a_level);
-    }
 }

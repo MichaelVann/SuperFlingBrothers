@@ -12,7 +12,7 @@ using static UnityEngine.UI.CanvasScaler;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 20.8f;
+    public const float _VERSION_NUMBER = 21f;
 
     static internal bool DEBUG_MODE = true;
 
@@ -204,7 +204,7 @@ public class GameHandler : MonoBehaviour
         for (int i = 0; i < 2; i++)
         {
             Equipment evaluatedEquipment = i == 0 ? a_first : a_second;
-            vals[i] = evaluatedEquipment.m_goldValue;
+            vals[i] = evaluatedEquipment.GetGoldValue();
             vals[i] += 1000 * (evaluatedEquipment.m_equipped ? 1 : 0);
         }
         returnVal = vals[0] > vals[1] ? 1 : (vals[0] < vals[1] ? -1 : 0);
@@ -228,9 +228,30 @@ public class GameHandler : MonoBehaviour
         {
             if (m_equipmentInventory[i] == a_equipment)
             {
-                ChangeCash(m_equipmentInventory[i].m_goldValue);
+                ChangeCash(m_equipmentInventory[i].GetGoldValue());
                 m_equipmentInventory.RemoveAt(i);
                 break;
+            }
+        }
+    }
+
+    internal void AttemptToRepairEquipment(Equipment a_equipmentRef)
+    {
+        float repairCost = a_equipmentRef.GetRepairCost();
+        if (GetCurrentCash() >= repairCost)
+        {
+            a_equipmentRef.Repair();
+            ChangeCash(-repairCost);
+        }
+    }
+
+    internal void UnEquipDestroyedEquipment()
+    {
+        for (int i = 0; i < m_xCellTeam.m_playerXCell.m_equippedEquipment.Length; i++)
+        {
+            if (m_xCellTeam.m_playerXCell.m_equippedEquipment[i] != null && m_xCellTeam.m_playerXCell.m_equippedEquipment[i].IsBroken())
+            {
+                m_xCellTeam.m_playerXCell.EquipEquipment(m_xCellTeam.m_playerXCell.m_equippedEquipment[i], i);
             }
         }
     }
@@ -396,4 +417,6 @@ public class GameHandler : MonoBehaviour
             }
         }
     }
+
+
 }

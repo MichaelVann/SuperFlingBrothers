@@ -166,7 +166,14 @@ public class BattleManager : MonoBehaviour
     {
         for (int i = 0; i < m_abilityButtons.Length; i++)
         {
-            m_abilityButtons[i].SetAbilityRef(m_activeAbilities[i]);
+            if (m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i] != null)
+            {
+                m_abilityButtons[i].SetEquipmentRef(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i]);
+                if (m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i].IsBroken())
+                {
+                    m_abilityButtons[i].Disable();
+                }
+            }
             m_abilityButtons[i].Refresh();
         }
     }
@@ -365,12 +372,18 @@ public class BattleManager : MonoBehaviour
         m_levelDifficultyText.text = "Level Difficulty: " + m_gameHandlerRef.m_battleDifficulty;
     }
 
+    internal void RefreshUIShieldBar()
+    {
+        m_shieldBarRef.Init(m_player.m_shield.capacity);
+
+    }
+
     public void InitialiseUpgrades()
     {
         //Shield
         if (m_player.m_shield.enabled)
         {
-            m_shieldBarRef.Init(m_player.m_shield.capacity);
+            RefreshUIShieldBar();
         }
         else
         {
@@ -384,7 +397,12 @@ public class BattleManager : MonoBehaviour
         m_activeAbilities = new EquipmentAbility[4];
         for (int i = 0; i < m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment.Length; i++)
         {
-            m_activeAbilities[i] = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i] != null ? new EquipmentAbility(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i].m_activeAbility) : null;
+            if (m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i] != null)
+            {
+                m_activeAbilities[i] = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i].m_activeAbility;
+                m_activeAbilities[i].PrepareForBattle();
+            }
+            //m_activeAbilities[i] = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i] != null ? new EquipmentAbility(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i].m_activeAbility) : null;
         }
 
         RefreshAbilityButtons();
@@ -562,7 +580,6 @@ public class BattleManager : MonoBehaviour
             }
             Enemy.eEnemyType enemyType = (Enemy.eEnemyType)(processedSpawnSpots[i]);
 
-            Debug.Log(enemyType);
 
             Vector3 spawnLocation = m_enemySpawnPointsRefs[i].transform.position;
             SpawnEnemy(spawnLocation, enemyType);

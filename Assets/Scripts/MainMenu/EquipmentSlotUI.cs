@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class EquipmentSlotUI : MonoBehaviour
 {
     public Text m_levelText;
+    public TextMeshProUGUI m_healthText;
     public Text m_nameText;
     public Text[] m_statNameTexts;
     public Text[] m_statTexts;
@@ -28,7 +30,6 @@ public class EquipmentSlotUI : MonoBehaviour
 
     public void Refresh()
     {
-
         bool valid = m_equipmentRef != null;
 
         for (int i = 0; i < m_statTexts.Length; i++)
@@ -37,7 +38,7 @@ public class EquipmentSlotUI : MonoBehaviour
             m_statTexts[i].color = Color.white;
         }
 
-        if (m_equipmentRef != null)
+        if (valid)
         {
             m_portraitRef.SetEquipmentRef(m_equipmentRef);
             for (int i = 0; i < m_equipmentRef.m_stats.Count; i++)
@@ -48,7 +49,8 @@ public class EquipmentSlotUI : MonoBehaviour
                 m_statTexts[index].color = Color.green; //CharacterStatHandler.GetStatColor(m_equipmentRef.m_stats[i].statType);
             }
             m_abilityTextRef.text = m_equipmentRef.m_activeAbility.GetName();
-            m_itemValueTextRef.text = "" + m_equipmentRef.m_goldValue;
+            m_itemValueTextRef.text = "" + m_equipmentRef.GetGoldValue();
+            m_healthText.color = VLib.PercentageToColor(m_equipmentRef.m_health / m_equipmentRef.m_maxHealth);
         }
         else
         {
@@ -57,7 +59,8 @@ public class EquipmentSlotUI : MonoBehaviour
 
         m_levelText.text = valid ? "Level: " + m_equipmentRef.m_level : "";
         m_nameText.text = valid ? m_equipmentRef.m_name : "";
-        m_nameText.color = valid ? m_equipmentRef.m_rarityTier.color : Color.white;
+        m_nameText.color = valid ? m_equipmentRef.m_rarity.color : Color.white;
+        m_healthText.text = valid ? m_equipmentRef.m_health.ToString("f2") + "/" + m_equipmentRef.m_maxHealth.ToString("f2") : "";
 
 
         m_portraitRef.gameObject.SetActive(valid);

@@ -157,10 +157,19 @@ public class EquipmentScreenHandler : MonoBehaviour
 
     public void SetEquipStatus(Equipment a_equipment)
     {
+        bool closingInventory = false;
+        if (!a_equipment.m_equipped)
+        {
+            closingInventory = true;
+        }
         m_gameHandlerRef.m_xCellTeam.m_playerXCell.EquipEquipment(a_equipment, m_openedEquipmentSlotId);
-        //CloseInventoryPanel();
+
         RefreshInventory();
         RefreshEquipmentSlots();
+        if (closingInventory)
+        {
+            //CloseInventoryPanel();
+        }
     }
 
     public void OpenEquipmentSlot(int a_id)

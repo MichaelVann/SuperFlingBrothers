@@ -7,6 +7,7 @@ public class XCellTeam
     internal int m_level;
     internal CharacterStatHandler m_statHandler;
     internal XCell m_playerXCell;
+    internal int m_playerCellIteration = 1;
 
     public XCellTeam()
     {
@@ -26,6 +27,7 @@ public class XCellTeam
     public void KillPlayer()
     {
         m_playerXCell = new XCell();
+        m_playerCellIteration++;
         ApplyStatsToPlayer();
     }
 

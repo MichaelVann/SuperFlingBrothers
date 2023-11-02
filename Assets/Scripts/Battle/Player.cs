@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class Player : Damageable
 {
+    XCell m_playerCellRef;
+
     Camera m_cameraRef;
     public GameObject m_velocityIndicatorRef;
 
@@ -34,10 +36,17 @@ public class Player : Damageable
     float m_coinPickupTimeoutMax = 1.3f;
     RisingFadingText m_coinValueText;
 
+    //Shield
     public SpriteRenderer m_shieldSpriteRenderer;
-    //GameHandler.Shield m_shieldRef;
     float m_maxShieldOpacity = 0.64f;
     float m_projectileDamageMult = 3f;
+    bool m_firstTimeShieldSetup = true;
+
+    public GameObject m_armorSegmentPrefab;
+    GameObject[] m_armorSegments;
+    float m_armorSegmentOffset = 0.13f;
+
+
 
     public override void Awake()
     {
@@ -48,6 +57,7 @@ public class Player : Damageable
         m_flingLine.startWidth = 0.05f;
         m_flingLine.endWidth = 0.02f;
         m_cameraRef = FindObjectOfType<Camera>();
+        m_playerCellRef = m_gameHandlerRef.m_xCellTeam.m_playerXCell;
         //m_rotateToAlignToVelocity = true;
         //m_rigidBody.freezeRotation = false;
     }
@@ -65,29 +75,84 @@ public class Player : Damageable
         //Fling(new Vector3(0f, -600f, 0f), 1f);
         m_velocityIndicatorRef.SetActive(m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.playerVector].m_owned);
         m_battleManagerRef.InitialiseUpgrades();
+        SetUpArmorSegments();
+
+    }
+
+
+    void SetUpShield(List<EquipmentAbility> a_shieldAbilityList)
+    {
+        m_shield.delay = 0f;
+        m_shield.capacity = 0f;
+        m_shield.rechargeRate = 0f;
+        for (int i = 0; i < a_shieldAbilityList.Count; i++)
+        {
+            if (!a_shieldAbilityList[i].m_parentEquipment.IsBroken())
+            {
+                m_shield.delay += 1f / a_shieldAbilityList[i].m_capacitor.rechargeDelay;
+                m_shield.capacity += a_shieldAbilityList[i].m_capacitor.capacity;
+                m_shield.rechargeRate += a_shieldAbilityList[i].m_capacitor.rechargeRate;
+            }
+        }
+        m_shield.delay = 1f / m_shield.delay;
+
+        m_shield.enabled = true;
+        m_shield.delayTimer = 0f;
+        if (m_firstTimeShieldSetup)
+        {
+            m_shield.value = m_shield.capacity;
+            m_firstTimeShieldSetup = false;
+        }
+        else
+        {
+            m_shield.value = Mathf.Clamp(m_shield.value, 0f, m_shield.capacity);
+        }
     }
 
     void SetupEquipmentShield()
     {
         List<EquipmentAbility> shieldAbilities = FindEquipmentAbilities(EquipmentAbility.eAbilityType.Shield);
 
-        int cumulativeLevel = 0;
-        
-        for (int i = 0; i < shieldAbilities.Count; i++)
-        {
-            cumulativeLevel += shieldAbilities[i].m_level;
-        }
-        SetUpShield(cumulativeLevel);
-        bool shieldOwned = cumulativeLevel > 0;
+        bool shieldOwned = shieldAbilities.Count > 0;
         if (shieldOwned)
         {
-            m_shield.enabled = true;
-            m_shield.delayTimer = 0f;
-            m_shield.value = m_shield.capacity;
+            SetUpShield(shieldAbilities);
         }
         m_shieldSpriteRenderer.gameObject.SetActive(shieldOwned);
         m_shieldBarRef.gameObject.SetActive(shieldOwned);
         m_shieldBarRef.SetMaxProgressValue(m_shield.capacity);
+        m_battleManagerRef.RefreshUIShieldBar();
+    }
+
+    void SetUpArmorSegments()
+    {
+        m_armorSegments = new GameObject[m_playerCellRef.m_equippedEquipment.Length];
+        for (int i = 0; i < m_playerCellRef.m_equippedEquipment.Length; i++)
+        {
+            if (m_playerCellRef.m_equippedEquipment[i] != null)
+            {
+                float angle = i * 90f - 45f;
+                Vector3 spawnPos = VLib.EulerAngleToVector2(angle);
+                spawnPos.z = transform.position.z;
+                spawnPos *= m_armorSegmentOffset;
+                spawnPos += transform.position;
+                Quaternion spawnRot = Quaternion.Euler(0f, 0f, -angle);
+                m_armorSegments[i] = Instantiate<GameObject>(m_armorSegmentPrefab, spawnPos, spawnRot, transform);
+            }
+        }
+        RefreshArmorSegments();
+    }
+
+    void RefreshArmorSegments()
+    {
+        for (int i = 0;i < m_armorSegments.Length;i++)
+        {
+            if (m_armorSegments[i] != null)
+            {
+                float healthScale = m_playerCellRef.m_equippedEquipment[i].m_health / m_playerCellRef.m_equippedEquipment[i].m_maxHealth;
+                m_armorSegments[i].GetComponent<SpriteRenderer>().color = new Color(1f, healthScale, healthScale);
+            }
+        }
     }
 
     EquipmentAbility FindActiveEquipmentAbility(EquipmentAbility.eAbilityType a_abilityType)
@@ -159,21 +224,6 @@ public class Player : Damageable
             }
 
         }
-
-        //for (int i = 0; i < m_battleManagerRef.m_activeAbilities.Length; i++)
-        //{
-        //    if (m_battleManagerRef.m_activeAbilities[i] != null)
-        //    {
-        //        EquipmentAbility abil = m_battleManagerRef.m_activeAbilities[i];
-        //        if (abil.m_abilityType == EquipmentAbility.eAbilityType.Projectile && abil.m_activated)
-        //        {
-        //            abil.m_ammo--;
-        //            abil.m_activated = false;
-        //            ShootProjectile(a_flingVector, abil);
-        //            break;
-        //        }
-        //    }
-        //}
         m_battleManagerRef.RefreshAbilityButtons();
     }
 
@@ -255,6 +305,11 @@ public class Player : Damageable
         bool runningBaseCollision = false;
         bool tookDamage = false;
 
+        Vector2 collisionPoint2d = a_collision.GetContact(0).point;
+        Vector3 collisionPoint = new Vector3(collisionPoint2d.x, collisionPoint2d.y, transform.position.z);
+
+
+
         if (enemy)//If collided with an enemy
         {
             if (true)//m_health <= m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue / 3f)//
@@ -284,7 +339,7 @@ public class Player : Damageable
             case GameHandler.eGameMode.Health:
                 if (a_collision.gameObject.GetComponent<Pocket>())
                 {
-                    TakePocketDamage();
+                    TakePocketDamage(a_collision.contacts[0].point);
                     PocketFling(a_collision.gameObject.transform.position);
                 }
                 else if (a_collision.gameObject.GetComponent<Enemy>() != null)
@@ -377,13 +432,21 @@ public class Player : Damageable
         damageText.SetOriginalColor(Color.gray);
     }
 
-    public override void Damage(float a_damage)
+    void DestroyArmorSegment(int a_id)
+    {
+        Destroy(m_armorSegments[a_id]);
+        m_armorSegments[a_id] = null;
+        SetupEquipmentShield();
+    }
+
+    public override void Damage(float a_damage, Vector2 a_damagePoint)
     {
         if (m_battleManagerRef.m_endingGame)
         {
             return;
         }
         float damage = a_damage;
+        //Shield
         if (m_shield.enabled)
         {
             if (m_shield.value >= damage)
@@ -398,6 +461,8 @@ public class Player : Damageable
             }
             m_shield.delayTimer = 0f;
         }
+
+        //Armor Protection
         float armourProtectionAmount = m_statHandler.m_stats[(int)eCharacterStatIndices.protection].m_finalValue * 0.1f;
         float blockedAmount = armourProtectionAmount > damage ? damage : armourProtectionAmount;
         if (blockedAmount > 0f)
@@ -406,10 +471,36 @@ public class Player : Damageable
         }
         m_statHandler.m_stats[(int)eCharacterStatIndices.protection].ChangeXP((int)blockedAmount);
         damage -= blockedAmount;
+
+        //Equipment Segment
+        float damageAngle = VLib.Vector2ToEulerAngle(a_damagePoint - transform.position.ToVector2());
+        damageAngle = 360f - damageAngle;
+        if (damageAngle < 0f)
+        {
+            damageAngle += 360f;
+        }
+        else if (damageAngle > 360f)
+        {
+            damageAngle -= 360f;
+        }
+        damageAngle += 90f;
+        int damagedEquipmentSlot = (int)((damageAngle % 360f) / 90f);
+        Debug.Log(damagedEquipmentSlot);
+        Equipment affectedEquipment = m_playerCellRef.m_equippedEquipment[damagedEquipmentSlot];
+        if (m_armorSegments[damagedEquipmentSlot] != null)
+        {
+            damage = affectedEquipment.Damage(damage);
+            if (damage > 0)
+            {
+                DestroyArmorSegment(damagedEquipmentSlot);
+            }
+        }
         damage = Mathf.Clamp(damage, 0f, float.MaxValue);
         m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].ChangeXP((int)damage);
-        base.Damage(damage);
+        base.Damage(damage, a_damagePoint);
         m_battleManagerRef.m_healthBarRef.SetBarValue(m_health);
+        RefreshArmorSegments();
+        m_battleManagerRef.RefreshAbilityButtons();
     }
 
     void UpdateShieldOpacity()
@@ -455,7 +546,7 @@ public class Player : Damageable
 
         if (Input.GetKey(KeyCode.M))
         {
-             Damage(100f);
+             Damage(100f, Vector2.zero);
         }
     }
 
