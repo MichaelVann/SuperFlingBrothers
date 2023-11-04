@@ -4,8 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
-using static Damageable;
-using static UnityEditor.Experimental.GraphView.Port;
+
 
 public class EquipmentAbility
 {
