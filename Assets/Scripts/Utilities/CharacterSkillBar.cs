@@ -11,8 +11,13 @@ public class CharacterSkillBar : MonoBehaviour
 
     internal bool m_animating = false;
     float m_animatingSpeed = 100f;
+    float m_lastProgress = 0f;
     float m_currentProgress = 0f;
     float m_totalProgress = 0f;
+    vTimer m_lerpTimer;
+    float m_lerpTotalTime = 5f;
+    float m_lerpExponent = 0.1f;
+    int m_lerpSensitivity = 3;
 
     // Start is called before the first frame update
     void Awake()
@@ -29,9 +34,12 @@ public class CharacterSkillBar : MonoBehaviour
     internal void Refresh()
     {
         m_totalProgress = m_trackedStat.m_RPGLevel.GetXpDifference(m_trackedStat.m_lastSeenRPGLevel, m_trackedStat.m_RPGLevel);
+
+        m_lerpTotalTime = Mathf.Log10(m_totalProgress+1f);
         if (m_totalProgress > 0)
         {
             m_animating = true;
+            m_lerpTimer = new vTimer(m_lerpTotalTime, true, true, false);
         }
         else
         {
@@ -62,19 +70,48 @@ public class CharacterSkillBar : MonoBehaviour
         {
             RPGLevel oldLevel = m_trackedStat.m_lastSeenRPGLevel;
             RPGLevel level = m_trackedStat.m_RPGLevel;
-            float speed = Mathf.Sin((m_currentProgress / m_totalProgress) * Mathf.PI) + 0.2f;
-            speed *= m_animatingSpeed;
-            float xpChange = (int)speed * Time.deltaTime;
-            oldLevel.ChangeXP(xpChange);
-            m_currentProgress += xpChange;
+            float m_lerpProgress = 0f;
+            m_lerpTimer.Update();
+            m_lerpProgress = m_lerpTimer.GetCompletionPercentage();
+            m_lerpProgress = VLib.SigmoidLerp(0f, m_totalProgress,m_lerpProgress, m_lerpSensitivity);// VLib.Eerp(0f, m_totalProgress, m_lerpProgress, m_lerpExponent);
+            oldLevel.ChangeXP(m_lerpProgress - m_currentProgress);
+
+            m_currentProgress = m_lerpProgress;
+            
+
+            int system = 2;
+
+            if (system == 0)
+            {
+                float remainingXp = m_trackedStat.m_RPGLevel.GetXpDifference(m_trackedStat.m_lastSeenRPGLevel, m_trackedStat.m_RPGLevel);
+                float speed = remainingXp * 0.99f;// Mathf.Pow(remainingXp,1.15f) /1f;
+                speed = VLib.LilClamp(speed, 1f);
+                float xpChange = speed * Time.deltaTime;
+                oldLevel.ChangeXP(xpChange);
+            }
+            else if (system == 1)
+            {
+                float x = (m_currentProgress / m_totalProgress) * 0.6f + 0.4f;
+                float speed = Mathf.Sin(x * Mathf.PI) + 0.05f;
+                speed *= m_animatingSpeed;
+                float xpChange = speed * Time.deltaTime * (m_totalProgress / 100f);
+                oldLevel.ChangeXP(xpChange);
+                m_currentProgress += xpChange;
+            }
+
+
 
             bool higherLevel = level.m_level > oldLevel.m_level;
-            bool higherXP = level.m_XP >= oldLevel.m_XP;
+            bool higherXP = level.m_XP > oldLevel.m_XP;
 
             if (!higherLevel && !higherXP)
             {
                 oldLevel.m_XP = level.m_XP;
                 m_animating = false;
+            }
+            if (m_currentProgress > m_totalProgress)
+            {
+                //Debug.Break();
             }
             RefreshValues();
         }

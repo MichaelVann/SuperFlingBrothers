@@ -45,7 +45,7 @@ public class RPGLevel
         while (m_XP >= m_maxXP)
         {
             m_XP -= m_maxXP;
-            m_maxXP += GetXpNeededForLevelUP(m_level);
+            m_maxXP = GetXpNeededForLevelUP(m_level+1);
 
             m_level++;
             m_allocationPoints++;
@@ -55,9 +55,10 @@ public class RPGLevel
     static float GetXpNeededForLevelUP(int a_level)
     {
         float xpNeeded = 0f;
-        int levelPlusOne = a_level + 1;
+        int levelPlusOne = a_level;
         float exponent = Mathf.Pow(2f, (levelPlusOne) / 7f);
         xpNeeded = (levelPlusOne + 300f * exponent) / 4f;
+        xpNeeded = Mathf.Floor(xpNeeded);
         return xpNeeded;
     }
 
@@ -66,7 +67,7 @@ public class RPGLevel
         float xpDiff = 0f;
         for (int i = a_lowerLevel.m_level; i < a_upperLevel.m_level; i++)
         {
-            xpDiff += GetXpNeededForLevelUP(a_lowerLevel.m_level);
+            xpDiff += GetXpNeededForLevelUP(i);
         }
         xpDiff -= a_lowerLevel.m_XP;
         xpDiff += a_upperLevel.m_XP;
@@ -310,8 +311,8 @@ public class CharacterStatHandler
             m_stats[i].name = GetStatName(i);
         }
 
-        SetStatPostAddedValue(eCharacterStatIndices.dexterity, 50f);
-        SetStatScale(eCharacterStatIndices.dexterity, 5f);
+        SetStatPostAddedValue(eCharacterStatIndices.dexterity, 10f);
+        SetStatScale(eCharacterStatIndices.dexterity, 1f);
 
         m_stats[(int)eCharacterStatIndices.constitution].m_scale = 10f;
         SetStatPostAddedValue(eCharacterStatIndices.constitution, 100f);

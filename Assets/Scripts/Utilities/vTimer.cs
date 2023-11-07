@@ -12,20 +12,26 @@ public class vTimer
     bool m_onceOff;
     bool m_finished;
     bool m_active;
+    bool m_resetsTimerOnComplete;
 
     public void SetActive(bool a_active) { m_active = a_active; }
+    public float GetTimer() { return m_timer; }
 
-    private void Init(float a_maxTime, bool a_onceOff, bool a_active)
+    public float GetCompletionPercentage() { return m_timer / m_timerMax; }
+    public float GetTimerMax() { return m_timerMax; }
+
+    private void Init(float a_maxTime, bool a_onceOff, bool a_active, bool a_resetsTimerOnComplete)
     {
         m_timer = 0f;
         m_timerMax = a_maxTime;
         m_onceOff = a_onceOff;
         m_active = a_active;
+        m_resetsTimerOnComplete = a_resetsTimerOnComplete;
     }
 
-    public vTimer(float a_maxTime, bool a_onceOff = false, bool a_active = true)
+    public vTimer(float a_maxTime, bool a_onceOff = false, bool a_active = true, bool a_resetsTimerOnComplete = true)
     {
-        Init(a_maxTime, a_onceOff, a_active);
+        Init(a_maxTime, a_onceOff, a_active, a_resetsTimerOnComplete);
     }
 
     public void Reset()
@@ -47,9 +53,19 @@ public class vTimer
             {
                 m_finished = true;
             }
-            m_timer -= m_timerMax;
+            if (m_resetsTimerOnComplete)
+            {
+                m_timer -= m_timerMax;
+            }
             return true;
         }
         return false;
+    }
+
+    public bool Update(ref float a_timeElapsed)
+    {
+        bool retVal = Update();
+        a_timeElapsed = m_timer;
+        return retVal;
     }
 }

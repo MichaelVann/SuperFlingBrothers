@@ -22,6 +22,7 @@ public class GameHandler : MonoBehaviour
     static internal float BATTLE_CoinValue = 1f;
     static internal float BATTLE_ShadowAngle = 135f;
     static internal float BATTLE_FlingStrength = 259f;
+    static internal float BATTLE_SkillXPScale = 5f;
     //Damageables
     static internal float DAMAGEABLE_defaultMass = 1f;
     static internal float DAMAGEABLE_bumpFlingStrengthMult = 0.25f;

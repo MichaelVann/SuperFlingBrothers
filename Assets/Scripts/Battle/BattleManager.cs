@@ -70,13 +70,12 @@ public class BattleManager : MonoBehaviour
 
     //Turns
     public int m_turnsRemaining;
-    public float m_turnInterval;
     float m_turnsTimer = 0f;
 
     //Turn Freezing
     public bool m_timeFrozen = false;
     float m_turnFreezeTimer;
-    float m_turnFreezeTimerMax;
+    float m_turnFreezeTimerMax = 2f;
     bool m_turnFreezing = false;
     float m_turnFreezingTimer = 0f;
     const float m_turnFreezingTimerMax = 0.2f;
@@ -99,9 +98,7 @@ public class BattleManager : MonoBehaviour
     //Active Abilities
     public EquipmentAbility[] m_activeAbilities;
 
-    //Prepared Abilities
-    //int m_extraTurnsRemaining = 1;
-    //bool m_usingExtraTurn;
+    internal float m_upperLowerFlingPositionBounds;
 
     internal struct EnvironmentalEffects
     {
@@ -338,7 +335,8 @@ public class BattleManager : MonoBehaviour
     {
         m_uiHandlerRef = GetComponent<BattleUIHandler>();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_turnFreezeTimerMax = m_turnInterval;
+        m_turnFreezeTimerMax *= 1f-(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].m_finalValue/100f);
+        m_debugText.text = "" + m_turnFreezeTimerMax;
         m_turnFreezeTimer = m_turnFreezeTimerMax;
         m_coreEnemySpawnLocation = new Vector3(0f, -1.6f, 0f);
         m_enemySpawnPointsRefs = new List<GameObject>();
@@ -370,6 +368,7 @@ public class BattleManager : MonoBehaviour
         }
         SpawnEnemies();
         m_levelDifficultyText.text = "Level Difficulty: " + m_gameHandlerRef.m_battleDifficulty;
+        m_upperLowerFlingPositionBounds = m_wallSpriteRenderers[3].gameObject.transform.position.y;
     }
 
     internal void RefreshUIShieldBar()
@@ -596,26 +595,26 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void UpdateTurns()
-    {
-        m_turnsTimer += Time.deltaTime;
-        if (m_turnsTimer >= m_turnInterval)
-        {
-            m_turnsTimer -= m_turnInterval;
-            if (m_gameHandlerRef.m_currentGameMode == GameHandler.eGameMode.TurnLimit)
-            {
-                m_turnsRemaining--;
-                if (m_turnsRemaining <= 0)
-                {
-                    StartEndingGame(eEndGameType.lose);
-                }
-            }
-            else
-            {
-                m_turnsRemaining++;
-            }
-        }
-    }
+    //public void UpdateTurns()
+    //{
+    //    m_turnsTimer += Time.deltaTime;
+    //    if (m_turnsTimer >= m_turnInterval)
+    //    {
+    //        m_turnsTimer -= m_turnInterval;
+    //        if (m_gameHandlerRef.m_currentGameMode == GameHandler.eGameMode.TurnLimit)
+    //        {
+    //            m_turnsRemaining--;
+    //            if (m_turnsRemaining <= 0)
+    //            {
+    //                StartEndingGame(eEndGameType.lose);
+    //            }
+    //        }
+    //        else
+    //        {
+    //            m_turnsRemaining++;
+    //        }
+    //    }
+    //}
 
     internal void Retreat()
     {
@@ -714,7 +713,7 @@ public class BattleManager : MonoBehaviour
         }
         else if (!m_endingGame)
         {
-            UpdateTurns();
+            //UpdateTurns();
             switch (m_gameHandlerRef.m_currentGameMode)
             {
                 case GameHandler.eGameMode.TurnLimit:

@@ -101,6 +101,12 @@ public static class VLib
         return retVec;
     }
 
+    public static float Eerp(float a_start, float a_end, float a_time, float a_exponent)
+    {
+        float retVal = Mathf.Lerp(a_start,a_end,Mathf.Pow(a_time,a_exponent));
+        return retVal;
+    }
+
     public static Vector2 EulerAngleToVector2(float a_angle)
     {
         float x = Mathf.Sin(a_angle * Mathf.PI / 180f);

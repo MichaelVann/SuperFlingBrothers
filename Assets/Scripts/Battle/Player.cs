@@ -14,6 +14,8 @@ public class Player : Damageable
     bool m_flinging = false;
     Vector3 m_originalFlingPos;
     const float m_maxFlingLength = 1f;
+    const int m_flingDexterityXP = 7;
+    const int m_abilityUsageDexterityXP = 10;
 
     LineRenderer m_flingLine;
 
@@ -24,7 +26,6 @@ public class Player : Damageable
 
     float m_hitTimeSlowdownRate = 0.05f;
 
-    float m_upperLowerFlingPositionBounds = 3.0f;
 
     public SpriteRenderer m_invalidFlingCross;
 
@@ -39,7 +40,7 @@ public class Player : Damageable
     //Shield
     public SpriteRenderer m_shieldSpriteRenderer;
     float m_maxShieldOpacity = 0.64f;
-    float m_projectileDamageMult = 3f;
+    float m_projectileDamageMult = 50f;
     bool m_firstTimeShieldSetup = true;
 
     public GameObject m_armorSegmentPrefab;
@@ -131,12 +132,27 @@ public class Player : Damageable
         {
             if (m_playerCellRef.m_equippedEquipment[i] != null)
             {
-                float angle = i * 90f - 45f;
-                Vector3 spawnPos = VLib.EulerAngleToVector2(angle);
+                Vector3 spawnPos = Vector3.zero;
+                switch (i)
+                {
+                    case 0:
+                        spawnPos = new Vector3(-1f, 1f).normalized;
+                        break;
+                    case 1:
+                        spawnPos = new Vector3(1f, 1f).normalized;
+                        break;
+                    case 2:
+                        spawnPos = new Vector3(-1f, -1f).normalized;
+                        break;
+                    case 3:
+                        spawnPos = new Vector3(1f, -1f).normalized;
+                        break;
+                }
+                //float angle = i * 90f - 45f;
+                Quaternion spawnRot = Quaternion.Euler(0f, 0f, VLib.Vector2ToEulerAngle(spawnPos));
                 spawnPos.z = transform.position.z;
                 spawnPos *= m_armorSegmentOffset;
                 spawnPos += transform.position;
-                Quaternion spawnRot = Quaternion.Euler(0f, 0f, -angle);
                 m_armorSegments[i] = Instantiate<GameObject>(m_armorSegmentPrefab, spawnPos, spawnRot, transform);
             }
         }
@@ -205,6 +221,7 @@ public class Player : Damageable
         base.Fling(a_flingVector, a_flingStrength);
         m_flinging = false;
         m_battleManagerRef.SetFrozen(false);
+        m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].ChangeXP(m_flingDexterityXP * GameHandler.BATTLE_SkillXPScale);
 
         //Handle Projectile Shooting
         EquipmentAbility abil = FindActiveEquipmentAbility();
@@ -237,8 +254,10 @@ public class Player : Damageable
             if (m_battleManagerRef.m_timeFrozen && Input.GetMouseButton(0))
             {
                 m_originalFlingPos = m_cameraRef.ScreenToWorldPoint(Input.mousePosition);
-
-                m_flinging = true;
+                if (m_originalFlingPos.y < m_battleManagerRef.m_upperLowerFlingPositionBounds && m_originalFlingPos.y > -m_battleManagerRef.m_upperLowerFlingPositionBounds)
+                {
+                    m_flinging = true;
+                }
             }
         }
         else
@@ -251,7 +270,7 @@ public class Player : Damageable
             m_flingLine.enabled = true;
             Vector3 worldMousePoint = m_cameraRef.ScreenToWorldPoint(Input.mousePosition);
 
-            if (worldMousePoint.y >= m_upperLowerFlingPositionBounds || worldMousePoint.y <= -m_upperLowerFlingPositionBounds)
+            if (worldMousePoint.y >= m_battleManagerRef.m_upperLowerFlingPositionBounds || worldMousePoint.y <= -m_battleManagerRef.m_upperLowerFlingPositionBounds)
             {
                 m_invalidFlingCross.enabled = true;
                 m_invalidFlingCross.gameObject.transform.position = new Vector3(worldMousePoint.x, worldMousePoint.y);
@@ -277,7 +296,7 @@ public class Player : Damageable
             //If the release point is outside the map, cancel the shot
             if (!Input.GetMouseButton(0))
             {
-                if (worldMousePoint.y < m_upperLowerFlingPositionBounds && worldMousePoint.y > -m_upperLowerFlingPositionBounds)
+                if (worldMousePoint.y < m_battleManagerRef.m_upperLowerFlingPositionBounds && worldMousePoint.y > -m_battleManagerRef.m_upperLowerFlingPositionBounds)
                 {
                     Fling(deltaMousePos, GameHandler.BATTLE_FlingStrength);
                 }
@@ -379,8 +398,9 @@ public class Player : Damageable
     {
         GameObject projectile = Instantiate<GameObject>(m_projectileTemplate,transform.position, VLib.Vector2DirectionToQuaternion(a_shootVector));
         Projectile projectileComp = projectile.GetComponent<Projectile>();
+        m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].ChangeXP(m_abilityUsageDexterityXP * GameHandler.BATTLE_SkillXPScale);
 
-        projectileComp.Initialise(a_ability, a_shootVector, m_rigidBody.velocity, m_statHandler.GetStatFinalValue((int)eCharacterStatIndices.dexterity) * m_projectileDamageMult);
+        projectileComp.Initialise(a_ability, a_shootVector, m_rigidBody.velocity, m_projectileDamageMult);
     }
 
     public void OnTriggerEnter2D(Collider2D a_collider)
@@ -485,6 +505,16 @@ public class Player : Damageable
         }
         damageAngle += 90f;
         int damagedEquipmentSlot = (int)((damageAngle % 360f) / 90f);
+
+        //Change to left to right top to bottom instead of rotating like a clock
+        if (damagedEquipmentSlot == 2)
+        {
+            damagedEquipmentSlot = 3;
+        }
+        else if (damagedEquipmentSlot == 3)
+        {
+            damagedEquipmentSlot = 2;
+        }
         Debug.Log(damagedEquipmentSlot);
         Equipment affectedEquipment = m_playerCellRef.m_equippedEquipment[damagedEquipmentSlot];
         if (m_armorSegments[damagedEquipmentSlot] != null)
@@ -496,7 +526,7 @@ public class Player : Damageable
             }
         }
         damage = Mathf.Clamp(damage, 0f, float.MaxValue);
-        m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].ChangeXP((int)damage);
+        m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].ChangeXP((int)damage * GameHandler.BATTLE_SkillXPScale);
         base.Damage(damage, a_damagePoint);
         m_battleManagerRef.m_healthBarRef.SetBarValue(m_health);
         RefreshArmorSegments();
@@ -552,6 +582,6 @@ public class Player : Damageable
 
     internal void ReportDamageDealt(float m_lastDamageTaken)
     {
-        m_statHandler.m_stats[(int)eCharacterStatIndices.strength].ChangeXP((int)m_lastDamageTaken);
+        m_statHandler.m_stats[(int)eCharacterStatIndices.strength].ChangeXP((int)(m_lastDamageTaken * GameHandler.BATTLE_SkillXPScale));
     }
 }

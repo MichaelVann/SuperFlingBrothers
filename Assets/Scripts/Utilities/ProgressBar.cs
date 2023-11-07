@@ -80,17 +80,21 @@ public class ProgressBar : MonoBehaviour
             }
         }
 
-        float healthPercentage = m_postProcess / m_progressMax;
-        float preHealthPercentage = m_progress / m_progressMax;
-        //m_progressBarRef.gameObject.transform.localScale = new Vector3(m_originalScale.x * healthPercentage, m_originalScale.y,1f);
-        m_barOccluder.gameObject.transform.localScale = new Vector3(m_originalScale.x * (1f-healthPercentage), m_originalScale.y,1f);
-        m_whiteLagBar.transform.localScale = new Vector3(m_originalScale.x * (1f- preHealthPercentage), m_originalScale.y,1f);
-        if (m_healthColoring)
+        if (m_progressMax != 0)
         {
-            Color barColor = VLib.PercentageToColor(healthPercentage);
-            m_progressBarRef.color = barColor;
+            float healthPercentage = m_postProcess / m_progressMax;
+            float preHealthPercentage = m_progress / m_progressMax;
+            //m_progressBarRef.gameObject.transform.localScale = new Vector3(m_originalScale.x * healthPercentage, m_originalScale.y,1f);
+            m_barOccluder.gameObject.transform.localScale = new Vector3(m_originalScale.x * (1f - healthPercentage), m_originalScale.y, 1f);
+            m_whiteLagBar.transform.localScale = new Vector3(m_originalScale.x * (1f - preHealthPercentage), m_originalScale.y, 1f);
+            if (m_healthColoring)
+            {
+                Color barColor = VLib.PercentageToColor(healthPercentage);
+                m_progressBarRef.color = barColor;
+            }
         }
-
-
+        else
+        {
+        }
     }
 }
