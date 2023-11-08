@@ -46,7 +46,11 @@ public class RPGLevel
         {
             m_XP -= m_maxXP;
             m_maxXP = GetXpNeededForLevelUP(m_level+1);
-
+            if (m_level >= 40)
+            {
+                m_level = m_level;
+                Debug.Log("Test");
+            }
             m_level++;
             m_allocationPoints++;
         }
@@ -91,7 +95,11 @@ public class CharacterStat
     [SerializeField]
     public float m_parentAddedValue;
     [SerializeField]
+    public float m_attributeEffectiveValue; // = ((stat.value-1f) * stat.scale);
+    [SerializeField]
     public float m_effectiveValue; // = ((stat.value-1f) * stat.scale);
+    [SerializeField]
+    public float m_totalValue; // = ((stat.value-1f) * stat.scale);
     [SerializeField]
     public float m_finalValue; // = effectiveValue + stat.postAddedValue + equipmentAddedValue; 
     [SerializeField]
@@ -103,26 +111,34 @@ public class CharacterStat
 
     public RPGLevel m_RPGLevel;
     public RPGLevel m_lastSeenRPGLevel;
+    bool m_usingRPGLevel = true;
 
-    public CharacterStat()
+    public CharacterStat(bool a_usingRPGLevel)
     {
+        m_usingRPGLevel = a_usingRPGLevel;
         m_RPGLevel = new RPGLevel();
         m_lastSeenRPGLevel = new RPGLevel();
     }
 
     public void UpdateStat()
     {
-        m_effectiveValue = (m_value - 1f) * m_scale;
-        m_finalValue = m_effectiveValue + postAddedValue;
-        m_finalValue += m_equipmentAddedValue;
-        m_finalValue += m_parentAddedValue;
+        if (m_usingRPGLevel)
+        {
+            m_value = m_RPGLevel.m_level - 1;
+        }
+
+        m_attributeEffectiveValue = (m_value - 1f) * m_scale;
+        //m_equipmentEffectiveValue = m_equipmentAddedValue * m_scale;
+        //m_effectiveValue = m_equipmentEffectiveValue + m_attributeEffectiveValue;
+        m_totalValue = m_value + m_equipmentAddedValue + m_parentAddedValue;
+        m_finalValue = (m_totalValue)* m_scale + postAddedValue;
+        //m_finalValue += m_parentAddedValue;
     }
 
     public void ChangeXP(float a_value)
     {
         a_value /= 3f;
         m_RPGLevel.ChangeXP(a_value);
-        m_value = m_RPGLevel.m_level;
         UpdateStat();
     }
 
@@ -141,9 +157,11 @@ public class CharacterStatHandler
 
     const float m_baseHealthScale = 4f;
 
+    public bool m_usingRPGLevel = true;
+
     public void Copy(CharacterStatHandler a_statHandler)
     {
-        Init();
+        Init(a_statHandler.m_usingRPGLevel);
         m_RPGLevel = a_statHandler.m_RPGLevel;
 
         m_reSpecCost = a_statHandler.m_reSpecCost;
@@ -223,13 +241,14 @@ public class CharacterStatHandler
     }
 
     // Start is called before the first frame update
-    public void Init()
+    public void Init(bool a_usingRPGLevel)
     {
+        m_usingRPGLevel = a_usingRPGLevel;
         m_RPGLevel = new RPGLevel();
         m_stats = new CharacterStat[(int)eCharacterStatIndices.count];
         for (int i = 0; i < m_stats.Length; i++)
         {
-            m_stats[i] = new CharacterStat();
+            m_stats[i] = new CharacterStat(m_usingRPGLevel);
         }
         SetDefaultStats();
     }
@@ -255,7 +274,7 @@ public class CharacterStatHandler
     {
         for (int i = 0;i < m_stats.Length;i++)
         {
-            m_stats[i].m_parentAddedValue = a_handler.m_stats[i].m_finalValue;
+            m_stats[i].m_parentAddedValue = a_handler.m_stats[i].m_totalValue;
             UpdateStat(i);
         }
     }
@@ -311,8 +330,8 @@ public class CharacterStatHandler
             m_stats[i].name = GetStatName(i);
         }
 
-        SetStatPostAddedValue(eCharacterStatIndices.dexterity, 10f);
-        SetStatScale(eCharacterStatIndices.dexterity, 1f);
+        SetStatPostAddedValue(eCharacterStatIndices.dexterity, 0f);
+        SetStatScale(eCharacterStatIndices.dexterity, 0.01f);
 
         m_stats[(int)eCharacterStatIndices.constitution].m_scale = 10f;
         SetStatPostAddedValue(eCharacterStatIndices.constitution, 100f);

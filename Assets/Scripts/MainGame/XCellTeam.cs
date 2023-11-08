@@ -14,9 +14,10 @@ public class XCellTeam
         m_name = "";
         m_level = 0;
         m_statHandler = new CharacterStatHandler();
-        m_statHandler.Init();
+        m_statHandler.Init(false);
         m_statHandler.ClearPostAddedValues();
         m_playerXCell = new XCell();
+        ApplyStatsToPlayer();
     }
 
     void ApplyStatsToPlayer()

@@ -199,6 +199,8 @@ MonoBehaviour:
   m_lightRef: {fileID: 95816661666460994}
   m_playerDamaging: 0
   m_enemyDamaging: 0
+  m_explosionPrefab: {fileID: 8455903170808272189, guid: c2dfda481e8668a48b2f4f8b329a630b,
+    type: 3}
   m_temporarySpritePrefab: {fileID: 9040330090155021966, guid: 71a9ed1dd910ae34da0af04b73d5bb22,
     type: 3}
   m_webSpriteRef: {fileID: 21300000, guid: 3d45872883a43634fb663fc61c5d5a7b, type: 3}
@@ -250,7 +252,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 0.3
-  m_LinearDrag: 0
+  m_LinearDrag: 0.1
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}

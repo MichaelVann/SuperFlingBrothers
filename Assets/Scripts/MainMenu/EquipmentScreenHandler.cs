@@ -84,7 +84,7 @@ public class EquipmentScreenHandler : MonoBehaviour
             if (m_gameHandlerRef.m_equipmentInventory[i] != null)
             {
                 EquipmentPanel equipmentPanel = Instantiate<GameObject>(m_equipmentPanelTemplate, m_inventoryContentRef.transform).GetComponent<EquipmentPanel>();
-                equipmentPanel.Init(m_gameHandlerRef.m_equipmentInventory[i]);
+                equipmentPanel.Init(m_gameHandlerRef.m_equipmentInventory[i], this);
                 //equipablePanel.Refresh();
                 m_equipmentItemPanels.Add(equipmentPanel);
             }
@@ -136,8 +136,8 @@ public class EquipmentScreenHandler : MonoBehaviour
 
     internal void SetEquipmentDigestStatus(bool a_open, Equipment a_equipment = null)
     {
-        SetTopPanelEquipmentRef(a_equipment);
-        //m_equipmentDigestRef.SetActive(a_open);
+        //SetTopPanelEquipmentRef(a_equipment);
+        m_equipmentDigestRef.SetActive(a_open);
 
         if (a_open)
         {

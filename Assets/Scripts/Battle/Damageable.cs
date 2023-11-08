@@ -88,7 +88,7 @@ public class Damageable : BaseObject
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_battleManagerRef = FindObjectOfType<BattleManager>();
         m_statHandler = new CharacterStatHandler();
-        m_statHandler.Init();
+        m_statHandler.Init(false);
         m_originalColor = m_spriteRenderer.color;
         m_rigidBody.mass = m_originalMass = GameHandler.DAMAGEABLE_defaultMass;
         m_damageFlashOverrideTimer = new vTimer(m_damageFlashTimerMax,false);

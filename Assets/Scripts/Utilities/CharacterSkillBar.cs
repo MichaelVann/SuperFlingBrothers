@@ -36,7 +36,7 @@ public class CharacterSkillBar : MonoBehaviour
         m_totalProgress = m_trackedStat.m_RPGLevel.GetXpDifference(m_trackedStat.m_lastSeenRPGLevel, m_trackedStat.m_RPGLevel);
 
         m_lerpTotalTime = Mathf.Log10(m_totalProgress+1f);
-        if (m_totalProgress > 0)
+        if (m_totalProgress > 0.01f)
         {
             m_animating = true;
             m_lerpTimer = new vTimer(m_lerpTotalTime, true, true, false);

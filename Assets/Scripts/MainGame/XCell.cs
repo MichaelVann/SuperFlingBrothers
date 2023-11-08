@@ -8,7 +8,7 @@ public class XCell
     internal CharacterStatHandler m_statHandler;
     [SerializeReference]
     public Equipment[] m_equippedEquipment;
-    const float m_equipmentStatEffectMult = 0.1f;
+    const float m_equipmentStatEffectMult = 1f;
     public Color m_colorShade;
 
     public XCell()
@@ -16,7 +16,7 @@ public class XCell
         m_name = VLib.GenerateRandomizedName(3,3);
         m_name += VLib.vRandom(100, 999);
         m_statHandler = new CharacterStatHandler();
-        m_statHandler.Init();
+        m_statHandler.Init(true);
         m_colorShade = new Color();
         m_colorShade = m_colorShade.Randomise();
         Init();

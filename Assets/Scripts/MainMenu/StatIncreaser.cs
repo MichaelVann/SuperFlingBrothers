@@ -36,7 +36,7 @@ public class StatIncreaser : MonoBehaviour
 
         m_statCounterRef.m_text.text = "" + m_referencedStat.m_value;
 
-        m_effectDescriptionTextRef.text = "+" + m_referencedStat.m_effectiveValue;
+        m_effectDescriptionTextRef.text = "+" + m_referencedStat.m_attributeEffectiveValue;
 
         string suffixString = "";
         switch (m_statIndex)
@@ -45,7 +45,7 @@ public class StatIncreaser : MonoBehaviour
                 suffixString = "Hit Damage";
                 break;
             case eCharacterStatIndices.dexterity:
-                suffixString = "Equipment Damage";
+                suffixString = "s Turn Speed";
                 break;
             case eCharacterStatIndices.constitution:
                 suffixString = "Health";

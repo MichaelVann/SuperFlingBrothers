@@ -17,6 +17,8 @@ public class Projectile : MonoBehaviour
     EquipmentAbility m_parentAbility;
     bool m_friendly = true;
     bool m_stunning = false;
+    float m_minimumVelocity = 0.5f;
+    public GameObject m_explosionPrefab;
 
     public GameObject m_temporarySpritePrefab;
     public Sprite m_webSpriteRef;
@@ -30,7 +32,17 @@ public class Projectile : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (m_rigidbody.velocity.magnitude < m_minimumVelocity)
+        {
+            Die();
+        }
         //transform.rotation = VLib.Vector2DirectionToQuaternion(m_rigidbody.velocity);
+    }
+
+    void Die()
+    {
+        Destroy(this.gameObject);
+        Instantiate(m_explosionPrefab, transform.position, new Quaternion());
     }
 
     public void Initialise(EquipmentAbility a_ability, Vector2 a_shootVector, Vector2 a_parentVelocity, float a_damage)

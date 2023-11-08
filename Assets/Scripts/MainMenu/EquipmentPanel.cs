@@ -27,7 +27,7 @@ public class EquipmentPanel : MonoBehaviour
     //public GameObject m_levelDisplayRef;
     public Text m_levelTextRef;
     public EquipmentPortrait m_equipmentPortrait;
-    public Button m_equipButtonRef;
+    public EquipmentInteractButton m_equipButtonRef;
     public Text m_equipButtonTextRef;
     public Button m_sellButtonRef;
     //public Image m_outlineRef;
@@ -35,18 +35,19 @@ public class EquipmentPanel : MonoBehaviour
 
     void Awake()
     {
-        m_equipmentScreenHandlerRef = FindObjectOfType<EquipmentScreenHandler>();
     }
 
-    public void Init(Equipment a_equipment)
+    public void Init(Equipment a_equipment, EquipmentScreenHandler a_equipmentScreenHandler)
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        m_equipmentScreenHandlerRef = a_equipmentScreenHandler;
         m_equipmentRef = a_equipment;
 
         for (int i = 0; i < m_statNameTextRefs.Length; i++)
         {
             m_statNameTextRefs[i].color = CharacterStatHandler.GetStatColor(i);
         }
+        m_equipButtonRef.Init(m_gameHandlerRef, m_equipmentScreenHandlerRef, m_equipmentRef);
     }
 
     public void Refresh()
@@ -89,7 +90,7 @@ public class EquipmentPanel : MonoBehaviour
 
         //m_costTextRef.text = "" + m_upgradeRef.m_cost;
         m_levelTextRef.text = "" + m_equipmentRef.m_level;
-        m_goldValueTextRef.text = "" + m_equipmentRef.GetGoldValue();
+        m_goldValueTextRef.text = "" + m_equipmentRef.GetSellValue();
         m_abilityTextRef.text = m_equipmentRef.m_activeAbility.GetName();
 
         SetEquipButtonStatus();
@@ -99,38 +100,9 @@ public class EquipmentPanel : MonoBehaviour
 
     void SetEquipButtonStatus()
     {
-        Color equipButtonColor = Color.white;
-        string equipButtonString = "";
+        m_equipButtonRef.SetEquipButtonStatus();
         bool equipped = m_equipmentRef.m_equipped;
         m_sellButtonRef.interactable = !equipped;
-        bool sameSlot = m_equipmentScreenHandlerRef.m_openedEquipmentSlotId == m_equipmentRef.m_equippedSlotId;
-        if (m_equipmentRef.IsBroken())
-        {
-            equipButtonColor = Color.grey;
-            equipButtonString = "Repair" + "(" +m_equipmentRef.GetRepairCost() + ")";
-            m_equipButtonRef.interactable = m_gameHandlerRef.GetCurrentCash() >= m_equipmentRef.GetRepairCost();
-        }
-        else
-        {
-            if (!equipped)
-            {
-                equipButtonColor = Color.white;
-                equipButtonString = "Equip";
-            }
-            else if (equipped && sameSlot)
-            {
-                equipButtonColor = Color.yellow;
-                equipButtonString = "UnEquip";
-            }
-            else if (equipped && !sameSlot)
-            {
-                equipButtonColor = Color.red;
-                equipButtonString = "ReEquip";
-            }
-        }
-        
-        m_equipButtonRef.gameObject.GetComponent<Image>().color = equipButtonColor;
-        m_equipButtonTextRef.text = equipButtonString;
     }
 
     internal void SetSelected(bool a_selected)

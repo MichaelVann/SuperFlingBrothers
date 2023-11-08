@@ -12,7 +12,11 @@ public class UpgradesScreenHandler : MonoBehaviour
     public GameObject m_contentRef;
     public GameObject m_upgradeItemPanelTemplate;
 
+    public BuyEquipmentButton m_buyEquipmentButtonRef;
+
     List<UpgradeItemPanel> m_upgradeItemPanels;
+
+    bool m_initialised = false;
 
     // Start is called before the first frame update
     void Awake()
@@ -25,7 +29,20 @@ public class UpgradesScreenHandler : MonoBehaviour
             upgradeItemPanel.Init(i, this);
             m_upgradeItemPanels.Add(upgradeItemPanel);
         }
+    }
+
+    void Start()
+    {
         Refresh();
+        m_initialised = true;
+    }
+
+    private void OnEnable()
+    {
+        if (m_initialised)
+        {
+            Refresh();
+        }
     }
 
     public void Refresh()
@@ -34,6 +51,7 @@ public class UpgradesScreenHandler : MonoBehaviour
         {
             m_upgradeItemPanels[i].Refresh();
         }
+        m_buyEquipmentButtonRef.Refresh();
     }
 
     public bool AttemptToBuyUpgrade(int a_id)
@@ -44,6 +62,14 @@ public class UpgradesScreenHandler : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public void AttemptToBuyEquipment()
+    {
+        if (m_gameHandlerRef.AttemptToBuyJunkEquipment())
+        {
+            Refresh();
+        }
     }
 
     // Update is called once per frame

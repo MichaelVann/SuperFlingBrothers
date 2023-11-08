@@ -10,6 +10,7 @@ public class CharacterInfoReadout : MonoBehaviour
     public Text[] m_statTexts;
     public TextMeshProUGUI m_characterIterationText;
     GameHandler m_gameHandlerRef;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -30,8 +31,8 @@ public class CharacterInfoReadout : MonoBehaviour
         for (int i = 0; i < m_statTexts.Length && i < (int)eCharacterStatIndices.count; i++)
         {
             CharacterStat stat = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[i];
-            m_statTexts[i].text = "" + stat.m_finalValue;
-            m_statTexts[i].text += "(+" + stat.m_equipmentAddedValue + ") (+" + stat.m_effectiveValue + ") (" + stat.m_parentAddedValue + ")";
+            m_statTexts[i].text = "" + VLib.TruncateFloatsDecimalPlaces(stat.m_totalValue, 2);
+            m_statTexts[i].text += "(+" + stat.m_equipmentAddedValue + ") (+" + stat.m_value + ") (" + stat.m_parentAddedValue + ")";
             m_statTexts[i].color = Color.white;// CharacterStatHandler.GetStatColor((eCharacterStatIndices)i);
         }
 

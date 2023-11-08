@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -12,17 +13,17 @@ using static UnityEngine.UI.CanvasScaler;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 21f;
+    public const float _VERSION_NUMBER = 21.2f;
 
     static internal bool DEBUG_MODE = true;
 
     // -- BALANCE VARIABLES --
 
-    static internal float GAME_enemyXPRewardScale = 20f;
+    static internal float GAME_enemyXPRewardScale = 10f;
     static internal float BATTLE_CoinValue = 1f;
     static internal float BATTLE_ShadowAngle = 135f;
     static internal float BATTLE_FlingStrength = 259f;
-    static internal float BATTLE_SkillXPScale = 5f;
+    static internal float BATTLE_SkillXPScale = 2f;
     //Damageables
     static internal float DAMAGEABLE_defaultMass = 1f;
     static internal float DAMAGEABLE_bumpFlingStrengthMult = 0.25f;
@@ -75,8 +76,10 @@ public class GameHandler : MonoBehaviour
     public int m_lastXpBonus = 0;
     public int m_lastDnaBonus = 0;
 
-    //Upgrades
+    //Store
     public UpgradeItem[] m_upgrades;
+    internal float m_junkEquipmentLevelScale = 0.5f;
+    internal float m_junkEquipmentCostScale = 10f;
     public enum UpgradeId
     {
         enemyVector,
@@ -101,6 +104,12 @@ public class GameHandler : MonoBehaviour
     }
     SaveData m_saveData;
     bool m_autoLoadDataOnLaunch = false;
+
+    internal int GetGeneratedEquipmentLevel(bool a_junk) { return (int)(m_xCellTeam.m_statHandler.m_RPGLevel.m_level * (a_junk ? m_junkEquipmentLevelScale : 1f)); }
+
+    internal int GetJunkEquipmentCost() { return  Equipment.GetNominalValue(GetGeneratedEquipmentLevel(true), Equipment.eRarityTier.Magic); }
+
+    internal bool CanAffordJunkEquipment() { return m_cash >= GetJunkEquipmentCost(); }
 
     internal void AttemptToRespec()
     {
@@ -170,16 +179,6 @@ public class GameHandler : MonoBehaviour
         m_upgrades[(int)UpgradeId.playerVector].SetDescription("Shows the direction of player movement.");
         m_upgrades[(int)UpgradeId.playerVector].SetCost(20);
     }
-
-    void SetupEquipment()
-    {
-        m_equipmentInventory = new List<Equipment>();
-        for (int i = 0; i < 3; i++)
-        {
-            m_equipmentInventory.Add(new Equipment(0));
-        }
-    }
-
     internal bool AttemptToBuyUpgrade(int a_upgradeID)
     {
         bool returnValue = false;
@@ -193,9 +192,30 @@ public class GameHandler : MonoBehaviour
             {
                 upgrade.SetOwned(true);
             }
-            returnValue =  true;
+            returnValue = true;
         }
         return returnValue;
+    }
+    void SetupEquipment()
+    {
+        m_equipmentInventory = new List<Equipment>();
+        for (int i = 0; i < 3; i++)
+        {
+            m_equipmentInventory.Add(new Equipment(0));
+        }
+    }
+
+    internal bool AttemptToBuyJunkEquipment()
+    {
+        bool successfullyBought = false;
+        float cost = GetJunkEquipmentCost();
+        if (m_cash >= cost)
+        {
+            m_cash -= cost;
+            successfullyBought = true;
+            PickUpEquipment(GenerateEquipment(true));
+        }
+        return successfullyBought;
     }
 
     public int EquipmentComparison(Equipment a_first, Equipment a_second)
@@ -205,7 +225,7 @@ public class GameHandler : MonoBehaviour
         for (int i = 0; i < 2; i++)
         {
             Equipment evaluatedEquipment = i == 0 ? a_first : a_second;
-            vals[i] = evaluatedEquipment.GetGoldValue();
+            vals[i] = evaluatedEquipment.GetSellValue();
             vals[i] += 1000 * (evaluatedEquipment.m_equipped ? 1 : 0);
         }
         returnVal = vals[0] > vals[1] ? 1 : (vals[0] < vals[1] ? -1 : 0);
@@ -215,6 +235,14 @@ public class GameHandler : MonoBehaviour
     internal void SortEquipmentInventory()
     {
         m_equipmentInventory.Sort(EquipmentComparison);
+    }
+
+    internal Equipment GenerateEquipment(bool a_junk = false)
+    {
+        float equipmentScale = a_junk ? 0.5f : 1.0f;
+        float equipmentLevel = equipmentScale * m_xCellTeam.m_statHandler.m_RPGLevel.m_level;
+        Equipment generatedEquipment = new Equipment((int)equipmentLevel);
+        return generatedEquipment;
     }
 
     internal void PickUpEquipment(Equipment a_equipment)
@@ -229,7 +257,7 @@ public class GameHandler : MonoBehaviour
         {
             if (m_equipmentInventory[i] == a_equipment)
             {
-                ChangeCash(m_equipmentInventory[i].GetGoldValue());
+                ChangeCash(m_equipmentInventory[i].GetSellValue());
                 m_equipmentInventory.RemoveAt(i);
                 break;
             }
@@ -331,7 +359,7 @@ public class GameHandler : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.O))
         {
             m_xCellTeam.m_playerXCell.m_statHandler = new CharacterStatHandler();
-            m_xCellTeam.m_playerXCell.m_statHandler.Init();
+            m_xCellTeam.m_playerXCell.m_statHandler.Init(true);
         }
         if (Input.GetKeyUp(KeyCode.H))
         {

@@ -335,7 +335,7 @@ public class BattleManager : MonoBehaviour
     {
         m_uiHandlerRef = GetComponent<BattleUIHandler>();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_turnFreezeTimerMax *= 1f-(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].m_finalValue/100f);
+        m_turnFreezeTimerMax -= m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].m_finalValue;
         m_debugText.text = "" + m_turnFreezeTimerMax;
         m_turnFreezeTimer = m_turnFreezeTimerMax;
         m_coreEnemySpawnLocation = new Vector3(0f, -1.6f, 0f);

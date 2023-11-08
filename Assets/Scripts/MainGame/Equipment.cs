@@ -41,6 +41,7 @@ public class Equipment
     const float m_scrapValueRatio = 0.1f;
     const float m_repairEfficacy = 0.95f;
 
+    const float m_valueScale = 0.1f;
 
     [SerializeField]
     public float m_health;
@@ -63,7 +64,31 @@ public class Equipment
     [SerializeReference]
     public EquipmentAbility m_activeAbility;
 
-    internal int GetGoldValue() {return (int)(m_goldValue * m_scrapValueRatio + m_goldValue * (1f- m_scrapValueRatio) * m_health/m_maxHealth);}
+    internal int GetSellValue() {return (int)(m_goldValue * m_scrapValueRatio + m_goldValue * (1f- m_scrapValueRatio) * m_health/m_maxHealth);}
+
+    static int GetAllocatablePoints(int a_level, eRarityTier a_tier)
+    {
+        int points = 10 + (int)((float)(a_level) * 2f);
+        points = (int)(points * Mathf.Pow(1.25f, (float)a_tier));
+        return(points);
+    }
+
+    int GetAllocatablePoints()
+    {
+        return GetAllocatablePoints(m_level, m_rarity.tier);
+    }
+
+    internal static int GetNominalValue(int a_level, eRarityTier a_tier)
+    {
+        int value = GetAllocatablePoints(a_level, a_tier);
+        return value;
+    }
+
+    internal int GetNominalValue()
+    {
+        return GetNominalValue(m_level,m_rarity.tier);
+    }
+
     internal int GetRepairCost()
     {
         float repairCost = m_goldValue;
@@ -164,9 +189,7 @@ public class Equipment
 
         m_activeAbility = new EquipmentAbility(this);
 
-        int points = 10 + (int)((float)(a_level)*2f);
-        points = (int)(points*Mathf.Pow(1.25f, (float)m_rarity.tier));
-        m_goldValue = points;
+        int points = GetAllocatablePoints();
         int statsChosenCount = VLib.vRandom(1,m_stats.Count-1);
         for (int i = 0; i < (int)eCharacterStatIndices.count; i++)
         {
@@ -184,11 +207,11 @@ public class Equipment
         {
             int index = UnityEngine.Random.Range(0, m_stats.Count);
             EquipmentStat statToEdit = m_stats[index];
-            statToEdit.value += 1;
+            statToEdit.value += m_valueScale;
             m_stats[index] = statToEdit;
             points--;
         }
-
+        m_goldValue = GetNominalValue();
     }
 
 }

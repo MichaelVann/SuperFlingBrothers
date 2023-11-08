@@ -49,7 +49,7 @@ public class EquipmentSlotUI : MonoBehaviour
                 m_statTexts[index].color = Color.green; //CharacterStatHandler.GetStatColor(m_equipmentRef.m_stats[i].statType);
             }
             m_abilityTextRef.text = m_equipmentRef.m_activeAbility.GetName();
-            m_itemValueTextRef.text = "" + m_equipmentRef.GetGoldValue();
+            m_itemValueTextRef.text = "" + m_equipmentRef.GetSellValue();
             m_healthText.color = VLib.PercentageToColor(m_equipmentRef.m_health / m_equipmentRef.m_maxHealth);
         }
         else

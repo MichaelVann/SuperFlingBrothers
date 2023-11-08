@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,11 +10,14 @@ public class EquipmentDigest : MonoBehaviour
     public Text m_nameText;
     public Text[] m_statNameTexts;
     public Text[] m_statTexts;
-    public Text[] m_affixTexts;
+    public TextMeshProUGUI m_affixText;
     public EquipmentPortrait m_portraitRef;
     public Text m_abilityTextRef;
     public Text m_itemValueTextRef;
     public EquipmentScreenHandler m_equipmentScreenHandlerRef;
+    public EquipmentInteractButton m_interactButtonRef;
+
+    GameHandler m_gameHandlerRef;
 
     Equipment m_equipmentRef;
 
@@ -30,9 +34,16 @@ public class EquipmentDigest : MonoBehaviour
 
     public void Refresh()
     {
-
+        if (m_gameHandlerRef == null)
+        {
+            m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        }
+        if (m_equipmentScreenHandlerRef == null)
+        {
+            m_equipmentScreenHandlerRef = FindObjectOfType<EquipmentScreenHandler>();
+        }
         bool valid = m_equipmentRef != null;
-
+        m_interactButtonRef.Init(m_gameHandlerRef,m_equipmentScreenHandlerRef, m_equipmentRef);
         for (int i = 0; i < m_statTexts.Length; i++)
         {
             m_statTexts[i].text = "0";
@@ -50,7 +61,7 @@ public class EquipmentDigest : MonoBehaviour
                 m_statTexts[index].color = Color.green; //CharacterStatHandler.GetStatColor(m_equipmentRef.m_stats[i].statType);
             }
             m_abilityTextRef.text = m_equipmentRef.m_activeAbility.GetName();
-            m_itemValueTextRef.text = "" + m_equipmentRef.GetGoldValue();
+            m_itemValueTextRef.text = "" + m_equipmentRef.GetSellValue();
         }
         else
         {
@@ -63,17 +74,28 @@ public class EquipmentDigest : MonoBehaviour
 
 
         m_portraitRef.gameObject.SetActive(valid);
-
-        for (int i = 0; i < m_affixTexts.Length && i < m_equipmentRef.m_activeAbility.m_affixes.Count; i++)
-        {
-            m_affixTexts[i].text = VLib.GetEnumName<EquipmentAbility.eAffix>(m_equipmentRef.m_activeAbility.m_affixes[i]);
-        }
-
+        m_affixText.text = "";
+        m_affixText.text += m_equipmentRef.m_activeAbility.GetAbilityDescription() + '\n';
+        m_interactButtonRef.SetEquipButtonStatus();
     }
 
     public void Close()
     {
         m_equipmentScreenHandlerRef.SetEquipmentDigestStatus(false);
+    }
+
+    public void InteractButtonPressed()
+    {
+        if (m_equipmentRef.IsBroken())
+        {
+            m_gameHandlerRef.AttemptToRepairEquipment(m_equipmentRef);
+        }
+        else
+        {
+            m_equipmentScreenHandlerRef.SetEquipStatus(m_equipmentRef);
+        }
+        Refresh();
+        Close();
     }
 
     // Update is called once per frame

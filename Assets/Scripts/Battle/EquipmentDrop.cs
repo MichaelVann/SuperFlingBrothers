@@ -14,7 +14,7 @@ public class EquipmentDrop : Loot
     {
         base.Start();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_equipment = new Equipment(m_gameHandlerRef.m_xCellTeam.m_statHandler.m_RPGLevel.m_level);
+        m_equipment = m_gameHandlerRef.GenerateEquipment();
         m_rarityRingSpriteRendererRef.color = m_equipment.m_rarity.color;
         m_lightRef.color = m_equipment.m_rarity.color;
     }
