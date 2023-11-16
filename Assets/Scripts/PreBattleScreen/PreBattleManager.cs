@@ -52,7 +52,7 @@ public class PreBattleManager : MonoBehaviour
     {
         //m_gameHandlerRef.SetBodyPartSelectedForBattle(m_bodyPartSelectionRef.GetComponent<BodyPartSelectionHandler>().m_selectedBodyPart);
         m_gameHandlerRef.SetBattleDifficulty(m_mapHandlerRef.m_selectedBattleNode.m_difficulty);
-        int maxEnemyDifficulty = m_gameHandlerRef.m_humanBody.m_maxEnemyDifficulty;
+        int maxEnemyDifficulty = HumanBody.m_maxEnemyDifficulty;
         m_gameHandlerRef.SetMaxEnemyDifficulty(maxEnemyDifficulty);
         m_gameHandlerRef.ChangeScene(GameHandler.eScene.battle);
 

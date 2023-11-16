@@ -13,7 +13,7 @@ using static UnityEngine.UI.CanvasScaler;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 21.3f;
+    public const float _VERSION_NUMBER = 21.4f;
 
     static internal bool DEBUG_MODE = true;
 
@@ -107,6 +107,7 @@ public class GameHandler : MonoBehaviour
         public string bodyLastName;
     }
     SaveData m_saveData;
+    //SaveDataUtility m_saveDataUtility;
     bool m_autoLoadDataOnLaunch = false;
 
     internal int GetGeneratedEquipmentLevel(bool a_junk) { return (int)(m_xCellTeam.m_statHandler.m_RPGLevel.m_level * (a_junk ? m_junkEquipmentLevelScale : 1f)); }
@@ -141,7 +142,7 @@ public class GameHandler : MonoBehaviour
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
-
+        //m_saveDataUtility = new SaveDataUtility(this);
         m_xCellTeam = new XCellTeam();
         m_xCellTeam.Init();
         //Stocks
@@ -415,6 +416,9 @@ public class GameHandler : MonoBehaviour
         string path = Application.persistentDataPath + "/Data.txt";
         string json = JsonUtility.ToJson(m_saveData);
         File.WriteAllText(path, json);
+        SaveDataUtility saveDataUtility =  new SaveDataUtility(this);
+        saveDataUtility.Save();
+        
     }
     public void LoadGame()
     {
@@ -430,8 +434,8 @@ public class GameHandler : MonoBehaviour
         {
             m_stockHandler.m_stockList[i].CopyValues(m_saveData.stockList[i]);
         }
-        m_humanBody.m_firstName = m_saveData.bodyFirstName;
-        m_humanBody.m_lastName = m_saveData.bodyLastName;
+        //m_humanBody.m_firstName = m_saveData.bodyFirstName;
+        //m_humanBody.m_lastName = m_saveData.bodyLastName;
 
         for (int i = 0; i < m_upgrades.Length; i++)
         {
@@ -453,7 +457,7 @@ public class GameHandler : MonoBehaviour
                 m_xCellTeam.m_playerXCell.m_equippedEquipment[m_equipmentInventory[i].m_equippedSlotId] = m_equipmentInventory[i];
             }
         }
+        SaveDataUtility saveDataUtility = new SaveDataUtility(this);
+        saveDataUtility.Load();
     }
-
-
 }

@@ -11,18 +11,15 @@ public class HumanBody
     public string m_lastName;
     public Town m_playerResidingTown;
     //float m_basePartHealth = 100;
-    public int m_maxEnemyDifficulty = 12;
+    internal const int m_maxEnemyDifficulty = 12;
 
     public int m_battleMaxDifficulty;
     public int m_battleMinDifficulty;
-    public int m_startingBattleMaxDifficulty = 20;
-    public int m_startingBattleMinDifficulty = 1;
+    public const int m_startingBattleMaxDifficulty = 20;
+    public const int m_startingBattleMinDifficulty = 1;
 
     public List<Town> m_towns;
     public List<TownConnection> m_townConnections;
-
-    public string m_name;
-    public bool m_unlocked;
 
     public int m_battlesCompleted = 0;
 
@@ -38,7 +35,7 @@ public class HumanBody
         string[] names = VLib.GenerateRandomPersonsName();
         m_firstName = names[0];
         m_lastName = names[1];
-        UpdateMaxAndMindDifficulties();
+        UpdateMaxAndMinDifficulties();
         SetupTowns();
     }
 
@@ -141,7 +138,7 @@ public class HumanBody
 
     internal void Refresh()
     {
-        UpdateMaxAndMindDifficulties();
+        UpdateMaxAndMinDifficulties();
         for (int i = 0; i < m_towns.Count; i++)
         {
             m_towns[i].Refresh();
@@ -216,16 +213,11 @@ public class HumanBody
         }
     }
 
-    public void UpdateMaxAndMindDifficulties()
+    public void UpdateMaxAndMinDifficulties()
     {
         //int playerLevel = m_gameHandlerRef.m_xCellTeam.level;
         int teamLevel = m_gameHandlerRef.m_xCellTeam.m_statHandler.m_RPGLevel.m_level;
         m_battleMaxDifficulty = m_startingBattleMaxDifficulty + teamLevel * 2;
         m_battleMinDifficulty = m_startingBattleMinDifficulty + teamLevel;
-    }
-
-    public void LoadHumanBodyState()
-    {
-
     }
 }

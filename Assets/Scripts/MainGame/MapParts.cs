@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using UnityEngine;
 public class BattleNode
 {
-    [SerializeField]
-    public int m_id;
     //public enum eState
     //{
     //    locked, unlocked, beaten
@@ -26,14 +24,24 @@ public class BattleNode
     public TownConnection m_owningConnection;
     //public BattleNode[] m_connectedNodes;
 
-    public BattleNode(int a_id, int a_minDifficulty, int a_maxDifficulty, TownConnection a_owningConnection)
+    public void SetOwningConnection(TownConnection a_owningConnection) { m_owningConnection = a_owningConnection; }
+
+    public BattleNode(int a_minDifficulty, int a_maxDifficulty, TownConnection a_owningConnection)
     {
-        m_id = a_id;
         //m_state = a_state;
         //m_difficulty = a_difficulty;
         //m_connectedNodes = null;
         m_owningConnection = a_owningConnection;
         SetUpDifficulty(a_minDifficulty, a_maxDifficulty);
+    }
+
+    public BattleNode(int a_difficulty, int a_boostTier, int a_minDifficulty, int a_maxDifficulty, TownConnection a_owningConnection)
+    {
+        m_difficulty = a_difficulty;
+        m_difficultyBoostTier = a_boostTier;
+        m_minDifficulty = a_minDifficulty;
+        m_maxDifficulty = a_maxDifficulty;
+        m_owningConnection = a_owningConnection;
     }
 
     public float GetDifficultyPercent()
@@ -117,7 +125,7 @@ public class TownConnection
         m_battles.Clear();
         for (int i = 0; i < m_battlesToSpawn; i++)
         {
-            m_battles.Add(new BattleNode(i, m_humanBodyRef.m_battleMinDifficulty, m_humanBodyRef.m_battleMaxDifficulty, this));
+            m_battles.Add(new BattleNode(m_humanBodyRef.m_battleMinDifficulty, m_humanBodyRef.m_battleMaxDifficulty, this));
         }
     }
 
@@ -134,6 +142,7 @@ public class TownConnection
         }
     }
 }
+
 public class Town
 {
     [SerializeField]
