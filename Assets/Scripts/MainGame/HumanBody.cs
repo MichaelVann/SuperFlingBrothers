@@ -18,19 +18,17 @@ public class HumanBody
     public int m_startingBattleMaxDifficulty = 20;
     public int m_startingBattleMinDifficulty = 1;
 
-    public bool m_bodyInitialised = false;
-
     public List<Town> m_towns;
     public List<TownConnection> m_townConnections;
 
     public string m_name;
     public bool m_unlocked;
 
-    internal int m_battlesCompleted = 0;
+    public int m_battlesCompleted = 0;
 
     //public int m_invaderStrength;
 
-    internal bool m_lost = false;
+    public bool m_lost = false;
 
     internal string GetHumansName() {return m_firstName + " " + m_lastName; }
 
@@ -173,6 +171,8 @@ public class HumanBody
             playersTown = a_connection.m_townB;
         }
 
+        Refresh();
+
         if (playersTown != null)
         {
             if (!playersTown.IsFrontLineTown() || playersTown.m_overrun)
@@ -180,9 +180,6 @@ public class HumanBody
                 TaskPlayerToResidingTown();
             }
         }
-
-        Refresh();
-
     }
 
     public void TaskPlayerToResidingTown()
@@ -225,5 +222,10 @@ public class HumanBody
         int teamLevel = m_gameHandlerRef.m_xCellTeam.m_statHandler.m_RPGLevel.m_level;
         m_battleMaxDifficulty = m_startingBattleMaxDifficulty + teamLevel * 2;
         m_battleMinDifficulty = m_startingBattleMinDifficulty + teamLevel;
+    }
+
+    public void LoadHumanBodyState()
+    {
+
     }
 }

@@ -1,30 +1,36 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class XCell
 {
+    [SerializeField]
     internal string m_name;
+    [SerializeField]
     internal CharacterStatHandler m_statHandler;
     [SerializeReference]
     public Equipment[] m_equippedEquipment;
+    [SerializeField]
     const float m_equipmentStatEffectMult = 1f;
+    [SerializeField]
     public Color m_colorShade;
 
     public XCell()
     {
-        m_name = VLib.GenerateRandomizedName(3,3);
+        //Init();
+    }
+
+    public void Init()
+    {
+        m_equippedEquipment = new Equipment[4];
+        m_name = VLib.GenerateRandomizedName(3, 3);
         m_name += VLib.vRandom(100, 999);
         m_statHandler = new CharacterStatHandler();
         m_statHandler.Init(true);
         m_colorShade = new Color();
         m_colorShade = m_colorShade.Randomise();
-        Init();
-    }
-
-    void Init()
-    {
-        m_equippedEquipment = new Equipment[4];
     }
 
     public void EquipEquipment(Equipment a_equipment, int a_slotId)

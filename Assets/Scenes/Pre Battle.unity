@@ -1475,7 +1475,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 6.8, y: 1030}
+  m_AnchoredPosition: {x: 6.8, y: -91.39995}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &164187252
@@ -2237,7 +2237,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 899.4}
+  m_AnchoredPosition: {x: 0, y: -222}
   m_SizeDelta: {x: 979.51807, y: 341}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &332098802
@@ -5718,6 +5718,10 @@ MonoBehaviour:
   m_equipmentAbilityNameText: {fileID: 390254017}
   m_openedEquipmentSlotId: -1
   m_equipmentDigestRef: {fileID: 841053711}
+  m_statAllocationNotifierRef: {fileID: 0}
+  m_statAllocationNotifierTextRef: {fileID: 0}
+  m_playerStatueRef: {fileID: 0}
+  m_xCellNameText: {fileID: 0}
   m_inventoryPanelRef: {fileID: 1848937025}
   m_inventoryContentRef: {fileID: 1640464680}
   m_equipmentPanelTemplate: {fileID: 4515766722464082340, guid: 7ca223f9319680647bb68da7c3491bbc,
@@ -7562,7 +7566,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -311, y: 824}
+  m_AnchoredPosition: {x: -311, y: -297.39996}
   m_SizeDelta: {x: 249.5, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1232254732
@@ -10173,7 +10177,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 6.8, y: 916}
+  m_AnchoredPosition: {x: 6.8, y: -205.39995}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1771092389
@@ -10819,8 +10823,8 @@ RectTransform:
   - {fileID: 1232254731}
   m_Father: {fileID: 776085103}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -11320,6 +11324,7 @@ MonoBehaviour:
   m_contentRef: {fileID: 1689516952}
   m_upgradeItemPanelTemplate: {fileID: 7083368681363107006, guid: bdec13b2b4310b647a3f473882bb8902,
     type: 3}
+  m_buyEquipmentButtonRef: {fileID: 0}
 --- !u!114 &1918135353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12579,6 +12584,7 @@ MonoBehaviour:
   - {fileID: 892318231}
   - {fileID: 1943196482}
   - {fileID: 1605244136}
+  m_characterIterationText: {fileID: 0}
 --- !u!1 &2110372555
 GameObject:
   m_ObjectHideFlags: 0

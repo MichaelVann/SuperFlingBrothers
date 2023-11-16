@@ -14,11 +14,16 @@ public enum eCharacterStatIndices
     count
 }
 
+[Serializable]
 public class RPGLevel
 {
+    [SerializeField]
     public float m_XP = 0;
+    [SerializeField]
     public float m_maxXP = 83;
+    [SerializeField]
     public int m_level = 1;
+    [SerializeField]
     public int m_allocationPoints = 0;
 
     public void ChangeXP(float a_xpReward)
@@ -46,11 +51,6 @@ public class RPGLevel
         {
             m_XP -= m_maxXP;
             m_maxXP = GetXpNeededForLevelUP(m_level+1);
-            if (m_level >= 40)
-            {
-                m_level = m_level;
-                Debug.Log("Test");
-            }
             m_level++;
             m_allocationPoints++;
         }
@@ -148,8 +148,10 @@ public class CharacterStat
 [Serializable]
 public class CharacterStatHandler
 {
+    [SerializeField]
     public RPGLevel m_RPGLevel;
 
+    [SerializeField]
     public int m_reSpecCost = 100;
 
     //[SerializeReference]
@@ -157,6 +159,7 @@ public class CharacterStatHandler
 
     const float m_baseHealthScale = 4f;
 
+    [SerializeField]
     public bool m_usingRPGLevel = true;
 
     public void Copy(CharacterStatHandler a_statHandler)

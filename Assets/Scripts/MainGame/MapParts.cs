@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 public class BattleNode
 {
+    [SerializeField]
     public int m_id;
     //public enum eState
     //{
@@ -13,10 +14,15 @@ public class BattleNode
     //}
     //public eState m_state;
     //public float m_invasionOwnershipPercentage = 0f;
+    [SerializeField]
     public int m_maxDifficulty;
+    [SerializeField]
     public int m_minDifficulty;
+    [SerializeField]
     public int m_difficulty;
+    [SerializeField]
     public int m_difficultyBoostTier = 0;
+    [SerializeField]
     public TownConnection m_owningConnection;
     //public BattleNode[] m_connectedNodes;
 
@@ -56,18 +62,24 @@ public class BattleNode
         }
     }
 }
-
 public class TownConnection
 {
+    [SerializeField]
     public string m_name;
+    [SerializeField]
     public Town m_townA;
+    [SerializeField]
     public Town m_townB;
+    [SerializeField]
     HumanBody m_humanBodyRef;
 
     //Front
+    [SerializeField]
     public bool m_frontActive;
+    [SerializeField]
     public List<BattleNode> m_battles;
-    int m_battlesToSpawn = 7;
+    const int m_battlesToSpawn = 7;
+    [SerializeField]
     public float m_warfrontBalance = 0.5f;
 
     public Town GetFriendlyTown() { return m_townB.m_overrun ? m_townA : m_townB; }
@@ -122,12 +134,15 @@ public class TownConnection
         }
     }
 }
-
 public class Town
 {
+    [SerializeField]
     public string m_name;
+    [SerializeField]
     public bool m_overrun;
+    [SerializeField]
     public float m_health;
+    [SerializeField]
     public List<TownConnection> m_connectedWarFronts;
     public HumanBody m_humanBodyRef;
 

@@ -1,22 +1,32 @@
-﻿using UnityEditor;
+﻿using System;
+using UnityEditor;
 using UnityEngine;
 
+[Serializable]
 public class XCellTeam
 {
+    [SerializeField]
     internal string m_name;
-    internal int m_level;
+    [SerializeField]
     internal CharacterStatHandler m_statHandler;
+    [SerializeField]
     internal XCell m_playerXCell;
+    [SerializeField]
     internal int m_playerCellIteration = 1;
 
     public XCellTeam()
     {
-        m_name = "";
-        m_level = 0;
+
+    }
+
+    public void Init()
+    {
+        m_name = "Team " + VLib.vRandom(0,100);
         m_statHandler = new CharacterStatHandler();
         m_statHandler.Init(false);
         m_statHandler.ClearPostAddedValues();
         m_playerXCell = new XCell();
+        m_playerXCell.Init();
         ApplyStatsToPlayer();
     }
 
@@ -28,6 +38,7 @@ public class XCellTeam
     public void KillPlayer()
     {
         m_playerXCell = new XCell();
+        m_playerXCell.Init();
         m_playerCellIteration++;
         ApplyStatsToPlayer();
     }

@@ -13,17 +13,19 @@ using static UnityEngine.UI.CanvasScaler;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 21.2f;
+    public const float _VERSION_NUMBER = 21.3f;
 
     static internal bool DEBUG_MODE = true;
 
     // -- BALANCE VARIABLES --
 
-    static internal float GAME_enemyXPRewardScale = 10f;
+    static internal float GAME_enemyXPRewardScale = 3f;
     static internal float BATTLE_CoinValue = 1f;
     static internal float BATTLE_ShadowAngle = 135f;
     static internal float BATTLE_FlingStrength = 259f;
     static internal float BATTLE_SkillXPScale = 2f;
+
+    static internal float PRE_BATTLE_WarfrontChange = -1f;
     //Damageables
     static internal float DAMAGEABLE_defaultMass = 1f;
     static internal float DAMAGEABLE_bumpFlingStrengthMult = 0.25f;
@@ -95,7 +97,9 @@ public class GameHandler : MonoBehaviour
     struct SaveData
     {
         public float cash;
+        public XCellTeam xCellTeam;
         public XCell xCell;
+        //public HumanBody humanBody;
         public List<Stock> stockList;
         public UpgradeItem[] upgrades;
         public List<Equipment> equipmentList;
@@ -139,7 +143,7 @@ public class GameHandler : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         m_xCellTeam = new XCellTeam();
-
+        m_xCellTeam.Init();
         //Stocks
         m_stockHandler = new StockHandler(this);
 
@@ -317,7 +321,7 @@ public class GameHandler : MonoBehaviour
             //{
             //    warfrontBalanceChange -= warfrontBalanceChangeAmount;
             //}
-            float warfrontBalanceChange = -0.05f;
+            float warfrontBalanceChange = PRE_BATTLE_WarfrontChange;
             m_playerWasKilledLastBattle = false;
 
             if (m_lastGameResult == eEndGameType.win)
@@ -398,7 +402,9 @@ public class GameHandler : MonoBehaviour
         //test[0].x = 5;
 
         m_saveData.cash = m_cash;
-        m_saveData.xCell = m_xCellTeam.m_playerXCell;
+        //m_saveData.xCell = m_xCellTeam.m_playerXCell;
+        m_saveData.xCellTeam = m_xCellTeam;
+        //m_saveData.humanBody = m_humanBody;
         //m_saveData.statHandler.Copy(m_playerStatHandler);
         m_saveData.stockList = m_stockHandler.m_stockList;
         m_saveData.upgrades = m_upgrades;
@@ -416,7 +422,9 @@ public class GameHandler : MonoBehaviour
         string loadedString = File.ReadAllText(path);
         m_saveData = JsonUtility.FromJson<SaveData>(loadedString);
         m_cash = m_saveData.cash;
-        m_xCellTeam.m_playerXCell = m_saveData.xCell;
+        m_xCellTeam = m_saveData.xCellTeam;
+        //m_humanBody = m_saveData.humanBody;
+        m_humanBody.m_gameHandlerRef = this;
         //m_playerStatHandler = m_saveData.statHandler;
         for (int i = 0; i < m_stockHandler.m_stockList.Count; i++)
         {
@@ -437,7 +445,7 @@ public class GameHandler : MonoBehaviour
 
         m_equipmentInventory = new List<Equipment>();
 
-        for (int i = 0; i < m_equipmentInventory.Count; i++)
+        for (int i = 0; i < m_saveData.equipmentList.Count; i++)
         {
             m_equipmentInventory.Add(m_saveData.equipmentList[i]);
             if (m_equipmentInventory[i].m_equipped)

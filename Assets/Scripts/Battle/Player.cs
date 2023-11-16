@@ -14,6 +14,7 @@ public class Player : Damageable
     bool m_flinging = false;
     Vector3 m_originalFlingPos;
     const float m_maxFlingLength = 1f;
+    const float m_minFlingLength = 0.15f;
     const int m_flingDexterityXP = 7;
     const int m_abilityUsageDexterityXP = 10;
 
@@ -73,11 +74,9 @@ public class Player : Damageable
         UpdateLocalStatsFromStatHandler();
         m_damageTextColor = Color.red;
         SetupEquipmentShield();
-        //Fling(new Vector3(0f, -600f, 0f), 1f);
         m_velocityIndicatorRef.SetActive(m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.playerVector].m_owned);
         m_battleManagerRef.InitialiseUpgrades();
         SetUpArmorSegments();
-
     }
 
 
@@ -262,6 +261,7 @@ public class Player : Damageable
         }
         else
         {
+            bool m_validFling = true;
             if (Input.touchCount >= 2)
             {
                 m_flinging = false;
@@ -270,14 +270,10 @@ public class Player : Damageable
             m_flingLine.enabled = true;
             Vector3 worldMousePoint = m_cameraRef.ScreenToWorldPoint(Input.mousePosition);
 
+
             if (worldMousePoint.y >= m_battleManagerRef.m_upperLowerFlingPositionBounds || worldMousePoint.y <= -m_battleManagerRef.m_upperLowerFlingPositionBounds)
             {
-                m_invalidFlingCross.enabled = true;
-                m_invalidFlingCross.gameObject.transform.position = new Vector3(worldMousePoint.x, worldMousePoint.y);
-            }
-            else
-            {
-                m_invalidFlingCross.enabled = false;
+                m_validFling = false;
             }
 
             Vector3 deltaMousePos = m_originalFlingPos - worldMousePoint;
@@ -285,18 +281,30 @@ public class Player : Damageable
             {
                 deltaMousePos = deltaMousePos.normalized * m_maxFlingLength;
             }
+            else if (deltaMousePos.magnitude < m_minFlingLength)
+            {
+                m_validFling = false;
+            }
 
             Vector3[] linePositions = new Vector3[2];
 
             linePositions[0] = transform.position;
             linePositions[1] = transform.position - deltaMousePos;
 
+
+            if (!m_validFling)
+            {
+                m_invalidFlingCross.gameObject.transform.position = new Vector3(worldMousePoint.x, worldMousePoint.y);
+            }
+            m_invalidFlingCross.enabled = !m_validFling;
+
+
             m_flingLine.SetPositions(linePositions);
             
             //If the release point is outside the map, cancel the shot
             if (!Input.GetMouseButton(0))
             {
-                if (worldMousePoint.y < m_battleManagerRef.m_upperLowerFlingPositionBounds && worldMousePoint.y > -m_battleManagerRef.m_upperLowerFlingPositionBounds)
+                if (m_validFling)
                 {
                     Fling(deltaMousePos, GameHandler.BATTLE_FlingStrength);
                 }

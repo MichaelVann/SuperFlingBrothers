@@ -238,7 +238,7 @@ public class EquipmentAbility
 
     public EquipmentAbility()
     {
-        RollNewAbility(Equipment.eRarityTier.Normal);
+        //RollNewAbility(Equipment.eRarityTier.Normal);
     }
 
     public EquipmentAbility(EquipmentAbility a_ability)
