@@ -109,7 +109,7 @@ public class Enemy : Damageable
                 m_rigidBody.mass *= 0.75f;
                 m_rigidBody.drag = 1f;
                 //m_spriteRenderer.color = Color.white;
-                m_shadowRef.GetComponent<SpriteRenderer>().sprite = m_idleBacteriaShadowSprite;
+                //m_shadowRef.GetComponent<SpriteRenderer>().sprite = m_idleBacteriaShadowSprite;
                 //m_flingReadinessIndicatorRef.SetActive(false);
                 m_nucleusDrainTimer = new vTimer(1.0f, false, false);
                 //m_flingPieIndicatorRef.gameObject.SetActive(false);

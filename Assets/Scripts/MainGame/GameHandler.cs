@@ -13,7 +13,7 @@ using static UnityEngine.UI.CanvasScaler;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 21.4f;
+    public const float _VERSION_NUMBER = 21.5f;
 
     static internal bool DEBUG_MODE = true;
 
@@ -25,7 +25,7 @@ public class GameHandler : MonoBehaviour
     static internal float BATTLE_FlingStrength = 259f;
     static internal float BATTLE_SkillXPScale = 2f;
 
-    static internal float PRE_BATTLE_WarfrontChange = -1f;
+    static internal float PRE_BATTLE_WarfrontChange = -0.19f;
     //Damageables
     static internal float DAMAGEABLE_defaultMass = 1f;
     static internal float DAMAGEABLE_bumpFlingStrengthMult = 0.25f;

@@ -11,6 +11,21 @@ public class ObjectShadow : MonoBehaviour
     public float m_height = 0f;
     public void Awake()
     {
+
+    }
+
+    public void Start()
+    {
+        if (transform.parent != null)
+        {
+            SpriteRenderer parentSprite = transform.parent.gameObject.GetComponent<SpriteRenderer>();
+            if (parentSprite != null)
+            {
+                SpriteRenderer spriteRenderer = GetComponent<SpriteRenderer>();
+                spriteRenderer.sprite = parentSprite.sprite;
+                spriteRenderer.color = Color.black;
+            }
+        }
     }
 
     public void Update()
