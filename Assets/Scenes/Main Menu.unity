@@ -653,7 +653,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &94047241
 RectTransform:
   m_ObjectHideFlags: 0
@@ -709,6 +709,8 @@ MonoBehaviour:
     type: 3}
   m_equipmentOverview: {fileID: 457407970}
   m_noEquipmentText: {fileID: 407584505}
+  m_confirmationBoxPrefab: {fileID: 5677177792671639612, guid: a28dd334b0130e742bdf568ce2c9e0e5,
+    type: 3}
 --- !u!114 &94047243
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1943,9 +1945,9 @@ RectTransform:
   m_Father: {fileID: 1905488662}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -72.55727, y: -17}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &280473269
 MonoBehaviour:
@@ -2345,7 +2347,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &327709229
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7391,7 +7393,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -0.000045776367}
-  m_SizeDelta: {x: 0, y: 22}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &952487977
 MonoBehaviour:
@@ -7468,9 +7470,9 @@ RectTransform:
   m_Father: {fileID: 1905488662}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 20.519043, y: 0}
-  m_SizeDelta: {x: 75.55727, y: -17}
+  m_SizeDelta: {x: 75.55727, y: 0}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &962224701
 MonoBehaviour:
@@ -8885,7 +8887,7 @@ RectTransform:
   m_Father: {fileID: 1666658128}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -9519,6 +9521,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7708535563834399150, guid: 8c988ee79aef8c8439f7449ee0eb2c5f,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -108.19998
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -11077,9 +11084,9 @@ RectTransform:
   m_Father: {fileID: 1905488662}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -72.55727, y: 20}
+  m_SizeDelta: {x: 0, y: 20}
   m_Pivot: {x: 0, y: 0}
 --- !u!114 &1568959480
 MonoBehaviour:
@@ -12781,8 +12788,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 94047242}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: SellAllUnequippedEquipment
+        m_TargetAssemblyTypeName: EquipmentScreenHandler, Assembly-CSharp
+        m_MethodName: ConfirmSellAllItems
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12942,7 +12949,7 @@ RectTransform:
   m_Father: {fileID: 311101413}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -13754,7 +13761,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1905488662
 RectTransform:
   m_ObjectHideFlags: 0

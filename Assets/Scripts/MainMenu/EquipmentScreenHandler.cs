@@ -32,6 +32,8 @@ public class EquipmentScreenHandler : MonoBehaviour
 
     public GameObject m_noEquipmentText;
 
+    public GameObject m_confirmationBoxPrefab;
+
     private bool m_inited = false;
 
     // Start is called before the first frame update
@@ -213,7 +215,14 @@ public class EquipmentScreenHandler : MonoBehaviour
         }
     }
 
-    public void SellAllUnequippedEquipment()
+    public void ConfirmSellAllItems()
+    {
+        ConfirmationBox confirmationBox = Instantiate(m_confirmationBoxPrefab, transform).GetComponent<ConfirmationBox>();
+        confirmationBox.SetMessageText("Are you sure you want to sell all items?");
+        confirmationBox.m_confirmationResponseDelegate = new ConfirmationBox.ConfirmationResponseDelegate(SellAllUnequippedEquipment);
+    }
+
+    void SellAllUnequippedEquipment()
     {
         List<EquipmentPanel> equipmentPanelList = new List<EquipmentPanel>();
 
