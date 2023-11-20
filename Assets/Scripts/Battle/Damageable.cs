@@ -173,7 +173,6 @@ public class Damageable : BaseObject
     private void StartDamageFlashTimer()
     {
         m_damageFlashOverrideRunning = true;
-        //m_damageColourTimer = 0f;
     }
 
     protected void SpawnDamageText(float a_value)
@@ -187,7 +186,7 @@ public class Damageable : BaseObject
 
     private void ChangeHealth(float a_change)
     {
-         //If the game is ending, disable damage
+        //If the game is ending, disable damage
         if (m_battleManagerRef.m_endingGame)
         {
             return;
@@ -215,10 +214,7 @@ public class Damageable : BaseObject
         //If the dmgble is below minimum health
         if(m_health <= 0f)
         {
-            if (m_gameHandlerRef.m_currentGameMode == GameHandler.eGameMode.Health)
-            {
-                Die();
-            }
+            Die();
         }
         UpdateMass();
         UpdateHealthColor();
@@ -268,7 +264,6 @@ public class Damageable : BaseObject
     public virtual void Die()
     {
         Instantiate(m_explosionPrefab, transform.position, new Quaternion());
-        //Bleed();
         Destroy(gameObject);
     }
 

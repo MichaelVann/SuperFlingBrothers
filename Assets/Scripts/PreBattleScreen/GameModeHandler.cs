@@ -12,24 +12,12 @@ public class GameModeHandler : MonoBehaviour
     void Start()
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        UpdateGameModeText();
     }
 
     // Update is called once per frame
     void Update()
     {
         
-    }
-
-    void UpdateGameModeText()
-    {
-        m_gameModeTextRef.text = m_gameHandlerRef.m_currentGameMode.ToString();
-    }
-
-    public void ChangeGameModeSelection(int a_change)
-    {
-        m_gameHandlerRef.ChangeGameMode(a_change);
-        UpdateGameModeText();
     }
 
     public void Play()

@@ -42,6 +42,7 @@ public class AbilityButton : MonoBehaviour
     { 
         if (m_equipmentRef != null)
         {
+            //If the equipment has been destroyed
             if (m_equipmentRef.IsBroken())
             {
                 m_buttonRef.interactable = false;
@@ -49,11 +50,13 @@ public class AbilityButton : MonoBehaviour
                 m_disabled = true;
                 m_equipmentRef.m_activeAbility.m_activated = false;
             }
+            //Else if the equipment has an ability
             else if (m_equipmentRef.m_activeAbility != null)
             {
                 EquipmentAbility ability = m_equipmentRef.m_activeAbility;
                 bool interactable = ability.m_ammo > 0;
                 m_buttonRef.interactable = interactable;
+                //Set the Color of the button depending on the type of ability and it's activation
                 if (!ability.m_passive)
                 {
                     Color buttonColor = Color.grey;

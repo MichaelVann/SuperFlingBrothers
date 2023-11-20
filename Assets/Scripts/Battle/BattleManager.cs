@@ -41,8 +41,10 @@ public class BattleManager : MonoBehaviour
     public GameObject m_wallTriangleRef;
     public GameObject m_gravityWellRef;
     public Material m_whiteFlashMaterialRef;
-    float m_wallXOffset = 2.11f;
-    float m_wallYSpace = 5f;
+
+    //Game Space
+    public GameObject m_gameSpaceMarker;
+    internal Vector2 m_gameSpace;
 
     public AbilityButton[] m_abilityButtons;
 
@@ -68,10 +70,6 @@ public class BattleManager : MonoBehaviour
     float m_playerSlideLerp = 0f;
     float m_playerSlideTime = 1f;
 
-    //Turns
-    public int m_turnsRemaining;
-    float m_turnsTimer = 0f;
-
     //Turn Freezing
     public bool m_timeFrozen = false;
     float m_turnFreezeTimer;
@@ -89,11 +87,7 @@ public class BattleManager : MonoBehaviour
     public GameObject m_enemySpawnPointContainerRef;
     List<GameObject> m_enemySpawnPointsRefs;
     internal int m_enemiesToSpawn = 12;
-    float m_enemySpawnGap = 0.4f;
-    Vector3 m_coreEnemySpawnLocation;
     int m_maxEnemyDifficulty = 0;
-
-    bool m_startingSequence = true;
 
     //Active Abilities
     public EquipmentAbility[] m_activeAbilities;
@@ -107,9 +101,6 @@ public class BattleManager : MonoBehaviour
         internal List<GameObject> m_gravityWellList;
     }
     EnvironmentalEffects m_environmentalEffects;
-
-    //Pre Game
-    bool m_runningPregame = true;
 
     //End Game
     public bool m_endingGame = false;
@@ -127,13 +118,56 @@ public class BattleManager : MonoBehaviour
     public float m_pocketDamage = 2f;
 
     //Post game
-    float m_scoreGained = 0f;
-    float m_bonusTimeScoreGained = 0f;
     int m_invaderStrengthChange = 0;
 
     public float GetMaxGameEndTimer()
     {
         return m_maxGameEndTimer;
+    }
+
+    public void SetScore(float a_value) { m_score = Mathf.Round(a_value*100f)/100f; }
+
+    public void ChangeScore(float a_change) { SetScore(m_score + a_change); }
+    public void PickUpEquipment(Equipment a_equipment) {m_equipmentCollected.Add(a_equipment);}
+    public void ChangeXp(float a_change) { m_xpEarned += a_change; }
+    public void ChangeInvaderStrength(int a_change) { m_invaderStrengthChange += a_change; }
+
+    void Awake()
+    {
+        m_uiHandlerRef = GetComponent<BattleUIHandler>();
+        m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        m_turnFreezeTimerMax -= m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].m_finalValue;
+        m_debugText.text = "" + m_turnFreezeTimerMax;
+        m_turnFreezeTimer = m_turnFreezeTimerMax;
+        m_enemySpawnPointsRefs = new List<GameObject>();
+        m_equipmentCollected = new List<Equipment>();
+
+        FindGameSpace();
+
+        SetupEnvironmentalEffects();
+    }
+
+    public void Start()
+    {
+        SetupDebug();
+
+        m_healthBarRef.Init(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue, m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue);
+
+        //Reset Trackers
+        m_gameHandlerRef.m_teamLevelAtStartOfBattle = m_gameHandlerRef.m_xCellTeam.m_statHandler.m_RPGLevel.m_level;
+        m_gameHandlerRef.m_xpEarnedLastGame = 0;
+
+        InitialiseAbilities();
+
+        SpawnPlayer();
+        foreach (SpriteRenderer spriteRendererRef in m_enemySpawnPointContainerRef.GetComponentsInChildren<SpriteRenderer>())
+        {
+            m_enemySpawnPointsRefs.Add(spriteRendererRef.gameObject);
+            spriteRendererRef.enabled = false;
+        }
+        SpawnEnemies();
+        m_levelDifficultyText.text = "Level Difficulty: " + m_gameHandlerRef.m_battleDifficulty;
+        m_upperLowerFlingPositionBounds = m_wallSpriteRenderers[3].gameObject.transform.position.y;
     }
 
     public void SetFrozen(bool a_frozen)
@@ -152,12 +186,12 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void SetScore(float a_value) { m_score = Mathf.Round(a_value*100f)/100f; }
-
-    public void ChangeScore(float a_change) { SetScore(m_score + a_change); }
-    public void PickUpEquipment(Equipment a_equipment) {m_equipmentCollected.Add(a_equipment);}
-    public void ChangeXp(float a_change) { m_xpEarned += a_change; }
-    public void ChangeInvaderStrength(int a_change) { m_invaderStrengthChange += a_change; }
+    void FindGameSpace()
+    {
+        m_gameSpace = new Vector2();
+        m_gameSpace[0] = m_gameSpaceMarker.transform.position.x;
+        m_gameSpace[1] = m_gameSpaceMarker.transform.position.y;
+    }
 
     public void RefreshAbilityButtons()
     {
@@ -209,9 +243,6 @@ public class BattleManager : MonoBehaviour
                     {
                         switch (abil.m_abilityType)
                         {
-                            //case ActiveAbility.eAbilityType.Projectile:
-                            //    m_player.ShootProjectile(abil);
-                            //    break;
                             case EquipmentAbility.eAbilityType.Count:
                                 break;
                             default:
@@ -225,9 +256,6 @@ public class BattleManager : MonoBehaviour
                 }
             }
         }
-
-        //ActiveAbility equipment = m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[a_id].m_activeAbilityType;
-        
         RefreshAbilityButtons();
     }
 
@@ -269,107 +297,85 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    void SpawnWallTriangles()
+    {
+        int triangleCount = VLib.vRandom(1, 4) * 2;
+        for (int i = 0; i < triangleCount; i++)
+        {
+            Vector3 pos = new Vector3();
+            pos.x = m_gameSpace.x * (i % 2 == 0 ? -1f : 1f);
+            float yGap = m_gameSpace.y * 2f / (float)((triangleCount / 2) + 1);
+            pos.y = m_gameSpace.y - yGap * ((i / 2) + 1);
+            pos.z = m_gameViewRef.transform.position.z;
+            float rotation = 90f * (i % 2 == 0 ? -1f : 1f);
+            Instantiate<GameObject>(m_wallTriangleRef, pos, Quaternion.Euler(0f, 0f, rotation), m_gameViewRef.transform);
+        }
+    }
+
+    void SpawnGravityWells()
+    {
+        m_environmentalEffects.m_gravityWellList = new List<GameObject>();
+
+        int gravityWellCount = VLib.vRandom(1, 4);
+        for (int i = 0; i < gravityWellCount; i++)
+        {
+            bool spawnFound = false;
+            Vector3 pos = new Vector3();
+            int spawnAttempts = 0;
+            while (!spawnFound && spawnAttempts < 20)
+            {
+                spawnAttempts++;
+                spawnFound = true;
+                pos.x = VLib.vRandom(-m_gameSpace.x, m_gameSpace.x);
+                pos.y = VLib.vRandom(-m_gameSpace.y, m_gameSpace.y);
+                for (int j = 0; j < m_environmentalEffects.m_gravityWellList.Count; j++)
+                {
+                    Vector3 deltaVec = m_environmentalEffects.m_gravityWellList[j].transform.localPosition - pos;
+                    float deltaMag = deltaVec.magnitude;
+                    if (deltaMag < 0.88f)
+                    {
+                        spawnFound = false;
+                    }
+                    print(deltaMag);
+                }
+                if (spawnFound)
+                {
+                    //m_environmentalEffects.m_gravityWellList
+                    GameObject gravityWell = Instantiate<GameObject>(m_gravityWellRef, new Vector3(), new Quaternion(), m_gameViewRef.transform);
+                    gravityWell.transform.localPosition = pos;
+                    m_environmentalEffects.m_gravityWellList.Add(gravityWell);
+                    break;
+                }
+            }
+        }
+    }
+
     void SetupEnvironmentalEffects()
     {
         m_environmentalEffects = new EnvironmentalEffects();
         m_environmentalEffects.wallTrianglesEnabled = UnityEngine.Random.Range(0f,1f) <= 0.3f;
-        m_environmentalEffects.gravityWellsEnabled =  UnityEngine.Random.Range(0f,1f) <= 0.3f;
+        m_environmentalEffects.gravityWellsEnabled = UnityEngine.Random.Range(0f,1f) <= 0.3f;
 
         if (m_environmentalEffects.wallTrianglesEnabled)
         {
-            int triangleCount = UnityEngine.Random.Range(1,9)*2;
-            for (int i = 0; i < triangleCount; i++)
-            {
-                Vector3 pos = new Vector3();
-                pos.x = m_wallXOffset * (i%2 == 0 ? -1f : 1f);
-                float yGap = m_wallYSpace / (float)((triangleCount / 2)+1);
-                pos.y = (m_wallYSpace/2f) - yGap * ((i/2)+1);
-                pos.z = m_gameViewRef.transform.position.z;
-                float rotation = 90f * (i % 2 == 0 ? -1f : 1f);
-                Instantiate<GameObject>(m_wallTriangleRef, pos, Quaternion.Euler(0f,0f,rotation), m_gameViewRef.transform);
-            }
-            //m_wallTriangles.SetActive(m_environmentalEffects.wallTriangles);
+            SpawnWallTriangles();
         }
 
         if (m_environmentalEffects.gravityWellsEnabled)
         {
-            m_environmentalEffects.m_gravityWellList = new List<GameObject>();
-
-            int gravityWellCount = VLib.vRandom(1,4);
-            for (int i = 0; i < gravityWellCount; i++)
+            float roll = VLib.vRandom(0f, 1f);
+            if (roll < 0.3f)
             {
-                bool spawnFound = false;
-                Vector3 pos = new Vector3();
-                int spawnAttempts = 0;
-                while (!spawnFound && spawnAttempts < 20)
-                {
-                    spawnAttempts++;
-                    spawnFound = true;
-                    pos.x = VLib.vRandom(-m_wallXOffset, m_wallXOffset);
-                    pos.y = VLib.vRandom(-m_wallYSpace / 2f, m_wallYSpace / 2f);
-                    for (int j = 0; j < m_environmentalEffects.m_gravityWellList.Count; j++)
-                    {
-                        Vector3 deltaVec = m_environmentalEffects.m_gravityWellList[j].transform.localPosition - pos;
-                        float deltaMag = deltaVec.magnitude;
-                        if (deltaMag < 0.88f)
-                        {
-                            spawnFound = false;
-                        }
-                        print(deltaMag);
-                    }
-                    if (spawnFound)
-                    {
-                        //m_environmentalEffects.m_gravityWellList
-                        GameObject gravityWell = Instantiate<GameObject>(m_gravityWellRef, new Vector3(), new Quaternion(), m_gameViewRef.transform);
-                        gravityWell.transform.localPosition = pos;
-                        m_environmentalEffects.m_gravityWellList.Add(gravityWell);
-                        break;
-                    }
-                }
+                GravityWell gravityWell = Instantiate<GameObject>(m_gravityWellRef, new Vector3(0f,0f,90f), new Quaternion(), m_gameViewRef.transform).GetComponent<GravityWell>();
+                gravityWell.Init(GravityWell.eGravityWellType.MegaWhirlpool);
+            }
+            else
+            {
+                SpawnGravityWells();
             }
         }
-        
     }
 
-    void Awake()
-    {
-        m_uiHandlerRef = GetComponent<BattleUIHandler>();
-        m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_turnFreezeTimerMax -= m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].m_finalValue;
-        m_debugText.text = "" + m_turnFreezeTimerMax;
-        m_turnFreezeTimer = m_turnFreezeTimerMax;
-        m_coreEnemySpawnLocation = new Vector3(0f, -1.6f, 0f);
-        m_enemySpawnPointsRefs = new List<GameObject>();
-        m_equipmentCollected = new List<Equipment>();
-        SetupEnvironmentalEffects();
-    }
-
-    public void Start()
-    {
-        SetupDebug();
-        if (m_gameHandlerRef.m_currentGameMode != GameHandler.eGameMode.TurnLimit)
-        {
-            m_turnsRemaining = 0;
-        }
-
-        m_healthBarRef.Init(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue, m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue);
-
-        //Reset Trackers
-        m_gameHandlerRef.m_teamLevelAtStartOfBattle = m_gameHandlerRef.m_xCellTeam.m_statHandler.m_RPGLevel.m_level;
-        m_gameHandlerRef.m_xpEarnedLastGame = 0;
-
-        InitialiseAbilities();
-
-        SpawnPlayer();
-        foreach (SpriteRenderer spriteRendererRef in m_enemySpawnPointContainerRef.GetComponentsInChildren<SpriteRenderer>())
-        {
-            m_enemySpawnPointsRefs.Add(spriteRendererRef.gameObject);
-            spriteRendererRef.enabled = false;
-        }
-        SpawnEnemies();
-        m_levelDifficultyText.text = "Level Difficulty: " + m_gameHandlerRef.m_battleDifficulty;
-        m_upperLowerFlingPositionBounds = m_wallSpriteRenderers[3].gameObject.transform.position.y;
-    }
 
     internal void RefreshUIShieldBar()
     {
@@ -579,7 +585,6 @@ public class BattleManager : MonoBehaviour
             }
             Enemy.eEnemyType enemyType = (Enemy.eEnemyType)(processedSpawnSpots[i]);
 
-
             Vector3 spawnLocation = m_enemySpawnPointsRefs[i].transform.position;
             SpawnEnemy(spawnLocation, enemyType);
             ChangeEnemyCount(1);
@@ -594,27 +599,6 @@ public class BattleManager : MonoBehaviour
             StartEndingGame(eEndGameType.win);
         }
     }
-
-    //public void UpdateTurns()
-    //{
-    //    m_turnsTimer += Time.deltaTime;
-    //    if (m_turnsTimer >= m_turnInterval)
-    //    {
-    //        m_turnsTimer -= m_turnInterval;
-    //        if (m_gameHandlerRef.m_currentGameMode == GameHandler.eGameMode.TurnLimit)
-    //        {
-    //            m_turnsRemaining--;
-    //            if (m_turnsRemaining <= 0)
-    //            {
-    //                StartEndingGame(eEndGameType.lose);
-    //            }
-    //        }
-    //        else
-    //        {
-    //            m_turnsRemaining++;
-    //        }
-    //    }
-    //}
 
     internal void Retreat()
     {
@@ -649,10 +633,6 @@ public class BattleManager : MonoBehaviour
 
     void FinishGame()
     {
-        //if (m_endGameType == eEndGameType.win)
-        //{
-        //    m_score += m_gameHandlerRef.m_battleDifficulty;
-        //}
         m_gameHandlerRef.m_dnaEarnedLastGame = m_score;
         m_gameHandlerRef.m_equipmentCollectedLastGame = m_equipmentCollected.Count;
         m_gameHandlerRef.m_invaderStrengthChangeLastGame = m_invaderStrengthChange;
@@ -660,7 +640,7 @@ public class BattleManager : MonoBehaviour
         {
             m_gameHandlerRef.PickUpEquipment(m_equipmentCollected[i]);
         }
-        //Go to post game screen
+
         SetTimeScale(1f);
         CalculateFinishedGame();
         FindObjectOfType<GameHandler>().ChangeScene(GameHandler.eScene.postBattle);
@@ -693,6 +673,18 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    void RunIntro()
+    {
+        m_playerSlideLerp += Time.deltaTime;
+        if (m_playerSlideLerp >= m_playerSlideTime)
+        {
+            m_playerSlideLerp = m_playerSlideTime;
+            m_introActive = false;
+            SetFrozen(true);
+        }
+        m_player.gameObject.transform.position = VLib.SigmoidLerp(m_playerSpawnPoint.transform.position, m_playerSlidePoint.transform.position, m_playerSlideLerp);
+    }
+
     void Update()
     {
         m_enemyCountText.text = "Enemy Count: " + m_enemyCount;
@@ -701,40 +693,20 @@ public class BattleManager : MonoBehaviour
         //Intro
         if (m_introActive)
         {
-            m_playerSlideLerp += Time.deltaTime;
-            if (m_playerSlideLerp >= m_playerSlideTime)
-            {
-                m_playerSlideLerp = m_playerSlideTime;
-                m_introActive = false;
-                SetFrozen(true);
-            }
-            //m_player.gameObject.transform.position = Vector3.Lerp(m_playerSpawnPoint.transform.position, m_playerSlidePoint.transform.position, m_playerSlideLerp/m_playerSlideTime);
-            m_player.gameObject.transform.position = VLib.SigmoidLerp(m_playerSpawnPoint.transform.position, m_playerSlidePoint.transform.position, m_playerSlideLerp);
+            RunIntro();
         }
         else if (!m_endingGame)
         {
-            //UpdateTurns();
-            switch (m_gameHandlerRef.m_currentGameMode)
-            {
-                case GameHandler.eGameMode.TurnLimit:
-                    break;
-                case GameHandler.eGameMode.Health:
-                    break;
-                case GameHandler.eGameMode.Pockets:
-                    break;
-                default:
-                    break;
-            }
-
             if (m_enemyCount <= 0)
             {
                 StartEndingGame(eEndGameType.win);
             }
             UpdateFreezeTimer();
         }
-        else if(m_endingGame)
+        else if (m_endingGame)
         {
             UpdateGameEnding();
         }
+
     }
 }

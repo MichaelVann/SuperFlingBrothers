@@ -18,6 +18,7 @@ public class Loot : MonoBehaviour
     float m_jumpTimer = 0f;
     float m_jumpTimerMax = 1f;
     public ObjectShadow m_shadowRef;
+    const float m_pushOutSpeed = 10f;
 
     // Start is called before the first frame update
     virtual public void Start()
@@ -73,26 +74,27 @@ public class Loot : MonoBehaviour
                 m_movingToTargetPos = false;
                 GetComponent<CircleCollider2D>().enabled = true;
             }
-            //Vector3 deltaPos = m_targetPosition - transform.position;
-
-            //float speed = Mathf.Clamp(m_targetSpeed, 0f, deltaPos.magnitude);
-
-            //transform.position += deltaPos.normalized * speed * Time.deltaTime;
-
-            //if (deltaPos.magnitude <= 0.01f)
-            //{
-            //    m_movingToTargetPos = false;
-            //}
         }
     }
 
     public void OnTriggerStay2D(Collider2D a_collider)
     {
-        if (a_collider.gameObject.GetComponent<Nucleus>())
+        if (!m_battleManagerRef.m_endingGame)
         {
-            Vector3 nucleusPos = a_collider.gameObject.transform.position;
-
-            transform.position += (transform.position - nucleusPos).normalized * 0.05f;
+            Vector3 pushOutVector = new Vector3();
+            if (a_collider.gameObject.GetComponent<Nucleus>())
+            {
+                Vector3 nucleusPos = a_collider.gameObject.transform.position.ToVector2();
+                Vector3 pos = transform.position.ToVector2();
+                pushOutVector = (pos - nucleusPos).normalized;
+            }
+            else if (a_collider.gameObject.GetComponent<Pocket>())
+            {
+                Vector3 pos = transform.position.ToVector2();
+                pushOutVector = -pos.normalized;
+            }
+            pushOutVector *= Time.deltaTime * m_pushOutSpeed;
+            transform.position += pushOutVector;
         }
     }
 

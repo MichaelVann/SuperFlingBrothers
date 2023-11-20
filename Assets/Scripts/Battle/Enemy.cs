@@ -59,20 +59,15 @@ public class Enemy : Damageable
 
     private float m_scoreValue = 1f;
     int m_xpReward = 5;
-    const float m_coinToXPRatio = 0.2f;
 
     float m_xpTextYOffset = 0.2f;
 
     float m_sightRadius = 4f;
 
-    //Rotation
-    float m_desiredRigidbodyRotation = 0f;
-
     //Flinging
     public float m_flingTimer = 0f;
     public float m_flingTimerMax = 3f;
     float m_flingAccuracy = 20f;
-    bool m_flinging;
 
     //Loot
     float m_lootSpawnOffset = 0.3f;
@@ -108,16 +103,9 @@ public class Enemy : Damageable
                 transform.localScale *= 1f;
                 m_rigidBody.mass *= 0.75f;
                 m_rigidBody.drag = 1f;
-                //m_spriteRenderer.color = Color.white;
-                //m_shadowRef.GetComponent<SpriteRenderer>().sprite = m_idleBacteriaShadowSprite;
-                //m_flingReadinessIndicatorRef.SetActive(false);
                 m_nucleusDrainTimer = new vTimer(1.0f, false, false);
-                //m_flingPieIndicatorRef.gameObject.SetActive(false);
                 break;
             case eEnemyType.InertiaDasher:
-                //m_spriteRenderer.sprite = m_enemySprites[0];
-                //m_originalColor = Color.yellow;
-                //m_flingAccuracy = 360f;
                 m_rotateToAlignToVelocity = true;
                 break;
             case eEnemyType.Dodger:
@@ -127,7 +115,6 @@ public class Enemy : Damageable
                 m_originalColor = Color.white;
                 break;
             case eEnemyType.Striker:
-                //m_originalColor = Color.red;
                 m_visionConeRef.SetActive(true);
                 break;
             case eEnemyType.Count:
@@ -136,7 +123,7 @@ public class Enemy : Damageable
                 break;
         }
         m_xpReward = (int)(m_typeTrait.difficulty * GameHandler.GAME_enemyXPRewardScale);
-        m_scoreValue = 0f;// (float)(m_xpReward) * m_coinToXPRatio;
+        m_scoreValue = 0f;
         m_rigidBody.freezeRotation = !m_typeTrait.canRotate;
         if (m_typeTrait.dodger)
         {
@@ -148,11 +135,8 @@ public class Enemy : Damageable
             m_flingDirectionIndicatorRef.SetActive(false);
         }
 
-
-
         //Store next fling direction ahead of time, rotate fling direction indicator towards it
         FindNextRandomFlingDirection();
-
 
         //m_rotateToAlignToVelocity = m_typeTrait.canRotate;
         UpdateLocalStatsFromStatHandler();
@@ -161,6 +145,7 @@ public class Enemy : Damageable
 
     public static void SetUpEnemyTypes()
     {
+        //Defaults
         for (int i = 0; i < (int)Enemy.eEnemyType.Count; i++)
         {
             m_enemyTypeTraits[i].type = Enemy.eEnemyType.Idler;
@@ -172,32 +157,33 @@ public class Enemy : Damageable
             m_enemyTypeTraits[i].canRotate = false;
         }
 
+        //Idler
         m_enemyTypeTraits[(int)eEnemyType.Idler].type = Enemy.eEnemyType.Idler;
         m_enemyTypeTraits[(int)eEnemyType.Idler].difficulty = 1;
         m_enemyTypeTraits[(int)eEnemyType.Idler].canRotate = true;
 
+        //Inertia Dasher
         m_enemyTypeTraits[(int)eEnemyType.InertiaDasher].type = Enemy.eEnemyType.InertiaDasher;
         m_enemyTypeTraits[(int)eEnemyType.InertiaDasher].inertiaDasher = true;
         m_enemyTypeTraits[(int)eEnemyType.InertiaDasher].difficulty = 3;
         m_enemyTypeTraits[(int)eEnemyType.InertiaDasher].canRotate = true;
 
-        //m_enemyTypeTraits[(int)eEnemyType.Dasher].duplicator = true;
-
+        //Dodger
         m_enemyTypeTraits[(int)eEnemyType.Dodger].type = Enemy.eEnemyType.Dodger;
         m_enemyTypeTraits[(int)eEnemyType.Dodger].dodger = true;
         m_enemyTypeTraits[(int)eEnemyType.Dodger].difficulty = 5;
-        //m_enemyTypeTraits[(int)eEnemyType.Dodger].duplicator = true;
 
+        //Healer
         m_enemyTypeTraits[(int)eEnemyType.Healer].type = Enemy.eEnemyType.Healer;
         m_enemyTypeTraits[(int)eEnemyType.Healer].dodger = true;
         m_enemyTypeTraits[(int)eEnemyType.Healer].difficulty = 8;
         m_enemyTypeTraits[(int)eEnemyType.Healer].duplicator = false;
         m_enemyTypeTraits[(int)eEnemyType.Healer].healer = true;
 
+        //Striker
         m_enemyTypeTraits[(int)eEnemyType.Striker].type = Enemy.eEnemyType.Striker;
         m_enemyTypeTraits[(int)eEnemyType.Striker].flinger = true;
         m_enemyTypeTraits[(int)eEnemyType.Striker].difficulty = 12;
-        //m_enemyTypeTraits[(int)eEnemyType.Striker].duplicator = true;
     }
 
     public override void Start()
@@ -249,11 +235,6 @@ public class Enemy : Damageable
         }
     }
 
-    void SetDesiredRotationFromVelocity()
-    {
-        m_desiredRigidbodyRotation = VLib.Vector2ToEulerAngle(m_rigidBody.velocity);
-    }
-
     void FindNextRandomFlingDirection()
     {
         float angle = VLib.vRandom(0f, 360f);
@@ -269,24 +250,8 @@ public class Enemy : Damageable
         bool tookDamage = true;
         if (a_collision.gameObject.GetComponent<Pocket>())
         {
-            switch (m_gameHandlerRef.m_currentGameMode)
-            {
-                case GameHandler.eGameMode.TurnLimit:
-                    break;
-                case GameHandler.eGameMode.Health:
-                    TakePocketDamage(a_collision.contacts[0].point);
-                    PocketFling(a_collision.gameObject.transform.position);
-                    break;
-                case GameHandler.eGameMode.Pockets:
-                    Die();
-                    break;
-                case GameHandler.eGameMode.Hunger:
-                    break;
-                case GameHandler.eGameMode.ModeCount:
-                    break;
-                default:
-                    break;
-            }
+            TakePocketDamage(a_collision.contacts[0].point);
+            PocketFling(a_collision.gameObject.transform.position);
         }
         else if (a_collision.gameObject.GetComponent<Nucleus>() != null && m_enemyType == eEnemyType.Idler)
         {
@@ -314,11 +279,6 @@ public class Enemy : Damageable
                 m_playerVulnerable = true;
                 oppPlayer.ReportDamageDealt(m_lastDamageTaken);
             }
-        }
-
-        if (m_typeTrait.inertiaDasher)
-        {
-            SetDesiredRotationFromVelocity();
         }
         return tookDamage;
     }
@@ -391,27 +351,42 @@ public class Enemy : Damageable
             spawnLocation = Quaternion.AngleAxis(spawnDirection[i], Vector3.forward) * spawnLocation;
             spawnLocation = transform.position + spawnLocation;
 
+            //Pad out the loot so it doesn't spawn with it's middle on the edge
+            float spawnBoundsPadding = 0.07f;
+            Vector2 spawnBounds = new Vector2(m_battleManagerRef.m_gameSpace.x +  spawnBoundsPadding, m_battleManagerRef.m_gameSpace.y + spawnBoundsPadding);
 
-            float xClamp = 2.1f;
-            float yClamp = 3.52f;
-            float xClampYCutoff = 3.148f;
-            float yClampXCutoff = 1.527f;
-
-            //Make sure the coins dont spawn inside the pockets
-            if (spawnLocation.y > xClampYCutoff)
-            {
-                float sin = Mathf.Sin(((spawnLocation.y - xClampYCutoff) / (yClamp - xClampYCutoff)) * Mathf.PI / 2f);
-                xClamp = yClampXCutoff + (1f - sin) * (xClamp - yClampXCutoff);
-            }
-            else if (spawnLocation.y < -xClampYCutoff)
-            {
-                float sin = Mathf.Sin((spawnLocation.y + xClampYCutoff) / (-yClamp + xClampYCutoff) * Mathf.PI / 2f);
-                xClamp = yClampXCutoff + (1f - sin) * (xClamp - yClampXCutoff);
-            }
-
-            spawnLocation = new Vector3(Mathf.Clamp(spawnLocation.x, -xClamp, xClamp), Mathf.Clamp(spawnLocation.y, -3.52f, 3.52f), spawnLocation.z);
+            spawnLocation = new Vector3(Mathf.Clamp(spawnLocation.x, -spawnBounds.x, spawnBounds.x), Mathf.Clamp(spawnLocation.y, -spawnBounds.y, spawnBounds.y), spawnLocation.z);
             GameObject loot = Instantiate<GameObject>(a_lootTemplate, transform.position, new Quaternion());
             loot.GetComponent<Loot>().Init(spawnLocation);
+        }
+    }
+
+    void SpawnXpText()
+    {
+        RisingFadingText xpText = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(0f, m_xpTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
+        xpText.SetImageEnabled(false);
+        xpText.SetGravityAffected(false);
+        xpText.SetHorizontalSpeed(0f);
+        xpText.SetLifeTimerMax(1.35f);
+        xpText.SetTextContent("XP +" + m_xpReward);
+        xpText.SetOriginalColor(Color.cyan);
+        xpText.SetOriginalScale(1.2f);
+    }
+
+    void SpawnDeathLoot()
+    {
+        //Spawn coins
+        SpawnLoot(m_coinPrefab, m_coinsToSpawn);
+        int equipmentDrops = 0;
+        while (UnityEngine.Random.Range(0f, 1f) < m_equipmentDropRate)
+        {
+            equipmentDrops++;
+        }
+        SpawnLoot(m_equipmentDropPrefab, equipmentDrops);
+
+        if (UnityEngine.Random.Range(0f, 1f) < 0.1f)
+        {
+            Instantiate<GameObject>(m_equipmentDropPrefab, transform.position, new Quaternion());
         }
     }
 
@@ -428,30 +403,11 @@ public class Enemy : Damageable
         m_battleManagerRef.ChangeXp(m_xpReward);
         m_battleManagerRef.ChangeInvaderStrength(-m_typeTrait.difficulty);
 
-        RisingFadingText xpText = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(0f, m_xpTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
-        xpText.SetImageEnabled(false);
-        xpText.SetGravityAffected(false);
-        xpText.SetHorizontalSpeed(0f);
-        xpText.SetLifeTimerMax(1.35f);
-        xpText.SetTextContent("XP +" + m_xpReward);
-        xpText.SetOriginalColor(Color.cyan);
-        xpText.SetOriginalScale(1.2f);
+        SpawnXpText();
 
         m_battleManagerRef.ChangeEnemyCount(-1);
 
-        //Spawn coins
-        SpawnLoot(m_coinPrefab, m_coinsToSpawn);
-        int equipmentDrops = 0;
-        while (UnityEngine.Random.Range(0f, 1f) < m_equipmentDropRate)
-        {
-            equipmentDrops++;
-        }
-        SpawnLoot(m_equipmentDropPrefab, equipmentDrops);
-
-        if (UnityEngine.Random.Range(0f,1f) < 0.1f)
-        {
-            Instantiate<GameObject>(m_equipmentDropPrefab, transform.position, new Quaternion());
-        }
+        SpawnDeathLoot();
 
         base.Die();
     }
@@ -463,7 +419,6 @@ public class Enemy : Damageable
         if (m_typeTrait.inertiaDasher)
         {
             Fling(m_rigidBody.velocity.normalized, flingStrength);
-            SetDesiredRotationFromVelocity();
         }
         else if (m_typeTrait.dodger)
         {
@@ -485,18 +440,23 @@ public class Enemy : Damageable
         }
     }
 
+    void RunFlingTimer()
+    {
+        m_flingTimer += Time.deltaTime;
+        if (m_flingTimer >= m_flingTimerMax)
+        {
+            m_flingTimer -= m_flingTimerMax;
+            Fling();
+        }
+    }
+
     private void FlingUpdate()
     {
         m_flingPieIndicatorRef.SetPieFillAmount(m_flingTimer / m_flingTimerMax);
         Vector3 playerPos = m_playerRef.transform.position;
         if (m_typeTrait.inertiaDasher)
         {
-            m_flingTimer += Time.deltaTime;
-            if (m_flingTimer >= m_flingTimerMax)
-            {
-                m_flingTimer -= m_flingTimerMax;
-                Fling();
-            }
+            RunFlingTimer();
         }
         else
         {
@@ -510,12 +470,7 @@ public class Enemy : Damageable
                 {
                     m_exclamationMarkRefs[i].SetActive(true);
                 }
-                m_flingTimer += Time.deltaTime;
-                if (m_flingTimer >= m_flingTimerMax)
-                {
-                    m_flingTimer -= m_flingTimerMax;
-                    Fling();
-                }
+                RunFlingTimer();
                 return;
             }
             else
@@ -527,7 +482,6 @@ public class Enemy : Damageable
                 m_visionConeRef.SetActive(false);
             }
         }
-
     }
 
     //AI

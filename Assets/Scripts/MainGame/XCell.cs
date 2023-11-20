@@ -31,6 +31,7 @@ public class XCell
         m_statHandler.Init(true);
         m_colorShade = new Color();
         m_colorShade = m_colorShade.Randomise();
+        m_colorShade.g = 0f;
     }
 
     public void EquipEquipment(Equipment a_equipment, int a_slotId)

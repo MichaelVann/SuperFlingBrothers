@@ -13,7 +13,7 @@ using static UnityEngine.UI.CanvasScaler;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 21.6f;
+    public const float _VERSION_NUMBER = 21.7f;
 
     static internal bool DEBUG_MODE = true;
 
@@ -40,17 +40,6 @@ public class GameHandler : MonoBehaviour
         battle,
         postBattle
     } eScene m_currentScene;
-
-    public enum eGameMode
-    {
-        TurnLimit,
-        Health,
-        Pockets,
-        Hunger,
-        ModeCount
-    }
-
-    public eGameMode m_currentGameMode;
 
     private float m_cash = 0;
     
@@ -127,7 +116,6 @@ public class GameHandler : MonoBehaviour
 
     public void SetLastGameResult(eEndGameType a_value) { m_lastGameResult = a_value; }
 
-    public void SetGameMode(eGameMode a_gameMode) { m_currentGameMode = a_gameMode; }
     public void ChangeCash(float a_change) { m_cash += a_change; }
 
     public void SetSelectedBattle(BattleNode a_battleNode) { m_attemptedBattleNode = a_battleNode; }
@@ -288,11 +276,6 @@ public class GameHandler : MonoBehaviour
                 m_xCellTeam.m_playerXCell.EquipEquipment(m_xCellTeam.m_playerXCell.m_equippedEquipment[i], i);
             }
         }
-    }
-
-    public void ChangeGameMode(int a_change)
-    {
-        m_currentGameMode = (eGameMode)VLib.SafeMod((int)(m_currentGameMode + a_change),(int)(eGameMode.ModeCount));
     }
   
     void KillPlayer()

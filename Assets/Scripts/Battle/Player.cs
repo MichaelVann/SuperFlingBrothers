@@ -14,7 +14,7 @@ public class Player : Damageable
     bool m_flinging = false;
     Vector3 m_originalFlingPos;
     const float m_maxFlingLength = 1f;
-    const float m_minFlingLength = 0.15f;
+    const float m_minFlingLength = 0f;//0.15f;
     const int m_flingDexterityXP = 7;
     const int m_abilityUsageDexterityXP = 10;
 
@@ -47,8 +47,6 @@ public class Player : Damageable
     public GameObject m_armorSegmentPrefab;
     GameObject[] m_armorSegments;
     float m_armorSegmentOffset = 0.13f;
-
-
 
     public override void Awake()
     {
@@ -359,40 +357,21 @@ public class Player : Damageable
             }
         }
 
-        switch (m_gameHandlerRef.m_currentGameMode)
+        if (a_collision.gameObject.GetComponent<Pocket>())
         {
-            case GameHandler.eGameMode.TurnLimit:
-                break;
-            case GameHandler.eGameMode.Health:
-                if (a_collision.gameObject.GetComponent<Pocket>())
-                {
-                    TakePocketDamage(a_collision.contacts[0].point);
-                    PocketFling(a_collision.gameObject.transform.position);
-                }
-                else if (a_collision.gameObject.GetComponent<Enemy>() != null)
-                {
-                    if (!a_collision.gameObject.GetComponent<Enemy>().m_playerVulnerable)
-                    {
-                        runningBaseCollision = true;
-                    }
-                }
-                else
-                {
-                    runningBaseCollision = true;
-                }
-                break;
-            case GameHandler.eGameMode.Pockets:
-                if (a_collision.gameObject.GetComponent<Pocket>())
-                {
-                    if (m_health <= 0f)
-                    {
-                        Die();
-                    }
-                    Damage();
-                }
-                break;
-            default:
-                break;
+            TakePocketDamage(a_collision.contacts[0].point);
+            PocketFling(a_collision.gameObject.transform.position);
+        }
+        else if (a_collision.gameObject.GetComponent<Enemy>() != null)
+        {
+            if (!a_collision.gameObject.GetComponent<Enemy>().m_playerVulnerable)
+            {
+                runningBaseCollision = true;
+            }
+        }
+        else
+        {
+            runningBaseCollision = true;
         }
 
         if (runningBaseCollision)

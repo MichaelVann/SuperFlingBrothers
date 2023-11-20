@@ -47,6 +47,7 @@ public class BattleUIHandler : MonoBehaviour
                 break;
         }
 
+        //Ending Text
         m_endingText.SetActive(true);
         m_endingText.GetComponent<Text>().color = m_bgColor;
         m_endingText.GetComponent<Text>().text = endTextString;
@@ -56,8 +57,6 @@ public class BattleUIHandler : MonoBehaviour
         m_gameOver = true;
         m_playingEnding = true;
         m_endingText.SetActive(true);
-
-        //m_battleManagerRef.CalculateFinishedGame();
     }
 
     public void PlayEnding()
@@ -72,7 +71,6 @@ public class BattleUIHandler : MonoBehaviour
 
     void Update()
     {
-        m_turnsText.text = "" + m_battleManagerRef.m_turnsRemaining;
         m_scoreText.text = "" + m_battleManagerRef.m_score;
 
         if (m_gameOver)
