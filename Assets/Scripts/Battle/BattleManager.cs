@@ -131,6 +131,10 @@ public class BattleManager : MonoBehaviour
     float m_bonusTimeScoreGained = 0f;
     int m_invaderStrengthChange = 0;
 
+    //Audio section
+    public AudioSource m_musicPlayer;
+
+
     public float GetMaxGameEndTimer()
     {
         return m_maxGameEndTimer;
@@ -259,6 +263,8 @@ public class BattleManager : MonoBehaviour
     {
         Time.timeScale = a_scale;
         //Debug.Log(a_scale);
+        float pitchRetention = 0.6f;
+        m_musicPlayer.pitch = pitchRetention+(a_scale*(1f-pitchRetention));
     }
 
     void SetupDebug()
