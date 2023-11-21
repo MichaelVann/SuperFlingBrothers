@@ -48,6 +48,10 @@ public class Player : Damageable
     GameObject[] m_armorSegments;
     float m_armorSegmentOffset = 0.13f;
 
+    //Audio
+    AudioSource m_audioSource;
+    public AudioClip m_lootPickupSound;
+
     public override void Awake()
     {
         base.Awake();
@@ -60,6 +64,7 @@ public class Player : Damageable
         m_playerCellRef = m_gameHandlerRef.m_xCellTeam.m_playerXCell;
         //m_rotateToAlignToVelocity = true;
         //m_rigidBody.freezeRotation = false;
+        m_audioSource = GetComponent<AudioSource>();
     }
 
     public override void Start()
@@ -392,6 +397,7 @@ public class Player : Damageable
 
     public void OnTriggerEnter2D(Collider2D a_collider)
     {
+        bool playingLootPickupSound = false;
         Coin coin = a_collider.gameObject.GetComponent<Coin>();
         EquipmentDrop equipmentDrop = a_collider.gameObject.GetComponent<EquipmentDrop>();
         if (coin != null && !coin.m_movingToTargetPos)
@@ -413,7 +419,7 @@ public class Player : Damageable
                 m_coinValueText.SetOriginalPosition(transform.position + new Vector3(0f, m_damageTextYOffset));
             }
             m_cumulativeCoinValue += m_battleManagerRef.m_coinValue;
-
+            playingLootPickupSound = true;
             m_coinValueText.SetTextContent("+" + m_cumulativeCoinValue);
             Destroy(a_collider.gameObject);
         }
@@ -426,6 +432,12 @@ public class Player : Damageable
             equipmentRFT.SetOriginalScale(1.2f);
             equipmentRFT.SetLifeTimerMax(1.35f);
             equipmentRFT.SetTextContent("+1 Eq");
+            playingLootPickupSound = true;
+        }
+        if (playingLootPickupSound == true)
+        {
+            m_audioSource.clip = m_lootPickupSound;
+            m_audioSource.Play();
         }
     }
 
