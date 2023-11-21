@@ -3,7 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
+
+public class NamedArrayAttribute : PropertyAttribute
+{
+    public readonly string[] names;
+    public NamedArrayAttribute(string[] names) { this.names = names; }
+}
+
+[CustomPropertyDrawer(typeof(NamedArrayAttribute))]
+public class NamedArrayDrawer : PropertyDrawer
+{
+    public override void OnGUI(Rect rect, SerializedProperty property, GUIContent label)
+    {
+        try
+        {
+            int pos = int.Parse(property.propertyPath.Split('[', ']')[1]);
+            EditorGUI.ObjectField(rect, property, new GUIContent(((NamedArrayAttribute)attribute).names[pos]));
+        }
+        catch
+        {
+            EditorGUI.ObjectField(rect, property, label);
+        }
+    }
+}
 
 public static class VLib
 {
@@ -316,4 +340,14 @@ public static class VLib
         return generatedNames;
     }
 
+
+    public static string[] GetEnumNames(Type enumType)
+    {
+        if (!enumType.IsEnum)
+        {
+            throw new ArgumentException("The provided type is not an enum.");
+        }
+
+        return Enum.GetNames(enumType);
+    }
 }

@@ -51,8 +51,6 @@ public class EquipmentAbility
         "Bounce Power Up: Everytime this projectile bounces it doubles in power."
      };
 
-
-
     [SerializeReference]
 
     internal List<eAffix> m_affixes;

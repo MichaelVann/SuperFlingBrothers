@@ -48,7 +48,6 @@ public class Equipment
     [SerializeField]
     public float m_maxHealth = 60f;
 
-
     internal bool m_newToPlayer = true;
 
     [Serializable]
