@@ -16,7 +16,6 @@ public class ArmorSegment : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_equipmentSymbols[0].name = "Test";
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
     }
 
