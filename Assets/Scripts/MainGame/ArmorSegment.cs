@@ -7,7 +7,6 @@ using UnityEngine;
 
 public class ArmorSegment : MonoBehaviour
 {
-    [NamedArrayAttribute(new string[] { "Armour", "ExtraTurn", "Bullet", "Shield", "Snare" })]
     public Sprite[] m_equipmentSymbols = new Sprite[(int)EquipmentAbility.eAbilityType.Count];
     //public Sprite m_armorSprite;
     public SpriteRenderer m_symbolSpriteRenderer;

@@ -13,8 +13,8 @@ using static UnityEngine.UI.CanvasScaler;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 21.10f;
-    public static string _VERSION_NUMBER_STRING = "21.10";
+    public const float _VERSION_NUMBER = 21.11f;
+    public static string _VERSION_NUMBER_STRING = "21.11";
 
     static internal bool DEBUG_MODE = true;
 
