@@ -13,7 +13,8 @@ using static UnityEngine.UI.CanvasScaler;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 21.9f;
+    public const float _VERSION_NUMBER = 21.10f;
+    public static string _VERSION_NUMBER_STRING = "21.10";
 
     static internal bool DEBUG_MODE = true;
 
@@ -81,6 +82,8 @@ public class GameHandler : MonoBehaviour
     public List<Equipment> m_equipmentInventory;
 
     StockHandler m_stockHandler;
+
+    internal AudioManager m_audioManager;
 
     [Serializable]
     struct SaveData
@@ -151,6 +154,7 @@ public class GameHandler : MonoBehaviour
         }
 
         //Battle
+        m_audioManager =  new AudioManager();
     }
 
     private void SetupHumanBody()

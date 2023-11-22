@@ -38,14 +38,4 @@ public class MainMenuHandler : MonoBehaviour
             m_menuList[i].SetActive(a_index == i);
         }
     }
-
-    public void SaveButtonPressed()
-    {
-        m_gameHandlerRef.SaveGame();
-    }
-
-    public void LoadButtonPressed()
-    {
-        m_gameHandlerRef.LoadGame();
-    }
 }

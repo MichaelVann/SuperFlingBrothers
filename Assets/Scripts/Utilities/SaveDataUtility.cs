@@ -45,9 +45,18 @@ public class SaveDataUtility
     }
 
     [Serializable]
+    struct AudioData
+    {
+        public bool muted;
+        public bool musicEnabled;
+        public bool soundEffectsEnabled;
+    }
+
+    [Serializable]
     struct SaveData
     {
         public HumanBodyData humanBodyData;
+        public AudioData audioData;
     }
     [SerializeField]
     SaveData m_saveData;
@@ -138,9 +147,24 @@ public class SaveDataUtility
         
     }
 
+    void SaveAudioData()
+    {
+        m_saveData.audioData.muted = m_gameHandlerRef.m_audioManager.m_musicEnabled;
+        m_saveData.audioData.musicEnabled = m_gameHandlerRef.m_audioManager.m_musicEnabled;
+        m_saveData.audioData.soundEffectsEnabled = m_gameHandlerRef.m_audioManager.m_soundEffectsEnabled;
+    }
+
+    void LoadAudioData()
+    {
+        m_gameHandlerRef.m_audioManager.m_muted = m_saveData.audioData.muted;
+        m_gameHandlerRef.m_audioManager.m_musicEnabled = m_saveData.audioData.musicEnabled;
+        m_gameHandlerRef.m_audioManager.m_soundEffectsEnabled = m_saveData.audioData.soundEffectsEnabled;
+    }
+
     internal void Save()
     {
         SaveHumanBody();
+        SaveAudioData();
         string path = GetSaveDataPath();
         string json = JsonUtility.ToJson(m_saveData);
         File.WriteAllText(path, json);
@@ -152,5 +176,6 @@ public class SaveDataUtility
         string loadedString = File.ReadAllText(path);
         m_saveData = JsonUtility.FromJson<SaveData>(loadedString);
         LoadHumanBody();
+        LoadAudioData();
     }
 }

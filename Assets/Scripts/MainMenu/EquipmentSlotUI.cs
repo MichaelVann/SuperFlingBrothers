@@ -11,7 +11,7 @@ public class EquipmentSlotUI : MonoBehaviour
     public Text m_nameText;
     public Text[] m_statNameTexts;
     public Text[] m_statTexts;
-    public EquipmentPortrait m_portraitRef;
+    public ArmorSegment m_armorSegment;
     public Text m_abilityTextRef;
     public Text m_itemValueTextRef;
 
@@ -40,7 +40,7 @@ public class EquipmentSlotUI : MonoBehaviour
 
         if (valid)
         {
-            m_portraitRef.SetEquipmentRef(m_equipmentRef);
+            m_armorSegment.AssignEquipment(m_equipmentRef);
             for (int i = 0; i < m_equipmentRef.m_stats.Count; i++)
             {
                 //m_statTexts[i].gameObject.SetActive(true);
@@ -63,7 +63,7 @@ public class EquipmentSlotUI : MonoBehaviour
         m_healthText.text = valid ? m_equipmentRef.m_health.ToString("f2") + "/" + m_equipmentRef.m_maxHealth.ToString("f2") : "";
 
 
-        m_portraitRef.gameObject.SetActive(valid);
+        m_armorSegment.gameObject.SetActive(valid);
     }
 
     // Update is called once per frame

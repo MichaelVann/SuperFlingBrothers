@@ -205,9 +205,6 @@ public class EquipmentAbility
         {
             case eAbilityType.ExtraTurn:
                 description = "Extra Turn: Gives the user an extra turn on collision with the enemy.";
-                //description += "\n\nTest";
-                //description += "\n\nTest";
-                //description += "\n\nTest";
 
                 break;
             case eAbilityType.Bullet:

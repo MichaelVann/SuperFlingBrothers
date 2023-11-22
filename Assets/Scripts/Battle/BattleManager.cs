@@ -123,7 +123,6 @@ public class BattleManager : MonoBehaviour
     //Audio section
     public AudioSource m_musicPlayer;
 
-
     public float GetMaxGameEndTimer()
     {
         return m_maxGameEndTimer;
@@ -172,6 +171,10 @@ public class BattleManager : MonoBehaviour
         SpawnEnemies();
         m_levelDifficultyText.text = "Level Difficulty: " + m_gameHandlerRef.m_battleDifficulty;
         m_upperLowerFlingPositionBounds = m_wallSpriteRenderers[3].gameObject.transform.position.y;
+        if (m_gameHandlerRef.m_audioManager.IsMusicOn())
+        {
+            m_musicPlayer.Play();
+        }
     }
 
     public void SetFrozen(bool a_frozen)
