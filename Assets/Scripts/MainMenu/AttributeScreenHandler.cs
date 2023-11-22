@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +10,7 @@ public class AttributeScreenHandler : MonoBehaviour
     public Counter m_strengthCounterRef;
     public Text m_availablePointsValueTextRef;
     public Button m_reSpecButtonRef;
-    public Text m_reSpecButtonTextRef;
+    public TextMeshProUGUI m_reSpecButtonTextRef;
 
     // Start is called before the first frame update
     void Start()

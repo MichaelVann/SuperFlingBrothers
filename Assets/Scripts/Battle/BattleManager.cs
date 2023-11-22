@@ -169,7 +169,7 @@ public class BattleManager : MonoBehaviour
             spriteRendererRef.enabled = false;
         }
         SpawnEnemies();
-        m_levelDifficultyText.text = "Level Difficulty: " + m_gameHandlerRef.m_battleDifficulty;
+        //m_levelDifficultyText.text = "Level Difficulty: " + m_gameHandlerRef.m_battleDifficulty;
         m_upperLowerFlingPositionBounds = m_wallSpriteRenderers[3].gameObject.transform.position.y;
         if (m_gameHandlerRef.m_audioManager.IsMusicOn())
         {
@@ -696,7 +696,7 @@ public class BattleManager : MonoBehaviour
 
     void Update()
     {
-        m_enemyCountText.text = "Enemy Count: " + m_enemyCount;
+        //m_enemyCountText.text = "Enemy Count: " + m_enemyCount;
         int fps = (int)(1f / Time.unscaledDeltaTime);
         m_fpsText.text = fps + " fps";
         //Intro
