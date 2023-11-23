@@ -95,6 +95,7 @@ public class Damageable : BaseObject
         m_defaultMaterialRef = m_spriteRenderer.material;
         UpdateLocalStatsFromStatHandler();
         m_originalConstraints = m_rigidBody.constraints;
+        m_rigidBody.drag = GameHandler.BATTLE_DamageableDragCoefficient;
     }
 
     public virtual void Start()
@@ -303,6 +304,7 @@ public class Damageable : BaseObject
                 float oppSpeed = 1f / m_damagePerSpeedDivider;
                 float damage = oppStrength * oppSpeed * oppContactStrength;
                 Damage(oppStrength * oppSpeed * oppContactStrength, a_collision.contacts[0].point);
+                m_rigidBody.velocity *= GameHandler.BATTLE_DamageableHitVelocityMultiplier;
                 tookDamage = true;
                 m_lastDamageTaken = damage;
             }

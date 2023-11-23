@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,8 +12,8 @@ public class UIBar : MonoBehaviour
     float m_barHeight = 25f;
 
     public RectTransform m_barMaskTransform;
-    public Text m_barValueText;
-    public Text m_labelText;
+    public TextMeshProUGUI m_barValueText;
+    public TextMeshProUGUI m_labelText;
     public GameObject m_fillingBar;
 
     float m_value = 0f;

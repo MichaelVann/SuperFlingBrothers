@@ -13,8 +13,8 @@ using static UnityEngine.UI.CanvasScaler;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 21.12f;
-    public static string _VERSION_NUMBER_STRING = "21.12";
+    public const float _VERSION_NUMBER = 22f;
+    public static string _VERSION_NUMBER_STRING = "22.0";
 
     static internal bool DEBUG_MODE = true;
 
@@ -25,6 +25,8 @@ public class GameHandler : MonoBehaviour
     static internal float BATTLE_ShadowAngle = 135f;
     static internal float BATTLE_FlingStrength = 259f;
     static internal float BATTLE_SkillXPScale = 2f;
+    static internal float BATTLE_DamageableDragCoefficient = 1.35f;
+    static internal float BATTLE_DamageableHitVelocityMultiplier = 2f;
 
     static internal float PRE_BATTLE_WarfrontChange = -0.19f;
     //Damageables
