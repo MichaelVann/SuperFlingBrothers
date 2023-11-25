@@ -6,8 +6,8 @@ using UnityEngine.UI;
 
 public class CharacterInfoReadout : MonoBehaviour
 {
-    public Text[] m_statNameTexts;
-    public Text[] m_statTexts;
+    public TextMeshProUGUI[] m_statNameTexts;
+    public StatReadout[] m_statReadouts;
     public TextMeshProUGUI m_characterIterationText;
     GameHandler m_gameHandlerRef;
 
@@ -19,22 +19,26 @@ public class CharacterInfoReadout : MonoBehaviour
         {
             m_statNameTexts[i].color = CharacterStatHandler.GetStatColor(i);
         }
+        for (int i = 0;i < m_statReadouts.Length; i++)
+        {
+            m_statReadouts[i].AssignStat(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[i]);
+        }
     }
 
     public void Refresh()
     {
-        for (int i = 0; i < m_statTexts.Length; i++)
+        for (int i = 0; i < m_statReadouts.Length; i++)
         {
-            m_statTexts[i].text = "";
+            m_statReadouts[i].Refresh();
         }
 
-        for (int i = 0; i < m_statTexts.Length && i < (int)eCharacterStatIndices.count; i++)
-        {
-            CharacterStat stat = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[i];
-            m_statTexts[i].text = "" + VLib.TruncateFloatsDecimalPlaces(stat.m_totalValue, 2);
-            m_statTexts[i].text += "(+" + stat.m_equipmentAddedValue + ") (+" + stat.m_value + ") (" + stat.m_parentAddedValue + ")";
-            m_statTexts[i].color = Color.white;// CharacterStatHandler.GetStatColor((eCharacterStatIndices)i);
-        }
+        //for (int i = 0; i < m_statTexts.Length && i < (int)eCharacterStatIndices.count; i++)
+        //{
+        //    CharacterStat stat = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[i];
+        //    m_statTexts[i].text = "" + VLib.TruncateFloatsDecimalPlaces(stat.m_totalValue, 2);
+        //    m_statTexts[i].text += "(+" + stat.m_equipmentAddedValue + ") (+" + stat.m_value + ") (" + stat.m_parentAddedValue + ")";
+        //    m_statTexts[i].color = Color.white;// CharacterStatHandler.GetStatColor((eCharacterStatIndices)i);
+        //}
 
         m_characterIterationText.text = "#" + m_gameHandlerRef.m_xCellTeam.m_playerCellIteration;
     }

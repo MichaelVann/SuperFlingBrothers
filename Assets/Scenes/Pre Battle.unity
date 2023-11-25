@@ -5721,7 +5721,7 @@ MonoBehaviour:
   m_strengthCounterRef: {fileID: 879458621}
   m_availablePointsValueTextRef: {fileID: 63040988}
   m_reSpecButtonRef: {fileID: 732918869}
-  m_reSpecButtonTextRef: {fileID: 1653168678}
+  m_reSpecButtonTextRef: {fileID: 0}
 --- !u!114 &949228040
 MonoBehaviour:
   m_ObjectHideFlags: 0

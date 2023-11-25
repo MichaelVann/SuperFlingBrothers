@@ -32,7 +32,7 @@ public class AudioManager
     public AudioManager()
     {
         m_muted = false;
-        m_musicEnabled = true;
+        m_musicEnabled = false;
         m_soundEffectsEnabled = true;
     }
 }
