@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class EquipmentPanel : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
-    EquipmentScreenHandler m_equipmentScreenHandlerRef;
+    SquadScreenHandler m_equipmentScreenHandlerRef;
     public Equipment m_equipmentRef;
 
     public Text m_nameTextRef;
@@ -37,7 +37,7 @@ public class EquipmentPanel : MonoBehaviour
     {
     }
 
-    public void Init(Equipment a_equipment, EquipmentScreenHandler a_equipmentScreenHandler)
+    public void Init(Equipment a_equipment, SquadScreenHandler a_equipmentScreenHandler)
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_equipmentScreenHandlerRef = a_equipmentScreenHandler;
@@ -75,7 +75,7 @@ public class EquipmentPanel : MonoBehaviour
             m_statTextRefs[i].color = Color.white;// CharacterStatHandler.GetStatColor(m_equipmentRef.m_stats[i].statType);
         }
 
-        Equipment openedEquipment = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[m_equipmentScreenHandlerRef.m_openedEquipmentSlotId];
+        Equipment openedEquipment = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_equipmentScreenHandlerRef.m_openedEquipmentSlotId];
         for (int i = 0; openedEquipment != null && i < openedEquipment.m_stats.Count; i++)
         {
             int index = (int)openedEquipment.m_stats[i].statType;

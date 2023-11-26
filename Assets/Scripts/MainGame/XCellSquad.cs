@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 
 [Serializable]
-public class XCellTeam
+public class XCellSquad
 {
     [SerializeField]
     internal string m_name;
@@ -14,7 +14,7 @@ public class XCellTeam
     [SerializeField]
     internal int m_playerCellIteration = 1;
 
-    public XCellTeam()
+    public XCellSquad()
     {
 
     }

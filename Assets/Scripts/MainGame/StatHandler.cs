@@ -83,13 +83,13 @@ public class RPGLevel
 public class CharacterStat
 {
     [SerializeField]
-    public string name;
+    public string m_name;
     [SerializeField]
     public float m_value;
     [SerializeField]
     public float m_scale;
     [SerializeField]
-    public float postAddedValue;
+    public float m_postAddedValue;
     [SerializeField]
     public float m_equipmentAddedValue;
     [SerializeField]
@@ -103,11 +103,11 @@ public class CharacterStat
     [SerializeField]
     public float m_finalValue; // = effectiveValue + stat.postAddedValue + equipmentAddedValue; 
     [SerializeField]
-    public float originalCost;
+    public float m_originalCost;
     [SerializeField]
-    public float cost;
+    public float m_cost;
     [SerializeField]
-    public float costIncreaseRate;
+    public float m_costIncreaseRate;
 
     public RPGLevel m_RPGLevel;
     public RPGLevel m_lastSeenRPGLevel;
@@ -131,7 +131,7 @@ public class CharacterStat
         //m_equipmentEffectiveValue = m_equipmentAddedValue * m_scale;
         //m_effectiveValue = m_equipmentEffectiveValue + m_attributeEffectiveValue;
         m_totalValue = m_value + m_equipmentAddedValue + m_parentAddedValue;
-        m_finalValue = (m_totalValue)* m_scale + postAddedValue;
+        m_finalValue = (m_totalValue)* m_scale + m_postAddedValue;
         //m_finalValue += m_parentAddedValue;
     }
 
@@ -181,7 +181,7 @@ public class CharacterStatHandler
         return m_stats[a_index].m_finalValue;
     }
 
-    public static string GetStatName(eCharacterStatIndices a_index, bool a_shortName = true)
+    public static string GetStatName(eCharacterStatIndices a_index, bool a_shortName = false)
     {
         string m_returnString = "";
 
@@ -315,7 +315,7 @@ public class CharacterStatHandler
 
     public void SetStatPostAddedValue(eCharacterStatIndices a_index, float a_value)
     {
-        m_stats[(int)a_index].postAddedValue = a_value;
+        m_stats[(int)a_index].m_postAddedValue = a_value;
         UpdateStat(a_index);
     }
 
@@ -325,12 +325,12 @@ public class CharacterStatHandler
         {
             SetStatScale((eCharacterStatIndices)i,1f);
             SetStatValue((eCharacterStatIndices)i, 1f);
-            m_stats[i].originalCost = 10f;
-            m_stats[i].cost = m_stats[i].originalCost;
-            m_stats[i].costIncreaseRate = 1.8f;
-            m_stats[i].postAddedValue = 0f;
+            m_stats[i].m_originalCost = 10f;
+            m_stats[i].m_cost = m_stats[i].m_originalCost;
+            m_stats[i].m_costIncreaseRate = 1.8f;
+            m_stats[i].m_postAddedValue = 0f;
 
-            m_stats[i].name = GetStatName(i);
+            m_stats[i].m_name = GetStatName(i);
         }
 
         SetStatPostAddedValue(eCharacterStatIndices.dexterity, 0f);

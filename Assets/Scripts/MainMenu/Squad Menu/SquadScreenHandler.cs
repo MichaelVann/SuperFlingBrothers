@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class EquipmentScreenHandler : MonoBehaviour
+public class SquadScreenHandler : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
     public EquipmentSlotUI[] m_equipmentSlotUIRefs;
@@ -18,15 +18,15 @@ public class EquipmentScreenHandler : MonoBehaviour
     public GameObject m_statAllocationNotifierRef;
     public Text m_statAllocationNotifierTextRef;
 
-    //Character
-    public GameObject m_playerStatueRef;
-    public TextMeshProUGUI m_xCellNameText;
-
     //Inventory
     public GameObject m_inventoryPanelRef;
     public GameObject m_inventoryContentRef;
     public GameObject m_equipmentPanelTemplate;
-    public GameObject m_equipmentOverview;
+
+    //Subscreens
+    public GameObject m_squadOverview;
+    public GameObject m_attributesScreen;
+    public GameObject m_skillsScreen;
 
     List<EquipmentPanel> m_equipmentItemPanels;
 
@@ -44,14 +44,12 @@ public class EquipmentScreenHandler : MonoBehaviour
         RefreshEquipmentSlots();
         InstantiateEquipmentInventory();
         m_inited = true;
-        m_xCellNameText.text = "ID: " + m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_name.ToUpper();
-        m_playerStatueRef.GetComponent<Image>().color = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_colorShade;
     }
 
     // Update is called once per frame
     void Update()
     {
-        int allocationPoints = m_gameHandlerRef.m_xCellTeam.m_statHandler.m_RPGLevel.m_allocationPoints;
+        int allocationPoints = m_gameHandlerRef.m_xCellSquad.m_statHandler.m_RPGLevel.m_allocationPoints;
         m_statAllocationNotifierRef.SetActive(allocationPoints > 0);
         if (m_statAllocationNotifierRef.activeSelf)
         {
@@ -95,7 +93,7 @@ public class EquipmentScreenHandler : MonoBehaviour
 
     public void RefreshInventory()
     {
-        SetTopPanelEquipmentRef(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[m_openedEquipmentSlotId]);
+        SetTopPanelEquipmentRef(m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_openedEquipmentSlotId]);
         m_gameHandlerRef.SortEquipmentInventory();
         InstantiateEquipmentInventory();
         m_gameHandlerRef.m_equipmentCollectedLastGame = 0;
@@ -152,7 +150,7 @@ public class EquipmentScreenHandler : MonoBehaviour
     {
         for (int i = 0; i < m_equipmentSlotUIRefs.Length; i++)
         {
-            m_equipmentSlotUIRefs[i].SetEquipmentRef(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i]);
+            m_equipmentSlotUIRefs[i].SetEquipmentRef(m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i]);
             m_equipmentSlotUIRefs[i].Refresh();
         }
     }
@@ -164,7 +162,7 @@ public class EquipmentScreenHandler : MonoBehaviour
         {
             closingInventory = true;
         }
-        m_gameHandlerRef.m_xCellTeam.m_playerXCell.EquipEquipment(a_equipment, m_openedEquipmentSlotId);
+        m_gameHandlerRef.m_xCellSquad.m_playerXCell.EquipEquipment(a_equipment, m_openedEquipmentSlotId);
 
         RefreshInventory();
         RefreshEquipmentSlots();
@@ -183,13 +181,12 @@ public class EquipmentScreenHandler : MonoBehaviour
     {
         RefreshEquipmentSlots();
         SetInventoryPanelStatus(false);
-
     }
 
     public void SetInventoryPanelStatus(bool a_open, int a_slotId = -1)
     {
         m_inventoryPanelRef.SetActive(a_open);
-        m_equipmentOverview.SetActive(!a_open);
+        m_squadOverview.SetActive(!a_open);
         m_openedEquipmentSlotId = a_slotId;
         if (a_open)
         {
@@ -240,5 +237,26 @@ public class EquipmentScreenHandler : MonoBehaviour
             equipmentPanelList.RemoveAt(0);
         }
         RefreshInventory();
+    }
+
+    public void OpenSquadOverview()
+    {
+        m_squadOverview.SetActive(true);
+        m_attributesScreen.SetActive(false);
+        m_skillsScreen.SetActive(false);
+    }
+
+    public void OpenAttributesScreen()
+    {
+        m_squadOverview.SetActive(false);
+        m_attributesScreen.SetActive(true);
+        m_skillsScreen.SetActive(false);
+    }
+
+    public void OpenSkillsScreen()
+    {
+        m_squadOverview.SetActive(false);
+        m_attributesScreen.SetActive(false);
+        m_skillsScreen.SetActive(true);
     }
 }

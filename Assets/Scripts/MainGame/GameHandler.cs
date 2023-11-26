@@ -13,8 +13,8 @@ using static UnityEngine.UI.CanvasScaler;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 22.1f;
-    public static string _VERSION_NUMBER_STRING = "22.1";
+    public const float _VERSION_NUMBER = 22.2f;
+    public static string _VERSION_NUMBER_STRING = "22.2";
 
     static internal bool DEBUG_MODE = true;
 
@@ -47,8 +47,7 @@ public class GameHandler : MonoBehaviour
     private float m_cash = 0;
     
     //Player
-
-    internal XCellTeam m_xCellTeam;
+    internal XCellSquad m_xCellSquad;
     bool m_playerWasKilledLastBattle = false;
 
     //Body
@@ -91,7 +90,7 @@ public class GameHandler : MonoBehaviour
     struct SaveData
     {
         public float cash;
-        public XCellTeam xCellTeam;
+        public XCellSquad xCellTeam;
         public XCell xCell;
         //public HumanBody humanBody;
         public List<Stock> stockList;
@@ -104,7 +103,7 @@ public class GameHandler : MonoBehaviour
     //SaveDataUtility m_saveDataUtility;
     bool m_autoLoadDataOnLaunch = false;
 
-    internal int GetGeneratedEquipmentLevel(bool a_junk) { return (int)(m_xCellTeam.m_statHandler.m_RPGLevel.m_level * (a_junk ? m_junkEquipmentLevelScale : 1f)); }
+    internal int GetGeneratedEquipmentLevel(bool a_junk) { return (int)(m_xCellSquad.m_statHandler.m_RPGLevel.m_level * (a_junk ? m_junkEquipmentLevelScale : 1f)); }
 
     internal int GetJunkEquipmentCost() { return  Equipment.GetNominalValue(GetGeneratedEquipmentLevel(true), Equipment.eRarityTier.Magic); }
 
@@ -112,10 +111,10 @@ public class GameHandler : MonoBehaviour
 
     internal void AttemptToRespec()
     {
-        if (m_xCellTeam.m_statHandler.m_reSpecCost <= m_cash)
+        if (m_xCellSquad.m_statHandler.m_reSpecCost <= m_cash)
         {
-            m_cash -= m_xCellTeam.m_statHandler.m_reSpecCost;
-            m_xCellTeam.m_statHandler.ReSpec();
+            m_cash -= m_xCellSquad.m_statHandler.m_reSpecCost;
+            m_xCellSquad.m_statHandler.ReSpec();
         }
     }
 
@@ -136,8 +135,8 @@ public class GameHandler : MonoBehaviour
     {
         DontDestroyOnLoad(gameObject);
         //m_saveDataUtility = new SaveDataUtility(this);
-        m_xCellTeam = new XCellTeam();
-        m_xCellTeam.Init();
+        m_xCellSquad = new XCellSquad();
+        m_xCellSquad.Init();
         //Stocks
         m_stockHandler = new StockHandler(this);
 
@@ -239,7 +238,7 @@ public class GameHandler : MonoBehaviour
     internal Equipment GenerateEquipment(bool a_junk = false)
     {
         float equipmentScale = a_junk ? 0.5f : 1.0f;
-        float equipmentLevel = equipmentScale * m_xCellTeam.m_statHandler.m_RPGLevel.m_level;
+        float equipmentLevel = equipmentScale * m_xCellSquad.m_statHandler.m_RPGLevel.m_level;
         Equipment generatedEquipment = new Equipment((int)equipmentLevel);
         return generatedEquipment;
     }
@@ -275,29 +274,29 @@ public class GameHandler : MonoBehaviour
 
     internal void UnEquipDestroyedEquipment()
     {
-        for (int i = 0; i < m_xCellTeam.m_playerXCell.m_equippedEquipment.Length; i++)
+        for (int i = 0; i < m_xCellSquad.m_playerXCell.m_equippedEquipment.Length; i++)
         {
-            if (m_xCellTeam.m_playerXCell.m_equippedEquipment[i] != null && m_xCellTeam.m_playerXCell.m_equippedEquipment[i].IsBroken())
+            if (m_xCellSquad.m_playerXCell.m_equippedEquipment[i] != null && m_xCellSquad.m_playerXCell.m_equippedEquipment[i].IsBroken())
             {
-                m_xCellTeam.m_playerXCell.EquipEquipment(m_xCellTeam.m_playerXCell.m_equippedEquipment[i], i);
+                m_xCellSquad.m_playerXCell.EquipEquipment(m_xCellSquad.m_playerXCell.m_equippedEquipment[i], i);
             }
         }
     }
   
     void KillPlayer()
     {
-        for (int i = 0; i < m_xCellTeam.m_playerXCell.m_equippedEquipment.Length; i++)
+        for (int i = 0; i < m_xCellSquad.m_playerXCell.m_equippedEquipment.Length; i++)
         {
             for (int j = 0; j < m_equipmentInventory.Count; j++)
             {
-                if (m_xCellTeam.m_playerXCell.m_equippedEquipment[i] == m_equipmentInventory[j])
+                if (m_xCellSquad.m_playerXCell.m_equippedEquipment[i] == m_equipmentInventory[j])
                 {
                     m_equipmentInventory.RemoveAt((int)j);
                     j--;
                 }
             }
         }
-        m_xCellTeam.KillPlayer();
+        m_xCellSquad.KillPlayer();
 
     }
 
@@ -336,7 +335,7 @@ public class GameHandler : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.K))
         {
-            m_xCellTeam.m_statHandler.m_RPGLevel.ChangeXP(1);
+            m_xCellSquad.m_statHandler.m_RPGLevel.ChangeXP(1);
         }
         if (Input.GetKey(KeyCode.J))
         {
@@ -352,12 +351,12 @@ public class GameHandler : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.O))
         {
-            m_xCellTeam.m_playerXCell.m_statHandler = new CharacterStatHandler();
-            m_xCellTeam.m_playerXCell.m_statHandler.Init(true);
+            m_xCellSquad.m_playerXCell.m_statHandler = new CharacterStatHandler();
+            m_xCellSquad.m_playerXCell.m_statHandler.Init(true);
         }
         if (Input.GetKeyUp(KeyCode.H))
         {
-            PickUpEquipment(new Equipment(m_xCellTeam.m_playerXCell.m_statHandler.m_RPGLevel.m_level));
+            PickUpEquipment(new Equipment(m_xCellSquad.m_playerXCell.m_statHandler.m_RPGLevel.m_level));
         }
         m_stockHandler.Update();
         //BATTLE_ShadowAngle = Mathf.Sin(Time.unscaledTime)*360f;
@@ -393,7 +392,7 @@ public class GameHandler : MonoBehaviour
 
         m_saveData.cash = m_cash;
         //m_saveData.xCell = m_xCellTeam.m_playerXCell;
-        m_saveData.xCellTeam = m_xCellTeam;
+        m_saveData.xCellTeam = m_xCellSquad;
         //m_saveData.humanBody = m_humanBody;
         //m_saveData.statHandler.Copy(m_playerStatHandler);
         m_saveData.stockList = m_stockHandler.m_stockList;
@@ -415,7 +414,7 @@ public class GameHandler : MonoBehaviour
         string loadedString = File.ReadAllText(path);
         m_saveData = JsonUtility.FromJson<SaveData>(loadedString);
         m_cash = m_saveData.cash;
-        m_xCellTeam = m_saveData.xCellTeam;
+        m_xCellSquad = m_saveData.xCellTeam;
         //m_humanBody = m_saveData.humanBody;
         m_humanBody.m_gameHandlerRef = this;
         //m_playerStatHandler = m_saveData.statHandler;
@@ -431,9 +430,9 @@ public class GameHandler : MonoBehaviour
             m_upgrades[i].Copy(m_saveData.upgrades[i]);
         }
 
-        for (int i = 0; i < m_xCellTeam.m_playerXCell.m_equippedEquipment.Length; i++)
+        for (int i = 0; i < m_xCellSquad.m_playerXCell.m_equippedEquipment.Length; i++)
         {
-            m_xCellTeam.m_playerXCell.m_equippedEquipment[i] = null;
+            m_xCellSquad.m_playerXCell.m_equippedEquipment[i] = null;
         }
 
         m_equipmentInventory = new List<Equipment>();
@@ -443,7 +442,7 @@ public class GameHandler : MonoBehaviour
             m_equipmentInventory.Add(m_saveData.equipmentList[i]);
             if (m_equipmentInventory[i].m_equipped)
             {
-                m_xCellTeam.m_playerXCell.m_equippedEquipment[m_equipmentInventory[i].m_equippedSlotId] = m_equipmentInventory[i];
+                m_xCellSquad.m_playerXCell.m_equippedEquipment[m_equipmentInventory[i].m_equippedSlotId] = m_equipmentInventory[i];
             }
         }
         SaveDataUtility saveDataUtility = new SaveDataUtility(this);

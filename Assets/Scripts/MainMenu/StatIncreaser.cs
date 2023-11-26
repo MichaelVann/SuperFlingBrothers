@@ -24,15 +24,15 @@ public class StatIncreaser : MonoBehaviour
 
     public void AttemptIncrease()
     {
-        m_gameHandlerRef.m_xCellTeam.AttemptToIncreaseStat(m_statIndex);
+        m_gameHandlerRef.m_xCellSquad.AttemptToIncreaseStat(m_statIndex);
     }
 
     // Update is called once per frame
     void Update()
     {
-        m_increaseButtonRef.interactable = m_gameHandlerRef.m_xCellTeam.m_statHandler.m_RPGLevel.m_allocationPoints > 0 ? true : false;
+        m_increaseButtonRef.interactable = m_gameHandlerRef.m_xCellSquad.m_statHandler.m_RPGLevel.m_allocationPoints > 0 ? true : false;
 
-        CharacterStat m_referencedStat = m_gameHandlerRef.m_xCellTeam.m_statHandler.m_stats[(int)m_statIndex];
+        CharacterStat m_referencedStat = m_gameHandlerRef.m_xCellSquad.m_statHandler.m_stats[(int)m_statIndex];
 
         m_statCounterRef.m_text.text = "" + m_referencedStat.m_value;
 

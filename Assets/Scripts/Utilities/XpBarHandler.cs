@@ -16,7 +16,7 @@ public class XpBarHandler : UIBar
     // Update is called once per frame
     void Update()
     {
-        CharacterStatHandler statHandler = m_gameHandlerRef.m_xCellTeam.m_statHandler;
+        CharacterStatHandler statHandler = m_gameHandlerRef.m_xCellSquad.m_statHandler;
         Init((float)statHandler.m_RPGLevel.m_XP, (float)statHandler.m_RPGLevel.m_maxXP);
         SetLabeltext("Level " + statHandler.m_RPGLevel.m_level);
     }

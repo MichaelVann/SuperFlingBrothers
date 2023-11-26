@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class StatReadout : MonoBehaviour
 {
+    public TextMeshProUGUI m_titleText;
     public TextMeshProUGUI m_totalStatText;
     public TextMeshProUGUI m_equipmentStatText;
     public TextMeshProUGUI m_skillStatText;
@@ -23,6 +24,8 @@ public class StatReadout : MonoBehaviour
 
     internal void Refresh()
     {
+        //m_titleText.color = CharacterStatHandler.GetStatColor(m_characterStat);
+        m_titleText.text = m_characterStat.m_name;
         m_totalStatText.text =     "" + m_characterStat.m_totalValue;
         m_equipmentStatText.text = "" + m_characterStat.m_equipmentAddedValue;
         m_skillStatText.text =     "" + m_characterStat.m_value;

@@ -8,7 +8,7 @@ public class EquipmentInteractButton : MonoBehaviour
     public Button m_buttonRef;
     Equipment m_equipmentRef;
     GameHandler m_gameHandlerRef;
-    EquipmentScreenHandler m_equipmentScreenHandlerRef;
+    SquadScreenHandler m_equipmentScreenHandlerRef;
     public Text m_equipButtonTextRef;
     // Start is called before the first frame update
     void Start()
@@ -16,7 +16,7 @@ public class EquipmentInteractButton : MonoBehaviour
         
     }
 
-    internal void Init(GameHandler a_gameHandlerRef, EquipmentScreenHandler a_equipmentScreenHandler, Equipment a_equipmentRef)
+    internal void Init(GameHandler a_gameHandlerRef, SquadScreenHandler a_equipmentScreenHandler, Equipment a_equipmentRef)
     {
         m_gameHandlerRef = a_gameHandlerRef;
         m_equipmentScreenHandlerRef = a_equipmentScreenHandler;

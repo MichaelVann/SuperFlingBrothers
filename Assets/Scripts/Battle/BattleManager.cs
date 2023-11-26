@@ -139,7 +139,7 @@ public class BattleManager : MonoBehaviour
     {
         m_uiHandlerRef = GetComponent<BattleUIHandler>();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_turnFreezeTimerMax -= m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].m_finalValue;
+        m_turnFreezeTimerMax -= m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].m_finalValue;
         m_debugText.text = "" + m_turnFreezeTimerMax;
         m_turnFreezeTimer = m_turnFreezeTimerMax;
         m_enemySpawnPointsRefs = new List<GameObject>();
@@ -154,10 +154,10 @@ public class BattleManager : MonoBehaviour
     {
         SetupDebug();
 
-        m_healthBarRef.Init(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue, m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue);
+        m_healthBarRef.Init(m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue, m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue);
 
         //Reset Trackers
-        m_gameHandlerRef.m_teamLevelAtStartOfBattle = m_gameHandlerRef.m_xCellTeam.m_statHandler.m_RPGLevel.m_level;
+        m_gameHandlerRef.m_teamLevelAtStartOfBattle = m_gameHandlerRef.m_xCellSquad.m_statHandler.m_RPGLevel.m_level;
         m_gameHandlerRef.m_xpEarnedLastGame = 0;
 
         InitialiseAbilities();
@@ -204,10 +204,10 @@ public class BattleManager : MonoBehaviour
     {
         for (int i = 0; i < m_abilityButtons.Length; i++)
         {
-            if (m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i] != null)
+            if (m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i] != null)
             {
-                m_abilityButtons[i].SetEquipmentRef(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i]);
-                if (m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i].IsBroken())
+                m_abilityButtons[i].SetEquipmentRef(m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i]);
+                if (m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i].IsBroken())
                 {
                     m_abilityButtons[i].Disable();
                 }
@@ -409,11 +409,11 @@ public class BattleManager : MonoBehaviour
     void InitialiseAbilities()
     {
         m_activeAbilities = new EquipmentAbility[4];
-        for (int i = 0; i < m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment.Length; i++)
+        for (int i = 0; i < m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment.Length; i++)
         {
-            if (m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i] != null)
+            if (m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i] != null)
             {
-                m_activeAbilities[i] = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i].m_activeAbility;
+                m_activeAbilities[i] = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i].m_activeAbility;
                 m_activeAbilities[i].PrepareForBattle();
             }
             //m_activeAbilities[i] = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i] != null ? new EquipmentAbility(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i].m_activeAbility) : null;

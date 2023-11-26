@@ -30,7 +30,6 @@ public class MainMenuHandler : MonoBehaviour
         
     }
 
-
     public void OpenMenu(int a_index)
     {
         for (int i = 0; i < m_menuList.Count; i++)

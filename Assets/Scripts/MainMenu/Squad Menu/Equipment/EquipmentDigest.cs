@@ -14,7 +14,7 @@ public class EquipmentDigest : MonoBehaviour
     public EquipmentPortrait m_portraitRef;
     public Text m_abilityTextRef;
     public Text m_itemValueTextRef;
-    public EquipmentScreenHandler m_equipmentScreenHandlerRef;
+    public SquadScreenHandler m_equipmentScreenHandlerRef;
     public EquipmentInteractButton m_interactButtonRef;
 
     GameHandler m_gameHandlerRef;
@@ -40,7 +40,7 @@ public class EquipmentDigest : MonoBehaviour
         }
         if (m_equipmentScreenHandlerRef == null)
         {
-            m_equipmentScreenHandlerRef = FindObjectOfType<EquipmentScreenHandler>();
+            m_equipmentScreenHandlerRef = FindObjectOfType<SquadScreenHandler>();
         }
         bool valid = m_equipmentRef != null;
         m_interactButtonRef.Init(m_gameHandlerRef,m_equipmentScreenHandlerRef, m_equipmentRef);

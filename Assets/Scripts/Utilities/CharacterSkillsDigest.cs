@@ -15,13 +15,13 @@ public class CharacterSkillsDigest : MonoBehaviour
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
 
         Vector3 skillBarsStartPoint = new Vector3(0f, 432f, 0f);
-        for (int i = 0; i < m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats.Length; i++)
+        for (int i = 0; i < m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_statHandler.m_stats.Length; i++)
         {
             skillBarsStartPoint += new Vector3(0f, -140f, 0);
             CharacterSkillBar skillBar = Instantiate<GameObject>(m_skillBarPrefab, transform).GetComponent<CharacterSkillBar>();
             skillBar.gameObject.transform.localPosition = skillBarsStartPoint;
-            skillBar.gameObject.transform.localScale *= 1.2f;
-            skillBar.Init(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[i]);
+            //skillBar.gameObject.transform.localScale *= 1.2f;
+            skillBar.Init(m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_statHandler.m_stats[i]);
             m_skillBars.Add(skillBar);
         }
     }

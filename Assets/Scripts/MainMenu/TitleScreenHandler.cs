@@ -22,7 +22,7 @@ public class TitleScreenHandler : MonoBehaviour
     void Update()
     {
 
-        int combinedNewStatsAndEquipment = m_gameHandlerRef.m_xCellTeam.m_statHandler.m_RPGLevel.m_allocationPoints + m_gameHandlerRef.m_equipmentCollectedLastGame;
+        int combinedNewStatsAndEquipment = m_gameHandlerRef.m_xCellSquad.m_statHandler.m_RPGLevel.m_allocationPoints + m_gameHandlerRef.m_equipmentCollectedLastGame;
 
         m_equipmentNotifierRef.SetActive(combinedNewStatsAndEquipment > 0);
 

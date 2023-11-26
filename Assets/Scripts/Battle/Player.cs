@@ -61,7 +61,7 @@ public class Player : Damageable
         m_flingLine.startWidth = 0.05f;
         m_flingLine.endWidth = 0.02f;
         m_cameraRef = FindObjectOfType<Camera>();
-        m_playerCellRef = m_gameHandlerRef.m_xCellTeam.m_playerXCell;
+        m_playerCellRef = m_gameHandlerRef.m_xCellSquad.m_playerXCell;
         //m_rotateToAlignToVelocity = true;
         //m_rigidBody.freezeRotation = false;
         m_audioSource = GetComponent<AudioSource>();
@@ -70,8 +70,8 @@ public class Player : Damageable
     public override void Start()
     {
         base.Start();
-        m_originalColor = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_colorShade;
-        m_statHandler = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler;
+        m_originalColor = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_colorShade;
+        m_statHandler = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_statHandler;
         m_healthBarRef.SetMaxProgressValue(m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue);
         m_battleManagerRef = FindObjectOfType<BattleManager>();
         UpdateLocalStatsFromStatHandler();

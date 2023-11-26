@@ -45,7 +45,7 @@ public class CharacterSkillBar : MonoBehaviour
         {
             m_trackedStat.m_lastSeenRPGLevel.Copy(m_trackedStat.m_RPGLevel);
         }
-        m_skillNameText.text = m_trackedStat.name;
+        m_skillNameText.text = m_trackedStat.m_name;
         if (m_UIBarRef != null)
         {
             m_UIBarRef.SetBarColor(VLib.COLOR_yellow);

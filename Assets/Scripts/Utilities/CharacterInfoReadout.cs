@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class CharacterInfoReadout : MonoBehaviour
 {
-    public TextMeshProUGUI[] m_statNameTexts;
     public StatReadout[] m_statReadouts;
     public TextMeshProUGUI m_characterIterationText;
     GameHandler m_gameHandlerRef;
@@ -15,13 +14,15 @@ public class CharacterInfoReadout : MonoBehaviour
     void Start()
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        for (int i = 0; i < m_statNameTexts.Length; i++)
+        InitialiseStatReadouts();
+    }
+
+    void InitialiseStatReadouts()
+    {
+        for (int i = 0; i < m_statReadouts.Length; i++)
         {
-            m_statNameTexts[i].color = CharacterStatHandler.GetStatColor(i);
-        }
-        for (int i = 0;i < m_statReadouts.Length; i++)
-        {
-            m_statReadouts[i].AssignStat(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_statHandler.m_stats[i]);
+            m_statReadouts[i].AssignStat(m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_statHandler.m_stats[i]);
+            m_statReadouts[i].m_titleText.color = CharacterStatHandler.GetStatColor(i);
         }
     }
 
@@ -40,7 +41,7 @@ public class CharacterInfoReadout : MonoBehaviour
         //    m_statTexts[i].color = Color.white;// CharacterStatHandler.GetStatColor((eCharacterStatIndices)i);
         //}
 
-        m_characterIterationText.text = "#" + m_gameHandlerRef.m_xCellTeam.m_playerCellIteration;
+        m_characterIterationText.text = "#" + m_gameHandlerRef.m_xCellSquad.m_playerCellIteration;
     }
 
     // Update is called once per frame
