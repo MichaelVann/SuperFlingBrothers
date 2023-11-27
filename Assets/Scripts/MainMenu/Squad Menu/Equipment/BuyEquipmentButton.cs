@@ -12,13 +12,16 @@ public class BuyEquipmentButton : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
-        m_buttonRef = GetComponent<Button>();
     }
     public void Refresh()
     {
         if (!m_gameHandlerRef)
         {
             m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        }
+        if (!m_buttonRef)
+        {
+            m_buttonRef = GetComponent<Button>();
         }
         m_buttonRef.interactable = m_gameHandlerRef.CanAffordJunkEquipment();
 

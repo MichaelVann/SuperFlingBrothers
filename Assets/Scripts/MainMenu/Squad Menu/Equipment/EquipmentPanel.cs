@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class EquipmentPanel : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
-    SquadScreenHandler m_equipmentScreenHandlerRef;
+    EquipmentInventoryHandler m_equipmentInventoryHandlerRef;
     public Equipment m_equipmentRef;
 
     public Text m_nameTextRef;
@@ -37,17 +37,17 @@ public class EquipmentPanel : MonoBehaviour
     {
     }
 
-    public void Init(Equipment a_equipment, SquadScreenHandler a_equipmentScreenHandler)
+    public void Init(Equipment a_equipment, EquipmentInventoryHandler a_equipmentScreenHandler)
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_equipmentScreenHandlerRef = a_equipmentScreenHandler;
+        m_equipmentInventoryHandlerRef = a_equipmentScreenHandler;
         m_equipmentRef = a_equipment;
 
         for (int i = 0; i < m_statNameTextRefs.Length; i++)
         {
             m_statNameTextRefs[i].color = CharacterStatHandler.GetStatColor(i);
         }
-        m_equipButtonRef.Init(m_gameHandlerRef, m_equipmentScreenHandlerRef, m_equipmentRef);
+        m_equipButtonRef.Init(m_gameHandlerRef, a_equipmentScreenHandler.m_squadScreenHandlerRef, m_equipmentRef);
     }
 
     public void Refresh()
@@ -70,12 +70,12 @@ public class EquipmentPanel : MonoBehaviour
         for (int i = 0; i < m_equipmentRef.m_stats.Count; i++)
         {
             int index = (int)m_equipmentRef.m_stats[i].statType;
-            m_statTextRefs[index].text = "" + m_equipmentRef.m_stats[i].value;
+            m_statTextRefs[index].text = m_equipmentRef.m_stats[i].value.ToString("f1");
             statDeltas[index] += m_equipmentRef.m_stats[i].value;
             m_statTextRefs[i].color = Color.white;// CharacterStatHandler.GetStatColor(m_equipmentRef.m_stats[i].statType);
         }
 
-        Equipment openedEquipment = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_equipmentScreenHandlerRef.m_openedEquipmentSlotId];
+        Equipment openedEquipment = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_equipmentInventoryHandlerRef.m_squadScreenHandlerRef.m_openedEquipmentSlotId];
         for (int i = 0; openedEquipment != null && i < openedEquipment.m_stats.Count; i++)
         {
             int index = (int)openedEquipment.m_stats[i].statType;
@@ -84,7 +84,7 @@ public class EquipmentPanel : MonoBehaviour
 
         for (int i = 0; i < m_statDeltaTextRefs.Length; i++)
         {
-            m_statDeltaTextRefs[i].text = "(" + statDeltas[i] + ")";
+            m_statDeltaTextRefs[i].text = "(" + statDeltas[i].ToString("f1") + ")";
             m_statDeltaTextRefs[i].color = statDeltas[i] < 0 ? Color.red : (statDeltas[i] > 0 ? Color.green : Color.white);
         }
 
@@ -119,7 +119,7 @@ public class EquipmentPanel : MonoBehaviour
         }
         else
         {
-            m_equipmentScreenHandlerRef.SetEquipStatus(m_equipmentRef);
+            m_equipmentInventoryHandlerRef.SetEquipStatus(m_equipmentRef);
         }
 
         Refresh();
@@ -127,11 +127,11 @@ public class EquipmentPanel : MonoBehaviour
 
     public void SellEquipment()
     {
-        m_equipmentScreenHandlerRef.SellEquipment(this);
+        m_equipmentInventoryHandlerRef.SellEquipment(this);
     }
 
     public void OpenEquipmentDigest()
     {
-        m_equipmentScreenHandlerRef.SetEquipmentDigestStatus(true, m_equipmentRef);
+        m_equipmentInventoryHandlerRef.SetEquipmentDigestStatus(true, m_equipmentRef);
     }
 }

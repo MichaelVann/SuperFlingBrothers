@@ -520,11 +520,14 @@ public class Player : Damageable
         Equipment affectedEquipment = m_playerCellRef.m_equippedEquipment[damagedEquipmentSlot];
         if (m_armorSegments[damagedEquipmentSlot] != null)
         {
-            damage = affectedEquipment.Damage(damage);
-            if (damage > 0)
+            float originalAppliedDamage = damage * GameHandler.DAMAGEABLE_ArmourAbsorption;
+            float remainingDamage = originalAppliedDamage;
+            remainingDamage = affectedEquipment.Damage(originalAppliedDamage);
+            if (remainingDamage > 0)
             {
                 DestroyArmorSegment(damagedEquipmentSlot);
             }
+            damage -= originalAppliedDamage - remainingDamage;
         }
         damage = Mathf.Clamp(damage, 0f, float.MaxValue);
         m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].ChangeXP((int)damage * GameHandler.BATTLE_SkillXPScale);

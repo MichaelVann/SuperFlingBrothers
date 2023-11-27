@@ -8,8 +8,8 @@ public class StatReadout : MonoBehaviour
     public TextMeshProUGUI m_titleText;
     public TextMeshProUGUI m_totalStatText;
     public TextMeshProUGUI m_equipmentStatText;
-    public TextMeshProUGUI m_skillStatText;
     public TextMeshProUGUI m_teamStatText;
+    public TextMeshProUGUI m_skillStatText;
 
     internal CharacterStat m_characterStat;
 
@@ -26,10 +26,10 @@ public class StatReadout : MonoBehaviour
     {
         //m_titleText.color = CharacterStatHandler.GetStatColor(m_characterStat);
         m_titleText.text = m_characterStat.m_name;
-        m_totalStatText.text =     "" + m_characterStat.m_totalValue;
-        m_equipmentStatText.text = "" + m_characterStat.m_equipmentAddedValue;
-        m_skillStatText.text =     "" + m_characterStat.m_value;
-        m_teamStatText.text =      "" + m_characterStat.m_parentAddedValue;
+        m_totalStatText.text =     m_characterStat.m_totalValue.ToString("f1");
+        m_equipmentStatText.text = m_characterStat.m_equipmentAddedValue.ToString("f1");
+        m_skillStatText.text =     m_characterStat.m_value.ToString("f1");
+        m_teamStatText.text =      m_characterStat.m_parentAddedValue.ToString("f1");
     }
 
     // Start is called before the first frame update

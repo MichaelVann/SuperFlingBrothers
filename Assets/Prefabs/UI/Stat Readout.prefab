@@ -191,8 +191,8 @@ MonoBehaviour:
   m_titleText: {fileID: 2197624862555174418}
   m_totalStatText: {fileID: 462053080390394782}
   m_equipmentStatText: {fileID: 8173301982058756815}
-  m_skillStatText: {fileID: 2635713778416531015}
-  m_teamStatText: {fileID: 145450895886826184}
+  m_teamStatText: {fileID: 2635713778416531015}
+  m_skillStatText: {fileID: 145450895886826184}
 --- !u!1 &4995549920341968154
 GameObject:
   m_ObjectHideFlags: 0

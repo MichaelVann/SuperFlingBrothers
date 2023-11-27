@@ -9,30 +9,21 @@ public class SquadScreenHandler : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
     public EquipmentSlotUI[] m_equipmentSlotUIRefs;
-    public EquipmentSlotUI m_inventoryEquipmentSlotUIRef;
-    public Text m_equipmentAbilityReadoutText;
-    public Text m_equipmentAbilityNameText;
+
     public int m_openedEquipmentSlotId = -1;
-    public GameObject m_equipmentDigestRef;
+
 
     public GameObject m_statAllocationNotifierRef;
     public Text m_statAllocationNotifierTextRef;
 
     //Inventory
     public GameObject m_inventoryPanelRef;
-    public GameObject m_inventoryContentRef;
-    public GameObject m_equipmentPanelTemplate;
 
     //Subscreens
     public GameObject m_squadOverview;
     public GameObject m_attributesScreen;
     public GameObject m_skillsScreen;
-
-    List<EquipmentPanel> m_equipmentItemPanels;
-
-    public GameObject m_noEquipmentText;
-
-    public GameObject m_confirmationBoxPrefab;
+    public GameObject m_storeScreen;
 
     private bool m_inited = false;
 
@@ -40,9 +31,7 @@ public class SquadScreenHandler : MonoBehaviour
     void Start()
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_equipmentItemPanels = new List<EquipmentPanel>();
         RefreshEquipmentSlots();
-        InstantiateEquipmentInventory();
         m_inited = true;
     }
 
@@ -72,80 +61,6 @@ public class SquadScreenHandler : MonoBehaviour
         }
     }
 
-    void InstantiateEquipmentInventory()
-    {
-        for (int i = 0; i < m_equipmentItemPanels.Count; i++)
-        {
-            GameObject.Destroy(m_equipmentItemPanels[i].gameObject);
-        }
-        m_equipmentItemPanels.Clear();
-        for (int i = 0; i < m_gameHandlerRef.m_equipmentInventory.Count; i++)
-        {
-            if (m_gameHandlerRef.m_equipmentInventory[i] != null)
-            {
-                EquipmentPanel equipmentPanel = Instantiate<GameObject>(m_equipmentPanelTemplate, m_inventoryContentRef.transform).GetComponent<EquipmentPanel>();
-                equipmentPanel.Init(m_gameHandlerRef.m_equipmentInventory[i], this);
-                //equipablePanel.Refresh();
-                m_equipmentItemPanels.Add(equipmentPanel);
-            }
-        }
-    }
-
-    public void RefreshInventory()
-    {
-        SetTopPanelEquipmentRef(m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_openedEquipmentSlotId]);
-        m_gameHandlerRef.SortEquipmentInventory();
-        InstantiateEquipmentInventory();
-        m_gameHandlerRef.m_equipmentCollectedLastGame = 0;
-        m_noEquipmentText.SetActive(m_equipmentItemPanels.Count < 1);
-        for (int i = 0; i < m_equipmentItemPanels.Count; i++)
-        {
-            m_equipmentItemPanels[i].Refresh();
-        }
-
-        //Top Panel
-        //m_inventoryEquipmentSlotUIRef.SetEquipmentRef(m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId]);
-        //m_inventoryEquipmentSlotUIRef.Refresh();
-        //if (m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId] != null)
-        //{
-        //    m_equipmentAbilityNameText.text = m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId].m_activeAbility.GetName();
-        //    m_equipmentAbilityReadoutText.text = m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId].m_activeAbility.GetAbilityDescription();
-        //}
-    }
-
-    internal void SetTopPanelEquipmentRef(Equipment a_equipment)
-    {
-        m_inventoryEquipmentSlotUIRef.SetEquipmentRef(a_equipment);
-        m_inventoryEquipmentSlotUIRef.Refresh();
-        if (a_equipment != null)
-        {
-            m_equipmentAbilityNameText.text = a_equipment.m_activeAbility.GetName();
-            m_equipmentAbilityReadoutText.text = a_equipment.m_activeAbility.GetAbilityDescription();
-            a_equipment.m_newToPlayer = false;
-        }
-        else
-        {
-            m_equipmentAbilityNameText.text = "";
-            m_equipmentAbilityReadoutText.text = "";
-        }
-        for (int i = 0; i < m_equipmentItemPanels.Count; i++)
-        {
-            m_equipmentItemPanels[i].SetSelected(m_equipmentItemPanels[i].m_equipmentRef == a_equipment);
-        }
-    }
-
-    internal void SetEquipmentDigestStatus(bool a_open, Equipment a_equipment = null)
-    {
-        //SetTopPanelEquipmentRef(a_equipment);
-        m_equipmentDigestRef.SetActive(a_open);
-
-        if (a_open)
-        {
-            m_equipmentDigestRef.GetComponent<EquipmentDigest>().SetEquipmentRef(a_equipment);
-            m_equipmentDigestRef.GetComponent<EquipmentDigest>().Refresh();
-        }
-    }
-
     public void RefreshEquipmentSlots()
     {
         for (int i = 0; i < m_equipmentSlotUIRefs.Length; i++)
@@ -155,22 +70,6 @@ public class SquadScreenHandler : MonoBehaviour
         }
     }
 
-    public void SetEquipStatus(Equipment a_equipment)
-    {
-        bool closingInventory = false;
-        if (!a_equipment.m_equipped)
-        {
-            closingInventory = true;
-        }
-        m_gameHandlerRef.m_xCellSquad.m_playerXCell.EquipEquipment(a_equipment, m_openedEquipmentSlotId);
-
-        RefreshInventory();
-        RefreshEquipmentSlots();
-        if (closingInventory)
-        {
-            //CloseInventoryPanel();
-        }
-    }
 
     public void OpenEquipmentSlot(int a_id)
     {
@@ -185,78 +84,47 @@ public class SquadScreenHandler : MonoBehaviour
 
     public void SetInventoryPanelStatus(bool a_open, int a_slotId = -1)
     {
+        m_openedEquipmentSlotId = a_slotId;
         m_inventoryPanelRef.SetActive(a_open);
         m_squadOverview.SetActive(!a_open);
-        m_openedEquipmentSlotId = a_slotId;
-        if (a_open)
-        {
-            RefreshInventory();
-        }
     }
 
-    public void SellEquipment(EquipmentPanel a_equipmentPanel, bool a_refreshInventory = true)
+    internal void SetEquipStatus(Equipment a_equipment)
     {
-        for (int i = 0; i < m_equipmentItemPanels.Count; i++)
-        {
-            if (m_equipmentItemPanels[i] == a_equipmentPanel)
-            {
-                GameObject.Destroy(a_equipmentPanel.gameObject);
-                m_equipmentItemPanels.RemoveAt(i);
-                m_gameHandlerRef.SellEquipment(a_equipmentPanel.m_equipmentRef);
-                break;
-            }
-        }
-        if (a_refreshInventory)
-        {
-            RefreshInventory();
-        }
+        m_gameHandlerRef.m_xCellSquad.m_playerXCell.EquipEquipment(a_equipment, m_openedEquipmentSlotId);
+        RefreshEquipmentSlots();
     }
 
-    public void ConfirmSellAllItems()
+
+    void CloseAllScreens()
     {
-        ConfirmationBox confirmationBox = Instantiate(m_confirmationBoxPrefab, transform).GetComponent<ConfirmationBox>();
-        confirmationBox.SetMessageText("Are you sure you want to sell all items?");
-        confirmationBox.m_confirmationResponseDelegate = new ConfirmationBox.ConfirmationResponseDelegate(SellAllUnequippedEquipment);
-    }
-
-    void SellAllUnequippedEquipment()
-    {
-        List<EquipmentPanel> equipmentPanelList = new List<EquipmentPanel>();
-
-        for (int i = 0; i < m_equipmentItemPanels.Count; i++)
-        {
-            if (!m_equipmentItemPanels[i].m_equipmentRef.m_equipped)
-            {
-                equipmentPanelList.Add(m_equipmentItemPanels[i]);
-            }
-        }
-
-        while (equipmentPanelList.Count > 0)
-        {
-            SellEquipment(equipmentPanelList[0],false);
-            equipmentPanelList.RemoveAt(0);
-        }
-        RefreshInventory();
+        m_squadOverview.SetActive(false);
+        m_attributesScreen.SetActive(false);
+        m_skillsScreen.SetActive(false);
+        m_storeScreen.SetActive(false);
     }
 
     public void OpenSquadOverview()
     {
+        CloseAllScreens();
         m_squadOverview.SetActive(true);
-        m_attributesScreen.SetActive(false);
-        m_skillsScreen.SetActive(false);
     }
 
     public void OpenAttributesScreen()
     {
-        m_squadOverview.SetActive(false);
+        CloseAllScreens();
         m_attributesScreen.SetActive(true);
-        m_skillsScreen.SetActive(false);
     }
 
     public void OpenSkillsScreen()
     {
-        m_squadOverview.SetActive(false);
-        m_attributesScreen.SetActive(false);
+        CloseAllScreens();
         m_skillsScreen.SetActive(true);
+    }
+
+    public void OpenStoreScreen()
+    {
+        CloseAllScreens();
+        m_storeScreen.SetActive(true);
     }
 }

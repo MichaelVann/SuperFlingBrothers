@@ -317,7 +317,6 @@ public static class VLib
         return generatedNames;
     }
 
-
     public static string[] GetEnumNames(Type enumType)
     {
         if (!enumType.IsEnum)
@@ -326,5 +325,15 @@ public static class VLib
         }
 
         return Enum.GetNames(enumType);
+    }
+
+    public static float RoundToDecimalPlaces(float a_value, int a_decimalPlaces)
+    {
+        float result = a_value;
+        float shift = Mathf.Pow(10f, a_decimalPlaces);
+        result *= shift;
+        result = Mathf.Round(result);
+        result /= shift;
+        return result;
     }
 }
