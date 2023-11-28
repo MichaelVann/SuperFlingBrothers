@@ -139,7 +139,7 @@ public class BattleManager : MonoBehaviour
     {
         m_uiHandlerRef = GetComponent<BattleUIHandler>();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_turnFreezeTimerMax -= m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].m_finalValue;
+        m_turnFreezeTimerMax = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatType.dexterity].m_finalValue;
         m_debugText.text = "" + m_turnFreezeTimerMax;
         m_turnFreezeTimer = m_turnFreezeTimerMax;
         m_enemySpawnPointsRefs = new List<GameObject>();
@@ -154,7 +154,7 @@ public class BattleManager : MonoBehaviour
     {
         SetupDebug();
 
-        m_healthBarRef.Init(m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue, m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue);
+        m_healthBarRef.Init(m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatType.constitution].m_finalValue, m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatType.constitution].m_finalValue);
 
         //Reset Trackers
         m_gameHandlerRef.m_teamLevelAtStartOfBattle = m_gameHandlerRef.m_xCellSquad.m_statHandler.m_RPGLevel.m_level;

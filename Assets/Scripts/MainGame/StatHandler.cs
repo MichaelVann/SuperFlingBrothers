@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
 
-public enum eCharacterStatIndices
+public enum eCharacterStatType
 {
     strength,
     dexterity,
@@ -22,7 +22,7 @@ public class RPGLevel
     [SerializeField]
     public float m_maxXP = 83;
     [SerializeField]
-    public int m_level = 1;
+    public int m_level = 0;
     [SerializeField]
     public int m_allocationPoints = 0;
 
@@ -85,6 +85,8 @@ public class CharacterStat
     [SerializeField]
     public string m_name;
     [SerializeField]
+    public eCharacterStatType m_type;
+    [SerializeField]
     public float m_value;
     [SerializeField]
     public float m_scale;
@@ -108,30 +110,54 @@ public class CharacterStat
     public float m_cost;
     [SerializeField]
     public float m_costIncreaseRate;
+    [SerializeField]
+    public bool m_reductive = false;
+    [SerializeField]
+    public float m_orginalReducedValue;
 
     public RPGLevel m_RPGLevel;
     public RPGLevel m_lastSeenRPGLevel;
     bool m_usingRPGLevel = true;
 
-    public CharacterStat(bool a_usingRPGLevel)
+    internal static readonly float[] m_statScales = {
+    /*Strength*/ 5f,
+    /*Dexterity*/ 0.01f,
+    /*Constitution*/ 10f,
+    /*Protection*/ 0.25f
+    };
+
+    public CharacterStat(bool a_usingRPGLevel, eCharacterStatType a_type)
     {
         m_usingRPGLevel = a_usingRPGLevel;
         m_RPGLevel = new RPGLevel();
         m_lastSeenRPGLevel = new RPGLevel();
+        m_type = a_type;
+        m_scale = m_statScales[(int)a_type];
+    }
+
+    public static float ConvertNominalValueToEffectiveValue(float a_nominalValue, eCharacterStatType a_type)
+    {
+        float result = 0f;
+        result = a_nominalValue * m_statScales[(int)a_type];
+        return result;
     }
 
     public void UpdateStat()
     {
         if (m_usingRPGLevel)
         {
-            m_value = m_RPGLevel.m_level - 1;
+            //m_value = m_RPGLevel.m_level - 1;
         }
 
-        m_attributeEffectiveValue = (m_value - 1f) * m_scale;
+        m_attributeEffectiveValue = (m_value) * m_scale;
         //m_equipmentEffectiveValue = m_equipmentAddedValue * m_scale;
         //m_effectiveValue = m_equipmentEffectiveValue + m_attributeEffectiveValue;
         m_totalValue = m_value + m_equipmentAddedValue + m_parentAddedValue;
         m_finalValue = (m_totalValue)* m_scale + m_postAddedValue;
+        if (m_reductive)
+        {
+            m_finalValue = m_orginalReducedValue - m_finalValue;
+        }
         //m_finalValue += m_parentAddedValue;
     }
 
@@ -141,7 +167,6 @@ public class CharacterStat
         m_RPGLevel.ChangeXP(a_value);
         UpdateStat();
     }
-
 
 }
 
@@ -181,25 +206,25 @@ public class CharacterStatHandler
         return m_stats[a_index].m_finalValue;
     }
 
-    public static string GetStatName(eCharacterStatIndices a_index, bool a_shortName = false)
+    public static string GetStatName(eCharacterStatType a_index, bool a_shortName = false)
     {
         string m_returnString = "";
 
         switch (a_index)
         {
-            case eCharacterStatIndices.strength:
-                m_returnString = !a_shortName ? "Strength" : "STR";
+            case eCharacterStatType.strength:
+                m_returnString = !a_shortName ? "Damage" : "DMG";
                 break;
-            case eCharacterStatIndices.dexterity:
-                m_returnString = !a_shortName ? "Dexterity" : "DEX";
+            case eCharacterStatType.dexterity:
+                m_returnString = !a_shortName ? "Turn Speed" : "SPD";
                 break;
-            case eCharacterStatIndices.constitution:
-                m_returnString = !a_shortName ? "Constitution" : "CON";
+            case eCharacterStatType.constitution:
+                m_returnString = !a_shortName ? "Health" : "HLT";
                 break;
-            case eCharacterStatIndices.protection:
+            case eCharacterStatType.protection:
                 m_returnString = !a_shortName ? "Protection" : "PROT";
                 break;
-            case eCharacterStatIndices.count:
+            case eCharacterStatType.count:
                 break;
             default:
                 break;
@@ -208,24 +233,24 @@ public class CharacterStatHandler
         return m_returnString;
     }
 
-    public static Color GetStatColor(eCharacterStatIndices a_index)
+    public static Color GetStatColor(eCharacterStatType a_index)
     {
         Color returnColor = new Color();
         switch (a_index)
         {
-            case eCharacterStatIndices.strength:
+            case eCharacterStatType.strength:
                 returnColor = Color.yellow;
                 break;
-            case eCharacterStatIndices.dexterity:
+            case eCharacterStatType.dexterity:
                 returnColor = new Color(0f, 0.75f, 0f);
                 break;
-            case eCharacterStatIndices.constitution:
+            case eCharacterStatType.constitution:
                 returnColor = Color.red;
                 break;
-            case eCharacterStatIndices.protection:
+            case eCharacterStatType.protection:
                 returnColor = Color.cyan;
                 break;
-            case eCharacterStatIndices.count:
+            case eCharacterStatType.count:
                 break;
             default:
                 break;
@@ -235,12 +260,12 @@ public class CharacterStatHandler
 
     public static Color GetStatColor(int a_index)
     {
-        return GetStatColor((eCharacterStatIndices)a_index);
+        return GetStatColor((eCharacterStatType)a_index);
     }
 
-    public static string GetStatName(int a_index)
+    public static string GetStatName(int a_index, bool a_shortName = false)
     {
-        return GetStatName((eCharacterStatIndices)a_index);
+        return GetStatName((eCharacterStatType)a_index, a_shortName);
     }
 
     // Start is called before the first frame update
@@ -248,10 +273,10 @@ public class CharacterStatHandler
     {
         m_usingRPGLevel = a_usingRPGLevel;
         m_RPGLevel = new RPGLevel();
-        m_stats = new CharacterStat[(int)eCharacterStatIndices.count];
+        m_stats = new CharacterStat[(int)eCharacterStatType.count];
         for (int i = 0; i < m_stats.Length; i++)
         {
-            m_stats[i] = new CharacterStat(m_usingRPGLevel);
+            m_stats[i] = new CharacterStat(m_usingRPGLevel, (eCharacterStatType)i);
         }
         SetDefaultStats();
     }
@@ -263,7 +288,7 @@ public class CharacterStatHandler
         m_reSpecCost *= 10;
     }
 
-    public void UpdateStat(eCharacterStatIndices a_index)
+    public void UpdateStat(eCharacterStatType a_index)
     {
         UpdateStat((int)a_index);
     }
@@ -282,38 +307,38 @@ public class CharacterStatHandler
         }
     }
 
-    public void SetStatValue(eCharacterStatIndices a_index, float a_value)
+    public void SetStatValue(eCharacterStatType a_index, float a_value)
     {
         m_stats[(int)a_index].m_value = a_value;
         UpdateStat(a_index);
 
         switch (a_index)
         {
-            case eCharacterStatIndices.strength:
+            case eCharacterStatType.strength:
                 break;
-            case eCharacterStatIndices.dexterity:
+            case eCharacterStatType.dexterity:
                 break;
-            case eCharacterStatIndices.constitution:
+            case eCharacterStatType.constitution:
                 break;
-            case eCharacterStatIndices.count:
+            case eCharacterStatType.count:
                 break;
             default:
                 break;
         }
     }
 
-    public void ChangeStatValue(eCharacterStatIndices a_index, float a_change)
+    public void ChangeStatValue(eCharacterStatType a_index, float a_change)
     {
         SetStatValue(a_index, m_stats[(int)a_index].m_value + a_change);
     }
 
-    public void SetStatScale(eCharacterStatIndices a_index, float a_value)
+    public void SetStatScale(eCharacterStatType a_index, float a_value)
     {
         m_stats[(int)a_index].m_scale = a_value;
         UpdateStat(a_index);
     }
 
-    public void SetStatPostAddedValue(eCharacterStatIndices a_index, float a_value)
+    public void SetStatPostAddedValue(eCharacterStatType a_index, float a_value)
     {
         m_stats[(int)a_index].m_postAddedValue = a_value;
         UpdateStat(a_index);
@@ -321,10 +346,9 @@ public class CharacterStatHandler
 
     public void SetDefaultStats()
     {
-        for (int i = 0; i < (int)eCharacterStatIndices.count; i++)
+        for (int i = 0; i < (int)eCharacterStatType.count; i++)
         {
-            SetStatScale((eCharacterStatIndices)i,1f);
-            SetStatValue((eCharacterStatIndices)i, 1f);
+            SetStatScale((eCharacterStatType)i,1f);
             m_stats[i].m_originalCost = 10f;
             m_stats[i].m_cost = m_stats[i].m_originalCost;
             m_stats[i].m_costIncreaseRate = 1.8f;
@@ -333,16 +357,18 @@ public class CharacterStatHandler
             m_stats[i].m_name = GetStatName(i);
         }
 
-        SetStatPostAddedValue(eCharacterStatIndices.dexterity, 0f);
-        SetStatScale(eCharacterStatIndices.dexterity, 0.01f);
+        SetStatPostAddedValue(eCharacterStatType.dexterity, 0f);
+        m_stats[(int)eCharacterStatType.dexterity].m_reductive = true;
+        m_stats[(int)eCharacterStatType.dexterity].m_orginalReducedValue = 2;
 
-        m_stats[(int)eCharacterStatIndices.constitution].m_scale = 10f;
-        SetStatPostAddedValue(eCharacterStatIndices.constitution, 100f);
-        SetStatScale(eCharacterStatIndices.strength, 5f);
-        SetStatPostAddedValue(eCharacterStatIndices.strength, 50f);
+        m_stats[(int)eCharacterStatType.constitution].m_scale = 10f;
+        SetStatPostAddedValue(eCharacterStatType.constitution, 100f);
+        SetStatPostAddedValue(eCharacterStatType.strength, 50f);
+
+
     }
 
-    public void AttemptToIncreaseStat(eCharacterStatIndices a_index)
+    public void AttemptToIncreaseStat(eCharacterStatType a_index)
     {
         if (m_RPGLevel.m_allocationPoints >= 1)
         {
@@ -355,7 +381,7 @@ public class CharacterStatHandler
     {
         for (int i = 0; i < m_stats.Length; i++)
         {
-            SetStatPostAddedValue((eCharacterStatIndices)i, 0f);
+            SetStatPostAddedValue((eCharacterStatType)i, 0f);
         }
     }
 }

@@ -26,10 +26,10 @@ public class StatReadout : MonoBehaviour
     {
         //m_titleText.color = CharacterStatHandler.GetStatColor(m_characterStat);
         m_titleText.text = m_characterStat.m_name;
-        m_totalStatText.text =     m_characterStat.m_totalValue.ToString("f1");
-        m_equipmentStatText.text = m_characterStat.m_equipmentAddedValue.ToString("f1");
-        m_skillStatText.text =     m_characterStat.m_value.ToString("f1");
-        m_teamStatText.text =      m_characterStat.m_parentAddedValue.ToString("f1");
+        m_totalStatText.text = "" + VLib.RoundToDecimalPlaces(m_characterStat.m_finalValue, Equipment.m_statRoundedDecimals);
+        m_equipmentStatText.text = "" + VLib.RoundToDecimalPlaces(m_characterStat.m_equipmentAddedValue, Equipment.m_statRoundedDecimals);
+        m_skillStatText.text = "" + VLib.RoundToDecimalPlaces(m_characterStat.m_value, Equipment.m_statRoundedDecimals);
+        m_teamStatText.text = "" + VLib.RoundToDecimalPlaces(m_characterStat.m_parentAddedValue, Equipment.m_statRoundedDecimals);
     }
 
     // Start is called before the first frame update

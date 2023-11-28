@@ -43,7 +43,7 @@ public class EquipmentDigest : MonoBehaviour
             m_equipmentInventoryHandler = FindObjectOfType<EquipmentInventoryHandler>();
         }
         bool valid = m_equipmentRef != null;
-        m_interactButtonRef.Init(m_gameHandlerRef,m_equipmentInventoryHandler.m_squadScreenHandlerRef, m_equipmentRef);
+        m_interactButtonRef.Init(m_gameHandlerRef, m_equipmentInventoryHandler.m_squadOverviewHandlerRef, m_equipmentRef);
         for (int i = 0; i < m_statTexts.Length; i++)
         {
             m_statTexts[i].text = "0";
@@ -57,7 +57,7 @@ public class EquipmentDigest : MonoBehaviour
             {
                 //m_statTexts[i].gameObject.SetActive(true);
                 int index = (int)m_equipmentRef.m_stats[i].statType;
-                m_statTexts[index].text = "" + m_equipmentRef.m_stats[i].value;
+                m_statTexts[index].text = "" + VLib.RoundToDecimalPlaces(m_equipmentRef.m_stats[i].value, Equipment.m_statRoundedDecimals);
                 m_statTexts[index].color = Color.green; //CharacterStatHandler.GetStatColor(m_equipmentRef.m_stats[i].statType);
             }
             m_abilityTextRef.text = m_equipmentRef.m_activeAbility.GetName();

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class EquipmentInventoryHandler : MonoBehaviour
 {
     public SquadScreenHandler m_squadScreenHandlerRef;
+    public SquadOverviewHandler m_squadOverviewHandlerRef;
     GameHandler m_gameHandlerRef;
     public EquipmentSlotUI m_inventoryEquipmentSlotUIRef;
     public Text m_equipmentAbilityReadoutText;
@@ -77,7 +78,7 @@ public class EquipmentInventoryHandler : MonoBehaviour
 
     public void RefreshInventory()
     {
-        SetTopPanelEquipmentRef(m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_squadScreenHandlerRef.m_openedEquipmentSlotId]);
+        SetTopPanelEquipmentRef(m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_squadOverviewHandlerRef.m_openedEquipmentSlotId]);
         m_gameHandlerRef.SortEquipmentInventory();
         InstantiateEquipmentInventory();
         m_gameHandlerRef.m_equipmentCollectedLastGame = 0;
@@ -124,7 +125,7 @@ public class EquipmentInventoryHandler : MonoBehaviour
         {
             closingInventory = true;
         }
-        m_squadScreenHandlerRef.SetEquipStatus(a_equipment);
+        m_squadOverviewHandlerRef.SetEquipStatus(a_equipment);
 
         RefreshInventory();
         

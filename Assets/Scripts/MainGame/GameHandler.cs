@@ -13,8 +13,8 @@ using static UnityEngine.UI.CanvasScaler;
 
 public class GameHandler : MonoBehaviour
 {
-    public const float _VERSION_NUMBER = 22.3f;
-    public static string _VERSION_NUMBER_STRING = "22.3";
+    public const int MAIN_VERSION_NUMBER = 22;
+    public const int SUB_VERSION_NUMBER = 4;
 
     static internal bool DEBUG_MODE = true;
 
@@ -31,10 +31,13 @@ public class GameHandler : MonoBehaviour
     static internal float DAMAGEABLE_DragCoefficient = 1.25f;
     static internal float DAMAGEABLE_HitVelocityMultiplier = 1.6f;
     static internal float DAMAGEABLE_ArmourAbsorption = 0.6f;
-    static internal float DAMAGEABLE_defaultMass = 1f;
-    static internal float DAMAGEABLE_bumpFlingStrengthMult = 0.25f;
-    static internal float DAMAGEABLE_pocketFlingStrength = 100f;
-    static internal float DAMAGEABLE_damagePerSpeedDivider = 8f;
+    static internal float DAMAGEABLE_DefaultMass = 1f;
+    static internal float DAMAGEABLE_BumpFlingStrengthMult = 0.25f;
+    static internal float DAMAGEABLE_PocketFlingStrength = 100f;
+    static internal float DAMAGEABLE_DamagePerSpeedDivider = 8f;
+
+    //Player
+
     // -- END OF BALANCE --
 
     public enum eScene

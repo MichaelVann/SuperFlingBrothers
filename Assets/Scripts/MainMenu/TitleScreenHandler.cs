@@ -15,7 +15,7 @@ public class TitleScreenHandler : MonoBehaviour
     void Start()
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_versionNumberText.text = "Version " + GameHandler._VERSION_NUMBER_STRING;
+        m_versionNumberText.text = "Version " + GameHandler.MAIN_VERSION_NUMBER + "." + GameHandler.SUB_VERSION_NUMBER;
     }
 
     // Update is called once per frame

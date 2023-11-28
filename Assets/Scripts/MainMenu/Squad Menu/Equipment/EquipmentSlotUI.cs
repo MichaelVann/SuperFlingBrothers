@@ -25,6 +25,7 @@ public class EquipmentSlotUI : MonoBehaviour
         for (int i = 0; i < m_statTexts.Length; i++)
         {
             m_statNameTexts[i].color = CharacterStatHandler.GetStatColor(i);
+            m_statNameTexts[i].text = CharacterStatHandler.GetStatName(i);
         }
     }
 

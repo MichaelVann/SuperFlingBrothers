@@ -43,7 +43,7 @@ public class XCellSquad
         ApplyStatsToPlayer();
     }
 
-    public void AttemptToIncreaseStat(eCharacterStatIndices a_index)
+    public void AttemptToIncreaseStat(eCharacterStatType a_index)
     {
         m_statHandler.AttemptToIncreaseStat(a_index);
         ApplyStatsToPlayer();

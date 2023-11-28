@@ -8,16 +8,11 @@ using UnityEngine.UI;
 public class SquadScreenHandler : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
-    public EquipmentSlotUI[] m_equipmentSlotUIRefs;
-
-    public int m_openedEquipmentSlotId = -1;
-
 
     public GameObject m_statAllocationNotifierRef;
     public Text m_statAllocationNotifierTextRef;
 
     //Inventory
-    public GameObject m_inventoryPanelRef;
 
     //Subscreens
     public GameObject m_squadOverview;
@@ -31,7 +26,6 @@ public class SquadScreenHandler : MonoBehaviour
     void Start()
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        RefreshEquipmentSlots();
         m_inited = true;
     }
 
@@ -51,48 +45,6 @@ public class SquadScreenHandler : MonoBehaviour
                 m_statAllocationNotifierTextRef.text = "" + allocationPoints;
             }
         }
-    }
-
-    private void OnEnable()
-    {
-        if (m_inited)
-        {
-            RefreshEquipmentSlots();
-        }
-    }
-
-    public void RefreshEquipmentSlots()
-    {
-        for (int i = 0; i < m_equipmentSlotUIRefs.Length; i++)
-        {
-            m_equipmentSlotUIRefs[i].SetEquipmentRef(m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i]);
-            m_equipmentSlotUIRefs[i].Refresh();
-        }
-    }
-
-
-    public void OpenEquipmentSlot(int a_id)
-    {
-        SetInventoryPanelStatus(true, a_id);
-    }
-
-    public void CloseInventoryPanel()
-    {
-        RefreshEquipmentSlots();
-        SetInventoryPanelStatus(false);
-    }
-
-    public void SetInventoryPanelStatus(bool a_open, int a_slotId = -1)
-    {
-        m_openedEquipmentSlotId = a_slotId;
-        m_inventoryPanelRef.SetActive(a_open);
-        m_squadOverview.SetActive(!a_open);
-    }
-
-    internal void SetEquipStatus(Equipment a_equipment)
-    {
-        m_gameHandlerRef.m_xCellSquad.m_playerXCell.EquipEquipment(a_equipment, m_openedEquipmentSlotId);
-        RefreshEquipmentSlots();
     }
 
 

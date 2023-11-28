@@ -9,6 +9,7 @@ public class EquipmentPanel : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
     EquipmentInventoryHandler m_equipmentInventoryHandlerRef;
+
     public Equipment m_equipmentRef;
 
     public Text m_nameTextRef;
@@ -32,9 +33,9 @@ public class EquipmentPanel : MonoBehaviour
     public Button m_sellButtonRef;
     //public Image m_outlineRef;
 
-
     void Awake()
     {
+
     }
 
     public void Init(Equipment a_equipment, EquipmentInventoryHandler a_equipmentScreenHandler)
@@ -46,8 +47,9 @@ public class EquipmentPanel : MonoBehaviour
         for (int i = 0; i < m_statNameTextRefs.Length; i++)
         {
             m_statNameTextRefs[i].color = CharacterStatHandler.GetStatColor(i);
+            m_statNameTextRefs[i].text = CharacterStatHandler.GetStatName(i, true);
         }
-        m_equipButtonRef.Init(m_gameHandlerRef, a_equipmentScreenHandler.m_squadScreenHandlerRef, m_equipmentRef);
+        m_equipButtonRef.Init(m_gameHandlerRef, a_equipmentScreenHandler.m_squadOverviewHandlerRef, m_equipmentRef);
     }
 
     public void Refresh()
@@ -56,7 +58,7 @@ public class EquipmentPanel : MonoBehaviour
         float[] statDeltas = new float[4];
 
         m_nameTextRef.text = m_equipmentRef.m_name;
-        m_healthText.text = m_equipmentRef.m_health.ToString("f0") + "/" + m_equipmentRef.m_maxHealth.ToString("f0");
+        m_healthText.text = VLib.RoundToDecimalPlaces(m_equipmentRef.m_health,1) + "/" + VLib.RoundToDecimalPlaces(m_equipmentRef.m_maxHealth,1);
         m_healthText.color = VLib.PercentageToColor(m_equipmentRef.m_health / m_equipmentRef.m_maxHealth);
         m_rarityTextRef.text = m_equipmentRef.m_rarity.name;
         m_rarityTextRef.color = m_equipmentRef.m_rarity.color;
@@ -70,21 +72,26 @@ public class EquipmentPanel : MonoBehaviour
         for (int i = 0; i < m_equipmentRef.m_stats.Count; i++)
         {
             int index = (int)m_equipmentRef.m_stats[i].statType;
-            m_statTextRefs[index].text = m_equipmentRef.m_stats[i].value.ToString("f1");
-            statDeltas[index] += m_equipmentRef.m_stats[i].value;
+
+            float statEffectiveValue = CharacterStat.ConvertNominalValueToEffectiveValue(m_equipmentRef.m_stats[i].value, m_equipmentRef.m_stats[i].statType);
+
+            m_statTextRefs[index].text = "" + VLib.RoundToDecimalPlaces(statEffectiveValue, Equipment.m_statRoundedDecimals);
+            statDeltas[index] += statEffectiveValue;
             m_statTextRefs[i].color = Color.white;// CharacterStatHandler.GetStatColor(m_equipmentRef.m_stats[i].statType);
         }
 
-        Equipment openedEquipment = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_equipmentInventoryHandlerRef.m_squadScreenHandlerRef.m_openedEquipmentSlotId];
+        Equipment openedEquipment = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_equipmentInventoryHandlerRef.m_squadOverviewHandlerRef.m_openedEquipmentSlotId];
         for (int i = 0; openedEquipment != null && i < openedEquipment.m_stats.Count; i++)
         {
+
             int index = (int)openedEquipment.m_stats[i].statType;
-            statDeltas[index] -= openedEquipment.m_stats[i].value;
+            float statEffectiveValue = CharacterStat.ConvertNominalValueToEffectiveValue(openedEquipment.m_stats[i].value, openedEquipment.m_stats[i].statType);
+            statDeltas[index] -= statEffectiveValue;
         }
 
         for (int i = 0; i < m_statDeltaTextRefs.Length; i++)
         {
-            m_statDeltaTextRefs[i].text = "(" + statDeltas[i].ToString("f1") + ")";
+            m_statDeltaTextRefs[i].text = "(" + VLib.RoundToDecimalPlaces(statDeltas[i], Equipment.m_statRoundedDecimals) + ")";
             m_statDeltaTextRefs[i].color = statDeltas[i] < 0 ? Color.red : (statDeltas[i] > 0 ? Color.green : Color.white);
         }
 

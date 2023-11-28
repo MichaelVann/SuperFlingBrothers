@@ -17,6 +17,15 @@ public class CharacterInfoReadout : MonoBehaviour
         InitialiseStatReadouts();
     }
 
+    private void OnEnable()
+    {
+        if (!m_gameHandlerRef)
+        {
+            m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        }
+        InitialiseStatReadouts();
+    }
+
     void InitialiseStatReadouts()
     {
         for (int i = 0; i < m_statReadouts.Length; i++)

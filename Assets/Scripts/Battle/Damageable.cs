@@ -10,7 +10,7 @@ public class Damageable : BaseObject
 
     public Vector3 m_lastVelocity;
     public float m_lastMomentumMagnitude = 0f;
-    protected float m_damagePerSpeedDivider = GameHandler.DAMAGEABLE_damagePerSpeedDivider;
+    protected float m_damagePerSpeedDivider = GameHandler.DAMAGEABLE_DamagePerSpeedDivider;
 
     const float m_massDivider = 2f;
     public float m_originalMass;
@@ -57,13 +57,13 @@ public class Damageable : BaseObject
     //Fling
     bool m_secondFlingEnabled = false;
     bool m_secondFling = true;
-    float m_bumpFlingStrengthMult = GameHandler.DAMAGEABLE_bumpFlingStrengthMult;
+    float m_bumpFlingStrengthMult = GameHandler.DAMAGEABLE_BumpFlingStrengthMult;
     float m_secondFlingTimer = 0f;
     float m_secondFlingTimerMax = 0.09f;
     Vector3 m_storedFlingVector;
     float m_storedFlingStrength = 0f;
 
-    float m_pocketFlingStrength = GameHandler.DAMAGEABLE_pocketFlingStrength;
+    float m_pocketFlingStrength = GameHandler.DAMAGEABLE_PocketFlingStrength;
 
     bool m_clearVelocityOption = false;
 
@@ -90,7 +90,7 @@ public class Damageable : BaseObject
         m_statHandler = new CharacterStatHandler();
         m_statHandler.Init(false);
         m_originalColor = m_spriteRenderer.color;
-        m_rigidBody.mass = m_originalMass = GameHandler.DAMAGEABLE_defaultMass;
+        m_rigidBody.mass = m_originalMass = GameHandler.DAMAGEABLE_DefaultMass;
         m_damageFlashOverrideTimer = new vTimer(m_damageFlashTimerMax,false);
         m_defaultMaterialRef = m_spriteRenderer.material;
         UpdateLocalStatsFromStatHandler();
@@ -113,7 +113,7 @@ public class Damageable : BaseObject
 
     protected void UpdateLocalStatsFromStatHandler()
     {
-        m_health = m_maxHealth = m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue;
+        m_health = m_maxHealth = m_statHandler.m_stats[(int)eCharacterStatType.constitution].m_finalValue;
         UpdateHealthColor();
         m_healthBarRef.SetMaxProgressValue(m_maxHealth);
     }
@@ -300,7 +300,7 @@ public class Damageable : BaseObject
             {
                 //Damage(oppDamageable.m_statHandler.m_stats[(int)eCharacterStatIndices.strength].finalValue * oppDamageable.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
 
-                float oppStrength = oppDamageable.m_statHandler.m_stats[(int)eCharacterStatIndices.strength].m_finalValue;
+                float oppStrength = oppDamageable.m_statHandler.m_stats[(int)eCharacterStatType.strength].m_finalValue;
                 float oppSpeed = 1f / m_damagePerSpeedDivider;
                 float damage = oppStrength * oppSpeed * oppContactStrength;
                 Damage(oppStrength * oppSpeed * oppContactStrength, a_collision.contacts[0].point);

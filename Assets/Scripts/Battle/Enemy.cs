@@ -99,7 +99,7 @@ public class Enemy : Damageable
         {
             case eEnemyType.Idler:
                 m_originalColor = Color.white;
-                m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue /= 2f;
+                m_statHandler.m_stats[(int)eCharacterStatType.constitution].m_finalValue /= 2f;
                 transform.localScale *= 1f;
                 m_rigidBody.mass *= 0.75f;
                 m_rigidBody.drag = 1f;
@@ -265,7 +265,7 @@ public class Enemy : Damageable
             if (oppEnemy.m_typeTrait.healer)
             {
                 runningBaseCollision = false;
-                Heal(oppEnemy.m_statHandler.m_stats[(int)eCharacterStatIndices.strength].m_finalValue * oppEnemy.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
+                Heal(oppEnemy.m_statHandler.m_stats[(int)eCharacterStatType.strength].m_finalValue * oppEnemy.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
             }
             runningBaseCollision = false;// !m_typeTrait.healer;
         }

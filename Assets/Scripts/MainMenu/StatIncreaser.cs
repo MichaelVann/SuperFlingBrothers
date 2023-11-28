@@ -5,11 +5,10 @@ using UnityEngine.UI;
 
 public class StatIncreaser : MonoBehaviour
 {
-    public eCharacterStatIndices m_statIndex;
+    public eCharacterStatType m_statIndex;
     GameHandler m_gameHandlerRef;
     public Text m_effectDescriptionTextRef;
     public Text m_effectSuffixTextRef;
-    public Text m_totalTextRef;
     public Counter m_statCounterRef;
     public Button m_increaseButtonRef;
 
@@ -41,19 +40,19 @@ public class StatIncreaser : MonoBehaviour
         string suffixString = "";
         switch (m_statIndex)
         {
-            case eCharacterStatIndices.strength:
+            case eCharacterStatType.strength:
                 suffixString = "Hit Damage";
                 break;
-            case eCharacterStatIndices.dexterity:
+            case eCharacterStatType.dexterity:
                 suffixString = "s Turn Speed";
                 break;
-            case eCharacterStatIndices.constitution:
+            case eCharacterStatType.constitution:
                 suffixString = "Health";
                 break;
-            case eCharacterStatIndices.protection:
+            case eCharacterStatType.protection:
                 suffixString = "Armour";
                 break;
-            case eCharacterStatIndices.count:
+            case eCharacterStatType.count:
                 break;
             default:
                 break;
@@ -61,7 +60,6 @@ public class StatIncreaser : MonoBehaviour
 
         m_effectSuffixTextRef.text = suffixString;
 
-        m_totalTextRef.text = "Total: " + m_referencedStat.m_finalValue;
     }
 
 

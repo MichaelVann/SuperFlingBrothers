@@ -53,9 +53,12 @@ public class Equipment
     [Serializable]
     public struct EquipmentStat
     {
-        public eCharacterStatIndices statType;
+        public eCharacterStatType statType;
         public float value;
     }
+
+    internal const int m_statRoundedDecimals = 2;
+
 
     //[SerializeReference]
     public List<EquipmentStat> m_stats;
@@ -190,10 +193,10 @@ public class Equipment
 
         int points = GetAllocatablePoints();
         int statsChosenCount = VLib.vRandom(1,m_stats.Count-1);
-        for (int i = 0; i < (int)eCharacterStatIndices.count; i++)
+        for (int i = 0; i < (int)eCharacterStatType.count; i++)
         {
             EquipmentStat newStat = new EquipmentStat();
-            newStat.statType = (eCharacterStatIndices)i;
+            newStat.statType = (eCharacterStatType)i;
             m_stats.Add(newStat);
         }
 

@@ -41,7 +41,7 @@ public class Player : Damageable
     //Shield
     public SpriteRenderer m_shieldSpriteRenderer;
     float m_maxShieldOpacity = 0.64f;
-    float m_projectileDamageMult = 50f;
+    float m_projectileDamageMult = 100f;
     bool m_firstTimeShieldSetup = true;
 
     public GameObject m_armorSegmentPrefab;
@@ -72,7 +72,7 @@ public class Player : Damageable
         base.Start();
         m_originalColor = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_colorShade;
         m_statHandler = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_statHandler;
-        m_healthBarRef.SetMaxProgressValue(m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].m_finalValue);
+        m_healthBarRef.SetMaxProgressValue(m_statHandler.m_stats[(int)eCharacterStatType.constitution].m_finalValue);
         m_battleManagerRef = FindObjectOfType<BattleManager>();
         UpdateLocalStatsFromStatHandler();
         m_damageTextColor = Color.red;
@@ -225,7 +225,7 @@ public class Player : Damageable
         base.Fling(a_flingVector, a_flingStrength);
         m_flinging = false;
         m_battleManagerRef.SetFrozen(false);
-        m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].ChangeXP(m_flingDexterityXP * GameHandler.BATTLE_SkillXPScale);
+        m_statHandler.m_stats[(int)eCharacterStatType.dexterity].ChangeXP(m_flingDexterityXP * GameHandler.BATTLE_SkillXPScale);
 
         //Handle Projectile Shooting
         EquipmentAbility abil = FindActiveEquipmentAbility();
@@ -392,7 +392,7 @@ public class Player : Damageable
     {
         GameObject projectile = Instantiate<GameObject>(m_projectileTemplate,transform.position, VLib.Vector2DirectionToQuaternion(a_shootVector));
         Projectile projectileComp = projectile.GetComponent<Projectile>();
-        m_statHandler.m_stats[(int)eCharacterStatIndices.dexterity].ChangeXP(m_abilityUsageDexterityXP * GameHandler.BATTLE_SkillXPScale);
+        m_statHandler.m_stats[(int)eCharacterStatType.dexterity].ChangeXP(m_abilityUsageDexterityXP * GameHandler.BATTLE_SkillXPScale);
 
         projectileComp.Initialise(a_ability, a_shootVector, m_rigidBody.velocity, m_projectileDamageMult);
     }
@@ -484,13 +484,13 @@ public class Player : Damageable
         }
 
         //Armor Protection
-        float armourProtectionAmount = m_statHandler.m_stats[(int)eCharacterStatIndices.protection].m_finalValue * 0.1f;
+        float armourProtectionAmount = m_statHandler.m_stats[(int)eCharacterStatType.protection].m_finalValue;
         float blockedAmount = armourProtectionAmount > damage ? damage : armourProtectionAmount;
         if (blockedAmount > 0f)
         {
             SpawnBlockText(blockedAmount);
         }
-        m_statHandler.m_stats[(int)eCharacterStatIndices.protection].ChangeXP((int)blockedAmount);
+        m_statHandler.m_stats[(int)eCharacterStatType.protection].ChangeXP((int)blockedAmount);
         damage -= blockedAmount;
 
         //Equipment Segment
@@ -530,7 +530,7 @@ public class Player : Damageable
             damage -= originalAppliedDamage - remainingDamage;
         }
         damage = Mathf.Clamp(damage, 0f, float.MaxValue);
-        m_statHandler.m_stats[(int)eCharacterStatIndices.constitution].ChangeXP((int)damage * GameHandler.BATTLE_SkillXPScale);
+        m_statHandler.m_stats[(int)eCharacterStatType.constitution].ChangeXP((int)damage * GameHandler.BATTLE_SkillXPScale);
         base.Damage(damage, a_damagePoint);
         m_battleManagerRef.m_healthBarRef.SetBarValue(m_health);
         RefreshArmorSegments();
@@ -586,6 +586,6 @@ public class Player : Damageable
 
     internal void ReportDamageDealt(float m_lastDamageTaken)
     {
-        m_statHandler.m_stats[(int)eCharacterStatIndices.strength].ChangeXP((int)(m_lastDamageTaken * GameHandler.BATTLE_SkillXPScale));
+        m_statHandler.m_stats[(int)eCharacterStatType.strength].ChangeXP((int)(m_lastDamageTaken * GameHandler.BATTLE_SkillXPScale));
     }
 }
