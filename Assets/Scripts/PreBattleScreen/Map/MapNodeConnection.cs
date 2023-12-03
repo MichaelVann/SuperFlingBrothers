@@ -22,6 +22,8 @@ public class MapNodeConnection : MonoBehaviour
     int m_nodesSetupCount = 0;
     TownConnection m_representedTownConnection;
 
+    int m_frontLinesCreatedCount = 0;
+    Vector3[] m_frontLinePoints;
     static Vector3[] m_linePositionsHolder;
 
     public bool m_isaFront = false;
@@ -52,7 +54,7 @@ public class MapNodeConnection : MonoBehaviour
         m_representedTownConnection = m_gameHandlerRef.m_humanBody.FindConnection(gameObject.name);
 
         SetUpLines();
-
+        m_frontLinePoints = new Vector3[2];
 
     }
 
@@ -148,9 +150,6 @@ public class MapNodeConnection : MonoBehaviour
             enemyTown = m_mapNodes[1];
         }
 
-        //Find a 90 degree front line
-        Vector3 frontLine = new Vector3(m_connectionLine.normalized.y, -m_connectionLine.normalized.x, m_connectionLine.normalized.z);
-
         for (int i = 0; i < m_representedTownConnection.m_battles.Count; i++)
         {
             GameObject nodeGameObject = Instantiate<GameObject>(m_UIBattleNodeTemplate);//, this.transform);
@@ -161,23 +160,35 @@ public class MapNodeConnection : MonoBehaviour
             while (!validSpawnFound)
             {
                 BattleNode battleNode = m_representedTownConnection.m_battles[i];
-                Vector3 spawnPos = new Vector3();// -frontLine / 2f + VLib.vRandom(0f, 1f) * frontLine;
-                Vector3 horizontalOffsetVector = -frontLine / 2f + VLib.vRandom(0f, 1f) * frontLine;
-                horizontalOffsetVector *= 0.5f;
-                Vector3 difficultyOffsetVector = Vector3.Lerp(m_frontStartPos, m_frontEndPos, Mathf.Clamp(battleNode.GetDifficultyPercent(), 0f, 1f));// -m_connectionLine.normalized/2f;
-                //difficultyOffsetVector += m_connectionLine.normalized * Mathf.Clamp(battleNode.GetDifficultyPercent(), 0f, 1f);
-                //difficultyOffsetVector *= 0.2f;
-                //spawnPos =  difficultyOffsetVector;
-                spawnPos += difficultyOffsetVector;
-                spawnPos += horizontalOffsetVector;
+                Vector3 spawnPos;
+
+                Vector3 targetPos = m_frontLinePoints[VLib.vRandom(0, 1)];
+                Vector3 frontLineDirection = (targetPos - transform.position).normalized;
+                targetPos -= frontLineDirection * 0.1f;
+                spawnPos = Vector3.Lerp(transform.position, targetPos, VLib.vRandom(0f, 1f));
+                float difficultyPercentage = battleNode.GetDifficultyPercent();
+                Vector3 offsetVector = GetFrontLineAdvanceDirection(frontLineDirection);
+                if (difficultyPercentage > 0.5f)
+                {
+                    //Enemy side of the front line
+                    difficultyPercentage -= 0.5f;
+                    difficultyPercentage *= 2f;
+                }
+                else
+                {
+                    //Friendly side of the front line
+                    difficultyPercentage = 0.5f - difficultyPercentage;
+                    difficultyPercentage *= 2f;
+                    offsetVector = offsetVector.RotateVector3In2D(180f);
+                }
+                spawnPos += offsetVector * 0.03f;
+                spawnPos += offsetVector * (difficultyPercentage * 0.03f);
                 nodeGameObject.transform.localPosition = spawnPos;
 
                 validSpawnFound = true;
                 spawnAttempts++;
                 for (int j = 0; j < m_nodeGameobjectList.Count; j++)
                 {
-                    Collider2D colliderA = nodeGameObject.GetComponent<Collider2D>();
-                    Collider2D colliderB = m_nodeGameobjectList[j].GetComponent<Collider2D>();
                     float distMag = (nodeGameObject.transform.localPosition - m_nodeGameobjectList[j].transform.localPosition).magnitude;
                     float allowedRadius = 0.1f;// node.GetComponent<CircleCollider2D>().radius * transform.;
                     if (spawnAttempts > m_maxNodeSpawnAttempts)
@@ -202,6 +213,7 @@ public class MapNodeConnection : MonoBehaviour
 
             if (spawnAttempts > m_maxNodeSpawnAttempts)
             {
+                print("Node spawning failed " + i);
                 Destroy(nodeGameObject);
                 break;
             }
@@ -341,11 +353,10 @@ public class MapNodeConnection : MonoBehaviour
       CreateLine(transform.position, a_endPosition, a_lineColor, a_lineColor, a_lineMat);
     }
 
-    internal void CreateFrontLine(Vector3 a_endPos)
+    Vector3 GetFrontLineAdvanceDirection(Vector3 a_line)
     {
-        CreateLine(transform.position, a_endPos, Color.green, Color.green);
+        Vector3 frontDirection = a_line.normalized;
 
-        Vector3 frontDirection = a_endPos - transform.position;
         Vector3 perpA = frontDirection.RotateVector3In2D(90f);
         Vector3 perpB = frontDirection.RotateVector3In2D(-90f);
         Vector3 enemyTownPos = m_mapNodes[0].m_overrun ? m_mapNodes[0].transform.position : m_mapNodes[1].transform.position;
@@ -355,18 +366,30 @@ public class MapNodeConnection : MonoBehaviour
         float angleA = Vector3.Angle(perpA, enemyTowndirection);
         float angleB = Vector3.Angle(perpB, enemyTowndirection);
 
-        Vector3 offsetVector = Vector3.zero;
+        Vector3 retreatDirection = Vector3.zero;
 
         if (angleA >= angleB)
         {
-            offsetVector = perpA;
+            retreatDirection = perpA;
         }
         else
         {
-            offsetVector = perpB;
+            retreatDirection = perpB;
         }
+        return retreatDirection;
+    }
 
-        offsetVector = offsetVector.normalized;
+    internal void CreateFrontLine(Vector3 a_endPos)
+    {
+        CreateLine(transform.position, a_endPos, Color.green, Color.green);
+
+        Vector3 frontDirection = a_endPos - transform.position;
+        m_frontLinePoints[m_frontLinesCreatedCount] = a_endPos;// - frontDirection.normalized * 0.1f;
+        m_frontLinesCreatedCount++;
+        m_frontLinesCreatedCount %= 2;
+
+        Vector3 offsetVector = GetFrontLineAdvanceDirection(frontDirection);
+
         offsetVector *= m_lineRendererRef.GetComponent<LineRenderer>().startWidth;
 
         CreateLine(transform.position - offsetVector, a_endPos - offsetVector, Color.red, Color.red);
@@ -398,7 +421,7 @@ public class MapNodeConnection : MonoBehaviour
         {
             for (int i = 0; i < m_anchorPoints.Length; i++)
             {
-                //CreateLine(m_anchorPoints[i].transform.position, Color.red);
+                //CreateFrontLine(m_anchorPoints[i].transform.position);
             }
             for (int i = 0; i < m_adjacentConnections.Count; i++)
             {

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,7 @@ public class StatIncreaser : MonoBehaviour
     GameHandler m_gameHandlerRef;
     public Text m_effectDescriptionTextRef;
     public Text m_effectSuffixTextRef;
+    public TextMeshProUGUI m_effectIntervalText;
     public Counter m_statCounterRef;
     public Button m_increaseButtonRef;
 
@@ -36,6 +38,8 @@ public class StatIncreaser : MonoBehaviour
         m_statCounterRef.m_text.text = "" + m_referencedStat.m_value;
 
         m_effectDescriptionTextRef.text = "+" + m_referencedStat.m_attributeEffectiveValue;
+
+        m_effectIntervalText.text = "" + m_referencedStat.m_scale + " " + CharacterStatHandler.GetStatName(m_referencedStat.m_type,true) + "/LVL";
 
         string suffixString = "";
         switch (m_statIndex)

@@ -70,8 +70,14 @@ public class BattleManager : MonoBehaviour
     float m_playerSlideLerp = 0f;
     float m_playerSlideTime = 1f;
 
+    //Hit Slowdown
+    internal bool m_hitSlowDownActive = false;
+    float m_hitTimeSlowdownRate = 0.05f;
+    float m_enemyHitTimer;
+    float m_enemyHitTimerMax = 0.14f;
+
     //Turn Freezing
-    public bool m_timeFrozen = false;
+    internal bool m_timeFrozen = false;
     float m_turnFreezeTimer;
     float m_turnFreezeTimerMax = 2f;
     bool m_turnFreezing = false;
@@ -297,6 +303,13 @@ public class BattleManager : MonoBehaviour
         //Debug.Log(a_scale);
         float pitchRetention = 0.6f;
         m_musicPlayer.pitch = pitchRetention+(a_scale*(1f-pitchRetention));
+    }
+
+    internal void EngageHitSlowdown(bool a_value)
+    {
+        m_hitSlowDownActive = a_value;
+        m_enemyHitTimer = 0f;
+        SetTimeScale(a_value? m_hitTimeSlowdownRate : 1f);
     }
 
     void SetupDebug()
@@ -671,17 +684,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    void UpdateGameEnding()
-    {
-        m_gameEndTimer += Time.deltaTime;
-        m_fadeToBlackRef.color = new Color(0f, 0f, 0f, Mathf.Pow(m_gameEndTimer / m_maxGameEndTimer,3f));
-        if (m_gameEndTimer >= m_maxGameEndTimer)
-        {
-            FinishGame();
-        }
-    }
-
-    void RunIntro()
+    void UpdateIntro()
     {
         m_playerSlideLerp += Time.deltaTime;
         if (m_playerSlideLerp >= m_playerSlideTime)
@@ -693,6 +696,42 @@ public class BattleManager : MonoBehaviour
         m_player.gameObject.transform.position = VLib.SigmoidLerp(m_playerSpawnPoint.transform.position, m_playerSlidePoint.transform.position, m_playerSlideLerp);
     }
 
+    void UpdateBattle()
+    {
+        if (m_enemyCount <= 0)
+        {
+            StartEndingGame(eEndGameType.win);
+        }
+        UpdateFreezeTimer();
+
+        if (m_hitSlowDownActive)
+        {
+            if (!m_timeFrozen)
+            {
+                m_enemyHitTimer += Time.deltaTime / m_hitTimeSlowdownRate;
+                if (m_enemyHitTimer >= m_enemyHitTimerMax)
+                {
+                    EngageHitSlowdown(false);
+                }
+            }
+            else
+            {
+                m_enemyHitTimer = 0f;
+                m_hitSlowDownActive = false;
+            }
+        }
+    }
+
+    void UpdateGameEnding()
+    {
+        m_gameEndTimer += Time.deltaTime;
+        m_fadeToBlackRef.color = new Color(0f, 0f, 0f, Mathf.Pow(m_gameEndTimer / m_maxGameEndTimer, 3f));
+        if (m_gameEndTimer >= m_maxGameEndTimer)
+        {
+            FinishGame();
+        }
+    }
+
     void Update()
     {
         //m_enemyCountText.text = "Enemy Count: " + m_enemyCount;
@@ -701,15 +740,11 @@ public class BattleManager : MonoBehaviour
         //Intro
         if (m_introActive)
         {
-            RunIntro();
+            UpdateIntro();
         }
         else if (!m_endingGame)
         {
-            if (m_enemyCount <= 0)
-            {
-                StartEndingGame(eEndGameType.win);
-            }
-            UpdateFreezeTimer();
+            UpdateBattle();
         }
         else if (m_endingGame)
         {

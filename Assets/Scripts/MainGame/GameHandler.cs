@@ -14,7 +14,7 @@ using static UnityEngine.UI.CanvasScaler;
 public class GameHandler : MonoBehaviour
 {
     public const int MAIN_VERSION_NUMBER = 22;
-    public const int SUB_VERSION_NUMBER = 6;
+    public const int SUB_VERSION_NUMBER = 7;
 
     static internal bool DEBUG_MODE = true;
 
@@ -84,6 +84,8 @@ public class GameHandler : MonoBehaviour
         Count
     }
 
+    //Equipment
+    const int m_startingEquipment = 0;
     public List<Equipment> m_equipmentInventory;
 
     StockHandler m_stockHandler;
@@ -201,7 +203,7 @@ public class GameHandler : MonoBehaviour
     void SetupEquipment()
     {
         m_equipmentInventory = new List<Equipment>();
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < m_startingEquipment; i++)
         {
             m_equipmentInventory.Add(new Equipment(0));
         }

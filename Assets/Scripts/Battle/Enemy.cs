@@ -104,18 +104,23 @@ public class Enemy : Damageable
                 m_rigidBody.mass *= 0.75f;
                 m_rigidBody.drag = 1f;
                 m_nucleusDrainTimer = new vTimer(1.0f, false, false);
+                m_equipmentDropRate = 0.1f;
                 break;
             case eEnemyType.InertiaDasher:
                 m_rotateToAlignToVelocity = true;
+                m_equipmentDropRate = 0.3f;
                 break;
             case eEnemyType.Dodger:
                 m_originalColor = Color.green;
+                m_equipmentDropRate = 0.3f;
                 break;
             case eEnemyType.Healer:
                 m_originalColor = Color.white;
+                m_equipmentDropRate = 0.3f;
                 break;
             case eEnemyType.Striker:
                 m_visionConeRef.SetActive(true);
+                m_equipmentDropRate = 0.5f;
                 break;
             case eEnemyType.Count:
                 break;
@@ -352,9 +357,8 @@ public class Enemy : Damageable
             spawnLocation = transform.position + spawnLocation;
 
             //Pad out the loot so it doesn't spawn with it's middle on the edge
-            float spawnBoundsPadding = 0.07f;
-            Vector2 spawnBounds = new Vector2(m_battleManagerRef.m_gameSpace.x +  spawnBoundsPadding, m_battleManagerRef.m_gameSpace.y + spawnBoundsPadding);
-
+            float spawnBoundsPadding = 0.15f;
+            Vector2 spawnBounds = new Vector2(m_battleManagerRef.m_gameSpace.x -  spawnBoundsPadding, m_battleManagerRef.m_gameSpace.y - spawnBoundsPadding);
             spawnLocation = new Vector3(Mathf.Clamp(spawnLocation.x, -spawnBounds.x, spawnBounds.x), Mathf.Clamp(spawnLocation.y, -spawnBounds.y, spawnBounds.y), spawnLocation.z);
             GameObject loot = Instantiate<GameObject>(a_lootTemplate, transform.position, new Quaternion());
             loot.GetComponent<Loot>().Init(spawnLocation);

@@ -20,9 +20,7 @@ public class Player : Damageable
 
     LineRenderer m_flingLine;
 
-    bool m_hitSlowdownActive = false;
-    float m_enemyHitTimer;
-    float m_enemyHitTimerMax = 0.14f;
+
     bool invertedTime = false;
 
     float m_hitTimeSlowdownRate = 0.05f;
@@ -330,12 +328,7 @@ public class Player : Damageable
         }
     }
 
-    void EngageHitSlowdown()
-    {
-        m_hitSlowdownActive = true;
-        m_enemyHitTimer = 0f;
-        m_battleManagerRef.SetTimeScale(m_hitTimeSlowdownRate);
-    }
+
 
     public override bool OnCollisionEnter2D(Collision2D a_collision)
     {
@@ -355,7 +348,7 @@ public class Player : Damageable
             {
                 if (!m_battleManagerRef.m_endingGame)
                 {
-                    EngageHitSlowdown();
+                    m_battleManagerRef.EngageHitSlowdown(true);
                 }
             }
             m_battleManagerRef.UseExtraTurn();
@@ -572,16 +565,7 @@ public class Player : Damageable
     {
         base.Update();
         HandleFlinging();
-        if (m_hitSlowdownActive)
-        {
-            m_enemyHitTimer += Time.deltaTime/m_hitTimeSlowdownRate;
-            if (m_enemyHitTimer >= m_enemyHitTimerMax)
-            {
-                m_hitSlowdownActive = false;
-                m_enemyHitTimer = 0f;
-                m_battleManagerRef.SetTimeScale(1f);
-            }
-        }
+ 
         ShieldUpdate();
 
         if (Input.GetKey(KeyCode.M))
