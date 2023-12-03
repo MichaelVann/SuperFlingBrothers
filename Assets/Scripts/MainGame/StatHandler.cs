@@ -121,7 +121,7 @@ public class CharacterStat
 
     internal static readonly float[] m_statScales = {
     /*Strength*/ 5f,
-    /*Dexterity*/ 0.01f,
+    /*Dexterity*/ 0.03f,
     /*Constitution*/ 10f,
     /*Protection*/ 0.25f
     };
@@ -146,7 +146,7 @@ public class CharacterStat
     {
         if (m_usingRPGLevel)
         {
-            //m_value = m_RPGLevel.m_level - 1;
+            m_value = m_RPGLevel.m_level;
         }
 
         m_attributeEffectiveValue = (m_value) * m_scale;
@@ -348,7 +348,6 @@ public class CharacterStatHandler
     {
         for (int i = 0; i < (int)eCharacterStatType.count; i++)
         {
-            SetStatScale((eCharacterStatType)i,1f);
             m_stats[i].m_originalCost = 10f;
             m_stats[i].m_cost = m_stats[i].m_originalCost;
             m_stats[i].m_costIncreaseRate = 1.8f;
@@ -361,11 +360,8 @@ public class CharacterStatHandler
         m_stats[(int)eCharacterStatType.dexterity].m_reductive = true;
         m_stats[(int)eCharacterStatType.dexterity].m_orginalReducedValue = 2;
 
-        m_stats[(int)eCharacterStatType.constitution].m_scale = 10f;
         SetStatPostAddedValue(eCharacterStatType.constitution, 100f);
         SetStatPostAddedValue(eCharacterStatType.strength, 50f);
-
-
     }
 
     public void AttemptToIncreaseStat(eCharacterStatType a_index)

@@ -140,8 +140,8 @@ public class BattleManager : MonoBehaviour
         m_uiHandlerRef = GetComponent<BattleUIHandler>();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_turnFreezeTimerMax = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatType.dexterity].m_finalValue;
-        m_debugText.text = "" + m_turnFreezeTimerMax;
-        m_turnFreezeTimer = m_turnFreezeTimerMax;
+        //m_debugText.text = "" + m_turnFreezeTimerMax;
+        m_turnFreezeTimer = 0f;
         m_enemySpawnPointsRefs = new List<GameObject>();
         m_equipmentCollected = new List<Equipment>();
 
@@ -275,8 +275,9 @@ public class BattleManager : MonoBehaviour
                 if (m_activeAbilities[i].m_abilityType == EquipmentAbility.eAbilityType.ExtraTurn && m_activeAbilities[i].m_activated)
                 {
                     m_activeAbilities[i].m_ammo--;
-                    m_turnFreezeTimer = m_turnFreezeTimerMax;
-                    m_turnFreezingTimer = m_turnFreezingTimerMax / 2f;
+                    //m_turnFreezeTimer = m_turnFreezeTimerMax;
+                    //m_turnFreezingTimer = m_turnFreezingTimerMax / 2f;
+                    SetFrozen(true);
                     m_activeAbilities[i].m_activated = false;
                     RefreshAbilityButtons();
                     break;
@@ -384,7 +385,6 @@ public class BattleManager : MonoBehaviour
             }
         }
     }
-
 
     internal void RefreshUIShieldBar()
     {
@@ -716,6 +716,7 @@ public class BattleManager : MonoBehaviour
         {
             UpdateGameEnding();
         }
+        m_debugText.text = "" + Time.timeScale;
 
     }
 }

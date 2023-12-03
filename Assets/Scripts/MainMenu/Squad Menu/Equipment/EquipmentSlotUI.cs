@@ -46,7 +46,7 @@ public class EquipmentSlotUI : MonoBehaviour
             {
                 //m_statTexts[i].gameObject.SetActive(true);
                 int index = (int)m_equipmentRef.m_stats[i].statType;
-                m_statTexts[index].text = m_equipmentRef.m_stats[i].value.ToString("f1");
+                m_statTexts[index].text = "" + VLib.RoundToDecimalPlaces(CharacterStat.ConvertNominalValueToEffectiveValue(m_equipmentRef.m_stats[i].value, m_equipmentRef.m_stats[i].statType), 2);
                 m_statTexts[index].color = Color.green; //CharacterStatHandler.GetStatColor(m_equipmentRef.m_stats[i].statType);
             }
             m_abilityTextRef.text = m_equipmentRef.m_activeAbility.GetName();
@@ -62,7 +62,6 @@ public class EquipmentSlotUI : MonoBehaviour
         m_nameText.text = valid ? m_equipmentRef.m_name : "";
         m_nameText.color = valid ? m_equipmentRef.m_rarity.color : Color.white;
         m_healthText.text = valid ? m_equipmentRef.m_health.ToString("f1") + "/" + m_equipmentRef.m_maxHealth.ToString("f1") : "";
-
 
         m_armorSegment.gameObject.SetActive(valid);
     }

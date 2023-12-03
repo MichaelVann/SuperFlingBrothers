@@ -27,9 +27,9 @@ public class StatReadout : MonoBehaviour
         //m_titleText.color = CharacterStatHandler.GetStatColor(m_characterStat);
         m_titleText.text = m_characterStat.m_name;
         m_totalStatText.text = "" + VLib.RoundToDecimalPlaces(m_characterStat.m_finalValue, Equipment.m_statRoundedDecimals);
-        m_equipmentStatText.text = "" + VLib.RoundToDecimalPlaces(m_characterStat.m_equipmentAddedValue, Equipment.m_statRoundedDecimals);
-        m_skillStatText.text = "" + VLib.RoundToDecimalPlaces(m_characterStat.m_value, Equipment.m_statRoundedDecimals);
-        m_teamStatText.text = "" + VLib.RoundToDecimalPlaces(m_characterStat.m_parentAddedValue, Equipment.m_statRoundedDecimals);
+        m_equipmentStatText.text = "" + VLib.RoundToDecimalPlaces(CharacterStat.ConvertNominalValueToEffectiveValue(m_characterStat.m_equipmentAddedValue, m_characterStat.m_type), Equipment.m_statRoundedDecimals);
+        m_skillStatText.text = "" + VLib.RoundToDecimalPlaces(CharacterStat.ConvertNominalValueToEffectiveValue(m_characterStat.m_value, m_characterStat.m_type), Equipment.m_statRoundedDecimals);
+        m_teamStatText.text = "" + VLib.RoundToDecimalPlaces(CharacterStat.ConvertNominalValueToEffectiveValue(m_characterStat.m_parentAddedValue, m_characterStat.m_type), Equipment.m_statRoundedDecimals);
     }
 
     // Start is called before the first frame update

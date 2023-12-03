@@ -5,6 +5,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 586436087050212849, guid: 8c1a46675eabcda4e93b7fa4171e3d18,
@@ -23,6 +24,12 @@ PrefabInstance:
       propertyPath: m_Name
       value: Inertia Dasher
       objectReference: {fileID: 0}
+    - target: {fileID: 4119762015452470857, guid: 8c1a46675eabcda4e93b7fa4171e3d18,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 49f96f103a4b37d459aa86ddcdbe6e62,
+        type: 3}
     - target: {fileID: 5265095099627222991, guid: 8c1a46675eabcda4e93b7fa4171e3d18,
         type: 3}
       propertyPath: m_Size.x
@@ -105,4 +112,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 49f96f103a4b37d459aa86ddcdbe6e62,
         type: 3}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8c1a46675eabcda4e93b7fa4171e3d18, type: 3}

@@ -55,7 +55,7 @@ public class Damageable : BaseObject
     internal Shield m_shield;
 
     //Fling
-    bool m_secondFlingEnabled = false;
+    const bool m_secondFlingEnabled = false;
     bool m_secondFling = true;
     float m_bumpFlingStrengthMult = GameHandler.DAMAGEABLE_BumpFlingStrengthMult;
     float m_secondFlingTimer = 0f;
@@ -137,7 +137,7 @@ public class Damageable : BaseObject
 
     void SecondFlingUpdate()
     {
-        if (!m_secondFling)
+        if (!m_secondFling && m_secondFlingEnabled)
         {
             m_secondFlingTimer += Time.deltaTime;
             if (m_secondFlingTimer >= m_secondFlingTimerMax)
@@ -154,7 +154,7 @@ public class Damageable : BaseObject
         GameObject smoke = Instantiate<GameObject>(m_puffOfSmokeTemplate, transform.position, new Quaternion());
         smoke.transform.localScale *= a_flingStrength/ 200f;
         //a_flingStrength *= (0.67f + (GetHealthPercentage() * 0.33f));
-        if (m_secondFling)
+        if (m_secondFling && m_secondFlingEnabled)
         {
             if (m_clearVelocityOption)
             {

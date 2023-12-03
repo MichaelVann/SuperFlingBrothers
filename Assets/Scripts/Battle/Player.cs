@@ -330,6 +330,13 @@ public class Player : Damageable
         }
     }
 
+    void EngageHitSlowdown()
+    {
+        m_hitSlowdownActive = true;
+        m_enemyHitTimer = 0f;
+        m_battleManagerRef.SetTimeScale(m_hitTimeSlowdownRate);
+    }
+
     public override bool OnCollisionEnter2D(Collision2D a_collision)
     {
         Enemy enemy = a_collision.gameObject.GetComponent<Enemy>();
@@ -348,8 +355,7 @@ public class Player : Damageable
             {
                 if (!m_battleManagerRef.m_endingGame)
                 {
-                    m_hitSlowdownActive = true;
-                    m_battleManagerRef.SetTimeScale(m_hitTimeSlowdownRate);
+                    EngageHitSlowdown();
                 }
             }
             m_battleManagerRef.UseExtraTurn();
