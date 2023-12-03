@@ -216,7 +216,7 @@ public class CharacterStatHandler
                 m_returnString = !a_shortName ? "Damage" : "DMG";
                 break;
             case eCharacterStatType.dexterity:
-                m_returnString = !a_shortName ? "Turn Speed" : "SPD";
+                m_returnString = !a_shortName ? "Fling Interval" : "SPD";
                 break;
             case eCharacterStatType.constitution:
                 m_returnString = !a_shortName ? "Health" : "HLT";

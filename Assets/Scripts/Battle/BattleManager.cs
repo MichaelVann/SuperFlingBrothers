@@ -346,7 +346,6 @@ public class BattleManager : MonoBehaviour
                     {
                         spawnFound = false;
                     }
-                    print(deltaMag);
                 }
                 if (spawnFound)
                 {

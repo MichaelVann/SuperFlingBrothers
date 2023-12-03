@@ -27,6 +27,7 @@ public class SquadScreenHandler : MonoBehaviour
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_inited = true;
+        FindObjectOfType<NavigationBar>().SetSelected(0);
     }
 
     // Update is called once per frame
