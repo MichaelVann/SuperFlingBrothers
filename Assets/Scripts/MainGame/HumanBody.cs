@@ -220,4 +220,15 @@ public class HumanBody
         m_battleMaxDifficulty = m_startingBattleMaxDifficulty + teamLevel * 4;
         m_battleMinDifficulty = m_startingBattleMinDifficulty + teamLevel;
     }
+
+    internal void ProgressEnemyFronts()
+    {
+        for (int i = 0; i < m_townConnections.Count; i++)
+        {
+            if (m_townConnections[i].m_frontActive)
+            {
+                m_townConnections[i].ChangeWarfrontBalance(GameHandler.PRE_BATTLE_WarfrontChange);
+            }
+        }
+    }
 }

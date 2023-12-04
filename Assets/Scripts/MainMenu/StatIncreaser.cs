@@ -37,24 +37,26 @@ public class StatIncreaser : MonoBehaviour
 
         m_statCounterRef.m_text.text = "" + m_referencedStat.m_value;
 
-        m_effectDescriptionTextRef.text = "+" + m_referencedStat.m_attributeEffectiveValue;
+        string sign = m_statIndex == eCharacterStatType.dexterity ? "-" : "+";
 
-        m_effectIntervalText.text = "" + m_referencedStat.m_scale + " " + CharacterStatHandler.GetStatName(m_referencedStat.m_type,true) + "/LVL";
+        m_effectDescriptionTextRef.text = sign + m_referencedStat.m_attributeEffectiveValue;
+
+        m_effectIntervalText.text = sign + m_referencedStat.m_scale + " " + CharacterStatHandler.GetStatName(m_referencedStat.m_type,true) + "/LVL";
 
         string suffixString = "";
         switch (m_statIndex)
         {
             case eCharacterStatType.strength:
-                suffixString = "Hit Damage";
+                suffixString = CharacterStatHandler.GetStatName(m_statIndex);
                 break;
             case eCharacterStatType.dexterity:
-                suffixString = "s Turn Speed";
+                suffixString = "s " + CharacterStatHandler.GetStatName(m_statIndex);
                 break;
             case eCharacterStatType.constitution:
-                suffixString = "Health";
+                suffixString = suffixString = CharacterStatHandler.GetStatName(m_statIndex);
                 break;
             case eCharacterStatType.protection:
-                suffixString = "Armour";
+                suffixString = suffixString = CharacterStatHandler.GetStatName(m_statIndex);
                 break;
             case eCharacterStatType.count:
                 break;

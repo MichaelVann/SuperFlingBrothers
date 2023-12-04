@@ -28,7 +28,7 @@ public class Wall : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D a_collision)
     {
-        if (a_collision.rigidbody != null)
+        if (a_collision.rigidbody != null && !a_collision.gameObject.GetComponent<Wall>())
         {
             float angle = 0f;
             switch (m_direction)

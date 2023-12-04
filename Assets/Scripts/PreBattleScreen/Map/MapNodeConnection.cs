@@ -83,7 +83,9 @@ public class MapNodeConnection : MonoBehaviour
         m_winningPercentText.gameObject.SetActive(m_isaFront);
         if (m_isaFront)
         {
-            m_winningPercentText.text = "" + (m_representedTownConnection.m_warfrontBalance * 100) + "/" + 100;
+            float roundedBalance = m_representedTownConnection.m_warfrontBalance * 100;
+            roundedBalance = VLib.RoundToDecimalPlaces(roundedBalance, 2);
+            m_winningPercentText.text = "" + (roundedBalance) + "/100";
         }
     }
 
@@ -338,7 +340,6 @@ public class MapNodeConnection : MonoBehaviour
         if (a_lineMat != null)
         {
             lineRenderer.material = a_lineMat;
-            //lineRenderer.material.SetTextureScale("_MainTex", new Vector2(0.1f,0.1f));
         }
         m_createdLineRenderers.Add(lineRenderer.gameObject);
 

@@ -127,6 +127,9 @@ public class Enemy : Damageable
             default:
                 break;
         }
+
+        m_equipmentDropRate *= GameHandler.BATTLE_EnemyEquipmentDropChanceScale;
+
         m_xpReward = (int)(m_typeTrait.difficulty * GameHandler.GAME_enemyXPRewardScale);
         m_scoreValue = 0f;
         m_rigidBody.freezeRotation = !m_typeTrait.canRotate;

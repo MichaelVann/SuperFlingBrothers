@@ -14,7 +14,7 @@ using static UnityEngine.UI.CanvasScaler;
 public class GameHandler : MonoBehaviour
 {
     public const int MAIN_VERSION_NUMBER = 22;
-    public const int SUB_VERSION_NUMBER = 7;
+    public const int SUB_VERSION_NUMBER = 8;
 
     static internal bool DEBUG_MODE = true;
 
@@ -25,6 +25,7 @@ public class GameHandler : MonoBehaviour
     static internal float BATTLE_ShadowAngle = 135f;
     static internal float BATTLE_FlingStrength = 320f;
     static internal float BATTLE_SkillXPScale = 2f;
+    static internal float BATTLE_EnemyEquipmentDropChanceScale = 0.5f;
 
     static internal float PRE_BATTLE_WarfrontChange = -0.19f;
     //Damageables
@@ -310,6 +311,7 @@ public class GameHandler : MonoBehaviour
     {
         if (m_attemptedBattleNode != null)
         {
+            m_humanBody.ProgressEnemyFronts();
             m_lastAttemptedBattleNode = m_attemptedBattleNode;
 
             //if (m_lastGameResult == eEndGameType.lose || m_lastGameResult == eEndGameType.escape)
@@ -323,7 +325,9 @@ public class GameHandler : MonoBehaviour
             {
                 float warfrontBalanceChangeAmount = (float)m_lastAttemptedBattleNode.m_difficulty / (float)m_humanBody.m_battleMaxDifficulty;
                 warfrontBalanceChangeAmount *= -warfrontBalanceChange;//Turn to percentage
-                warfrontBalanceChange += warfrontBalanceChangeAmount;
+                warfrontBalanceChangeAmount = Mathf.Clamp(warfrontBalanceChangeAmount, 0f, -warfrontBalanceChange);
+                m_lastAttemptedBattleNode.m_owningConnection.ChangeWarfrontBalance(warfrontBalanceChangeAmount);
+                //warfrontBalanceChange += warfrontBalanceChangeAmount;
             }
             else if (m_lastGameResult == eEndGameType.lose)
             {
@@ -331,7 +335,6 @@ public class GameHandler : MonoBehaviour
                 KillPlayer();
             }
 
-            m_lastAttemptedBattleNode.m_owningConnection.ChangeWarfrontBalance(warfrontBalanceChange);
             m_humanBody.m_battlesCompleted++;
             m_humanBody.Refresh();
         }
