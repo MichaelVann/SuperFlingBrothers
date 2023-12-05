@@ -89,7 +89,7 @@ public class ProgressBar : MonoBehaviour
             m_whiteLagBar.transform.localScale = new Vector3(m_originalScale.x * (1f - preHealthPercentage), m_originalScale.y, 1f);
             if (m_healthColoring)
             {
-                Color barColor = VLib.PercentageToColor(healthPercentage);
+                Color barColor = VLib.RatioToColorRGB(healthPercentage);
                 m_progressBarRef.color = barColor;
             }
         }

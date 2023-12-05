@@ -151,7 +151,7 @@ public class Enemy : Damageable
         UpdateHealthColor();
     }
 
-    public static void SetUpEnemyTypes()
+    internal static void SetUpEnemyTypes()
     {
         //Defaults
         for (int i = 0; i < (int)Enemy.eEnemyType.Count; i++)
@@ -192,6 +192,16 @@ public class Enemy : Damageable
         m_enemyTypeTraits[(int)eEnemyType.Striker].type = Enemy.eEnemyType.Striker;
         m_enemyTypeTraits[(int)eEnemyType.Striker].flinger = true;
         m_enemyTypeTraits[(int)eEnemyType.Striker].difficulty = 12;
+    }
+
+    static internal int GetHighestEnemyDifficulty()
+    {
+        int maxDifficulty = 0;
+        for (int i = 0; i < m_enemyTypeTraits.Length; i++)
+        {
+            maxDifficulty = maxDifficulty < m_enemyTypeTraits[i].difficulty ? m_enemyTypeTraits[i].difficulty : maxDifficulty;
+        }
+        return maxDifficulty;
     }
 
     public override void Start()

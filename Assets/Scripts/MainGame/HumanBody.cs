@@ -13,8 +13,9 @@ public class HumanBody
     //float m_basePartHealth = 100;
     internal const int m_maxEnemyDifficulty = 12;
 
-    public int m_battleMaxDifficulty;
-    public int m_battleMinDifficulty;
+    static internal int m_battleMaxTheoreticalDifficulty;
+    internal int m_battleMaxDifficulty;
+    internal int m_battleMinDifficulty;
     public const int m_startingBattleMaxDifficulty = 20;
     public const int m_startingBattleMinDifficulty = 1;
 
@@ -29,6 +30,13 @@ public class HumanBody
 
     internal string GetHumansName() {return m_firstName + " " + m_lastName; }
 
+    static internal int FindMaxPossibleBattleDifficulty()
+    {
+        int maxBattleDifficulty = 0;
+        maxBattleDifficulty = GameHandler.BATTLE_EnemySpawnPointCount * Enemy.GetHighestEnemyDifficulty();
+        return maxBattleDifficulty;
+    }
+
     public HumanBody(GameHandler a_gameHandlerRef)
     {
         m_gameHandlerRef = a_gameHandlerRef;
@@ -37,6 +45,7 @@ public class HumanBody
         m_lastName = names[1];
         UpdateMaxAndMinDifficulties();
         SetupTowns();
+        m_battleMaxTheoreticalDifficulty = FindMaxPossibleBattleDifficulty();
     }
 
     void SetupTowns()
@@ -223,12 +232,18 @@ public class HumanBody
 
     internal void ProgressEnemyFronts()
     {
+        List<TownConnection> activeFronts = new List<TownConnection>();
         for (int i = 0; i < m_townConnections.Count; i++)
         {
             if (m_townConnections[i].m_frontActive)
             {
-                m_townConnections[i].ChangeWarfrontBalance(GameHandler.PRE_BATTLE_WarfrontChange);
+                activeFronts.Add(m_townConnections[i]);
             }
+        }
+
+        for (int i = 0; i < activeFronts.Count; i++)
+        {
+            activeFronts[i].ChangeWarfrontBalance(GameHandler.PRE_BATTLE_WarfrontChange);
         }
     }
 }

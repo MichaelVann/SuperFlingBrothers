@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 public class BattleNode
 {
@@ -44,10 +45,17 @@ public class BattleNode
         m_owningConnection = a_owningConnection;
     }
 
-    public float GetDifficultyPercent()
+    internal float GetDifficultyPercent()
     {
         float retVal = 0f;
         retVal = (((float)m_difficulty - (float)m_minDifficulty) / ((float)m_maxDifficulty - (float)m_minDifficulty));
+        return retVal;
+    }
+
+    internal float GetDifficultyPercentOfMaximum()
+    {
+        float retVal = 0f;
+        retVal = (((float)m_difficulty - (float)m_minDifficulty) / ((float)HumanBody.m_battleMaxTheoreticalDifficulty - (float)m_minDifficulty));
         return retVal;
     }
 
@@ -92,6 +100,8 @@ public class TownConnection
 
     public Town GetFriendlyTown() { return m_townB.m_overrun ? m_townA : m_townB; }
     public Town GetEnemyTown() { return m_townA.m_overrun ? m_townA : m_townB; }
+
+    public static int BattleDifficultySortComparisonHighToLow(BattleNode a_nodeA, BattleNode a_nodeB) { return  a_nodeB.m_difficulty - a_nodeA.m_difficulty; }
 
     public TownConnection(Town a_townA, Town a_townB, string a_name)
     {

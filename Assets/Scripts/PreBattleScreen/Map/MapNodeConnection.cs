@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -126,6 +124,44 @@ public class MapNodeConnection : MonoBehaviour
         }
     }
 
+    void SpawnBattleNode(BattleNode a_battleNode, Vector3 a_spawnPos)
+    {
+        GameObject nodeGameObject = Instantiate<GameObject>(m_UIBattleNodeTemplate);//, this.transform);
+        nodeGameObject.transform.localPosition = a_spawnPos;
+        UIBattleNode node = nodeGameObject.GetComponent<UIBattleNode>();
+        node.SetUp(this, a_battleNode);
+        node.m_id = m_nodesSetupCount;
+        m_nodesSetupCount++;
+        //node.m_parentBodyPartID = m_bodyPartID;
+
+        float difficultyPercentage = node.m_battleNodeRef.GetDifficultyPercent();// (float)(node.m_difficulty) / (float)(m_representedTownConnection.m_frontDifficulty);
+        Color nodeColor = VLib.RatioToColorRGB(1f - difficultyPercentage);// VLib.PercentageToColor(1f - (float)(node.m_difficulty - m_minBaseDifficulty) / (float)(m_maxBaseDifficulty - m_minBaseDifficulty));
+        if (node.m_difficultyBoostTier > 0)
+        {
+            switch (node.m_difficultyBoostTier)
+            {
+                default:
+                    nodeColor = Color.black;
+                    break;
+                case 1:
+                    nodeColor = Color.blue;
+                    break;
+                case 2:
+                    nodeColor = Color.cyan;
+                    break;
+                case 3:
+                    nodeColor = Color.magenta;
+                    break;
+                case 4:
+                    nodeColor = Color.white;
+                    break;
+            }
+        }
+        node.GetComponent<SpriteRenderer>().color = nodeColor;
+        m_nodeGameobjectList.Add(nodeGameObject);
+        //m_nodeList.Add(node);
+    }
+
     void SetUpBattleNodes()
     {
         if (m_nodeGameobjectList.Count > 0)
@@ -135,7 +171,6 @@ public class MapNodeConnection : MonoBehaviour
                 Destroy(m_nodeGameobjectList[i].gameObject);
             }
         }
-
 
         MapNode friendlyTown = null;
         MapNode enemyTown = null;
@@ -152,112 +187,95 @@ public class MapNodeConnection : MonoBehaviour
             enemyTown = m_mapNodes[1];
         }
 
+        //Sort the battles by their difficulty, low to high
+        m_representedTownConnection.m_battles.Sort(TownConnection.BattleDifficultySortComparisonHighToLow);
+
+
         for (int i = 0; i < m_representedTownConnection.m_battles.Count; i++)
         {
-            GameObject nodeGameObject = Instantiate<GameObject>(m_UIBattleNodeTemplate);//, this.transform);
-
             bool validSpawnFound = false;
             int spawnAttempts = 0;
 
-            while (!validSpawnFound)
+            List<Vector3> spawnRowPoints = new List<Vector3>();
+
+            for (int j = 0; j < 10; j++)
             {
-                BattleNode battleNode = m_representedTownConnection.m_battles[i];
-                Vector3 spawnPos;
-
-                Vector3 targetPos = m_frontLinePoints[VLib.vRandom(0, 1)];
+                int k = j >= 5 ? 1 : 0;
+                Vector3 targetPos = m_frontLinePoints[k];
                 Vector3 frontLineDirection = (targetPos - transform.position).normalized;
-                targetPos -= frontLineDirection * 0.1f;
-                spawnPos = Vector3.Lerp(transform.position, targetPos, VLib.vRandom(0f, 1f));
-                float difficultyPercentage = battleNode.GetDifficultyPercent();
-                Vector3 offsetVector = GetFrontLineAdvanceDirection(frontLineDirection);
-                if (difficultyPercentage > 0.5f)
-                {
-                    //Enemy side of the front line
-                    difficultyPercentage -= 0.5f;
-                    difficultyPercentage *= 2f;
-                }
-                else
-                {
-                    //Friendly side of the front line
-                    difficultyPercentage = 0.5f - difficultyPercentage;
-                    difficultyPercentage *= 2f;
-                    offsetVector = offsetVector.RotateVector3In2D(180f);
-                }
-                spawnPos += offsetVector * 0.03f;
-                spawnPos += offsetVector * (difficultyPercentage * 0.03f);
-                nodeGameObject.transform.localPosition = spawnPos;
-
-                validSpawnFound = true;
-                spawnAttempts++;
-                for (int j = 0; j < m_nodeGameobjectList.Count; j++)
-                {
-                    float distMag = (nodeGameObject.transform.localPosition - m_nodeGameobjectList[j].transform.localPosition).magnitude;
-                    float allowedRadius = 0.1f;// node.GetComponent<CircleCollider2D>().radius * transform.;
-                    if (spawnAttempts > m_maxNodeSpawnAttempts)
-                    {
-                        nodeGameObject.GetComponent<SpriteRenderer>().color = Color.yellow;
-                    }
-                    if (distMag <= allowedRadius && spawnAttempts <= m_maxNodeSpawnAttempts)
-                    {
-                        validSpawnFound = false;
-                        break;
-                    }
-                }
-
-                float nameDistMag = (nodeGameObject.transform.position - transform.position).magnitude;
-                float nameAllowedRadius = 0.12f;// node.GetComponent<CircleCollider2D>().radius * transform.;
-
-                if (nameDistMag < nameAllowedRadius && spawnAttempts <= m_maxNodeSpawnAttempts)
-                {
-                    validSpawnFound = false;
-                }
+                float lerpAmount = ((j % 5) + 1) / 5f;
+                spawnRowPoints.Add(Vector3.Lerp(transform.position, targetPos, lerpAmount));
             }
 
-            if (spawnAttempts > m_maxNodeSpawnAttempts)
+            BattleNode battleNode = m_representedTownConnection.m_battles[i];
+            Vector3 spawnPos = new Vector3();
+            int test = 0;
+            List<GameObject> debugPoints = new List<GameObject>();
+
+            for (int j = 0; j < m_maxNodeSpawnAttempts && !validSpawnFound; j++)
+            {
+                spawnAttempts++;
+                test = j;
+                List<Vector3> remainingSpawnPointRows = new List<Vector3>(spawnRowPoints);
+
+                while (remainingSpawnPointRows.Count > 0 && !validSpawnFound)
+                {
+                    int spawnIndex = VLib.vRandom(0, remainingSpawnPointRows.Count - 1);
+                    spawnPos = remainingSpawnPointRows[spawnIndex];
+
+                    float mainLerpAmount = battleNode.GetDifficultyPercentOfMaximum();
+                    mainLerpAmount = Mathf.Pow(mainLerpAmount, 0.16f);
+                    float endLerpAmount = j / (float)m_maxNodeSpawnAttempts;
+                    Vector3 endLerpPoint = Vector3.Lerp(spawnPos, m_frontStartPos, endLerpAmount);
+
+                    spawnPos = Vector3.Lerp(m_frontStartPos, endLerpPoint, mainLerpAmount);
+
+                    validSpawnFound = true;
+                    for (int m = 0; m < m_nodeGameobjectList.Count; m++)
+                    {
+                        float distMag = (spawnPos - m_nodeGameobjectList[m].transform.localPosition).magnitude;
+                        float allowedRadius = 0.1f;// node.GetComponent<CircleCollider2D>().radius * transform.;
+                        if (distMag <= allowedRadius && spawnAttempts <= m_maxNodeSpawnAttempts)
+                        {
+                            validSpawnFound = false;
+                            break;
+                        }
+                    }
+
+                    float nameDistMag = (spawnPos - transform.position).magnitude;
+                    float nameAllowedRadius = 0.12f;// node.GetComponent<CircleCollider2D>().radius * transform.;
+
+                    if (nameDistMag < nameAllowedRadius && spawnAttempts <= m_maxNodeSpawnAttempts)
+                    {
+                        validSpawnFound = false;
+                    }
+                    remainingSpawnPointRows.RemoveAt(spawnIndex);
+
+                    //--Debug Marker--
+
+                    //GameObject debugMarker = Instantiate(m_UIBattleNodeTemplate);
+                    //debugMarker.transform.position = endLerpPoint;
+                    //debugMarker.GetComponent<SpriteRenderer>().color = Color.black;
+                    //debugPoints.Add(debugMarker);
+                }
+
+
+            }
+
+            if (spawnAttempts > m_maxNodeSpawnAttempts || !validSpawnFound)
             {
                 print("Node spawning failed " + i);
-                Destroy(nodeGameObject);
-                break;
             }
             else
             {
                 //Spawn Node
-                UIBattleNode node = nodeGameObject.GetComponent<UIBattleNode>();
-                node.SetUp(this, m_representedTownConnection.m_battles[i]);
-                node.m_id = m_nodesSetupCount;
-                m_nodesSetupCount++;
-                //node.m_parentBodyPartID = m_bodyPartID;
-
-                float difficultyPercentage = node.m_battleNodeRef.GetDifficultyPercent();// (float)(node.m_difficulty) / (float)(m_representedTownConnection.m_frontDifficulty);
-                Color nodeColor = VLib.PercentageToColor(1f-difficultyPercentage);// VLib.PercentageToColor(1f - (float)(node.m_difficulty - m_minBaseDifficulty) / (float)(m_maxBaseDifficulty - m_minBaseDifficulty));
-                if (node.m_difficultyBoostTier > 0)
+                SpawnBattleNode(m_representedTownConnection.m_battles[i], spawnPos);
+                for (int d = 0; d < debugPoints.Count; d++)
                 {
-                    switch (node.m_difficultyBoostTier)
-                    {
-                        default:
-                            nodeColor = Color.black;
-                            break;
-                        case 1:
-                            nodeColor = Color.blue;
-                            break;
-                        case 2:
-                            nodeColor = Color.cyan;
-                            break;
-                        case 3:
-                            nodeColor = Color.magenta;
-                            break;
-                        case 4:
-                            nodeColor = Color.white;
-                            break;
-                    }
+                    Destroy(debugPoints[d]);
                 }
-                node.GetComponent<SpriteRenderer>().color = nodeColor;
-                m_nodeGameobjectList.Add(nodeGameObject);
-                //m_nodeList.Add(node);
             }
-
         }
-        //m_bodyPartSelectionHandler.SetUpBodyPartNodes(m_bodyPartID);
     }
 
     internal void SelectBattleNode(UIBattleNode a_selectedNode)
@@ -270,7 +288,7 @@ public class MapNodeConnection : MonoBehaviour
         int returnVal = 0;
         float firstDistance = (a_first.transform.position - transform.position).magnitude;
         float lastDistance = (a_last.transform.position - transform.position).magnitude;
-        returnVal = (int)(firstDistance - lastDistance*1000f);
+        returnVal = (int)(firstDistance - lastDistance * 1000f);
         return returnVal;
     }
 
@@ -296,7 +314,6 @@ public class MapNodeConnection : MonoBehaviour
                 m_adjacentConnections.Add(sortedConnectionList[j]);
             }
         }
-
 
         //For both map nodes, if they both have a neighbouring mapnode connected to eachother, add that connection as an adjacent connection
         MapNode nodeA = m_mapNodes[0];
@@ -351,7 +368,7 @@ public class MapNodeConnection : MonoBehaviour
 
     void CreateLine(Vector3 a_endPosition, Color a_lineColor, Material a_lineMat = null)
     {
-      CreateLine(transform.position, a_endPosition, a_lineColor, a_lineColor, a_lineMat);
+        CreateLine(transform.position, a_endPosition, a_lineColor, a_lineColor, a_lineMat);
     }
 
     Vector3 GetFrontLineAdvanceDirection(Vector3 a_line)

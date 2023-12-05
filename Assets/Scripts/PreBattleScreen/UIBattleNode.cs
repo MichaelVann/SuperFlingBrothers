@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class UIBattleNode : MonoBehaviour
@@ -35,6 +36,7 @@ public class UIBattleNode : MonoBehaviour
         m_battleNodeRef = a_battleNodeRef;
         m_difficulty = m_battleNodeRef.m_difficulty;
         m_difficultyBoostTier = m_battleNodeRef.m_difficultyBoostTier;
+        SetNodeDifficultyColor();
     }
 
     // Update is called once per frame
@@ -46,6 +48,35 @@ public class UIBattleNode : MonoBehaviour
     {
         m_owningConnection.SelectBattleNode(this);
     }
+
+    internal void SetNodeDifficultyColor()
+    {
+        float difficultyPercentage = m_battleNodeRef.GetDifficultyPercentOfMaximum();
+        Color nodeColor = VLib.RatioToColorRarity(difficultyPercentage);
+        if (m_difficultyBoostTier > 0)
+        {
+            switch (m_difficultyBoostTier)
+            {
+                default:
+                    nodeColor = Color.black;
+                    break;
+                case 1:
+                    nodeColor = Color.blue;
+                    break;
+                case 2:
+                    nodeColor = Color.cyan;
+                    break;
+                case 3:
+                    nodeColor = Color.magenta;
+                    break;
+                case 4:
+                    nodeColor = Color.white;
+                    break;
+            }
+        }
+        GetComponent<SpriteRenderer>().color = nodeColor;
+    }
+
 
     void OnMouseUpAsButton()
     {

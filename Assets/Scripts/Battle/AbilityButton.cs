@@ -72,7 +72,7 @@ public class AbilityButton : MonoBehaviour
 
             //Health Text
             m_healthText.text = m_equipmentRef.m_health.ToString("f0");
-            m_healthText.color = VLib.PercentageToColor(m_equipmentRef.m_health / m_equipmentRef.m_maxHealth);
+            m_healthText.color = VLib.RatioToColorRGB(m_equipmentRef.m_health / m_equipmentRef.m_maxHealth);
             m_maxHealthText.text = m_equipmentRef.m_maxHealth.ToString("f0");
 
         }

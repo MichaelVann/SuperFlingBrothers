@@ -498,6 +498,10 @@ public class BattleManager : MonoBehaviour
 
         //Roll an amount of enemies to be spawned between the minimum and maximum needed enemies
         m_enemiesToSpawn = UnityEngine.Random.Range(minimumSpawnsNeeded, maximumSpawns);
+        if (m_enemySpawnPointsRefs.Count != GameHandler.BATTLE_EnemySpawnPointCount)
+        {
+            throw new Exception("Update Enemy spawn count const in GameHandler");
+        }
         int[] spawnLocationsTypes = new int[m_enemySpawnPointsRefs.Count];
 
         //Initialise the spawnLocations to empty

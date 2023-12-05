@@ -14,7 +14,7 @@ using static UnityEngine.UI.CanvasScaler;
 public class GameHandler : MonoBehaviour
 {
     public const int MAIN_VERSION_NUMBER = 22;
-    public const int SUB_VERSION_NUMBER = 8;
+    public const int SUB_VERSION_NUMBER = 9;
 
     static internal bool DEBUG_MODE = true;
 
@@ -26,8 +26,9 @@ public class GameHandler : MonoBehaviour
     static internal float BATTLE_FlingStrength = 320f;
     static internal float BATTLE_SkillXPScale = 2f;
     static internal float BATTLE_EnemyEquipmentDropChanceScale = 0.5f;
+    internal const int    BATTLE_EnemySpawnPointCount = 19;
 
-    static internal float PRE_BATTLE_WarfrontChange = -0.19f;
+    static internal float PRE_BATTLE_WarfrontChange = -0.17f;
     //Damageables
     static internal float DAMAGEABLE_DragCoefficient = 1.25f;
     static internal float DAMAGEABLE_HitVelocityMultiplier = 1.6f;
@@ -136,6 +137,8 @@ public class GameHandler : MonoBehaviour
     public void SetBattleDifficulty(int a_difficulty) { m_battleDifficulty = a_difficulty; }
     public void SetMaxEnemyDifficulty(int a_difficulty) { m_maxEnemyDifficulty = a_difficulty; }
 
+
+
     internal StockHandler GetStockHandlerRef() { return m_stockHandler; }
 
     void Awake()
@@ -146,12 +149,12 @@ public class GameHandler : MonoBehaviour
         m_xCellSquad.Init();
         //Stocks
         m_stockHandler = new StockHandler(this);
+        Enemy.SetUpEnemyTypes();
 
         SetupHumanBody();
 
         SetupUpgrades();
         SetupEquipment();
-        Enemy.SetUpEnemyTypes();
         if (m_autoLoadDataOnLaunch)
         {
             LoadGame();
@@ -396,11 +399,7 @@ public class GameHandler : MonoBehaviour
 
     public void SaveGame()
     {
-        //test[0] = new Test();
-        //test[0].x = 5;
-
         m_saveData.cash = m_cash;
-        //m_saveData.xCell = m_xCellTeam.m_playerXCell;
         m_saveData.xCellTeam = m_xCellSquad;
         //m_saveData.humanBody = m_humanBody;
         //m_saveData.statHandler.Copy(m_playerStatHandler);

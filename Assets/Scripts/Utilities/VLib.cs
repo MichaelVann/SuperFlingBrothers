@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Pipes;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -190,23 +191,53 @@ public static class VLib
         return newColor;
     }
 
-    public static Color PercentageToColor(float a_percentage)
+    public static Color RatioToColorRGB(float a_ratio)
     {
         Color returnColor = Color.white;
 
-        float redRatio = Mathf.Clamp(2f - (2f * a_percentage), 0f, 1f);
-        float greenRatio = Mathf.Clamp(5f * (a_percentage) - 1.5f, 0f, 1f);
+        float redRatio = Mathf.Clamp(2f - (2f * a_ratio), 0f, 1f);
+        float greenRatio = Mathf.Clamp(5f * (a_ratio) - 1.5f, 0f, 1f);
         returnColor = new Color(redRatio, greenRatio, 0f);
         return returnColor;
     }
 
-    public static Color PercentageToColorWithAlpha(float a_percentage)
+    internal static Color RatioToColorRarity(float a_ratio)
     {
         Color returnColor = Color.white;
+        float cases = 6f;
+        float modRatio = a_ratio % (1f / cases);
+        switch (a_ratio)
+        {
+            case float n when (n > 0f / cases && n < 1f/ cases):
+                returnColor = RatioToColorRGB(modRatio);// (1f-a_ratio) / (1f / cases));
+                break;
+            case float n when (n > 1f / cases && n < 2f / cases):
+                returnColor = Color.Lerp(Color.green, Color.cyan, modRatio);
+                break;
+            case float n when (n > 2f / cases && n < 3f / cases):
+                returnColor = Color.Lerp(Color.cyan, Color.blue, modRatio);
+                break;
+            case float n when (n > 3f / cases && n < 4f / cases):
+                returnColor = Color.Lerp(Color.blue, Color.magenta, modRatio);
+                break;
+            case float n when (n > 4f / cases && n < 5f / cases):
+                returnColor = Color.Lerp(Color.magenta, Color.white, modRatio);
+                break;
+            case float n when (n > 5f / cases && n < 6f / cases):
+                returnColor = Color.Lerp(Color.white, Color.black, modRatio);
+                break;
+            default:
+                break;
+        }
 
-        float redRatio = Mathf.Clamp(2f - (2f * a_percentage), 0f, 1f);
-        float greenRatio = Mathf.Clamp(5f * (a_percentage) - 1.5f, 0f, 1f);
-        returnColor = new Color(redRatio, greenRatio, 0f, a_percentage);
+        return returnColor;
+    }
+
+    public static Color RatioToColorRGBWithAlpha(float a_percentage)
+    {
+        Color returnColor = RatioToColorRGB(a_percentage);
+
+        returnColor.a = a_percentage;// = new Color(redRatio, greenRatio, 0f, a_percentage);
         return returnColor;
     }
 
