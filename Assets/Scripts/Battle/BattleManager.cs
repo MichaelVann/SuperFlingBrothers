@@ -127,7 +127,7 @@ public class BattleManager : MonoBehaviour
     int m_invaderStrengthChange = 0;
 
     //Audio section
-    public AudioSource m_musicPlayer;
+    public MusicPlayer m_musicPlayerRef;
 
     public float GetMaxGameEndTimer()
     {
@@ -177,10 +177,7 @@ public class BattleManager : MonoBehaviour
         SpawnEnemies();
         //m_levelDifficultyText.text = "Level Difficulty: " + m_gameHandlerRef.m_battleDifficulty;
         m_upperLowerFlingPositionBounds = m_wallSpriteRenderers[3].gameObject.transform.position.y;
-        if (m_gameHandlerRef.m_audioManager.IsMusicOn())
-        {
-            m_musicPlayer.Play();
-        }
+
     }
 
     public void SetFrozen(bool a_frozen)
@@ -301,8 +298,6 @@ public class BattleManager : MonoBehaviour
     {
         Time.timeScale = a_scale;
         //Debug.Log(a_scale);
-        float pitchRetention = 0.6f;
-        m_musicPlayer.pitch = pitchRetention+(a_scale*(1f-pitchRetention));
     }
 
     internal void EngageHitSlowdown(bool a_value)

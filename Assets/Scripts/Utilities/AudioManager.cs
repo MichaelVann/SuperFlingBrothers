@@ -15,7 +15,7 @@ public class AudioManager
 
     internal void ToggleSoundEffects() { m_soundEffectsEnabled = !m_soundEffectsEnabled; }
 
-    internal bool IsMusicOn()
+    internal bool IsMusicEnabled()
     {
         bool retVal = m_musicEnabled;
         retVal &= !m_muted;
