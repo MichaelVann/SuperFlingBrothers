@@ -137,8 +137,6 @@ public class GameHandler : MonoBehaviour
     public void SetBattleDifficulty(int a_difficulty) { m_battleDifficulty = a_difficulty; }
     public void SetMaxEnemyDifficulty(int a_difficulty) { m_maxEnemyDifficulty = a_difficulty; }
 
-
-
     internal StockHandler GetStockHandlerRef() { return m_stockHandler; }
 
     void Awake()

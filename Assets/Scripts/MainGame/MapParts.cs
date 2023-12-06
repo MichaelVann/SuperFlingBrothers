@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
 public class BattleNode
 {
     //public enum eState
@@ -24,6 +25,8 @@ public class BattleNode
     [SerializeField]
     public TownConnection m_owningConnection;
     //public BattleNode[] m_connectedNodes;
+    internal Vector3 m_position;
+    internal bool m_positionCalculated;
 
     public void SetOwningConnection(TownConnection a_owningConnection) { m_owningConnection = a_owningConnection; }
 
@@ -36,13 +39,26 @@ public class BattleNode
         SetUpDifficulty(a_minDifficulty, a_maxDifficulty);
     }
 
-    public BattleNode(int a_difficulty, int a_boostTier, int a_minDifficulty, int a_maxDifficulty, TownConnection a_owningConnection)
+    public BattleNode(int a_difficulty, int a_boostTier, int a_minDifficulty, int a_maxDifficulty, TownConnection a_owningConnection, Vector3 a_position)
     {
         m_difficulty = a_difficulty;
         m_difficultyBoostTier = a_boostTier;
         m_minDifficulty = a_minDifficulty;
         m_maxDifficulty = a_maxDifficulty;
         m_owningConnection = a_owningConnection;
+        m_position = a_position;
+        m_positionCalculated = true;
+    }
+
+    internal BattleNode(SaveDataUtility.BattleNodeData a_data, TownConnection a_owningConnection)
+    {
+        m_difficulty = a_data.difficulty;
+        m_difficultyBoostTier = a_data.difficultyBoostTier;
+        m_minDifficulty = a_data.minDifficulty;
+        m_maxDifficulty = a_data.maxDifficulty;
+        m_owningConnection = a_owningConnection;
+        m_position = a_data.position;
+        m_positionCalculated = true;
     }
 
     internal float GetDifficultyPercent()

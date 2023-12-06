@@ -45,7 +45,6 @@ public class MusicPlayer : MonoBehaviour
         else if (!m_battleManagerRef.m_timeFrozen && m_heartBeatAudioSource.isPlaying)
         {
             m_heartBeatAudioSource.Stop();
-
         }
 
         m_mainAudioSource.pitch = pitch;
