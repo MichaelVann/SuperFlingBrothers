@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class UIBattleNode : MonoBehaviour
@@ -19,23 +18,34 @@ public class UIBattleNode : MonoBehaviour
     public int m_difficulty = 5;
     public int m_difficultyBoostTier = 0;
 
-    public GameObject m_selectionRing;
+    public GameObject m_selectionRingRef;
+    public GameObject m_lockIconRef;
 
-    public void SetSelectionRingActive(bool a_active) { m_selectionRing.SetActive(a_active); }
+    internal bool m_enabled;
+
+    public void SetSelectionRingActive(bool a_active) { m_selectionRingRef.SetActive(a_active); }
 
 
     void Start()
     {
-        m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_selectionRing.SetActive(false);
+        m_selectionRingRef.SetActive(false);
     }
 
     public void SetUp(MapNodeConnection a_connection, BattleNode a_battleNodeRef)
     {
+        m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_owningConnection = a_connection;
         m_battleNodeRef = a_battleNodeRef;
         m_difficulty = m_battleNodeRef.m_difficulty;
         m_difficultyBoostTier = m_battleNodeRef.m_difficultyBoostTier;
+        m_enabled = m_battleNodeRef.m_available;
+
+        if (m_enabled)
+        {
+            m_gameHandlerRef.m_humanBody.m_availableBattles++;
+        }
+
+        m_lockIconRef.SetActive(!m_enabled);
         SetNodeDifficultyColor();
     }
 
@@ -53,26 +63,10 @@ public class UIBattleNode : MonoBehaviour
     {
         float difficultyPercentage = m_battleNodeRef.GetDifficultyPercentOfMaximum();
         Color nodeColor = VLib.RatioToColorRarity(difficultyPercentage);
-        if (m_difficultyBoostTier > 0)
+
+        if (!m_enabled)
         {
-            switch (m_difficultyBoostTier)
-            {
-                default:
-                    nodeColor = Color.black;
-                    break;
-                case 1:
-                    nodeColor = Color.blue;
-                    break;
-                case 2:
-                    nodeColor = Color.cyan;
-                    break;
-                case 3:
-                    nodeColor = Color.magenta;
-                    break;
-                case 4:
-                    nodeColor = Color.white;
-                    break;
-            }
+            nodeColor *= 0.5f;
         }
         GetComponent<SpriteRenderer>().color = nodeColor;
     }
@@ -85,7 +79,10 @@ public class UIBattleNode : MonoBehaviour
 
     public void NodePressed()
     {
-        Select();
+        if (m_enabled)
+        {
+            Select();
+        }
     }
 
 }

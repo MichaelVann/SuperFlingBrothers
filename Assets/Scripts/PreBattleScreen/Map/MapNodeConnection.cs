@@ -132,32 +132,7 @@ public class MapNodeConnection : MonoBehaviour
         node.SetUp(this, a_battleNode);
         node.m_id = m_nodesSetupCount;
         m_nodesSetupCount++;
-        //node.m_parentBodyPartID = m_bodyPartID;
 
-        float difficultyPercentage = node.m_battleNodeRef.GetDifficultyPercent();// (float)(node.m_difficulty) / (float)(m_representedTownConnection.m_frontDifficulty);
-        Color nodeColor = VLib.RatioToColorRGB(1f - difficultyPercentage);// VLib.PercentageToColor(1f - (float)(node.m_difficulty - m_minBaseDifficulty) / (float)(m_maxBaseDifficulty - m_minBaseDifficulty));
-        if (node.m_difficultyBoostTier > 0)
-        {
-            switch (node.m_difficultyBoostTier)
-            {
-                default:
-                    nodeColor = Color.black;
-                    break;
-                case 1:
-                    nodeColor = Color.blue;
-                    break;
-                case 2:
-                    nodeColor = Color.cyan;
-                    break;
-                case 3:
-                    nodeColor = Color.magenta;
-                    break;
-                case 4:
-                    nodeColor = Color.white;
-                    break;
-            }
-        }
-        node.GetComponent<SpriteRenderer>().color = nodeColor;
         m_nodeGameObjectList.Add(nodeGameObject);
         //m_nodeList.Add(node);
     }
@@ -229,7 +204,7 @@ public class MapNodeConnection : MonoBehaviour
                         spawnPos = remainingSpawnPointRows[spawnIndex];
 
                         float mainLerpAmount = battleNode.GetDifficultyPercentOfMaximum();
-                        mainLerpAmount = Mathf.Pow(mainLerpAmount, 0.16f);
+                        mainLerpAmount = Mathf.Pow(mainLerpAmount, 0.36f);
                         float endLerpAmount = j / (float)m_maxNodeSpawnAttempts;
                         Vector3 endLerpPoint = Vector3.Lerp(spawnPos, m_frontStartPos, endLerpAmount);
 

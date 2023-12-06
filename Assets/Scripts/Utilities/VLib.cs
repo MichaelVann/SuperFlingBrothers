@@ -205,10 +205,12 @@ public static class VLib
     {
         Color returnColor = Color.white;
         float cases = 6f;
-        float modRatio = a_ratio % (1f / cases);
+        float mod = (1f / cases);
+        float modRatio = a_ratio % mod;
+        modRatio /= mod;
         switch (a_ratio)
         {
-            case float n when (n > 0f / cases && n < 1f/ cases):
+            case float n when (n >= 0f / cases && n < 1f/ cases):
                 returnColor = RatioToColorRGB(modRatio);// (1f-a_ratio) / (1f / cases));
                 break;
             case float n when (n > 1f / cases && n < 2f / cases):

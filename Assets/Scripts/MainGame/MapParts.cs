@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
 public class BattleNode
@@ -26,7 +25,8 @@ public class BattleNode
     public TownConnection m_owningConnection;
     //public BattleNode[] m_connectedNodes;
     internal Vector3 m_position;
-    internal bool m_positionCalculated;
+    internal bool m_positionCalculated = false;
+    internal bool m_available;
 
     public void SetOwningConnection(TownConnection a_owningConnection) { m_owningConnection = a_owningConnection; }
 
@@ -37,6 +37,7 @@ public class BattleNode
         //m_connectedNodes = null;
         m_owningConnection = a_owningConnection;
         SetUpDifficulty(a_minDifficulty, a_maxDifficulty);
+        m_available = m_difficulty <= a_owningConnection.m_humanBodyRef.m_battleMaxDifficulty;
     }
 
     public BattleNode(int a_difficulty, int a_boostTier, int a_minDifficulty, int a_maxDifficulty, TownConnection a_owningConnection, Vector3 a_position)
@@ -58,7 +59,8 @@ public class BattleNode
         m_maxDifficulty = a_data.maxDifficulty;
         m_owningConnection = a_owningConnection;
         m_position = a_data.position;
-        m_positionCalculated = true;
+        m_positionCalculated = a_data.positionCalculated;
+        m_available = a_data.available;
     }
 
     internal float GetDifficultyPercent()
@@ -103,14 +105,14 @@ public class TownConnection
     [SerializeField]
     public Town m_townB;
     [SerializeField]
-    HumanBody m_humanBodyRef;
+    internal HumanBody m_humanBodyRef;
 
     //Front
     [SerializeField]
     public bool m_frontActive;
     [SerializeField]
     public List<BattleNode> m_battles;
-    const int m_battlesToSpawn = 7;
+    const int m_battlesToSpawn = 14;
     [SerializeField]
     public float m_warfrontBalance = 0.5f;
 
@@ -151,7 +153,11 @@ public class TownConnection
         m_battles.Clear();
         for (int i = 0; i < m_battlesToSpawn; i++)
         {
-            m_battles.Add(new BattleNode(m_humanBodyRef.m_battleMinDifficulty, m_humanBodyRef.m_battleMaxDifficulty, this));
+            bool available = i <= m_battlesToSpawn / 2;
+            int maxDifficulty = available ? m_humanBodyRef.m_battleMaxDifficulty : HumanBody.m_battleMaxTheoreticalDifficulty;
+            int minDifficulty = available ? m_humanBodyRef.m_battleMinDifficulty : m_humanBodyRef.m_battleMaxDifficulty;
+
+            m_battles.Add(new BattleNode(minDifficulty, maxDifficulty, this));
         }
     }
 

@@ -17,6 +17,8 @@ public class SaveDataUtility
         public int minDifficulty;
         public int maxDifficulty;
         public Vector3 position;
+        public bool positionCalculated;
+        public bool available;
     }
 
     [Serializable]
@@ -112,6 +114,8 @@ public class SaveDataUtility
                 battleData.minDifficulty = battleNode.m_minDifficulty;
                 battleData.maxDifficulty = battleNode.m_maxDifficulty;
                 battleData.position = battleNode.m_position;
+                battleData.positionCalculated = battleNode.m_positionCalculated;
+                battleData.available = battleNode.m_available;
                 connectionData.nodes.Add(battleData);
             }
             m_saveData.humanBodyData.connections.Add(connectionData);
@@ -145,6 +149,7 @@ public class SaveDataUtility
             {
                 BattleNode battleNode = new BattleNode(connectionData.nodes[j], connection);
                 connection.m_battles.Add(battleNode);
+                connection.m_warfrontBalance = connectionData.warfrontBalance;
             }
         }
         
@@ -176,9 +181,17 @@ public class SaveDataUtility
     internal void Load()
     {
         string path = GetSaveDataPath();
-        string loadedString = File.ReadAllText(path);
-        m_saveData = JsonUtility.FromJson<SaveData>(loadedString);
-        LoadHumanBody();
-        LoadAudioData();
+        if (File.Exists(path))
+        {
+            string loadedString = File.ReadAllText(path);
+            m_saveData = JsonUtility.FromJson<SaveData>(loadedString);
+            LoadHumanBody();
+            LoadAudioData();
+        }
+        else
+        {
+            //Throw up window saying no save found
+        }
+
     }
 }

@@ -22,11 +22,14 @@ public class PreBattleManager : MonoBehaviour
     private void Awake()
     {
         m_currentSubScreen = eSubScreen.choosePart;
+        m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        m_gameHandlerRef.m_humanBody.m_availableBattles = 0;
     }
 
     void Start()
     {
-        m_gameHandlerRef = FindObjectOfType<GameHandler>();
+
+
     }
 
     public void MoveToBodySelection()

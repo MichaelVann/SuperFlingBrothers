@@ -13,8 +13,8 @@ using static UnityEngine.UI.CanvasScaler;
 
 public class GameHandler : MonoBehaviour
 {
-    public const int MAIN_VERSION_NUMBER = 22;
-    public const int SUB_VERSION_NUMBER = 12;
+    public const int MAIN_VERSION_NUMBER = 23;
+    public const int SUB_VERSION_NUMBER = 0;
 
     static internal bool DEBUG_MODE = true;
 
@@ -339,6 +339,12 @@ public class GameHandler : MonoBehaviour
             m_humanBody.m_battlesCompleted++;
             m_humanBody.Refresh();
         }
+    }
+
+    internal void PassBattle()
+    {
+        m_humanBody.ProgressEnemyFronts();
+        m_humanBody.Refresh();
     }
 
     void Update()

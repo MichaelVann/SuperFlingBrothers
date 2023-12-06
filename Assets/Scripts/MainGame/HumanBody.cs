@@ -22,7 +22,8 @@ public class HumanBody
     public List<Town> m_towns;
     public List<TownConnection> m_townConnections;
 
-    public int m_battlesCompleted = 0;
+    internal int m_battlesCompleted = 0;
+    internal int m_availableBattles;
 
     //public int m_invaderStrength;
 
@@ -44,8 +45,8 @@ public class HumanBody
         m_firstName = names[0];
         m_lastName = names[1];
         UpdateMaxAndMinDifficulties();
-        SetupTowns();
         m_battleMaxTheoreticalDifficulty = FindMaxPossibleBattleDifficulty();
+        SetupTowns();
     }
 
     void SetupTowns()
