@@ -7656,8 +7656,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4afbf6e08ab0c504496ee6cebdcb37a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_mainMusic: {fileID: 8300000, guid: 98f2b5113adf54fd39199b4693668d47, type: 3}
-  m_heartBeatAudio: {fileID: 8300000, guid: a50104ea4301144f4a06c0e2244c6338, type: 3}
+  m_mainMusic: {fileID: 8300000, guid: d53206eb8fdab4740abf81e044578ca0, type: 3}
+  m_heartBeatAudio: {fileID: 8300000, guid: 9ca2a76f658784081acb16354dd79bb3, type: 3}
 --- !u!1001 &8931938327932523813
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -35,7 +35,7 @@ public class MusicPlayer : MonoBehaviour
     void Update()
     {
         float pitch = 1f;
-        float pitchRetention = 0.6f;
+        float pitchRetention = 0.2f;
         pitch *= pitchRetention + (Time.timeScale * (1f - pitchRetention));
 
         if (m_battleManagerRef.m_timeFrozen && !m_heartBeatAudioSource.isPlaying)
@@ -47,6 +47,6 @@ public class MusicPlayer : MonoBehaviour
             m_heartBeatAudioSource.Stop();
         }
 
-        m_mainAudioSource.pitch = pitch;
+        m_mainAudioSource.volume = pitch;
     }
 }
