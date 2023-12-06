@@ -10,12 +10,13 @@ public class SaveDataUtility
     const string m_saveFileName = "Data2.txt";
 
     [Serializable]
-    struct BattleNodeData
+    internal struct BattleNodeData
     {
         public int difficulty;
         public int difficultyBoostTier;
         public int minDifficulty;
         public int maxDifficulty;
+        public Vector3 position;
     }
 
     [Serializable]
@@ -105,10 +106,12 @@ public class SaveDataUtility
             for (int j = 0; j < connection.m_battles.Count; j++)
             {
                 BattleNodeData battleData = new BattleNodeData();
-                battleData.difficulty = connection.m_battles[j].m_difficulty;
-                battleData.difficultyBoostTier = connection.m_battles[j].m_difficultyBoostTier;
-                battleData.minDifficulty = connection.m_battles[j].m_minDifficulty;
-                battleData.maxDifficulty = connection.m_battles[j].m_maxDifficulty;
+                BattleNode battleNode = connection.m_battles[j];
+                battleData.difficulty = battleNode.m_difficulty;
+                battleData.difficultyBoostTier = battleNode.m_difficultyBoostTier;
+                battleData.minDifficulty = battleNode.m_minDifficulty;
+                battleData.maxDifficulty = battleNode.m_maxDifficulty;
+                battleData.position = battleNode.m_position;
                 connectionData.nodes.Add(battleData);
             }
             m_saveData.humanBodyData.connections.Add(connectionData);
@@ -140,8 +143,8 @@ public class SaveDataUtility
             connection.m_battles = new List<BattleNode>();
             for (int j = 0; j < connectionData.nodes.Count; j++)
             {
-                BattleNode battle = new BattleNode(connectionData.nodes[j].difficulty, connectionData.nodes[j].difficultyBoostTier, connectionData.nodes[j].minDifficulty, connectionData.nodes[j].maxDifficulty, connection);
-                connection.m_battles.Add(battle);
+                BattleNode battleNode = new BattleNode(connectionData.nodes[j], connection);
+                connection.m_battles.Add(battleNode);
             }
         }
         

@@ -14,7 +14,7 @@ using static UnityEngine.UI.CanvasScaler;
 public class GameHandler : MonoBehaviour
 {
     public const int MAIN_VERSION_NUMBER = 22;
-    public const int SUB_VERSION_NUMBER = 10;
+    public const int SUB_VERSION_NUMBER = 11;
 
     static internal bool DEBUG_MODE = true;
 
@@ -136,8 +136,6 @@ public class GameHandler : MonoBehaviour
 
     public void SetBattleDifficulty(int a_difficulty) { m_battleDifficulty = a_difficulty; }
     public void SetMaxEnemyDifficulty(int a_difficulty) { m_maxEnemyDifficulty = a_difficulty; }
-
-
 
     internal StockHandler GetStockHandlerRef() { return m_stockHandler; }
 

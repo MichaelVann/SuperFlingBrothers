@@ -15,7 +15,7 @@ public class MapNodeConnection : MonoBehaviour
 
     //Battle Nodes
     public GameObject m_UIBattleNodeTemplate;
-    public List<GameObject> m_nodeGameobjectList;
+    public List<GameObject> m_nodeGameObjectList;
     int m_maxNodeSpawnAttempts = 20;
     int m_nodesSetupCount = 0;
     TownConnection m_representedTownConnection;
@@ -158,17 +158,17 @@ public class MapNodeConnection : MonoBehaviour
             }
         }
         node.GetComponent<SpriteRenderer>().color = nodeColor;
-        m_nodeGameobjectList.Add(nodeGameObject);
+        m_nodeGameObjectList.Add(nodeGameObject);
         //m_nodeList.Add(node);
     }
 
     void SetUpBattleNodes()
     {
-        if (m_nodeGameobjectList.Count > 0)
+        if (m_nodeGameObjectList.Count > 0)
         {
-            for (int i = 0; i < m_nodeGameobjectList.Count; i++)
+            for (int i = 0; i < m_nodeGameObjectList.Count; i++)
             {
-                Destroy(m_nodeGameobjectList[i].gameObject);
+                Destroy(m_nodeGameObjectList[i].gameObject);
             }
         }
 
@@ -193,73 +193,79 @@ public class MapNodeConnection : MonoBehaviour
 
         for (int i = 0; i < m_representedTownConnection.m_battles.Count; i++)
         {
+            Vector3 spawnPos = new Vector3();
+            BattleNode battleNode = m_representedTownConnection.m_battles[i];
             bool validSpawnFound = false;
             int spawnAttempts = 0;
 
-            List<Vector3> spawnRowPoints = new List<Vector3>();
-
-            for (int j = 0; j < 10; j++)
-            {
-                int k = j >= 5 ? 1 : 0;
-                Vector3 targetPos = m_frontLinePoints[k];
-                Vector3 frontLineDirection = (targetPos - transform.position).normalized;
-                float lerpAmount = ((j % 5) + 1) / 5f;
-                spawnRowPoints.Add(Vector3.Lerp(transform.position, targetPos, lerpAmount));
-            }
-
-            BattleNode battleNode = m_representedTownConnection.m_battles[i];
-            Vector3 spawnPos = new Vector3();
-            int test = 0;
             List<GameObject> debugPoints = new List<GameObject>();
 
-            for (int j = 0; j < m_maxNodeSpawnAttempts && !validSpawnFound; j++)
+            if (battleNode.m_positionCalculated)
             {
-                spawnAttempts++;
-                test = j;
-                List<Vector3> remainingSpawnPointRows = new List<Vector3>(spawnRowPoints);
+                validSpawnFound = true;
+                spawnPos = battleNode.m_position;
+            }
+            else
+            {
+                List<Vector3> spawnRowPoints = new List<Vector3>();
 
-                while (remainingSpawnPointRows.Count > 0 && !validSpawnFound)
+                for (int j = 0; j < 10; j++)
                 {
-                    int spawnIndex = VLib.vRandom(0, remainingSpawnPointRows.Count - 1);
-                    spawnPos = remainingSpawnPointRows[spawnIndex];
-
-                    float mainLerpAmount = battleNode.GetDifficultyPercentOfMaximum();
-                    mainLerpAmount = Mathf.Pow(mainLerpAmount, 0.16f);
-                    float endLerpAmount = j / (float)m_maxNodeSpawnAttempts;
-                    Vector3 endLerpPoint = Vector3.Lerp(spawnPos, m_frontStartPos, endLerpAmount);
-
-                    spawnPos = Vector3.Lerp(m_frontStartPos, endLerpPoint, mainLerpAmount);
-
-                    validSpawnFound = true;
-                    for (int m = 0; m < m_nodeGameobjectList.Count; m++)
-                    {
-                        float distMag = (spawnPos - m_nodeGameobjectList[m].transform.localPosition).magnitude;
-                        float allowedRadius = 0.1f;// node.GetComponent<CircleCollider2D>().radius * transform.;
-                        if (distMag <= allowedRadius && spawnAttempts <= m_maxNodeSpawnAttempts)
-                        {
-                            validSpawnFound = false;
-                            break;
-                        }
-                    }
-
-                    float nameDistMag = (spawnPos - transform.position).magnitude;
-                    float nameAllowedRadius = 0.12f;// node.GetComponent<CircleCollider2D>().radius * transform.;
-
-                    if (nameDistMag < nameAllowedRadius && spawnAttempts <= m_maxNodeSpawnAttempts)
-                    {
-                        validSpawnFound = false;
-                    }
-                    remainingSpawnPointRows.RemoveAt(spawnIndex);
-
-                    //--Debug Marker--
-
-                    //GameObject debugMarker = Instantiate(m_UIBattleNodeTemplate);
-                    //debugMarker.transform.position = endLerpPoint;
-                    //debugMarker.GetComponent<SpriteRenderer>().color = Color.black;
-                    //debugPoints.Add(debugMarker);
+                    int k = j >= 5 ? 1 : 0;
+                    Vector3 targetPos = m_frontLinePoints[k];
+                    Vector3 frontLineDirection = (targetPos - transform.position).normalized;
+                    float lerpAmount = ((j % 5) + 1) / 5f;
+                    spawnRowPoints.Add(Vector3.Lerp(transform.position, targetPos, lerpAmount));
                 }
 
+                for (int j = 0; j < m_maxNodeSpawnAttempts && !validSpawnFound; j++)
+                {
+                    spawnAttempts++;
+                    List<Vector3> remainingSpawnPointRows = new List<Vector3>(spawnRowPoints);
 
+                    while (remainingSpawnPointRows.Count > 0 && !validSpawnFound)
+                    {
+                        int spawnIndex = VLib.vRandom(0, remainingSpawnPointRows.Count - 1);
+                        spawnPos = remainingSpawnPointRows[spawnIndex];
+
+                        float mainLerpAmount = battleNode.GetDifficultyPercentOfMaximum();
+                        mainLerpAmount = Mathf.Pow(mainLerpAmount, 0.16f);
+                        float endLerpAmount = j / (float)m_maxNodeSpawnAttempts;
+                        Vector3 endLerpPoint = Vector3.Lerp(spawnPos, m_frontStartPos, endLerpAmount);
+
+                        spawnPos = Vector3.Lerp(m_frontStartPos, endLerpPoint, mainLerpAmount);
+
+                        validSpawnFound = true;
+                        for (int m = 0; m < m_nodeGameObjectList.Count; m++)
+                        {
+                            float distMag = (spawnPos - m_nodeGameObjectList[m].transform.localPosition).magnitude;
+                            float allowedRadius = 0.1f;// node.GetComponent<CircleCollider2D>().radius * transform.;
+                            if (distMag <= allowedRadius && spawnAttempts <= m_maxNodeSpawnAttempts)
+                            {
+                                validSpawnFound = false;
+                                break;
+                            }
+                        }
+
+                        float nameDistMag = (spawnPos - transform.position).magnitude;
+                        float nameAllowedRadius = 0.12f;// node.GetComponent<CircleCollider2D>().radius * transform.;
+
+                        if (nameDistMag < nameAllowedRadius && spawnAttempts <= m_maxNodeSpawnAttempts)
+                        {
+                            validSpawnFound = false;
+                        }
+                        remainingSpawnPointRows.RemoveAt(spawnIndex);
+
+                        //--Debug Marker--
+
+                        //GameObject debugMarker = Instantiate(m_UIBattleNodeTemplate);
+                        //debugMarker.transform.position = endLerpPoint;
+                        //debugMarker.GetComponent<SpriteRenderer>().color = Color.black;
+                        //debugPoints.Add(debugMarker);
+                    }
+
+
+                }
             }
 
             if (spawnAttempts > m_maxNodeSpawnAttempts || !validSpawnFound)
@@ -268,8 +274,14 @@ public class MapNodeConnection : MonoBehaviour
             }
             else
             {
+                if (!battleNode.m_positionCalculated)
+                {
+                    battleNode.m_position = spawnPos;
+                    battleNode.m_positionCalculated = true;
+                }
+
                 //Spawn Node
-                SpawnBattleNode(m_representedTownConnection.m_battles[i], spawnPos);
+                SpawnBattleNode(battleNode, spawnPos);
                 for (int d = 0; d < debugPoints.Count; d++)
                 {
                     Destroy(debugPoints[d]);
