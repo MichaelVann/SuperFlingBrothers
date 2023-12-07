@@ -20,6 +20,15 @@ public class UIBattleNode : MonoBehaviour
 
     public GameObject m_selectionRingRef;
     public GameObject m_lockIconRef;
+    public GameObject m_shadowRef;
+
+    //Bobbing Effect
+    float m_bobTimer = 0f;
+    float m_bobScale = 0.003f;
+    Vector3 m_startingPosition;
+
+    Vector3 m_shadowStartingPostion;
+    Vector3 m_shadowStartingDirection;
 
     internal bool m_enabled;
 
@@ -28,6 +37,7 @@ public class UIBattleNode : MonoBehaviour
 
     void Start()
     {
+        m_bobTimer += VLib.vRandom(0, Mathf.PI);
         m_selectionRingRef.SetActive(false);
     }
 
@@ -44,7 +54,9 @@ public class UIBattleNode : MonoBehaviour
         {
             m_gameHandlerRef.m_humanBody.m_availableBattles++;
         }
-
+        m_startingPosition = transform.position;
+        m_shadowStartingPostion =  m_shadowRef.transform.position;
+        m_shadowStartingDirection = m_shadowRef.transform.localPosition.normalized;
         m_lockIconRef.SetActive(!m_enabled);
         SetNodeDifficultyColor();
     }
@@ -52,6 +64,10 @@ public class UIBattleNode : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        m_bobTimer += Time.deltaTime;
+        transform.position = m_startingPosition + new Vector3(0f,m_bobScale * Mathf.Sin(m_bobTimer*Mathf.PI));
+
+        m_shadowRef.transform.position = m_shadowStartingPostion + m_shadowStartingDirection * (m_bobScale * Mathf.Sin(m_bobTimer*Mathf.PI));
     }
 
     public void Select()

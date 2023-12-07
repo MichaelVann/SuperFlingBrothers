@@ -243,7 +243,8 @@ public class Player : Damageable
             }
 
         }
-        m_battleManagerRef.RefreshAbilityButtons();
+        m_battleManagerRef.m_uiHandlerRef.RefreshAbilityButtons();
+        //m_battleManagerRef.m_uiHandlerRef.DeactivateAbility();
     }
 
     void HandleFlinging()
@@ -327,8 +328,6 @@ public class Player : Damageable
             m_battleManagerRef.StartEndingGame(eEndGameType.lose);
         }
     }
-
-
 
     public override bool OnCollisionEnter2D(Collision2D a_collision)
     {
@@ -533,7 +532,7 @@ public class Player : Damageable
         base.Damage(damage, a_damagePoint);
         m_battleManagerRef.m_healthBarRef.SetBarValue(m_health);
         RefreshArmorSegments();
-        m_battleManagerRef.RefreshAbilityButtons();
+        m_battleManagerRef.m_uiHandlerRef.RefreshAbilityButtons();
     }
 
     void UpdateShieldOpacity()

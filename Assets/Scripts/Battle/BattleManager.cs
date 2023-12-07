@@ -22,7 +22,7 @@ public class BattleManager : MonoBehaviour
 
     static public float m_shadowDistance = 0.1f;
 
-    BattleUIHandler m_uiHandlerRef;
+    internal BattleUIHandler m_uiHandlerRef;
     public GameHandler m_gameHandlerRef;
     public GameObject m_gameHandlerTemplate;
     public GameObject m_playerTemplate;
@@ -46,7 +46,6 @@ public class BattleManager : MonoBehaviour
     public GameObject m_gameSpaceMarker;
     internal Vector2 m_gameSpace;
 
-    public AbilityButton[] m_abilityButtons;
 
     public Text m_enemyCountText;
     public Text m_levelDifficultyText;
@@ -185,6 +184,7 @@ public class BattleManager : MonoBehaviour
         m_turnFreezingTimer = 0f;
         m_turnFreezing = false;
         m_timeFrozen = a_frozen;
+
         for (int i = 0; i < m_wallSpriteRenderers.Length; i++)
         {
             float colourScale = 0.12f;
@@ -203,23 +203,8 @@ public class BattleManager : MonoBehaviour
         m_gameSpace[1] = m_gameSpaceMarker.transform.position.y;
     }
 
-    public void RefreshAbilityButtons()
-    {
-        for (int i = 0; i < m_abilityButtons.Length; i++)
-        {
-            if (m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i] != null)
-            {
-                m_abilityButtons[i].SetEquipmentRef(m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i]);
-                if (m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i].IsBroken())
-                {
-                    m_abilityButtons[i].Disable();
-                }
-            }
-            m_abilityButtons[i].Refresh();
-        }
-    }
 
-    public void ActivateAbility(int a_id)
+    internal void ActivateAbility(int a_id)
     {
         for (int i = 0; i < m_activeAbilities.Length; i++)
         {
@@ -266,8 +251,9 @@ public class BattleManager : MonoBehaviour
                 }
             }
         }
-        RefreshAbilityButtons();
+ 
     }
+
 
     public void UseExtraTurn()
     {
@@ -282,7 +268,7 @@ public class BattleManager : MonoBehaviour
                     //m_turnFreezingTimer = m_turnFreezingTimerMax / 2f;
                     SetFrozen(true);
                     m_activeAbilities[i].m_activated = false;
-                    RefreshAbilityButtons();
+                    m_uiHandlerRef.RefreshAbilityButtons();
                     break;
                 }
             }
@@ -426,7 +412,7 @@ public class BattleManager : MonoBehaviour
             //m_activeAbilities[i] = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i] != null ? new EquipmentAbility(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i].m_activeAbility) : null;
         }
 
-        RefreshAbilityButtons();
+        m_uiHandlerRef.RefreshAbilityButtons();
     }
 
     public void SpawnPlayer()

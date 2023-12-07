@@ -14,7 +14,7 @@ using static UnityEngine.UI.CanvasScaler;
 public class GameHandler : MonoBehaviour
 {
     public const int MAIN_VERSION_NUMBER = 23;
-    public const int SUB_VERSION_NUMBER = 0;
+    public const int SUB_VERSION_NUMBER = 1;
 
     static internal bool DEBUG_MODE = true;
 
@@ -87,7 +87,7 @@ public class GameHandler : MonoBehaviour
     }
 
     //Equipment
-    const int m_startingEquipment = 0;
+    const int m_startingEquipment = 1;
     public List<Equipment> m_equipmentInventory;
 
     StockHandler m_stockHandler;

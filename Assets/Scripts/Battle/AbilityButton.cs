@@ -6,9 +6,10 @@ using UnityEngine.UI;
 
 public class AbilityButton : MonoBehaviour
 {
-    Equipment m_equipmentRef;
+    internal Equipment m_equipmentRef;
+    public Image m_panelImageRef;
     Button m_buttonRef;
-    public Text m_abilityNameText;
+    public TextMeshProUGUI m_abilityNameText;
     public TextMeshProUGUI m_affixText;
 
     public TextMeshProUGUI m_healthText;
@@ -60,11 +61,7 @@ public class AbilityButton : MonoBehaviour
                 if (!ability.m_passive)
                 {
                     Color buttonColor = Color.grey;
-                    if (m_buttonRef.interactable)
-                    {
-                        buttonColor = ability.m_activated ? Color.blue : Color.grey;
-                    }
-                    GetComponent<Image>().color = buttonColor;
+                    m_panelImageRef.color = buttonColor;
                 }
                 m_abilityNameText.text = ability.GetName() + (ability.m_passive ? "" : "(" + ability.m_ammo + ")");
                 m_affixText.text = ability.GetAffixNames();
@@ -75,10 +72,6 @@ public class AbilityButton : MonoBehaviour
             m_healthText.color = VLib.RatioToColorRGB(m_equipmentRef.m_health / m_equipmentRef.m_maxHealth);
             m_maxHealthText.text = m_equipmentRef.m_maxHealth.ToString("f0");
 
-        }
-        else
-        {
-            gameObject.SetActive(false);
         }
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class BattleUIHandler : MonoBehaviour
 {
     BattleManager m_battleManagerRef;
+    GameHandler m_gameHandlerRef;
 
     public Text m_turnsText;
     public Text m_scoreText;
@@ -15,9 +16,20 @@ public class BattleUIHandler : MonoBehaviour
     public Text m_endingHighlightText;
     public bool m_playingEnding = false;
 
+
+    //Ability Buttons
+    public AbilityButton[] m_abilityButtons;
+    public GameObject[] m_abilityButtonSlots;
+    public ActivatedAbilityPanel m_activatedAbilityPanel;
+
     void Awake()
     {
         m_battleManagerRef = GetComponent<BattleManager>();
+    }
+
+    private void Start()
+    {
+        m_gameHandlerRef = m_battleManagerRef.m_gameHandlerRef;
     }
 
     public void StartEnding(eEndGameType a_type)
@@ -80,5 +92,55 @@ public class BattleUIHandler : MonoBehaviour
                 PlayEnding();
             }
         }
+    }
+
+
+    public void RefreshAbilityButtons()
+    {
+        bool activatedAbility = false;
+        for (int i = 0; i < m_abilityButtons.Length; i++)
+        {
+            if (m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i] != null)
+            {
+                m_abilityButtons[i].SetEquipmentRef(m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i]);
+                if (m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i].IsBroken())
+                {
+                    m_abilityButtons[i].Disable();
+                }
+            }
+            if (m_abilityButtons[i].m_equipmentRef != null)
+            {
+                if (m_abilityButtons[i].m_equipmentRef.m_activeAbility.m_activated)
+                {
+                    activatedAbility = true;
+                    m_activatedAbilityPanel.SetEquipmentAbility(m_abilityButtons[i].m_equipmentRef.m_activeAbility);
+                }
+                m_abilityButtons[i].gameObject.SetActive(true);
+                m_abilityButtonSlots[i].SetActive(false);
+                m_abilityButtons[i].Refresh();
+            }
+            else
+            {
+                m_abilityButtons[i].gameObject.SetActive(false);
+                m_abilityButtonSlots[i].SetActive(true);
+            }
+        }
+        m_activatedAbilityPanel.gameObject.SetActive(activatedAbility);
+         
+    }
+
+    public void ActivateAbility(int a_id)
+    {
+        m_battleManagerRef.ActivateAbility(a_id);
+        m_activatedAbilityPanel.gameObject.SetActive(true);
+        RefreshAbilityButtons();
+    }
+
+
+    public void DeactivateAbility()
+    {
+        m_battleManagerRef.ActivateAbility(-1);
+        m_activatedAbilityPanel.gameObject.SetActive(false);
+        RefreshAbilityButtons();
     }
 }
