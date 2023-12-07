@@ -14,7 +14,7 @@ using static UnityEngine.UI.CanvasScaler;
 public class GameHandler : MonoBehaviour
 {
     public const int MAIN_VERSION_NUMBER = 23;
-    public const int SUB_VERSION_NUMBER = 1;
+    public const int SUB_VERSION_NUMBER = 2;
 
     static internal bool DEBUG_MODE = true;
 

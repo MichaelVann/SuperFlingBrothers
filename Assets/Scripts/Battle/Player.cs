@@ -91,7 +91,7 @@ public class Player : Damageable
             if (!a_shieldAbilityList[i].m_parentEquipment.IsBroken())
             {
                 m_shield.delay += 1f / a_shieldAbilityList[i].m_capacitor.rechargeDelay;
-                m_shield.capacity += a_shieldAbilityList[i].m_capacitor.capacity;
+                m_shield.capacity += a_shieldAbilityList[i].m_capacitor.capacity * m_statHandler.GetStatFinalValue(eCharacterStatType.constitution)/100f;
                 m_shield.rechargeRate += a_shieldAbilityList[i].m_capacitor.rechargeRate;
             }
         }

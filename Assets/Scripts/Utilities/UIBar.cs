@@ -66,7 +66,7 @@ public class UIBar : MonoBehaviour
     public void UpdateBarSprite()
     {
         m_barMaskTransform.sizeDelta = new Vector2(m_barLength * m_value / m_maxValue, m_barHeight);
-        m_barValueText.text = "" + (int)(m_value)+ " / " + m_maxValue.ToString("f0");
+        m_barValueText.text = "" + VLib.RoundToDecimalPlaces(m_value,1)+ " / " + VLib.RoundToDecimalPlaces(m_maxValue,1);
     }
 
     public void SetLabeltext(string a_string)

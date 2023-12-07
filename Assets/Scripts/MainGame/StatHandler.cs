@@ -206,6 +206,11 @@ public class CharacterStatHandler
         return m_stats[a_index].m_finalValue;
     }
 
+    public float GetStatFinalValue(eCharacterStatType a_index)
+    {
+        return m_stats[(int)a_index].m_finalValue;
+    }
+
     public static string GetStatName(eCharacterStatType a_index, bool a_shortName = false)
     {
         string m_returnString = "";
