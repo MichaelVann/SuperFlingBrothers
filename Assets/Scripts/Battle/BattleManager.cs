@@ -141,6 +141,10 @@ public class BattleManager : MonoBehaviour
         m_uiHandlerRef = GetComponent<BattleUIHandler>();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_battleNodeRef = m_gameHandlerRef.m_attemptedBattleNode;
+        if (m_battleNodeRef == null)
+        {
+            m_battleNodeRef = new BattleNode(2, 4, null);
+        }
         m_turnFreezeTimerMax = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatType.dexterity].m_finalValue;
         //m_debugText.text = "" + m_turnFreezeTimerMax;
         m_turnFreezeTimer = 0f;
