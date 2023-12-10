@@ -14,8 +14,8 @@ public class HumanBody
     internal const int m_maxEnemyDifficulty = 12;
 
     static internal int m_battleMaxTheoreticalDifficulty;
-    internal int m_battleMaxDifficulty;
-    internal int m_battleMinDifficulty;
+    static internal int m_battleMaxDifficulty;
+    static internal int m_battleMinDifficulty;
     public const int m_startingBattleMaxDifficulty = 20;
     public const int m_startingBattleMinDifficulty = 1;
 

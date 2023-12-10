@@ -20,6 +20,8 @@ public class EquipmentInventoryHandler : MonoBehaviour
 
     public GameObject m_confirmationBoxPrefab;
 
+    public GameObject m_popUpCanvasRef;
+
     List<EquipmentPanel> m_equipmentItemPanels;
 
     bool m_initialised = false;
@@ -168,7 +170,7 @@ public class EquipmentInventoryHandler : MonoBehaviour
 
     public void ConfirmSellAllItems()
     {
-        ConfirmationBox confirmationBox = Instantiate(m_confirmationBoxPrefab, transform).GetComponent<ConfirmationBox>();
+        ConfirmationBox confirmationBox = Instantiate(m_confirmationBoxPrefab, m_popUpCanvasRef.transform).GetComponent<ConfirmationBox>();
         confirmationBox.SetMessageText("Are you sure you want to sell all items?");
         confirmationBox.m_confirmationResponseDelegate = new ConfirmationBox.ConfirmationResponseDelegate(SellAllUnequippedEquipment);
     }

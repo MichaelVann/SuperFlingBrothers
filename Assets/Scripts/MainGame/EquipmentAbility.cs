@@ -5,27 +5,29 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-
+[Serializable]
 public class EquipmentAbility
 {
-    internal Equipment m_parentEquipment;
-    //public bool m_enabled = false;
-    internal int m_cooldown;
-    internal int m_ammo;
-    internal int m_maxAmmo;
-    internal bool m_passive = true;
-    internal bool m_activated = false;
-    internal int m_level;
 
-    internal struct Capacitor
+    public Equipment m_parentEquipment;
+    //public bool m_enabled = false;
+    public int m_cooldown;
+    public int m_ammo;
+    public int m_maxAmmo;
+    public bool m_passive = true;
+    public bool m_activated = false;
+    public int m_level;
+
+    [Serializable]
+    public struct Capacitor
     {
-        internal float rechargeDelay;
-        internal float rechargeDelayTimer;
-        internal float rechargeRate;
-        internal float value;
-        internal float capacity;
+        public float rechargeDelay;
+        public float rechargeDelayTimer;
+        public float rechargeRate;
+        public float value;
+        public float capacity;
     }
-    internal Capacitor m_capacitor;
+    public Capacitor m_capacitor;
 
     public enum eAbilityType
     {
@@ -52,7 +54,6 @@ public class EquipmentAbility
      };
 
     [SerializeReference]
-
     internal List<eAffix> m_affixes;
 
     public eAbilityType m_abilityType;

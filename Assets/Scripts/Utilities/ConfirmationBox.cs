@@ -9,6 +9,8 @@ public class ConfirmationBox : MonoBehaviour
     internal delegate void ConfirmationResponseDelegate();
     internal ConfirmationResponseDelegate m_confirmationResponseDelegate;
 
+    public GameObject m_cancelButtonRef;
+    public TextMeshProUGUI m_confirmButtonTextRef;
 
     // Start is called before the first frame update
     void Start()
@@ -25,6 +27,12 @@ public class ConfirmationBox : MonoBehaviour
     internal void SetMessageText(string a_string)
     {
         m_messageText.text = a_string;
+    }
+
+    internal void SetToAcknowledgeOnlyMode()
+    {
+        m_cancelButtonRef.SetActive(false);
+        m_confirmButtonTextRef.text = "Understood";
     }
 
     public void Respond(bool a_response)

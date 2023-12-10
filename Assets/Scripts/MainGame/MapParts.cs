@@ -13,10 +13,7 @@ public class BattleNode
     //}
     //public eState m_state;
     //public float m_invasionOwnershipPercentage = 0f;
-    [SerializeField]
-    public int m_maxDifficulty;
-    [SerializeField]
-    public int m_minDifficulty;
+
     [SerializeField]
     public int m_difficulty;
     [SerializeField]
@@ -28,6 +25,15 @@ public class BattleNode
     internal bool m_positionCalculated = false;
     internal bool m_available;
 
+    [Serializable]
+    internal struct EnvironmentalEffects
+    {
+        internal bool wallTrianglesEnabled;
+        internal bool gravityWellsEnabled;
+        internal bool megaGravityWellEnabled;
+    }
+    internal EnvironmentalEffects m_environmentalEffects;
+
     public void SetOwningConnection(TownConnection a_owningConnection) { m_owningConnection = a_owningConnection; }
 
     public BattleNode(int a_minDifficulty, int a_maxDifficulty, TownConnection a_owningConnection)
@@ -37,50 +43,38 @@ public class BattleNode
         //m_connectedNodes = null;
         m_owningConnection = a_owningConnection;
         SetUpDifficulty(a_minDifficulty, a_maxDifficulty);
-        m_available = m_difficulty <= a_owningConnection.m_humanBodyRef.m_battleMaxDifficulty;
+        m_available = m_difficulty <= HumanBody.m_battleMaxDifficulty;
+        SetupEnvironmentalEffects();
     }
 
-    public BattleNode(int a_difficulty, int a_boostTier, int a_minDifficulty, int a_maxDifficulty, TownConnection a_owningConnection, Vector3 a_position)
-    {
-        m_difficulty = a_difficulty;
-        m_difficultyBoostTier = a_boostTier;
-        m_minDifficulty = a_minDifficulty;
-        m_maxDifficulty = a_maxDifficulty;
-        m_owningConnection = a_owningConnection;
-        m_position = a_position;
-        m_positionCalculated = true;
-    }
 
     internal BattleNode(SaveDataUtility.BattleNodeData a_data, TownConnection a_owningConnection)
     {
         m_difficulty = a_data.difficulty;
         m_difficultyBoostTier = a_data.difficultyBoostTier;
-        m_minDifficulty = a_data.minDifficulty;
-        m_maxDifficulty = a_data.maxDifficulty;
         m_owningConnection = a_owningConnection;
         m_position = a_data.position;
         m_positionCalculated = a_data.positionCalculated;
         m_available = a_data.available;
+        m_environmentalEffects = a_data.environmentalEffects;
     }
 
     internal float GetDifficultyPercent()
     {
         float retVal = 0f;
-        retVal = (((float)m_difficulty - (float)m_minDifficulty) / ((float)m_maxDifficulty - (float)m_minDifficulty));
+        retVal = (((float)m_difficulty - (float)HumanBody.m_battleMaxDifficulty) / ((float)HumanBody.m_battleMaxDifficulty - (float)HumanBody.m_battleMaxDifficulty));
         return retVal;
     }
 
     internal float GetDifficultyPercentOfMaximum()
     {
         float retVal = 0f;
-        retVal = (((float)m_difficulty - (float)m_minDifficulty) / ((float)HumanBody.m_battleMaxTheoreticalDifficulty - (float)m_minDifficulty));
+        retVal = (((float)m_difficulty - (float)HumanBody.m_battleMinDifficulty) / ((float)HumanBody.m_battleMaxTheoreticalDifficulty - (float)HumanBody.m_battleMinDifficulty));
         return retVal;
     }
 
     public void SetUpDifficulty(int a_minDifficulty, int a_maxDifficulty)
     {
-        m_maxDifficulty = a_maxDifficulty;
-        m_minDifficulty = a_minDifficulty;
         m_difficulty = VLib.vRandom(a_minDifficulty, a_maxDifficulty);
 
         float roll = VLib.vRandom(0f, 1f);
@@ -95,6 +89,23 @@ public class BattleNode
             }
         }
     }
+
+    void SetupEnvironmentalEffects()
+    {
+        m_environmentalEffects = new EnvironmentalEffects();
+        m_environmentalEffects.wallTrianglesEnabled = UnityEngine.Random.Range(0f, 1f) <= 0.3f;
+        m_environmentalEffects.gravityWellsEnabled = UnityEngine.Random.Range(0f, 1f) <= 0.3f;
+
+        if (m_environmentalEffects.gravityWellsEnabled)
+        {
+            float roll = VLib.vRandom(0f, 1f);
+            if (roll < 0.3f)
+            {
+                m_environmentalEffects.megaGravityWellEnabled = true;
+            }
+        }
+    }
+
 }
 public class TownConnection
 {
@@ -154,8 +165,8 @@ public class TownConnection
         for (int i = 0; i < m_battlesToSpawn; i++)
         {
             bool available = i <= m_battlesToSpawn / 2;
-            int maxDifficulty = available ? m_humanBodyRef.m_battleMaxDifficulty : HumanBody.m_battleMaxTheoreticalDifficulty;
-            int minDifficulty = available ? m_humanBodyRef.m_battleMinDifficulty : m_humanBodyRef.m_battleMaxDifficulty;
+            int maxDifficulty = available ? HumanBody.m_battleMaxDifficulty : HumanBody.m_battleMaxTheoreticalDifficulty;
+            int minDifficulty = available ? HumanBody.m_battleMinDifficulty : HumanBody.m_battleMaxDifficulty;
 
             m_battles.Add(new BattleNode(minDifficulty, maxDifficulty, this));
         }

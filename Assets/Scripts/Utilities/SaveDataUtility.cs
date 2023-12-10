@@ -19,6 +19,8 @@ public class SaveDataUtility
         public Vector3 position;
         public bool positionCalculated;
         public bool available;
+
+        public BattleNode.EnvironmentalEffects environmentalEffects;
     }
 
     [Serializable]
@@ -111,11 +113,10 @@ public class SaveDataUtility
                 BattleNode battleNode = connection.m_battles[j];
                 battleData.difficulty = battleNode.m_difficulty;
                 battleData.difficultyBoostTier = battleNode.m_difficultyBoostTier;
-                battleData.minDifficulty = battleNode.m_minDifficulty;
-                battleData.maxDifficulty = battleNode.m_maxDifficulty;
                 battleData.position = battleNode.m_position;
                 battleData.positionCalculated = battleNode.m_positionCalculated;
                 battleData.available = battleNode.m_available;
+                battleData.environmentalEffects = battleNode.m_environmentalEffects;
                 connectionData.nodes.Add(battleData);
             }
             m_saveData.humanBodyData.connections.Add(connectionData);
@@ -178,8 +179,9 @@ public class SaveDataUtility
         File.WriteAllText(path, json);
     }
 
-    internal void Load()
+    internal bool Load()
     {
+        bool retVal = false;
         string path = GetSaveDataPath();
         if (File.Exists(path))
         {
@@ -187,11 +189,12 @@ public class SaveDataUtility
             m_saveData = JsonUtility.FromJson<SaveData>(loadedString);
             LoadHumanBody();
             LoadAudioData();
+            retVal = true;
         }
         else
         {
             //Throw up window saying no save found
         }
-
+        return retVal;
     }
 }

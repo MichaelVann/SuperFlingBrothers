@@ -18,10 +18,8 @@ public class TitleScreenHandler : MonoBehaviour
         m_versionNumberText.text = "Version " + GameHandler.MAIN_VERSION_NUMBER + "." + GameHandler.SUB_VERSION_NUMBER;
     }
 
-    // Update is called once per frame
-    void Update()
+    void RefreshEquipmentNotifier()
     {
-
         int combinedNewStatsAndEquipment = m_gameHandlerRef.m_xCellSquad.m_statHandler.m_RPGLevel.m_allocationPoints + m_gameHandlerRef.m_equipmentCollectedLastGame;
 
         m_equipmentNotifierRef.SetActive(combinedNewStatsAndEquipment > 0);
@@ -37,5 +35,11 @@ public class TitleScreenHandler : MonoBehaviour
                 m_equipmentNotifierTextRef.text = "" + combinedNewStatsAndEquipment;
             }
         }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        RefreshEquipmentNotifier();
     }
 }

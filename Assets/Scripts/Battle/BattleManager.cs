@@ -20,6 +20,8 @@ public class BattleManager : MonoBehaviour
     public Text m_debugText;
     public TextMeshProUGUI m_fpsText;
 
+    private BattleNode m_battleNodeRef;
+
     static public float m_shadowDistance = 0.1f;
 
     internal BattleUIHandler m_uiHandlerRef;
@@ -46,6 +48,7 @@ public class BattleManager : MonoBehaviour
     public GameObject m_gameSpaceMarker;
     internal Vector2 m_gameSpace;
 
+    List<GameObject> m_gravityWellList;
 
     public Text m_enemyCountText;
     public Text m_levelDifficultyText;
@@ -99,14 +102,6 @@ public class BattleManager : MonoBehaviour
 
     internal float m_upperLowerFlingPositionBounds;
 
-    internal struct EnvironmentalEffects
-    {
-        internal bool wallTrianglesEnabled;
-        internal bool gravityWellsEnabled;
-        internal List<GameObject> m_gravityWellList;
-    }
-    EnvironmentalEffects m_environmentalEffects;
-
     //End Game
     public bool m_endingGame = false;
     public float m_gameEndSlowdownFactor = 0.25f;
@@ -123,6 +118,7 @@ public class BattleManager : MonoBehaviour
     public float m_pocketDamage = 2f;
 
     //Post game
+    bool m_gameFinished = false;
     int m_invaderStrengthChange = 0;
 
     //Audio section
@@ -144,12 +140,12 @@ public class BattleManager : MonoBehaviour
     {
         m_uiHandlerRef = GetComponent<BattleUIHandler>();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        m_battleNodeRef = m_gameHandlerRef.m_attemptedBattleNode;
         m_turnFreezeTimerMax = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatType.dexterity].m_finalValue;
         //m_debugText.text = "" + m_turnFreezeTimerMax;
         m_turnFreezeTimer = 0f;
         m_enemySpawnPointsRefs = new List<GameObject>();
         m_equipmentCollected = new List<Equipment>();
-
         FindGameSpace();
 
         SetupEnvironmentalEffects();
@@ -192,7 +188,7 @@ public class BattleManager : MonoBehaviour
         }
         if (!m_endingGame)
         {
-            SetTimeScale(a_frozen ? 0.0f : 1.0f);
+            UpdateTimeScale();
         }
     }
 
@@ -280,9 +276,32 @@ public class BattleManager : MonoBehaviour
         m_gameHandlerRef.CalculateFinishedGame();
     }
 
-    public void SetTimeScale(float a_scale)
+    public void UpdateTimeScale()
     {
-        Time.timeScale = a_scale;
+        float timeScale = 1f;
+
+        if (m_gameFinished)
+        {
+            timeScale = 1f;
+        }
+        else if (m_endingGame)
+        {
+            timeScale = m_gameEndSlowdownFactor;
+        }
+        else if (m_timeFrozen)
+        {
+            timeScale = 0f;
+        }
+        else if (m_turnFreezing)
+        {
+            timeScale = (1f - m_slowableTime * m_turnFreezingTimer / m_turnFreezingTimerMax);
+        }
+        else if (m_hitSlowDownActive)
+        {
+            timeScale = m_hitTimeSlowdownRate;
+        }
+
+        Time.timeScale = timeScale;
         //Debug.Log(a_scale);
     }
 
@@ -290,7 +309,7 @@ public class BattleManager : MonoBehaviour
     {
         m_hitSlowDownActive = a_value;
         m_enemyHitTimer = 0f;
-        SetTimeScale(a_value? m_hitTimeSlowdownRate : 1f);
+        UpdateTimeScale();
     }
 
     void SetupDebug()
@@ -318,7 +337,7 @@ public class BattleManager : MonoBehaviour
 
     void SpawnGravityWells()
     {
-        m_environmentalEffects.m_gravityWellList = new List<GameObject>();
+        m_gravityWellList = new List<GameObject>();
 
         int gravityWellCount = VLib.vRandom(1, 4);
         for (int i = 0; i < gravityWellCount; i++)
@@ -332,9 +351,9 @@ public class BattleManager : MonoBehaviour
                 spawnFound = true;
                 pos.x = VLib.vRandom(-m_gameSpace.x, m_gameSpace.x);
                 pos.y = VLib.vRandom(-m_gameSpace.y, m_gameSpace.y);
-                for (int j = 0; j < m_environmentalEffects.m_gravityWellList.Count; j++)
+                for (int j = 0; j < m_gravityWellList.Count; j++)
                 {
-                    Vector3 deltaVec = m_environmentalEffects.m_gravityWellList[j].transform.localPosition - pos;
+                    Vector3 deltaVec = m_gravityWellList[j].transform.localPosition - pos;
                     float deltaMag = deltaVec.magnitude;
                     if (deltaMag < 0.88f)
                     {
@@ -346,7 +365,7 @@ public class BattleManager : MonoBehaviour
                     //m_environmentalEffects.m_gravityWellList
                     GameObject gravityWell = Instantiate<GameObject>(m_gravityWellRef, new Vector3(), new Quaternion(), m_gameViewRef.transform);
                     gravityWell.transform.localPosition = pos;
-                    m_environmentalEffects.m_gravityWellList.Add(gravityWell);
+                    m_gravityWellList.Add(gravityWell);
                     break;
                 }
             }
@@ -355,19 +374,14 @@ public class BattleManager : MonoBehaviour
 
     void SetupEnvironmentalEffects()
     {
-        m_environmentalEffects = new EnvironmentalEffects();
-        m_environmentalEffects.wallTrianglesEnabled = UnityEngine.Random.Range(0f,1f) <= 0.3f;
-        m_environmentalEffects.gravityWellsEnabled = UnityEngine.Random.Range(0f,1f) <= 0.3f;
-
-        if (m_environmentalEffects.wallTrianglesEnabled)
+        if (m_battleNodeRef.m_environmentalEffects.wallTrianglesEnabled)
         {
             SpawnWallTriangles();
         }
 
-        if (m_environmentalEffects.gravityWellsEnabled)
+        if (m_battleNodeRef.m_environmentalEffects.gravityWellsEnabled)
         {
-            float roll = VLib.vRandom(0f, 1f);
-            if (roll < 0.3f)
+            if (m_battleNodeRef.m_environmentalEffects.megaGravityWellEnabled)
             {
                 GravityWell gravityWell = Instantiate<GameObject>(m_gravityWellRef, new Vector3(0f,0f,90f), new Quaternion(), m_gameViewRef.transform).GetComponent<GravityWell>();
                 gravityWell.Init(GravityWell.eGravityWellType.MegaWhirlpool);
@@ -627,8 +641,7 @@ public class BattleManager : MonoBehaviour
             else
             {
                 m_turnFreezingTimer += Time.deltaTime;
-
-                SetTimeScale(1f - m_slowableTime * m_turnFreezingTimer / m_turnFreezingTimerMax);
+                UpdateTimeScale();
                 if (m_turnFreezingTimer >= m_turnFreezingTimerMax)
                 {
                     SetFrozen(true);
@@ -646,8 +659,8 @@ public class BattleManager : MonoBehaviour
         {
             m_gameHandlerRef.PickUpEquipment(m_equipmentCollected[i]);
         }
-
-        SetTimeScale(1f);
+        m_gameFinished = true;
+        UpdateTimeScale();
         CalculateFinishedGame();
         FindObjectOfType<GameHandler>().ChangeScene(GameHandler.eScene.postBattle);
     }
@@ -658,7 +671,7 @@ public class BattleManager : MonoBehaviour
         {
             m_endingGame = true;
             m_gameHandlerRef.SetLastGameResult(a_type);
-            SetTimeScale(m_gameEndSlowdownFactor);
+            UpdateTimeScale();
             m_uiHandlerRef.StartEnding(a_type);
             m_endGameType = a_type;
             if (m_endGameType == eEndGameType.lose)

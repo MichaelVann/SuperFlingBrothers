@@ -14,6 +14,8 @@ public class OptionsMenu : MonoBehaviour
     public UICheckBox m_musicCheckBox;
     public UICheckBox m_soundEffectCheckBox;
 
+    public GameObject m_confirmationBoxPrefab;
+
     void Start()
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
@@ -50,7 +52,15 @@ public class OptionsMenu : MonoBehaviour
 
     public void LoadButtonPressed()
     {
-        m_gameHandlerRef.LoadGame();
+        if (!m_gameHandlerRef.LoadGame())
+        {
+            ConfirmationBox confirmationBox = Instantiate(m_confirmationBoxPrefab, transform).GetComponent<ConfirmationBox>();
+            confirmationBox.SetMessageText("No save file found.");
+            confirmationBox.SetToAcknowledgeOnlyMode();
+            //confirmationBox.m_confirmationResponseDelegate = new ConfirmationBox.ConfirmationResponseDelegate(SellAllUnequippedEquipment);
+        }
+        
+
         Refresh();
     }
 

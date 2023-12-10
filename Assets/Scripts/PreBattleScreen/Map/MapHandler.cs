@@ -32,8 +32,6 @@ public class MapHandler : MonoBehaviour
     // UI Popup
     public GameObject m_lostNotificationRef;
 
-
-
     MapNode m_residingMapNode;
 
     //Selected BattleNode
@@ -58,12 +56,6 @@ public class MapHandler : MonoBehaviour
         m_viewedBodyPartUI = Instantiate(m_bodyMapPrefab, transform).GetComponent<HumanBodyUI>();
         m_viewedBodyPartUI.Initialise();
         //ApplyZoomAndPan();
-
-        if (m_gameHandlerRef.m_humanBody.m_lost)
-        {
-            // UI Popup: lost notification
-            m_lostNotificationRef.SetActive(true);
-        };
     }
 
     public void Start()

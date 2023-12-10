@@ -14,7 +14,7 @@ using static UnityEngine.UI.CanvasScaler;
 public class GameHandler : MonoBehaviour
 {
     public const int MAIN_VERSION_NUMBER = 23;
-    public const int SUB_VERSION_NUMBER = 2;
+    public const int SUB_VERSION_NUMBER = 3;
 
     static internal bool DEBUG_MODE = true;
 
@@ -28,7 +28,7 @@ public class GameHandler : MonoBehaviour
     static internal float BATTLE_EnemyEquipmentDropChanceScale = 0.5f;
     internal const int    BATTLE_EnemySpawnPointCount = 19;
 
-    static internal float PRE_BATTLE_WarfrontChange = -0.17f;
+    static internal float PRE_BATTLE_WarfrontChange = -0.17f; //Default is -0.17f
     //Damageables
     static internal float DAMAGEABLE_DragCoefficient = 1.25f;
     static internal float DAMAGEABLE_HitVelocityMultiplier = 1.6f;
@@ -60,7 +60,7 @@ public class GameHandler : MonoBehaviour
     public HumanBody m_humanBody;
 
     //Current Battle
-    public BattleNode m_attemptedBattleNode;
+    internal BattleNode m_attemptedBattleNode;
     internal int m_battleDifficulty = 2;
     internal int m_maxEnemyDifficulty; //Set from humanbody
 
@@ -324,7 +324,7 @@ public class GameHandler : MonoBehaviour
 
             if (m_lastGameResult == eEndGameType.win)
             {
-                float warfrontBalanceChangeAmount = (float)m_lastAttemptedBattleNode.m_difficulty / (float)m_humanBody.m_battleMaxDifficulty;
+                float warfrontBalanceChangeAmount = (float)m_lastAttemptedBattleNode.m_difficulty / (float)HumanBody.m_battleMaxDifficulty;
                 warfrontBalanceChangeAmount *= -warfrontBalanceChange;//Turn to percentage
                 warfrontBalanceChangeAmount = Mathf.Clamp(warfrontBalanceChangeAmount, 0f, -warfrontBalanceChange);
                 m_lastAttemptedBattleNode.m_owningConnection.ChangeWarfrontBalance(warfrontBalanceChangeAmount);
@@ -420,44 +420,59 @@ public class GameHandler : MonoBehaviour
         saveDataUtility.Save();
         
     }
-    public void LoadGame()
+
+    public bool LoadGame()
     {
+        bool retVal = true;
+
         string path = Application.persistentDataPath + "/Data.txt";
-        string loadedString = File.ReadAllText(path);
-        m_saveData = JsonUtility.FromJson<SaveData>(loadedString);
-        m_cash = m_saveData.cash;
-        m_xCellSquad = m_saveData.xCellTeam;
-        //m_humanBody = m_saveData.humanBody;
-        m_humanBody.m_gameHandlerRef = this;
-        //m_playerStatHandler = m_saveData.statHandler;
-        for (int i = 0; i < m_stockHandler.m_stockList.Count; i++)
+        if (File.Exists(path))
         {
-            m_stockHandler.m_stockList[i].CopyValues(m_saveData.stockList[i]);
-        }
-        //m_humanBody.m_firstName = m_saveData.bodyFirstName;
-        //m_humanBody.m_lastName = m_saveData.bodyLastName;
-
-        for (int i = 0; i < m_upgrades.Length; i++)
-        {
-            m_upgrades[i].Copy(m_saveData.upgrades[i]);
-        }
-
-        for (int i = 0; i < m_xCellSquad.m_playerXCell.m_equippedEquipment.Length; i++)
-        {
-            m_xCellSquad.m_playerXCell.m_equippedEquipment[i] = null;
-        }
-
-        m_equipmentInventory = new List<Equipment>();
-
-        for (int i = 0; i < m_saveData.equipmentList.Count; i++)
-        {
-            m_equipmentInventory.Add(m_saveData.equipmentList[i]);
-            if (m_equipmentInventory[i].m_equipped)
+            string loadedString = File.ReadAllText(path);
+            m_saveData = JsonUtility.FromJson<SaveData>(loadedString);
+            m_cash = m_saveData.cash;
+            m_xCellSquad = m_saveData.xCellTeam;
+            //m_humanBody = m_saveData.humanBody;
+            m_humanBody.m_gameHandlerRef = this;
+            //m_playerStatHandler = m_saveData.statHandler;
+            for (int i = 0; i < m_stockHandler.m_stockList.Count; i++)
             {
-                m_xCellSquad.m_playerXCell.m_equippedEquipment[m_equipmentInventory[i].m_equippedSlotId] = m_equipmentInventory[i];
+                m_stockHandler.m_stockList[i].CopyValues(m_saveData.stockList[i]);
+            }
+            //m_humanBody.m_firstName = m_saveData.bodyFirstName;
+            //m_humanBody.m_lastName = m_saveData.bodyLastName;
+
+            for (int i = 0; i < m_upgrades.Length; i++)
+            {
+                m_upgrades[i].Copy(m_saveData.upgrades[i]);
+            }
+
+            for (int i = 0; i < m_xCellSquad.m_playerXCell.m_equippedEquipment.Length; i++)
+            {
+                m_xCellSquad.m_playerXCell.m_equippedEquipment[i] = null;
+            }
+
+            m_equipmentInventory = new List<Equipment>();
+
+            for (int i = 0; i < m_saveData.equipmentList.Count; i++)
+            {
+                m_equipmentInventory.Add(m_saveData.equipmentList[i]);
+                if (m_equipmentInventory[i].m_equipped)
+                {
+                    m_xCellSquad.m_playerXCell.m_equippedEquipment[m_equipmentInventory[i].m_equippedSlotId] = m_equipmentInventory[i];
+                }
             }
         }
+        else
+        {
+            retVal = false;
+        }
+        
         SaveDataUtility saveDataUtility = new SaveDataUtility(this);
-        saveDataUtility.Load();
+        if (!saveDataUtility.Load())
+        {
+            retVal = false;
+        }
+        return retVal;
     }
 }
