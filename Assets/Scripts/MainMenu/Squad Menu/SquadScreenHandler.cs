@@ -12,6 +12,9 @@ public class SquadScreenHandler : MonoBehaviour
     public GameObject m_statAllocationNotifierRef;
     public Text m_statAllocationNotifierTextRef;
 
+    public GameObject m_equipmentAllocationNotifierRef;
+    public Text m_equipmentAllocationNotifierTextRef;
+
     //Inventory
 
     //Subscreens
@@ -45,6 +48,13 @@ public class SquadScreenHandler : MonoBehaviour
             {
                 m_statAllocationNotifierTextRef.text = "" + allocationPoints;
             }
+        }
+
+        int newEquipmentCount = m_gameHandlerRef.m_equipmentCollectedLastGame;
+        m_equipmentAllocationNotifierRef.SetActive(newEquipmentCount > 0);
+        if (newEquipmentCount > 0)
+        {
+            m_equipmentAllocationNotifierTextRef.text = newEquipmentCount.ToString();
         }
     }
 

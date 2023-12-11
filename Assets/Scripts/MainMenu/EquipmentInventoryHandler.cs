@@ -24,6 +24,8 @@ public class EquipmentInventoryHandler : MonoBehaviour
 
     List<EquipmentPanel> m_equipmentItemPanels;
 
+    [SerializeField] private ScrollRect m_inventoryView;
+
     bool m_initialised = false;
 
     // Start is called before the first frame update
@@ -89,6 +91,9 @@ public class EquipmentInventoryHandler : MonoBehaviour
         {
             m_equipmentItemPanels[i].Refresh();
         }
+
+        //Reset scroll bar to top
+        m_inventoryView.verticalNormalizedPosition = 1;
 
         //Top Panel
         //m_inventoryEquipmentSlotUIRef.SetEquipmentRef(m_gameHandlerRef.m_playerStatHandler.m_equippedEquipment[m_openedEquipmentSlotId]);
