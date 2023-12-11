@@ -75,7 +75,7 @@ public class Player : Damageable
         UpdateLocalStatsFromStatHandler();
         m_damageTextColor = Color.red;
         SetupEquipmentShield();
-        m_velocityIndicatorRef.SetActive(m_gameHandlerRef.m_upgrades[(int)GameHandler.UpgradeId.playerVector].m_owned);
+        m_velocityIndicatorRef.SetActive(m_gameHandlerRef.m_upgradeTree.m_upgradeItemList[(int)UpgradeItem.UpgradeId.playerVector].m_owned);
         m_battleManagerRef.InitialiseUpgrades();
         SetUpArmorSegments();
     }

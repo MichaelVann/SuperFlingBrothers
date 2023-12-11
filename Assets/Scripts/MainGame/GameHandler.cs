@@ -13,6 +13,8 @@ using static UnityEngine.UI.CanvasScaler;
 
 public class GameHandler : MonoBehaviour
 {
+    internal static GameHandler m_staticAutoRef;
+
     public const int MAIN_VERSION_NUMBER = 23;
     public const int SUB_VERSION_NUMBER = 5;
 
@@ -76,15 +78,9 @@ public class GameHandler : MonoBehaviour
     public int m_lastDnaBonus = 0;
 
     //Store
-    public UpgradeItem[] m_upgrades;
+    internal UpgradeTree m_upgradeTree;
     internal float m_junkEquipmentLevelScale = 0.5f;
     internal float m_junkEquipmentCostScale = 10f;
-    public enum UpgradeId
-    {
-        enemyVector,
-        playerVector,
-        Count
-    }
 
     //Equipment
     const int m_startingEquipment = 1;
@@ -141,6 +137,7 @@ public class GameHandler : MonoBehaviour
 
     void Awake()
     {
+        m_staticAutoRef = this;
         DontDestroyOnLoad(gameObject);
         //m_saveDataUtility = new SaveDataUtility(this);
         m_xCellSquad = new XCellSquad();
@@ -151,7 +148,7 @@ public class GameHandler : MonoBehaviour
 
         SetupHumanBody();
 
-        SetupUpgrades();
+        m_upgradeTree = new UpgradeTree();
         SetupEquipment();
         if (m_autoLoadDataOnLaunch)
         {
@@ -162,6 +159,7 @@ public class GameHandler : MonoBehaviour
             Application.targetFrameRate = (int)Screen.currentResolution.refreshRateRatio.value;
         }
 
+
         //Battle
         m_audioManager =  new AudioManager();
     }
@@ -171,37 +169,6 @@ public class GameHandler : MonoBehaviour
         m_humanBody = new HumanBody(this);
     }
 
-    void SetupUpgrades()
-    {
-        m_upgrades = new UpgradeItem[(int)UpgradeId.Count];
-
-        m_upgrades[(int)UpgradeId.enemyVector] = new UpgradeItem();
-        m_upgrades[(int)UpgradeId.enemyVector].SetName("Enemy Vectors");
-        m_upgrades[(int)UpgradeId.enemyVector].SetDescription("Shows the direction of all enemies movement.");
-        m_upgrades[(int)UpgradeId.enemyVector].SetCost(30);
-
-        m_upgrades[(int)UpgradeId.playerVector] = new UpgradeItem();
-        m_upgrades[(int)UpgradeId.playerVector].SetName("Player Vector");
-        m_upgrades[(int)UpgradeId.playerVector].SetDescription("Shows the direction of player movement.");
-        m_upgrades[(int)UpgradeId.playerVector].SetCost(20);
-    }
-    internal bool AttemptToBuyUpgrade(int a_upgradeID)
-    {
-        bool returnValue = false;
-        UpgradeItem upgrade = m_upgrades[a_upgradeID];
-        if (upgrade.m_cost <= m_cash)
-        {
-            m_cash -= upgrade.m_cost;
-            upgrade.m_level++;
-            upgrade.m_cost *= upgrade.m_costScaling;
-            if (!upgrade.m_owned)
-            {
-                upgrade.SetOwned(true);
-            }
-            returnValue = true;
-        }
-        return returnValue;
-    }
     void SetupEquipment()
     {
         m_equipmentInventory = new List<Equipment>();
@@ -408,7 +375,7 @@ public class GameHandler : MonoBehaviour
         //m_saveData.humanBody = m_humanBody;
         //m_saveData.statHandler.Copy(m_playerStatHandler);
         m_saveData.stockList = m_stockHandler.m_stockList;
-        m_saveData.upgrades = m_upgrades;
+        //m_saveData.upgrades = m_upgrades;
         m_saveData.equipmentList = m_equipmentInventory;
         m_saveData.bodyFirstName = m_humanBody.m_firstName;
         m_saveData.bodyLastName = m_humanBody.m_lastName;
@@ -442,10 +409,10 @@ public class GameHandler : MonoBehaviour
             //m_humanBody.m_firstName = m_saveData.bodyFirstName;
             //m_humanBody.m_lastName = m_saveData.bodyLastName;
 
-            for (int i = 0; i < m_upgrades.Length; i++)
-            {
-                m_upgrades[i].Copy(m_saveData.upgrades[i]);
-            }
+            //for (int i = 0; i < m_upgrades.Length; i++)
+            //{
+            //    m_upgrades[i].Copy(m_saveData.upgrades[i]);
+            //}
 
             for (int i = 0; i < m_xCellSquad.m_playerXCell.m_equippedEquipment.Length; i++)
             {

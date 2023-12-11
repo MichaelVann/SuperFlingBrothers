@@ -17,20 +17,43 @@ public class UpgradeItem
     public int m_level = 0;
     public int m_maxLevel = 10;
 
+    public bool m_unlocked;
+
+    internal UpgradeItem m_precursorUpgrade;
+    internal List<UpgradeItem> m_upgradeChildren;
+
+    public enum UpgradeId
+    {
+        playerVector,
+        enemyVector,
+        battleScouting,
+        Count
+    }
+    public UpgradeId m_ID;
+
     public void SetName(string a_string) { m_name = a_string; }
     public void SetDescription(string a_string) { m_description = a_string; }
     public void SetCost(float a_cost) { m_cost = a_cost; }
     public void SetCostScaling(float a_cost) { m_costScaling = a_cost; }
 
     public void SetOwned(bool a_value) { m_owned = a_value; }
+
+    public void SetPrecursorUpgrade(UpgradeItem a_upgradeItem) { m_precursorUpgrade = a_upgradeItem;}
     public void SetHasLevels(bool a_value) { m_hasLevels = a_value; }
 
     public void SetLevel(int a_value) { m_level = a_value; }
-    public void SetMaxLevel(int a_value) { m_maxLevel = a_value; }
+    public void SetMaxLevel(int a_value) { m_maxLevel = a_value; m_hasLevels = true; }
+
+    internal void SetID(UpgradeId a_ID) { m_ID = a_ID; }
+
+    internal void AddChildUpgrade(UpgradeItem a_child)
+    {
+        m_upgradeChildren.Add(a_child);
+    }
 
     public UpgradeItem()
     {
-
+        m_upgradeChildren = new List<UpgradeItem>();
     }
 
     public void Copy(UpgradeItem a_upgradeItem)
@@ -46,8 +69,12 @@ public class UpgradeItem
         m_maxLevel = a_upgradeItem.m_maxLevel;
     }
 
-    public void Update()
+    internal void Refresh()
     {
-
+        m_unlocked = true;
+        if (m_precursorUpgrade != null)
+        {
+            m_unlocked = m_precursorUpgrade.m_owned;
+        }
     }
 }
