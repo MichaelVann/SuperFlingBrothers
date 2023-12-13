@@ -63,7 +63,8 @@ public class BattleManager : MonoBehaviour
     public SpriteRenderer[] m_wallSpriteRenderers;
 
     Player m_player;
-    List<Enemy> m_enemies;
+    internal List<Enemy> m_enemies;
+    internal int[] m_enemyTypeCounts;
 
     //Player Spawn Intro
     bool m_introActive = true;
@@ -124,6 +125,9 @@ public class BattleManager : MonoBehaviour
     //Audio section
     public MusicPlayer m_musicPlayerRef;
 
+    internal delegate void onEnemyCountChangeDelegate();
+    internal onEnemyCountChangeDelegate m_enemyCountChangeDelegate;
+
     public float GetMaxGameEndTimer()
     {
         return m_maxGameEndTimer;
@@ -153,6 +157,8 @@ public class BattleManager : MonoBehaviour
         FindGameSpace();
 
         SetupEnvironmentalEffects();
+        m_enemies = new List<Enemy>();
+        m_enemyTypeCounts = new int[(int) Enemy.eEnemyType.Count];
     }
 
     public void Start()
@@ -468,6 +474,8 @@ public class BattleManager : MonoBehaviour
         enemyObj = Instantiate<GameObject>(template, a_spawnLocation, Quaternion.identity, m_gameViewRef.transform);
         Enemy enemy = enemyObj.GetComponent<Enemy>();
         enemy.SetUpType(a_type);
+        m_enemies.Add(enemy);
+        ChangeEnemyCount(1, enemy.m_enemyType);
     }
 
     public void SpawnEnemies()
@@ -611,13 +619,17 @@ public class BattleManager : MonoBehaviour
 
             Vector3 spawnLocation = m_enemySpawnPointsRefs[i].transform.position;
             SpawnEnemy(spawnLocation, enemyType);
-            ChangeEnemyCount(1);
         }
     }
 
-    public void ChangeEnemyCount(int a_change)
+    public void ChangeEnemyCount(int a_change, Enemy.eEnemyType a_type)
     {
         m_enemyCount += a_change;
+        m_enemyTypeCounts[(int) a_type] += a_change;
+        if (m_enemyCountChangeDelegate != null)
+        {
+            m_enemyCountChangeDelegate.Invoke();
+        }
         if (m_enemyCount <= 0)
         {
             StartEndingGame(eEndGameType.win);

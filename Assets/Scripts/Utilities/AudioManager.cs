@@ -27,12 +27,12 @@ public class AudioManager
         bool retVal = m_soundEffectsEnabled;
         retVal &= !m_muted;
         return retVal;
-    }
+    }   
 
     public AudioManager()
     {
         m_muted = false;
-        m_musicEnabled = false;
+        m_musicEnabled = true;
         m_soundEffectsEnabled = true;
     }
 }

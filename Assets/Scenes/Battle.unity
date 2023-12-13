@@ -741,7 +741,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.6000061, y: 2}
+  m_AnchoredPosition: {x: 0.60009766, y: 2}
   m_SizeDelta: {x: -40.7, y: -38.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &146685781
@@ -8608,6 +8608,7 @@ MonoBehaviour:
   m_playerSpawnPoint: {fileID: 616174667}
   m_playerSlidePoint: {fileID: 694589386}
   m_enemySpawnPointContainerRef: {fileID: 587954411}
+  m_activeAbilities: []
   m_endingGame: 0
   m_gameEndSlowdownFactor: 0.25
   m_gameEndTimer: 0
@@ -8617,6 +8618,9 @@ MonoBehaviour:
   m_enemyCount: 0
   m_pocketDamage: 2
   m_musicPlayerRef: {fileID: 7536694725050579455}
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &2111950312
 GameObject:
   m_ObjectHideFlags: 0
@@ -8945,6 +8949,8 @@ GameObject:
   - component: {fileID: 1258147062236752493}
   - component: {fileID: 7536694725050579454}
   - component: {fileID: 7536694725050579455}
+  - component: {fileID: 7536694725050579456}
+  - component: {fileID: 7536694725050579457}
   m_Layer: 0
   m_Name: Music Player
   m_TagString: Untagged
@@ -9831,8 +9837,9 @@ AudioSource:
   m_GameObject: {fileID: 763688679366833774}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 7647682589535607597, guid: e6911c7f548a44cf189772e6205e196a,
+    type: 2}
+  m_audioClip: {fileID: 8300000, guid: 788161927b64e4c288cadc5a2fd3f695, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -9930,8 +9937,62 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4afbf6e08ab0c504496ee6cebdcb37a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_mainMusic: {fileID: 8300000, guid: d53206eb8fdab4740abf81e044578ca0, type: 3}
-  m_heartBeatAudio: {fileID: 8300000, guid: 9ca2a76f658784081acb16354dd79bb3, type: 3}
+  m_audioMixer: {fileID: 24100000, guid: e6911c7f548a44cf189772e6205e196a, type: 2}
+  m_characterMusic: {fileID: 0}
+  m_heartBeatMusic: {fileID: 0}
+  m_idlerMusic: {fileID: 0}
+  m_inertiaDasherMusic: {fileID: 0}
+  m_dodgerMusic: {fileID: 0}
+  m_healerMusic: {fileID: 0}
+  m_strikerMusic: {fileID: 0}
+--- !u!169 &7536694725050579456
+AudioLowPassFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763688679366833774}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_LowpassResonanceQ: 1
+  lowpassLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.20841292
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!164 &7536694725050579457
+AudioReverbFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 763688679366833774}
+  m_Enabled: 1
+  m_DryLevel: 0
+  m_Room: 0
+  m_RoomHF: 0
+  m_DecayTime: 1
+  m_DecayHFRatio: 0.5
+  m_ReflectionsLevel: -10000
+  m_ReverbLevel: 0
+  m_ReverbDelay: 0.04
+  m_Diffusion: 100
+  m_Density: 100
+  m_HFReference: 5000
+  m_RoomLF: 0
+  m_LFReference: 250
+  m_ReflectionsDelay: 0
+  m_ReverbPreset: 27
 --- !u!1001 &8931938327932523813
 PrefabInstance:
   m_ObjectHideFlags: 0
