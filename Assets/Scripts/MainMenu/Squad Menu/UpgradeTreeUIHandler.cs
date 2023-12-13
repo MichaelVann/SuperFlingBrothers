@@ -67,11 +67,13 @@ public class UpgradeTreeUIHandler : MonoBehaviour
     public void AttemptToPurchaseUpgrade(UpgradeItem a_upgradeItemRef)
     {
         m_upgradeTreeRef.AttemptToBuyUpgrade(a_upgradeItemRef);
+        Refresh();
     }
 
     void SpawnNode(UpgradeItem a_upgrade, Vector3 a_parentPos, int a_index, float a_parentWidth, float a_width, bool a_drawingConnection)
     {
         UpgradeUINode node = Instantiate(m_upgradeNodePrefab, m_contentTransform).GetComponent<UpgradeUINode>();
+        m_upgradeNodes.Add(node);
         node.SetUp(a_upgrade, this);
         node.SetNameText(a_upgrade.m_name);
         node.SetAvailableSpace(a_width);
@@ -156,6 +158,14 @@ public class UpgradeTreeUIHandler : MonoBehaviour
 
             //node.transform.localPosition = offset;
             //SpawnChildNodes(initialUpgrades[i], offset, itemWidth);
+        }
+    }
+
+    void Refresh()
+    {
+        for (int i = 0; i < m_upgradeNodes.Count; i++)
+        {
+            m_upgradeNodes[i].Refresh();
         }
     }
 

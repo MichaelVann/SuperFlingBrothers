@@ -17,19 +17,7 @@ public class UpgradeTree
 
     UpgradeItem NewUpgrade(UpgradeItem.UpgradeId a_ID, string a_name, int a_cost, int a_maxLevel, UpgradeItem a_precursorUpgrade, string a_description)
     {
-        UpgradeItem upgrade = new UpgradeItem();
-        upgrade.SetName(a_name);
-        upgrade.SetDescription(a_description);
-        upgrade.SetCost(a_cost);
-        upgrade.SetPrecursorUpgrade(a_precursorUpgrade);
-        if (a_precursorUpgrade != null)
-        {
-            a_precursorUpgrade.AddChildUpgrade(upgrade);
-        }
-        if (a_maxLevel > 0)
-        {
-            upgrade.SetMaxLevel(a_maxLevel);
-        }
+        UpgradeItem upgrade = new UpgradeItem(a_ID,a_name, a_cost, a_maxLevel, a_precursorUpgrade, a_description);
         m_upgradeItemList.Add(upgrade);
         return upgrade;
     }
@@ -37,11 +25,13 @@ public class UpgradeTree
     void SetupUpgrades()
     {
         UpgradeItem playerVector = NewUpgrade(UpgradeItem.UpgradeId.playerVector, "Player Vector", 20, 0, null, "Shows the direction of player movement.");
-        UpgradeItem enemyVector = NewUpgrade(UpgradeItem.UpgradeId.enemyVector, "Enemy Vectors", 30, 0, playerVector, "Shows the direction of all enemies movement.");
+          UpgradeItem enemyVector = NewUpgrade(UpgradeItem.UpgradeId.enemyVector, "Enemy Vectors", 30, 0, playerVector, "Shows the direction of all enemies movement.");
+            UpgradeItem comboHits = NewUpgrade(UpgradeItem.UpgradeId.comboHits, "Combo Hits", 100, 0, enemyVector, "Adds 10% extra damage on each hit per turn.");
+
         UpgradeItem battleScouting = NewUpgrade(UpgradeItem.UpgradeId.battleScouting, "Battle Scouting", 50, 0, null, "Reveals the environmental effects of each battle.");
-        UpgradeItem test1 = NewUpgrade(UpgradeItem.UpgradeId.battleScouting, "Test1", 50, 0, playerVector, "Reveals the environmental effects of each battle.");
-        UpgradeItem test2 = NewUpgrade(UpgradeItem.UpgradeId.battleScouting, "Test2", 50, 0, battleScouting, "Reveals the environmental effects of each battle.");
-        UpgradeItem test3 = NewUpgrade(UpgradeItem.UpgradeId.battleScouting, "Test3", 50, 0, battleScouting, "Reveals the environmental effects of each battle.");
+        //UpgradeItem test1 = NewUpgrade(UpgradeItem.UpgradeId.battleScouting, "Test1", 50, 0, playerVector, "Reveals the environmental effects of each battle.");
+        //UpgradeItem test2 = NewUpgrade(UpgradeItem.UpgradeId.battleScouting, "Test2", 50, 0, battleScouting, "Reveals the environmental effects of each battle.");
+        //UpgradeItem test3 = NewUpgrade(UpgradeItem.UpgradeId.battleScouting, "Test3", 50, 0, battleScouting, "Reveals the environmental effects of each battle.");
         //UpgradeItem test4 = NewUpgrade(UpgradeItem.UpgradeId.battleScouting, "Test4", 50, 0, test1, "Reveals the environmental effects of each battle.");
     }
 
@@ -66,17 +56,6 @@ public class UpgradeTree
         }
     }
 
-
-    internal void UnlockUpgrade(UpgradeItem a_upgrade)
-    {
-        if (GameHandler.m_staticAutoRef.GetCurrentCash() >= a_upgrade.m_cost)
-        {
-            GameHandler.m_staticAutoRef.ChangeCash(-a_upgrade.m_cost);
-            a_upgrade.m_owned = true;
-            RefreshUpgrades();
-        }
-    }
-
     internal void AttemptToBuyUpgrade(UpgradeItem a_upgrade)
     {
         float cash = GameHandler.m_staticAutoRef.GetCurrentCash();
@@ -89,6 +68,7 @@ public class UpgradeTree
             {
                 a_upgrade.SetOwned(true);
             }
+            RefreshUpgrades();
         }
     }
 }

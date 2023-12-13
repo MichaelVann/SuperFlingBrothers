@@ -423,6 +423,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_nameText: {fileID: 2872542866340933681}
+  m_backdropRef: {fileID: 8541944816619021708}
+  m_iconRef: {fileID: 5361057874614134611}
+  m_possibleIconRefs:
+  - {fileID: 21300000, guid: 16663240d3d6dcc4483a530e8f1e68dc, type: 3}
+  - {fileID: 21300000, guid: e973702553cc23248a0b54ece9054332, type: 3}
+  - {fileID: 21300000, guid: 4eaa35deb3425a244b54297cd69bb51f, type: 3}
+  - {fileID: 21300000, guid: 239a3f56b5d7c0040957e5bb2a2986e9, type: 3}
+  m_lockIconRef: {fileID: 21300000, guid: 58422b0b0a2b0fa48ae9847f82aadfea, type: 3}
 --- !u!114 &4462926078987042811
 MonoBehaviour:
   m_ObjectHideFlags: 0

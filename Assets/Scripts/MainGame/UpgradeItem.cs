@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 [Serializable]
 public class UpgradeItem
@@ -26,6 +27,7 @@ public class UpgradeItem
     {
         playerVector,
         enemyVector,
+        comboHits,
         battleScouting,
         Count
     }
@@ -54,6 +56,25 @@ public class UpgradeItem
     public UpgradeItem()
     {
         m_upgradeChildren = new List<UpgradeItem>();
+    }
+
+    public UpgradeItem(UpgradeItem.UpgradeId a_ID, string a_name, int a_cost, int a_maxLevel, UpgradeItem a_precursorUpgrade, string a_description)
+    {
+        m_upgradeChildren = new List<UpgradeItem>();
+        SetID(a_ID);
+        SetName(a_name);
+        SetDescription(a_description);
+        SetCost(a_cost);
+        SetPrecursorUpgrade(a_precursorUpgrade);
+        if (a_precursorUpgrade != null)
+        {
+            a_precursorUpgrade.AddChildUpgrade(this);
+        }
+        if (a_maxLevel > 0)
+        {
+            SetMaxLevel(a_maxLevel);
+        }
+        Refresh();
     }
 
     public void Copy(UpgradeItem a_upgradeItem)

@@ -27,9 +27,8 @@ public class Nucleus : Damageable
         base.Update();
     }
 
-    public override bool OnCollisionEnter2D(Collision2D a_collision)
+    public override void OnCollisionEnter2D(Collision2D a_collision)
     {
-        bool tookDamage = false;
         Player oppPlayer = a_collision.gameObject.GetComponent<Player>();
         if (oppPlayer)
         {
@@ -38,11 +37,6 @@ public class Nucleus : Damageable
                 Heal(oppPlayer.m_statHandler.m_stats[(int)eCharacterStatType.strength].m_finalValue * oppPlayer.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
             }
         }
-        else
-        {
-            tookDamage = base.OnCollisionEnter2D(a_collision);
-        }
-        return tookDamage;
     }
 
     public override void Die()

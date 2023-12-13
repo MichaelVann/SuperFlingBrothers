@@ -53,7 +53,7 @@ public class RisingFadingText : MonoBehaviour
 
     void LifeTimerUpdate()
     {
-        m_lifeTimer += Time.deltaTime;
+        m_lifeTimer += Time.unscaledDeltaTime;
         if (m_lifeTimer >= m_lifeTimerMax)
         {
             Destroy(m_imageRef.gameObject);

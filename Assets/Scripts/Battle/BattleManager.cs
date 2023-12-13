@@ -74,9 +74,9 @@ public class BattleManager : MonoBehaviour
 
     //Hit Slowdown
     internal bool m_hitSlowDownActive = false;
-    float m_hitTimeSlowdownRate = 0.05f;
+    float m_hitTimeSlowdownRate = 0.03f;
     float m_enemyHitTimer;
-    float m_enemyHitTimerMax = 0.14f;
+    float m_enemyHitTimerMax = 0.23f;
 
     //Turn Freezing
     internal bool m_timeFrozen = false;
@@ -710,7 +710,7 @@ public class BattleManager : MonoBehaviour
         {
             if (!m_timeFrozen)
             {
-                m_enemyHitTimer += Time.deltaTime / m_hitTimeSlowdownRate;
+                m_enemyHitTimer += Time.unscaledDeltaTime;
                 if (m_enemyHitTimer >= m_enemyHitTimerMax)
                 {
                     EngageHitSlowdown(false);

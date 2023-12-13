@@ -20,16 +20,18 @@ public class Player : Damageable
 
     LineRenderer m_flingLine;
 
-
     bool invertedTime = false;
 
     float m_hitTimeSlowdownRate = 0.05f;
-
 
     public SpriteRenderer m_invalidFlingCross;
 
     public GameObject m_projectileTemplate;
 
+    //Combohits
+    bool m_comboHitEnabled;
+    float m_comboHit = 1f;
+    const float m_comboHitExponent = 1.1f;
     //Coins
     float m_cumulativeCoinValue = 0f;
     float m_coinPickupTimeout = 0;
@@ -75,11 +77,21 @@ public class Player : Damageable
         UpdateLocalStatsFromStatHandler();
         m_damageTextColor = Color.red;
         SetupEquipmentShield();
-        m_velocityIndicatorRef.SetActive(m_gameHandlerRef.m_upgradeTree.m_upgradeItemList[(int)UpgradeItem.UpgradeId.playerVector].m_owned);
-        m_battleManagerRef.InitialiseUpgrades();
+        SetUpUpgrades();
         SetUpArmorSegments();
     }
 
+    bool HasUpgrade(UpgradeItem.UpgradeId a_upgradeID)
+    {
+        return m_gameHandlerRef.m_upgradeTree.m_upgradeItemList[(int)a_upgradeID].m_owned;
+    }
+
+    void SetUpUpgrades()
+    {
+        m_comboHitEnabled = HasUpgrade(UpgradeItem.UpgradeId.comboHits);
+        m_velocityIndicatorRef.SetActive(HasUpgrade(UpgradeItem.UpgradeId.playerVector));
+        m_battleManagerRef.InitialiseUpgrades();
+    }
 
     void SetUpShield(List<EquipmentAbility> a_shieldAbilityList)
     {
@@ -221,6 +233,10 @@ public class Player : Damageable
     public override void Fling(Vector3 a_flingVector, float a_flingStrength)
     {
         base.Fling(a_flingVector, a_flingStrength);
+        if (m_comboHitEnabled)
+        {
+            m_comboHit = 1f;
+        }
         m_flinging = false;
         m_battleManagerRef.SetFrozen(false);
         m_statHandler.m_stats[(int)eCharacterStatType.dexterity].ChangeXP(m_flingDexterityXP * GameHandler.BATTLE_SkillXPScale);
@@ -329,17 +345,14 @@ public class Player : Damageable
         }
     }
 
-    public override bool OnCollisionEnter2D(Collision2D a_collision)
+    public override void OnCollisionEnter2D(Collision2D a_collision)
     {
         Enemy enemy = a_collision.gameObject.GetComponent<Enemy>();
         RetreatZone retreatZone = a_collision.gameObject.GetComponent<RetreatZone>();
         bool runningBaseCollision = false;
-        bool tookDamage = false;
 
         Vector2 collisionPoint2d = a_collision.GetContact(0).point;
         Vector3 collisionPoint = new Vector3(collisionPoint2d.x, collisionPoint2d.y, transform.position.z);
-
-
 
         if (enemy)//If collided with an enemy
         {
@@ -351,6 +364,20 @@ public class Player : Damageable
                 }
             }
             m_battleManagerRef.UseExtraTurn();
+
+
+            float damageDealt = CalculateDamageDealtFromCollision(enemy, a_collision);
+            if (m_comboHitEnabled)
+            {
+                damageDealt *= m_comboHit;
+                string comboString = VLib.RoundToDecimalPlaces(m_comboHit, 2) + "X";
+                SpawnRisingFadingText(comboString, Color.white, true, 2f);
+            }
+            enemy.ReceiveDamageFromCollision(gameObject, damageDealt, a_collision.contacts[0].point);
+            if (m_comboHitEnabled)
+            {
+                m_comboHit *= m_comboHitExponent;
+            }
         }
         else if (retreatZone)
         {
@@ -361,18 +388,14 @@ public class Player : Damageable
                 transform.position = retreatZone.transform.position;
             }
         }
-
-        if (a_collision.gameObject.GetComponent<Pocket>())
+        else if (a_collision.gameObject.GetComponent<Pocket>())
         {
             TakePocketDamage(a_collision.contacts[0].point);
             PocketFling(a_collision.gameObject.transform.position);
         }
-        else if (a_collision.gameObject.GetComponent<Enemy>() != null)
+        else if (a_collision.gameObject.GetComponent<Nucleus>())
         {
-            if (!a_collision.gameObject.GetComponent<Enemy>().m_playerVulnerable)
-            {
-                runningBaseCollision = true;
-            }
+            runningBaseCollision = false;
         }
         else
         {
@@ -381,9 +404,13 @@ public class Player : Damageable
 
         if (runningBaseCollision)
         {
-            tookDamage = base.OnCollisionEnter2D(a_collision);
+            base.OnCollisionEnter2D(a_collision);
         }
-        return tookDamage;
+    }
+
+    internal override void ReceiveDamageFromCollision(GameObject a_collidingObject, float a_damage, Vector2 a_contactPoint)
+    {
+        base.ReceiveDamageFromCollision(a_collidingObject, a_damage, a_contactPoint);
     }
 
     internal void ShootProjectile(Vector3 a_shootVector, EquipmentAbility a_ability)

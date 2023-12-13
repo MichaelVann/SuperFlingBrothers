@@ -260,12 +260,12 @@ public class Enemy : Damageable
         m_flingDirectionIndicatorRef.transform.localRotation = VLib.Vector2DirectionToQuaternion(m_nextFlingDirection);
     }
 
-    public override bool OnCollisionEnter2D(Collision2D a_collision)
+    public override void OnCollisionEnter2D(Collision2D a_collision)
     {
         bool runningBaseCollision = true;
         Enemy oppEnemy = a_collision.gameObject.GetComponent<Enemy>();
         Player oppPlayer = a_collision.gameObject.GetComponent<Player>();
-        bool tookDamage = true;
+        float dealtDamage = 0f;
         if (a_collision.gameObject.GetComponent<Pocket>())
         {
             TakePocketDamage(a_collision.contacts[0].point);
@@ -277,6 +277,7 @@ public class Enemy : Damageable
             m_rigidBody.constraints = RigidbodyConstraints2D.FreezePosition;
             m_rigidBody.freezeRotation = true;
             m_nucleusDrainTimer.SetActive(true);
+            runningBaseCollision = true;
         }
         else if (oppEnemy != null)
         {
@@ -287,18 +288,30 @@ public class Enemy : Damageable
             }
             runningBaseCollision = false;// !m_typeTrait.healer;
         }
+        else if (oppPlayer != null)
+        {
+            if (m_playerVulnerable)
+            {
+                runningBaseCollision = false;
+            }
+        }
 
         if (runningBaseCollision)
         {
-            tookDamage = base.OnCollisionEnter2D(a_collision);
-            if (tookDamage && oppPlayer != null)
-            {
-                m_playerVulnerableTimer.Reset();
-                m_playerVulnerable = true;
-                oppPlayer.ReportDamageDealt(m_lastDamageTaken);
-            }
+            base.OnCollisionEnter2D(a_collision);
         }
-        return tookDamage;
+    }
+
+    internal override void ReceiveDamageFromCollision(GameObject a_collidingGameObject, float a_damage, Vector2 a_contactPoint)
+    {
+        Player oppPlayer = a_collidingGameObject.GetComponent<Player>();
+        base.ReceiveDamageFromCollision(a_collidingGameObject, a_damage, a_contactPoint);
+        if (oppPlayer != null)
+        {
+            m_playerVulnerableTimer.Reset();
+            m_playerVulnerable = true;
+            oppPlayer.ReportDamageDealt(m_lastDamageTakenFromCollision);
+        }
     }
 
     public override void Damage(float a_damage, Vector2 a_damagePoint)

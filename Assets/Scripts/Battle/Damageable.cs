@@ -35,7 +35,7 @@ public class Damageable : BaseObject
 
     public GameObject m_puffOfSmokeTemplate;
 
-    protected float m_lastDamageTaken = 0f;
+    protected float m_lastDamageTakenFromCollision = 0f;
 
     RigidbodyConstraints2D m_originalConstraints;
 
@@ -176,13 +176,27 @@ public class Damageable : BaseObject
         m_damageFlashOverrideRunning = true;
     }
 
+    protected void SpawnRisingFadingText(string a_string, Color a_color, bool a_gravityAffected, float a_scale = 1f)
+    {
+        RisingFadingText text = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(0f, m_damageTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
+        text.SetImageEnabled(false);
+        text.SetGravityAffected(true);
+        text.SetTextContent(a_string);
+        text.SetOriginalColor(a_color);
+        text.SetOriginalScale(a_scale);
+    }
+
+    protected void SpawnRisingFadingText(float a_value, int a_decimals, Color a_color, bool a_gravityAffected, float a_scale = 1f)
+    {
+        string valueString = "" + VLib.TruncateFloatsDecimalPlaces(a_value, a_decimals);
+
+        SpawnRisingFadingText(valueString, a_color, a_gravityAffected, a_scale);
+    }
+
     protected void SpawnDamageText(float a_value)
     {
-        RisingFadingText damageText = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(0f, m_damageTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
-        damageText.SetImageEnabled(false);
-        damageText.SetGravityAffected(true);
-        damageText.SetTextContent(a_value);
-        damageText.SetOriginalColor(a_value >= 0f ? m_healTextColor : m_damageTextColor);
+        Color color = a_value >= 0f ? m_healTextColor : m_damageTextColor;
+        SpawnRisingFadingText(a_value, 2, color, true);
     }
 
     private void ChangeHealth(float a_change)
@@ -286,30 +300,46 @@ public class Damageable : BaseObject
         return chanceToHit;
     }
 
-    public virtual bool OnCollisionEnter2D(Collision2D a_collision)
+    protected float CalculateDamageDealtFromCollision(Damageable a_oppDamageable, Collision2D a_collision)
     {
-        bool tookDamage = false;
+        float damageDone = 0f;
+
+        Vector2 contactPoint = a_collision.GetContact(0).point;
+
+        float contactStrength = GetChanceToHit(contactPoint);
+        float oppContactStrength = a_oppDamageable.GetChanceToHit(contactPoint);
+
+        if (oppContactStrength <= contactStrength)
+        {
+            float strength = m_statHandler.m_stats[(int)eCharacterStatType.strength].m_finalValue;
+            float speedMult = 1f / m_damagePerSpeedDivider;
+            damageDone = strength * speedMult * contactStrength;
+        }
+
+        return damageDone;
+    }
+
+    internal virtual void ReceiveDamageFromCollision(GameObject a_collidingObject, float a_damage, Vector2 a_contactPoint)
+    {
+        if (a_damage != 0)
+        {
+            m_rigidBody.velocity *= GameHandler.DAMAGEABLE_HitVelocityMultiplier;
+            Damage(a_damage, a_contactPoint);
+            m_lastDamageTakenFromCollision = a_damage;
+        }
+    }
+
+    public virtual void OnCollisionEnter2D(Collision2D a_collision)
+    {
         Damageable oppDamageable = a_collision.gameObject.GetComponent<Damageable>();
         if (oppDamageable)
         {
-            Vector2 contactPoint = a_collision.GetContact(0).point;
-            float contactStrength = GetChanceToHit(contactPoint);
-
-            float oppContactStrength = oppDamageable.GetChanceToHit(contactPoint);
-            if (oppContactStrength >= contactStrength)
+            float damageDealt = CalculateDamageDealtFromCollision(oppDamageable, a_collision);
+            if (damageDealt != 0f)
             {
-                //Damage(oppDamageable.m_statHandler.m_stats[(int)eCharacterStatIndices.strength].finalValue * oppDamageable.m_lastMomentumMagnitude / m_damagePerSpeedDivider);
-
-                float oppStrength = oppDamageable.m_statHandler.m_stats[(int)eCharacterStatType.strength].m_finalValue;
-                float oppSpeed = 1f / m_damagePerSpeedDivider;
-                float damage = oppStrength * oppSpeed * oppContactStrength;
-                Damage(oppStrength * oppSpeed * oppContactStrength, a_collision.contacts[0].point);
-                m_rigidBody.velocity *= GameHandler.DAMAGEABLE_HitVelocityMultiplier;
-                tookDamage = true;
-                m_lastDamageTaken = damage;
+                oppDamageable.ReceiveDamageFromCollision(gameObject, damageDealt, a_collision.contacts[0].point);
             }
         }
-        return tookDamage;
     }
 
     private void DamageFlashOverrideUpdate()
