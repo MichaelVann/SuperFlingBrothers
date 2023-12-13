@@ -9,6 +9,9 @@ public class UpgradeTree
     internal List<UpgradeItem> m_upgradeItemList;
 
     // Start is called before the first frame update
+
+    internal bool HasUpgrade(UpgradeItem.UpgradeId a_upgradeId) { return m_upgradeItemList[(int)a_upgradeId].m_owned; }
+
     internal UpgradeTree()
     {
         m_upgradeItemList = new List<UpgradeItem>();

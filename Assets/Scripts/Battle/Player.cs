@@ -83,7 +83,7 @@ public class Player : Damageable
 
     bool HasUpgrade(UpgradeItem.UpgradeId a_upgradeID)
     {
-        return m_gameHandlerRef.m_upgradeTree.m_upgradeItemList[(int)a_upgradeID].m_owned;
+        return m_gameHandlerRef.m_upgradeTree.HasUpgrade(a_upgradeID);
     }
 
     void SetUpUpgrades()

@@ -369,4 +369,123 @@ public static class VLib
         result /= shift;
         return result;
     }
+
+    public static string ScrambleAlphabeticalString(string a_input)
+    {
+        string output = string.Empty;
+        int charBase = -1;
+        int cypher = 1; //VLib.vRandom(0, 26);
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < a_input.Length; i++)
+        {
+            char c = a_input[i];
+            if (c != ' ')
+            {
+                float roll = VLib.vRandom(0f, 1f);
+                if (roll >= 0.5)
+                {
+                    c = '?';
+                }
+                else if (roll >= 0.25)
+                {
+                    int symbolRoll = vRandom(1, 4);
+                    switch (symbolRoll)
+                    {
+                        case 1:
+                            c = '!';
+                            break;
+                        case 2:
+                            c = '#';
+                            break;
+                        case 3:
+                            c = '&';
+                            break;
+                        case 4:
+                            c = '@';
+                            break;
+                    }
+                }
+                else
+                {
+                    if (c > 91)
+                    {
+                        charBase = 97;
+                    }
+                    else
+                    {
+                        charBase = 65;
+                    }
+                    int cInt = c + cypher;
+                    cInt = (cInt - charBase) % 26;
+                    c = (char)(cInt + charBase);
+                }
+
+            }
+            builder.Append(c);
+        }
+        output = builder.ToString();
+        return output;
+    }
+
+    public static char ScrambleAlphabeticalCharacter(char a_char)
+    {
+        if (a_char != ' ')
+        {
+            int charBase = -1;
+            int cypher = 1;
+            float roll = VLib.vRandom(0f, 1f);
+            if (roll >= 0.5)
+            {
+                a_char = '?';
+            }
+            else if (roll >= 0.25)
+            {
+                int symbolRoll = vRandom(1, 4);
+                switch (symbolRoll)
+                {
+                    case 1:
+                        a_char = '!';
+                        break;
+                    case 2:
+                        a_char = '#';
+                        break;
+                    case 3:
+                        a_char = '&';
+                        break;
+                    case 4:
+                        a_char = '@';
+                        break;
+                }
+            }
+            else
+            {
+                if (a_char > 91)
+                {
+                    charBase = 97;
+                }
+                else
+                {
+                    charBase = 65;
+                }
+                int cInt = a_char + cypher;
+                cInt = (cInt - charBase) % 26;
+                a_char = (char)(cInt + charBase);
+            }
+        }
+        return a_char;
+    }
+
+    public static string ScrambleRandomAlphabeticalCharacter(string a_input)
+    {
+        string output = string.Empty;
+        if(a_input.Length > 0)
+        {
+            StringBuilder builder = new StringBuilder(a_input);
+            int index = VLib.vRandom(0, a_input.Length - 1);
+            builder[index] = ScrambleAlphabeticalCharacter(a_input[index]);
+            output = builder.ToString();
+        }
+        return output;
+    }
+
 }

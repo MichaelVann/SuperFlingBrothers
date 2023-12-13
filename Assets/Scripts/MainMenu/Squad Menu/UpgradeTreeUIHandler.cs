@@ -22,7 +22,7 @@ public class UpgradeTreeUIHandler : MonoBehaviour
     //Nodes
     UpgradeUINode m_selectedUpgradeNode = null;
     const float m_firstNodeRowPadding = 250f;
-    const float m_nodeVerticalPadding = 350f;
+    const float m_nodeVerticalPadding = 245f;
 
     //Zoom
     float m_zoom = 1f;
@@ -31,21 +31,26 @@ public class UpgradeTreeUIHandler : MonoBehaviour
     bool m_wasPinchingLastFrame = false;
     float m_lastPinchDistance = 0f;
 
+    bool m_inited = false;
+
     // Start is called before the first frame update
     void Start()
     {
         m_gameHandlerRef = GameHandler.m_staticAutoRef;
         m_upgradeTreeRef = m_gameHandlerRef.m_upgradeTree;
         m_upgradeNodes = new List<UpgradeUINode>();
-        //for (int i = 0; i < m_upgradeTreeRef.m_upgradeItemList.Count; i++)
-        //{
-        //    UpgradeItem upgradeItem = m_upgradeTreeRef.m_upgradeItemList[i];
-        //    UpgradeUINode upgradeNode = Instantiate(m_upgradeNodePrefab, m_contentTransform).GetComponent<UpgradeUINode>();
-        //    upgradeNode.SetNameText(upgradeItem.m_name);
-        //    m_upgradeNodes.Add(upgradeNode);
-        //}
+
         PositionUpgrades();
         SetUpgradeNodePanelStatus(false);
+        m_inited = true;
+    }
+
+    private void OnEnable()
+    {
+        if (m_inited)
+        {
+            Refresh();
+        }
     }
 
     void SelectNode()
@@ -148,16 +153,6 @@ public class UpgradeTreeUIHandler : MonoBehaviour
         {
             float yPos = m_firstNodeRowPadding - m_nodeVerticalPadding;
             SpawnNode(initialUpgrades[i], new Vector3(0f, yPos, 0f), i, totalWidth, itemWidth, true);
-            //UpgradeUINode node = Instantiate(m_upgradeNodePrefab, m_contentTransform).GetComponent<UpgradeUINode>();
-            //node.SetNameText(initialUpgrades[i].m_name);
-            //node.SetAvailableSpace(itemWidth);
-            //Vector3 offset = new Vector3((i+1) * itemWidth, 250, 0);
-
-            ////Account for 0,0 being in the middle
-            //offset -= new Vector3(totalWidth / 2f,0f,0f);
-
-            //node.transform.localPosition = offset;
-            //SpawnChildNodes(initialUpgrades[i], offset, itemWidth);
         }
     }
 
