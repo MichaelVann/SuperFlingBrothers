@@ -2496,7 +2496,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 398, y: -13.999756}
+  m_AnchoredPosition: {x: -440, y: -13.999756}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &612851207
@@ -5219,6 +5219,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1148175457}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1148175459 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7215183608725576750, guid: f83de20d141e8e54bb03c862fd8241b4,
+    type: 3}
+  m_PrefabInstance: {fileID: 1148175457}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47ce86e225613ae4a99b97abb6cb149a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!212 &1160697055 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 6401465947331615681, guid: 2eeca16652b58a1458d7025c898f83b9,
@@ -8501,7 +8513,7 @@ GameObject:
   - component: {fileID: 2053396456}
   - component: {fileID: 2053396457}
   m_Layer: 0
-  m_Name: Name Placard
+  m_Name: Battle Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8534,7 +8546,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcb4ac4071daf3b499517daaa03411b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_turnsText: {fileID: 0}
+  m_xpBarHandlerRef: {fileID: 1148175459}
   m_scoreText: {fileID: 978051187}
   m_gameOver: 0
   m_endingText: {fileID: 1194165200}
@@ -8608,6 +8620,7 @@ MonoBehaviour:
   m_playerSpawnPoint: {fileID: 616174667}
   m_playerSlidePoint: {fileID: 694589386}
   m_enemySpawnPointContainerRef: {fileID: 587954411}
+  m_activeAbilities: []
   m_endingGame: 0
   m_gameEndSlowdownFactor: 0.25
   m_gameEndTimer: 0
@@ -8617,6 +8630,9 @@ MonoBehaviour:
   m_enemyCount: 0
   m_pocketDamage: 2
   m_musicPlayerRef: {fileID: 7536694725050579455}
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &2111950312
 GameObject:
   m_ObjectHideFlags: 0

@@ -17,7 +17,7 @@ public class XpBarHandler : UIBar
     void Update()
     {
         CharacterStatHandler statHandler = m_gameHandlerRef.m_xCellSquad.m_statHandler;
-        Init((float)statHandler.m_RPGLevel.m_XP, (float)statHandler.m_RPGLevel.m_maxXP);
+        Init(statHandler.m_RPGLevel.m_XP, statHandler.m_RPGLevel.m_maxXP);
         SetLabeltext("Level " + statHandler.m_RPGLevel.m_level);
     }
 }

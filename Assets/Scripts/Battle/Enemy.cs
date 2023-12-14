@@ -393,14 +393,7 @@ public class Enemy : Damageable
 
     void SpawnXpText()
     {
-        RisingFadingText xpText = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(0f, m_xpTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
-        xpText.SetImageEnabled(false);
-        xpText.SetGravityAffected(false);
-        xpText.SetHorizontalSpeed(0f);
-        xpText.SetLifeTimerMax(1.35f);
-        xpText.SetTextContent("XP +" + m_xpReward);
-        xpText.SetOriginalColor(Color.cyan);
-        xpText.SetOriginalScale(1.2f);
+        m_battleManagerRef.m_uiHandlerRef.SpawnXpRisingText(m_risingFadingTextPrefab, m_xpReward);
     }
 
     void SpawnDeathLoot()

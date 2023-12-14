@@ -8,8 +8,8 @@ public class BattleUIHandler : MonoBehaviour
     BattleManager m_battleManagerRef;
     GameHandler m_gameHandlerRef;
 
-    public Text m_turnsText;
-    public Text m_scoreText;
+    [SerializeField] XpBarHandler m_xpBarHandlerRef;
+    [SerializeField] Text m_scoreText;
 
     public bool m_gameOver = false;
     public GameObject m_endingText;
@@ -79,6 +79,23 @@ public class BattleUIHandler : MonoBehaviour
             textScale = 1f;
         }
         m_endingText.transform.localScale = new Vector3(textScale, textScale, 1f);
+    }
+
+    internal void SpawnXpRisingText(GameObject a_risingTextPrefab, float a_xpReward)
+    {
+        RisingFadingText xpText = Instantiate(a_risingTextPrefab, m_xpBarHandlerRef.gameObject.transform.position + new Vector3(400f, 0f, 0f), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
+        xpText.SetImageEnabled(false);
+        xpText.SetGravityAffected(false);
+        xpText.SetHorizontalSpeed(0f);
+        xpText.SetLifeTimerMax(1.35f);
+        xpText.SetTextContent("XP +" + a_xpReward);
+        xpText.SetOriginalColor(Color.cyan);
+        xpText.SetOriginalScale(1.2f);
+    }
+
+    internal void SpawnCoinRisingText(GameObject a_risingTextPrefab, float a_value)
+    {
+
     }
 
     void Update()

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Damageable : BaseObject
 {
@@ -180,23 +181,27 @@ public class Damageable : BaseObject
     {
         RisingFadingText text = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(0f, m_damageTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
         text.SetImageEnabled(false);
-        text.SetGravityAffected(true);
-        text.SetTextContent(a_string);
-        text.SetOriginalColor(a_color);
+        //text.SetGravityAffected(true);
+        //text.SetTextContent(a_string);
+        //text.SetOriginalColor(a_color);
         text.SetOriginalScale(a_scale);
-    }
-
-    protected void SpawnRisingFadingText(float a_value, int a_decimals, Color a_color, bool a_gravityAffected, float a_scale = 1f)
-    {
-        string valueString = "" + VLib.TruncateFloatsDecimalPlaces(a_value, a_decimals);
-
-        SpawnRisingFadingText(valueString, a_color, a_gravityAffected, a_scale);
+        text.SetUp(a_string, a_color, a_color);
     }
 
     protected void SpawnDamageText(float a_value)
     {
-        Color color = a_value >= 0f ? m_healTextColor : m_damageTextColor;
-        SpawnRisingFadingText(a_value, 2, color, true);
+        Color firstcolor = a_value >= 0f ? m_healTextColor : Color.red;
+        Color secondColor = a_value >= 0f ? m_healTextColor : Color.yellow;
+
+        string valueString = "" + VLib.TruncateFloatsDecimalPlaces(a_value, 2);
+
+        RisingFadingText text = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(0f, m_damageTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
+        text.SetImageEnabled(false);
+        //text.SetGravityAffected(true);
+        //text.SetTextContent(a_string);
+        //text.SetOriginalColor(a_color);
+        text.SetOriginalScale(1f);
+        text.SetUp(valueString, firstcolor, secondColor);
     }
 
     private void ChangeHealth(float a_change)
