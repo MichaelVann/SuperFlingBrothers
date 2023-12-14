@@ -11,6 +11,8 @@ public class AttributeScreenHandler : MonoBehaviour
     public Text m_availablePointsValueTextRef;
     public Button m_reSpecButtonRef;
     public TextMeshProUGUI m_reSpecButtonTextRef;
+    [SerializeField] GameObject m_confirmationBoxPrefab;
+    [SerializeField] GameObject m_popUpCanvasRef;
 
     // Start is called before the first frame update
     void Start()
@@ -31,5 +33,12 @@ public class AttributeScreenHandler : MonoBehaviour
         m_gameHandlerRef.AttemptToRespec();
         m_reSpecButtonTextRef.text = "Respec \n" + m_gameHandlerRef.m_xCellSquad.m_statHandler.m_reSpecCost + " DNA";
         m_reSpecButtonRef.interactable = m_gameHandlerRef.m_xCellSquad.m_statHandler.m_reSpecCost <= m_gameHandlerRef.GetCurrentCash();
+    }
+
+    public void AskToRespec()
+    {
+        ConfirmationBox confirmationBox = Instantiate(m_confirmationBoxPrefab, m_popUpCanvasRef.transform).GetComponent<ConfirmationBox>();
+        confirmationBox.SetMessageText("Are you sure you want to respecialise?");
+        confirmationBox.m_confirmationResponseDelegate = new ConfirmationBox.ConfirmationResponseDelegate(Respec);
     }
 }

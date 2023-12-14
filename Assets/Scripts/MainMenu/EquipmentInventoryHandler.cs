@@ -172,7 +172,6 @@ public class EquipmentInventoryHandler : MonoBehaviour
         }
     }
 
-
     public void ConfirmSellAllItems()
     {
         ConfirmationBox confirmationBox = Instantiate(m_confirmationBoxPrefab, m_popUpCanvasRef.transform).GetComponent<ConfirmationBox>();

@@ -289,8 +289,8 @@ public class CharacterStatHandler
     public void ReSpec()
     {
         SetDefaultStats();
-        m_RPGLevel.m_allocationPoints = m_RPGLevel.m_level - 1;
-        m_reSpecCost *= 10;
+        m_RPGLevel.m_allocationPoints = m_RPGLevel.m_level;
+        //m_reSpecCost *= 10;
     }
 
     public void UpdateStat(eCharacterStatType a_index)
@@ -353,6 +353,7 @@ public class CharacterStatHandler
     {
         for (int i = 0; i < (int)eCharacterStatType.count; i++)
         {
+            m_stats[i].m_value = 0f;
             m_stats[i].m_originalCost = 10f;
             m_stats[i].m_cost = m_stats[i].m_originalCost;
             m_stats[i].m_costIncreaseRate = 1.8f;
