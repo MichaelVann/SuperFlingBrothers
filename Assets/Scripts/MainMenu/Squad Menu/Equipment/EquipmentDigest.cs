@@ -16,6 +16,7 @@ public class EquipmentDigest : MonoBehaviour
     public Text m_itemValueTextRef;
     public EquipmentInventoryHandler m_equipmentInventoryHandler;
     public EquipmentInteractButton m_interactButtonRef;
+    [SerializeField] GameObject m_toOverviewButtonRef;
 
     GameHandler m_gameHandlerRef;
 
@@ -34,6 +35,7 @@ public class EquipmentDigest : MonoBehaviour
 
     public void Refresh()
     {
+        bool linkedToSquadScreen = false;
         if (m_gameHandlerRef == null)
         {
             m_gameHandlerRef = FindObjectOfType<GameHandler>();
@@ -42,8 +44,24 @@ public class EquipmentDigest : MonoBehaviour
         {
             m_equipmentInventoryHandler = FindObjectOfType<EquipmentInventoryHandler>();
         }
+        if (m_equipmentInventoryHandler != null)
+        {
+            linkedToSquadScreen = true;
+        }
+
+        if (linkedToSquadScreen)
+        {
+            m_interactButtonRef.Init(m_gameHandlerRef, m_equipmentInventoryHandler.m_squadOverviewHandlerRef, m_equipmentRef);
+            m_interactButtonRef.SetEquipButtonStatus();
+            m_interactButtonRef.gameObject.SetActive(true);
+            m_toOverviewButtonRef.SetActive(false);
+        }
+        else
+        {
+            m_interactButtonRef.gameObject.SetActive(false);
+            m_toOverviewButtonRef.SetActive(true);
+        }
         bool valid = m_equipmentRef != null;
-        m_interactButtonRef.Init(m_gameHandlerRef, m_equipmentInventoryHandler.m_squadOverviewHandlerRef, m_equipmentRef);
         for (int i = 0; i < m_statTexts.Length; i++)
         {
             m_statTexts[i].text = "0";
@@ -72,16 +90,21 @@ public class EquipmentDigest : MonoBehaviour
         m_nameText.text = valid ? m_equipmentRef.m_name : "";
         m_nameText.color = valid ? m_equipmentRef.m_rarity.color : Color.white;
 
-
         m_portraitRef.gameObject.SetActive(valid);
         m_affixText.text = "";
         m_affixText.text += m_equipmentRef.m_activeAbility.GetAbilityDescription() + '\n';
-        m_interactButtonRef.SetEquipButtonStatus();
     }
 
     public void Close()
     {
-        m_equipmentInventoryHandler.SetEquipmentDigestStatus(false);
+        if (m_equipmentInventoryHandler)
+        {
+            m_equipmentInventoryHandler.SetEquipmentDigestStatus(false);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void InteractButtonPressed()
@@ -95,6 +118,12 @@ public class EquipmentDigest : MonoBehaviour
             m_equipmentInventoryHandler.SetEquipStatus(m_equipmentRef);
         }
         Refresh();
+        Close();
+    }
+
+    public void ToOverview()
+    {
+        FindObjectOfType<SquadScreenHandler>().OpenSquadOverview();
         Close();
     }
 

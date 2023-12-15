@@ -13,6 +13,8 @@ public class NodeInfoPanelHandler : MonoBehaviour
     vTimer m_environEffectsScrambleTimer;
     Vector3 m_environEffectsOriginalPos;
     Vector3 m_environEffectsOffsetVector;
+    [SerializeField] GameObject m_unknownEnvironmentalEffectsTagRef;
+
 
     bool m_scramblingEnvironEffectString = false;
     string m_environEffectsString;
@@ -115,7 +117,10 @@ public class NodeInfoPanelHandler : MonoBehaviour
     {
         SetUpEnvironmentalEffectsString();
 
-        if (!GameHandler.m_staticAutoRef.m_upgradeTree.HasUpgrade(UpgradeItem.UpgradeId.battleScouting))
+        bool hasScouting = GameHandler.m_staticAutoRef.m_upgradeTree.HasUpgrade(UpgradeItem.UpgradeId.battleScouting);
+        m_unknownEnvironmentalEffectsTagRef.SetActive(!hasScouting);
+
+        if (!hasScouting)
         {
             int roll = VLib.vRandom(1, 2);
             if (roll == 1)

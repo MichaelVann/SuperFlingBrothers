@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +10,8 @@ public class EquipmentInteractButton : MonoBehaviour
     Equipment m_equipmentRef;
     GameHandler m_gameHandlerRef;
     SquadOverviewHandler m_squadOverviewHandlerRef;
-    public Text m_equipButtonTextRef;
+    [SerializeField] TextMeshProUGUI m_equipButtonTextRef;
+    [SerializeField] Image m_buttonImageRef;
     // Start is called before the first frame update
     void Start()
     {
@@ -46,21 +48,24 @@ public class EquipmentInteractButton : MonoBehaviour
             if (!equipped)
             {
                 equipButtonColor = Color.white;
+                m_equipButtonTextRef.color = Color.gray;
                 equipButtonString = "Equip";
             }
             else if (equipped && sameSlot)
             {
                 equipButtonColor = Color.yellow;
+                m_equipButtonTextRef.color = Color.black;
                 equipButtonString = "UnEquip";
             }
             else if (equipped && !sameSlot)
             {
                 equipButtonColor = Color.red;
+                m_equipButtonTextRef.color = Color.white;
                 equipButtonString = "ReEquip";
             }
         }
 
-        m_buttonRef.gameObject.GetComponent<Image>().color = equipButtonColor;
+        m_buttonImageRef.color = equipButtonColor;
         m_equipButtonTextRef.text = equipButtonString;
     }
 }

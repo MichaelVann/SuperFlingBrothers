@@ -45,7 +45,7 @@ public class PreBattleManager : MonoBehaviour
             float contestAmount = VLib.vRandom(5f, 20f);
             resultsBox.SetUp("Frontline News", "Viruses Effort: " + VLib.RoundToDecimalPlaces(m_gameHandlerRef.m_lastFrontLineEnemyEffect - contestAmount, 2) * scale);
             resultsBox.AddDescriptionString("Immune Forces's Effort: " + VLib.RoundToDecimalPlaces(m_gameHandlerRef.m_lastFrontLineEnemyEffect + contestAmount,2) * scale);
-            resultsBox.AddDescriptionString("Spec Ops Resistance: " + m_gameHandlerRef.m_lastFrontLinePlayerEffect * scale);
+            resultsBox.AddDescriptionString("SFB Resistance: " + m_gameHandlerRef.m_lastFrontLinePlayerEffect * scale);
             resultsBox.AddDescriptionString("Net Frontline Shift: " + m_gameHandlerRef.m_lastFrontLineChange * scale);
         }
     }

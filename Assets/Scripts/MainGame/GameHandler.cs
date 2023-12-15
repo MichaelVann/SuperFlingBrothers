@@ -16,7 +16,7 @@ public class GameHandler : MonoBehaviour
     internal static GameHandler m_staticAutoRef;
 
     public const int MAIN_VERSION_NUMBER = 24;
-    public const int SUB_VERSION_NUMBER = 4;
+    public const int SUB_VERSION_NUMBER = 5;
 
     static internal bool DEBUG_MODE = true;
 
@@ -182,17 +182,19 @@ public class GameHandler : MonoBehaviour
         }
     }
 
-    internal bool AttemptToBuyJunkEquipment()
+    internal Equipment AttemptToBuyJunkEquipment()
     {
+        Equipment equipment = null;
         bool successfullyBought = false;
         float cost = GetJunkEquipmentCost();
         if (m_cash >= cost)
         {
             m_cash -= cost;
             successfullyBought = true;
-            PickUpEquipment(GenerateEquipment(true));
+            equipment = GenerateEquipment(true);
+            PickUpEquipment(equipment);
         }
-        return successfullyBought;
+        return equipment;
     }
 
     public int EquipmentComparison(Equipment a_first, Equipment a_second)

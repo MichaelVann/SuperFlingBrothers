@@ -13,7 +13,7 @@ public class UpgradesScreenHandler : MonoBehaviour
     public GameObject m_upgradeItemPanelTemplate;
 
     public BuyEquipmentButton m_buyEquipmentButtonRef;
-
+    [SerializeField] GameObject m_equipmentDigestPrefab;
 
     bool m_initialised = false;
 
@@ -45,9 +45,13 @@ public class UpgradesScreenHandler : MonoBehaviour
 
     public void AttemptToBuyEquipment()
     {
-        if (m_gameHandlerRef.AttemptToBuyJunkEquipment())
+        Equipment equipment = m_gameHandlerRef.AttemptToBuyJunkEquipment();
+        if (equipment != null)
         {
             Refresh();
+            EquipmentDigest equipmentDigest = Instantiate(m_equipmentDigestPrefab, transform).GetComponent<EquipmentDigest>();
+            equipmentDigest.SetEquipmentRef(equipment);
+            equipmentDigest.Refresh();
         }
     }
 

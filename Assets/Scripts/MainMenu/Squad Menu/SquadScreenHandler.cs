@@ -14,14 +14,16 @@ public class SquadScreenHandler : MonoBehaviour
 
     public GameObject m_equipmentAllocationNotifierRef;
     public Text m_equipmentAllocationNotifierTextRef;
+    [SerializeField] TextMeshProUGUI m_titleTextRef;
 
     //Inventory
 
     //Subscreens
-    public GameObject m_squadOverview;
-    public GameObject m_attributesScreen;
-    public GameObject m_skillsScreen;
-    public GameObject m_storeScreen;
+    [SerializeField] GameObject m_squadOverview;
+    [SerializeField] GameObject m_attributesScreen;
+    [SerializeField] GameObject m_skillsScreen;
+    [SerializeField] GameObject m_storeScreen;
+    [SerializeField] NavigationBar m_navigationBarRef;
 
     private bool m_inited = false;
 
@@ -30,7 +32,7 @@ public class SquadScreenHandler : MonoBehaviour
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_inited = true;
-        FindObjectOfType<NavigationBar>().SetSelected(0);
+        OpenSquadOverview();
     }
 
     // Update is called once per frame
@@ -71,23 +73,31 @@ public class SquadScreenHandler : MonoBehaviour
     {
         CloseAllScreens();
         m_squadOverview.SetActive(true);
+        m_navigationBarRef.SetSelected(0);
+        m_titleTextRef.text = "Overview";
     }
 
     public void OpenAttributesScreen()
     {
         CloseAllScreens();
         m_attributesScreen.SetActive(true);
+        m_navigationBarRef.SetSelected(1);
+        m_titleTextRef.text = "Squad Attributes";
     }
 
     public void OpenSkillsScreen()
     {
         CloseAllScreens();
         m_skillsScreen.SetActive(true);
+        m_navigationBarRef.SetSelected(2);
+        m_titleTextRef.text = "Character Skills";
     }
 
     public void OpenStoreScreen()
     {
         CloseAllScreens();
         m_storeScreen.SetActive(true);
+        m_navigationBarRef.SetSelected(3);
+        m_titleTextRef.text = "Upgrades";
     }
 }
