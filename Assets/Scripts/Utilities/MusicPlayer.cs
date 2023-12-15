@@ -122,61 +122,64 @@ public class MusicPlayer : MonoBehaviour
 
     void Refresh()
     {
-        
-        if (m_idlerAudioSource.isPlaying &&
-            m_battleManagerRef.m_enemyTypeCounts[0] == 0)
+        if (m_gameHandlerRef.m_audioManager.IsMusicEnabled())
         {
-            m_idlerAudioSource.Stop();
-        }
-        else if (!m_idlerAudioSource.isPlaying &&
-            m_battleManagerRef.m_enemyTypeCounts[0] > 0)
-        {
-            m_idlerAudioSource.Play();
-        }
+            if (m_idlerAudioSource.isPlaying &&
+          m_battleManagerRef.m_enemyTypeCounts[0] == 0)
+            {
+                m_idlerAudioSource.Stop();
+            }
+            else if (!m_idlerAudioSource.isPlaying &&
+                m_battleManagerRef.m_enemyTypeCounts[0] > 0)
+            {
+                m_idlerAudioSource.Play();
+            }
 
-        if (m_inertiaDasherAudioSource.isPlaying &&
-            m_battleManagerRef.m_enemyTypeCounts[1] == 0)
-        {
-            m_inertiaDasherAudioSource.Stop();
-        }
-        else if (!m_inertiaDasherAudioSource.isPlaying &&
-            m_battleManagerRef.m_enemyTypeCounts[1] > 0)
-        {
-            m_inertiaDasherAudioSource.Play();
-        }
+            if (m_inertiaDasherAudioSource.isPlaying &&
+                m_battleManagerRef.m_enemyTypeCounts[1] == 0)
+            {
+                m_inertiaDasherAudioSource.Stop();
+            }
+            else if (!m_inertiaDasherAudioSource.isPlaying &&
+                m_battleManagerRef.m_enemyTypeCounts[1] > 0)
+            {
+                m_inertiaDasherAudioSource.Play();
+            }
 
-        if (m_dodgerAudioSource.isPlaying &&
-            m_battleManagerRef.m_enemyTypeCounts[2] == 0)
-        {
-            m_dodgerAudioSource.Stop();
-        }
-        else if (!m_dodgerAudioSource.isPlaying &&
-            m_battleManagerRef.m_enemyTypeCounts[2] > 0)
-        {
-            m_dodgerAudioSource.Play();
-        }
+            if (m_dodgerAudioSource.isPlaying &&
+                m_battleManagerRef.m_enemyTypeCounts[2] == 0)
+            {
+                m_dodgerAudioSource.Stop();
+            }
+            else if (!m_dodgerAudioSource.isPlaying &&
+                m_battleManagerRef.m_enemyTypeCounts[2] > 0)
+            {
+                m_dodgerAudioSource.Play();
+            }
 
-        if (m_healerAudioSource.isPlaying &&
-            m_battleManagerRef.m_enemyTypeCounts[3] == 0)
-        {
-            m_healerAudioSource.Stop();
-        }
-        else if (!m_healerAudioSource.isPlaying &&
-            m_battleManagerRef.m_enemyTypeCounts[3] > 0)
-        {
-            m_healerAudioSource.Play();
-        }
+            if (m_healerAudioSource.isPlaying &&
+                m_battleManagerRef.m_enemyTypeCounts[3] == 0)
+            {
+                m_healerAudioSource.Stop();
+            }
+            else if (!m_healerAudioSource.isPlaying &&
+                m_battleManagerRef.m_enemyTypeCounts[3] > 0)
+            {
+                m_healerAudioSource.Play();
+            }
 
-        if (m_strikerAudioSource.isPlaying &&
-            m_battleManagerRef.m_enemyTypeCounts[4] == 0)
-        {
-            m_strikerAudioSource.Stop();
+            if (m_strikerAudioSource.isPlaying &&
+                m_battleManagerRef.m_enemyTypeCounts[4] == 0)
+            {
+                m_strikerAudioSource.Stop();
+            }
+            else if (!m_strikerAudioSource.isPlaying &&
+                m_battleManagerRef.m_enemyTypeCounts[4] > 0)
+            {
+                m_strikerAudioSource.Play();
+            }
         }
-        else if (!m_strikerAudioSource.isPlaying &&
-            m_battleManagerRef.m_enemyTypeCounts[4] > 0)
-        {
-            m_strikerAudioSource.Play();
-        }
+      
     }
 
     void OnEnemyCountChange()
