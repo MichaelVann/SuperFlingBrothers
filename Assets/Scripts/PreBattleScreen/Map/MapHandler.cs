@@ -38,8 +38,6 @@ public class MapHandler : MonoBehaviour
     int m_selectedBattleNodeId = -1;
     public BattleNode m_selectedBattleNode;
     UIBattleNode m_selectedUIBattleNode;
-    public GameObject m_backdropRef;
-    Vector3 m_backdropRefStartingSize;
 
     //Camera
 
@@ -63,7 +61,6 @@ public class MapHandler : MonoBehaviour
         m_residingMapNode = m_viewedBodyPartUI.GetResidingMapNode();
         m_currentPan = m_residingMapNode.transform.position;
         m_currentPan.z = m_startingCameraZPos;
-        m_backdropRefStartingSize = m_backdropRef.transform.localScale;
         ApplyZoomAndPan();
     }
 
@@ -160,10 +157,8 @@ public class MapHandler : MonoBehaviour
     {
         ClampCameraPan();
         m_cameraRef.transform.position = m_currentPan;// * m_currentZoom;
-        m_backdropRef.transform.position = new Vector3(m_currentPan.x, m_currentPan.y, m_backdropRef.transform.position.z);
         //Debug.Log(m_currentZoomLocation);
         m_cameraRef.orthographicSize = m_startingCameraSize/m_currentZoom;// new Vector3(m_currentZoom, m_currentZoom, 1f);
-        m_backdropRef.transform.localScale = m_backdropRefStartingSize / m_currentZoom;
     }
 
     void PinchZoom()

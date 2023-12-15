@@ -244,7 +244,12 @@ public class HumanBody
 
         for (int i = 0; i < activeFronts.Count; i++)
         {
-            activeFronts[i].ChangeWarfrontBalance(GameHandler.PRE_BATTLE_WarfrontChange);
+            float warFrontChange = GameHandler.PRE_BATTLE_WarfrontChange;
+            activeFronts[i].ChangeWarfrontBalance(warFrontChange);
+            if (m_gameHandlerRef.m_attemptedBattleNode.m_owningConnection == activeFronts[i])
+            {
+                m_gameHandlerRef.m_lastFrontLineEnemyEffect = warFrontChange;
+            }
         }
     }
 }

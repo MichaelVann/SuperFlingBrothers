@@ -37,6 +37,7 @@ public class PostBattleHandler : MonoBehaviour
         
         m_winResult = m_gameHandlerRef.m_lastGameResult;
         m_winBonusRef.SetActive(m_winResult == eEndGameType.win);
+        m_gameHandlerRef.m_frontLineResultsPending = true;
         switch (m_winResult)
         {
             case eEndGameType.retreat:

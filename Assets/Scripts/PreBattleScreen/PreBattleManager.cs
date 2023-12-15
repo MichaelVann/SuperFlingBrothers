@@ -12,8 +12,9 @@ public class PreBattleManager : MonoBehaviour
     public GameObject m_gameModeSelectionRef;
     public Text m_battleDifficultyText;
 
-    [SerializeField]
-    private Canvas m_menuCanvasRef;
+    [SerializeField] GameObject m_UIScalingBoxPrefab;
+
+    [SerializeField] Canvas m_menuCanvasRef;
 
     public GameObject m_confirmationBoxPrefab;
 
@@ -36,12 +37,27 @@ public class PreBattleManager : MonoBehaviour
             lostConfirmationBox.SetMessageText(m_gameHandlerRef.m_humanBody.GetHumansName() + " has succumbed to the infection.");
             lostConfirmationBox.m_confirmationResponseDelegate = new ConfirmationBox.ConfirmationResponseDelegate(LoseGame);
         }
+        if (m_gameHandlerRef.m_frontLineResultsPending)
+        {
+            UIScalingBox resultsBox = Instantiate(m_UIScalingBoxPrefab, m_menuCanvasRef.transform).GetComponent<UIScalingBox>();
+            resultsBox.SetOnCloseDelegate(AcknowledgeFrontLineNews);
+            const float scale = 100f;
+            float contestAmount = VLib.vRandom(5f, 20f);
+            resultsBox.SetUp("Frontline News", "Viruses Effort: " + VLib.RoundToDecimalPlaces(m_gameHandlerRef.m_lastFrontLineEnemyEffect - contestAmount, 2) * scale);
+            resultsBox.AddDescriptionString("Immune Forces's Effort: " + VLib.RoundToDecimalPlaces(m_gameHandlerRef.m_lastFrontLineEnemyEffect + contestAmount,2) * scale);
+            resultsBox.AddDescriptionString("Spec Ops Resistance: " + m_gameHandlerRef.m_lastFrontLinePlayerEffect * scale);
+            resultsBox.AddDescriptionString("Net Frontline Shift: " + m_gameHandlerRef.m_lastFrontLineChange * scale);
+        }
     }
 
     void Start()
     {
 
+    }
 
+    internal void AcknowledgeFrontLineNews()
+    {
+        m_gameHandlerRef.m_frontLineResultsPending = false;
     }
 
     void LoseGame()

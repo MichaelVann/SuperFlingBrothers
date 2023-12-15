@@ -16,7 +16,7 @@ public class GameHandler : MonoBehaviour
     internal static GameHandler m_staticAutoRef;
 
     public const int MAIN_VERSION_NUMBER = 24;
-    public const int SUB_VERSION_NUMBER = 3;
+    public const int SUB_VERSION_NUMBER = 4;
 
     static internal bool DEBUG_MODE = true;
 
@@ -68,14 +68,18 @@ public class GameHandler : MonoBehaviour
 
     //Last Game
     public BattleNode m_lastAttemptedBattleNode;
-    public eEndGameType m_lastGameResult = eEndGameType.lose;
-    public float m_xpEarnedLastGame = 0f;
-    public int m_invaderStrengthChangeLastGame = 0;
-    public int m_teamLevelAtStartOfBattle = 0;
-    public float m_dnaEarnedLastGame = 0f;
-    public int m_equipmentCollectedLastGame = 0;
-    public int m_lastXpBonus = 0;
-    public int m_lastDnaBonus = 0;
+    internal eEndGameType m_lastGameResult = eEndGameType.lose;
+    internal float m_xpEarnedLastGame = 0f;
+    internal int m_invaderStrengthChangeLastGame = 0;
+    internal int m_teamLevelAtStartOfBattle = 0;
+    internal float m_dnaEarnedLastGame = 0f;
+    internal int m_equipmentCollectedLastGame = 0;
+    internal int m_lastXpBonus = 0;
+    internal int m_lastDnaBonus = 0;
+    internal bool m_frontLineResultsPending = false;
+    internal float m_lastFrontLinePlayerEffect = 0f;
+    internal float m_lastFrontLineEnemyEffect = 0f;
+    internal float m_lastFrontLineChange = 0f;
 
     //Store
     internal UpgradeTree m_upgradeTree;
@@ -295,6 +299,7 @@ public class GameHandler : MonoBehaviour
                 warfrontBalanceChangeAmount *= -warfrontBalanceChange;//Turn to percentage
                 warfrontBalanceChangeAmount = Mathf.Clamp(warfrontBalanceChangeAmount, 0f, -warfrontBalanceChange);
                 m_lastAttemptedBattleNode.m_owningConnection.ChangeWarfrontBalance(warfrontBalanceChangeAmount);
+                m_lastFrontLinePlayerEffect = warfrontBalanceChangeAmount;
                 //warfrontBalanceChange += warfrontBalanceChangeAmount;
             }
             else if (m_lastGameResult == eEndGameType.lose)
@@ -302,6 +307,7 @@ public class GameHandler : MonoBehaviour
                 m_playerWasKilledLastBattle = true;
                 KillPlayer();
             }
+            m_lastFrontLineChange = m_lastFrontLineEnemyEffect + m_lastFrontLinePlayerEffect;
 
             m_humanBody.m_battlesCompleted++;
             m_humanBody.Refresh();
