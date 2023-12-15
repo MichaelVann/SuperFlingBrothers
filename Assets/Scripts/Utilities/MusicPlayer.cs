@@ -17,11 +17,10 @@ public class MusicPlayer : MonoBehaviour
     AudioSource m_dodgerAudioSource;
     AudioSource m_healerAudioSource;
     AudioSource m_strikerAudioSource;
-      
+    List<AudioSource> m_enemyAudioSources;
 
     bool m_timeWasFrozen = false;
-    bool m_musicSwapped = false;
-
+  
     public AudioClip m_characterMusic;
     public AudioClip m_heartBeatMusic;
     public AudioClip m_idlerMusic;
@@ -30,26 +29,40 @@ public class MusicPlayer : MonoBehaviour
     public AudioClip m_healerMusic;
     public AudioClip m_strikerMusic;
 
-    // Start is called before the first frame update
+    public AudioClip m_damageSound;
+    public AudioClip m_bounceSound;
+    public AudioClip m_flingSound;
+    public AudioClip m_pocketSound;
+
+    public AudioSource m_defaultAudioSource; 
+
     void Awake()
     {
-        //m_audioMixer = GetComponent<AudioMixer>();
-
-        m_characterAudioSource = GetComponent<AudioSource>();
-        m_characterAudioSource.clip = m_characterMusic;
-        
+        m_defaultAudioSource = gameObject.AddComponent<AudioSource>();
+        m_enemyAudioSources = new List<AudioSource>();
+        // create AudioSources for various streams
+        m_characterAudioSource = gameObject.AddComponent<AudioSource>();
         m_heartBeatAudioSource = gameObject.AddComponent<AudioSource>();
-        m_heartBeatAudioSource.clip = m_heartBeatMusic;
+        m_idlerAudioSource = gameObject.AddComponent<AudioSource>();
+        m_inertiaDasherAudioSource = gameObject.AddComponent<AudioSource>();
+        m_dodgerAudioSource = gameObject.AddComponent<AudioSource>();
+        m_healerAudioSource = gameObject.AddComponent<AudioSource>();
+        m_strikerAudioSource = gameObject.AddComponent<AudioSource>();
+
 
         AudioMixerGroup[] audioMixerGroups = m_audioMixer.FindMatchingGroups("");
-        m_characterAudioSource.outputAudioMixerGroup = m_audioMixer.FindMatchingGroups("Character")[0];
-        m_heartBeatAudioSource.outputAudioMixerGroup = m_audioMixer.FindMatchingGroups("Heartbeat")[0];
-
+      
+        SetupAudioSource(m_characterAudioSource, m_characterMusic, "Character");
+        SetupAudioSource(m_heartBeatAudioSource, m_heartBeatMusic, "Heartbeat");
         SetupAudioSource(m_idlerAudioSource, m_idlerMusic, "Enemies");
         SetupAudioSource(m_inertiaDasherAudioSource, m_inertiaDasherMusic, "Enemies");
+        SetupAudioSource(m_dodgerAudioSource, m_dodgerMusic, "Enemies");
+        SetupAudioSource(m_healerAudioSource, m_healerMusic, "Enemies");
+        SetupAudioSource(m_strikerAudioSource, m_strikerMusic, "Enemies");
 
     }
 
+    // Start is called before the first frame update
     void Start()
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
@@ -59,6 +72,9 @@ public class MusicPlayer : MonoBehaviour
         if (m_gameHandlerRef.m_audioManager.IsMusicEnabled())
         {
             m_characterAudioSource.Play();
+            m_heartBeatAudioSource.Play();
+            Refresh();
+            
         }
     }
 
@@ -76,19 +92,10 @@ public class MusicPlayer : MonoBehaviour
             {
                 // Freeze has just happened
                 m_timeWasFrozen = true;
-                m_heartBeatAudioSource.Play();
-                m_characterAudioSource.loop = false;
-                m_characterAudioSource.bypassEffects = false;
-            }
-            // if we have, must be coming through second time or later so
-            // check to see if the music clip is still playing and if it's been swapped
-            // if it isn't and hasn't we can swap it
-            else if (!m_characterAudioSource.isPlaying && !m_musicSwapped)
-            {
-                m_characterAudioSource.clip = m_heartBeatMusic;
-                m_characterAudioSource.loop = true;
-                m_characterAudioSource.Play();
-                m_musicSwapped = true;
+                m_audioMixer.SetFloat("heartBeatVol", 4f);
+                m_audioMixer.SetFloat("characterVol", -6f);
+                m_audioMixer.SetFloat("enemiesVol", -6f);
+               
             }
         }
         else
@@ -96,61 +103,107 @@ public class MusicPlayer : MonoBehaviour
         {
             if (m_timeWasFrozen)
             {
-                // Check if heartbeat file still going or if we already stopped it
-                if (m_heartBeatAudioSource.isPlaying)
-                {
-                    m_heartBeatAudioSource.Stop();
-                    m_characterAudioSource.loop = false;
-                    m_characterAudioSource.bypassEffects = true;
-                }
-            }
-            // Don't change the toggle back until the music has stopped playing though
-            if (!m_characterAudioSource.isPlaying)
-            {
-                m_characterAudioSource.clip = m_characterMusic;
-                m_characterAudioSource.loop = true;
-                m_characterAudioSource.Play();
-                m_musicSwapped = false;
                 m_timeWasFrozen = false;
-            }
-        }
 
-        /*
-        if (m_battleManagerRef.m_timeFrozen && !m_heartBeatAudioSource.isPlaying)
-        {
-            m_heartBeatAudioSource.Play();
-            if (m_characterAudioSource.isPlaying && m_characterAudioSource.loop)
-            else if (!m_characterAudioSource.isPlaying)
-            {
-                m_characterAudioSource.clip = m_pauseMusic;
-                m_characterAudioSource.loop = true;
-                m_characterAudioSource.Play();
+                m_audioMixer.SetFloat("heartBeatVol", -80f);
+                m_audioMixer.SetFloat("characterVol", 0f);
+                m_audioMixer.SetFloat("enemiesVol", 0f);
             }
          }
-        else if (!m_battleManagerRef.m_timeFrozen && m_heartBeatAudioSource.isPlaying)
-        {
-            m_heartBeatAudioSource.Stop();
 
-        }
-        */
-
-        // m_characterAudioSource.volume = pitch;
-    }
+         }
 
     void SetupAudioSource(AudioSource a_audioSource, AudioClip a_clip, string a_mixerGroupName)
     {
-        a_audioSource = gameObject.AddComponent<AudioSource>();
         a_audioSource.clip = a_clip;
+        a_audioSource.loop = true;
         a_audioSource.outputAudioMixerGroup = m_audioMixer.FindMatchingGroups(a_mixerGroupName)[0];
+    }
+
+    void Refresh()
+    {
+        
+        if (m_idlerAudioSource.isPlaying &&
+            m_battleManagerRef.m_enemyTypeCounts[0] == 0)
+        {
+            m_idlerAudioSource.Stop();
+        }
+        else if (!m_idlerAudioSource.isPlaying &&
+            m_battleManagerRef.m_enemyTypeCounts[0] > 0)
+        {
+            m_idlerAudioSource.Play();
+        }
+
+        if (m_inertiaDasherAudioSource.isPlaying &&
+            m_battleManagerRef.m_enemyTypeCounts[1] == 0)
+        {
+            m_inertiaDasherAudioSource.Stop();
+        }
+        else if (!m_inertiaDasherAudioSource.isPlaying &&
+            m_battleManagerRef.m_enemyTypeCounts[1] > 0)
+        {
+            m_inertiaDasherAudioSource.Play();
+        }
+
+        if (m_dodgerAudioSource.isPlaying &&
+            m_battleManagerRef.m_enemyTypeCounts[2] == 0)
+        {
+            m_dodgerAudioSource.Stop();
+        }
+        else if (!m_dodgerAudioSource.isPlaying &&
+            m_battleManagerRef.m_enemyTypeCounts[2] > 0)
+        {
+            m_dodgerAudioSource.Play();
+        }
+
+        if (m_healerAudioSource.isPlaying &&
+            m_battleManagerRef.m_enemyTypeCounts[3] == 0)
+        {
+            m_healerAudioSource.Stop();
+        }
+        else if (!m_healerAudioSource.isPlaying &&
+            m_battleManagerRef.m_enemyTypeCounts[3] > 0)
+        {
+            m_healerAudioSource.Play();
+        }
+
+        if (m_strikerAudioSource.isPlaying &&
+            m_battleManagerRef.m_enemyTypeCounts[4] == 0)
+        {
+            m_strikerAudioSource.Stop();
+        }
+        else if (!m_strikerAudioSource.isPlaying &&
+            m_battleManagerRef.m_enemyTypeCounts[4] > 0)
+        {
+            m_strikerAudioSource.Play();
+        }
     }
 
     void OnEnemyCountChange()
     {
-        if (m_battleManagerRef.m_enemyTypeCounts[(int) Enemy.eEnemyType.InertiaDasher]>0)
-        {
-            m_characterAudioSource.clip = m_heartBeatMusic;
-            m_characterAudioSource.Play();
-        }
+
+        Refresh();      
+        
+    }
+
+    public void PlayDamageSound()
+    {
+        m_defaultAudioSource.PlayOneShot(m_damageSound, 1);
+    }
+
+    public void PlayBounceSound()
+    {
+        m_defaultAudioSource.PlayOneShot(m_bounceSound, 1);
+    }
+
+    public void PlayFlingSound()
+    {
+        m_defaultAudioSource.PlayOneShot(m_flingSound, 0.5f);
+    }
+
+    public void PlayPocketSound()
+    {
+        m_defaultAudioSource.PlayOneShot(m_pocketSound, 0.5f);
     }
 }
 

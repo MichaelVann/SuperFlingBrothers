@@ -3,7 +3,17 @@ guid: aad5f185cd183b34897c921e7239f2f2
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - m_spriteRenderer: {instanceID: 0}
+  - m_explosionPrefab: {instanceID: 0}
+  - m_collisionSparkPrefab: {instanceID: 0}
+  - m_risingFadingTextPrefab: {instanceID: 0}
+  - m_healthBarRef: {instanceID: 0}
+  - m_shieldBarRef: {instanceID: 0}
+  - m_shadowRef: {instanceID: 0}
+  - m_bloodSplatterTemplate: {instanceID: 0}
+  - m_puffOfSmokeTemplate: {instanceID: 0}
+  - m_damageSound: {fileID: 8300000, guid: 5dff105b96c4d4969b6604dd05d17b9b, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

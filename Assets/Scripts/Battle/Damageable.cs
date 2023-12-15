@@ -7,6 +7,7 @@ public class Damageable : BaseObject
 {
     protected GameHandler m_gameHandlerRef;
     protected BattleManager m_battleManagerRef;
+    protected MusicPlayer m_musicPlayerRef;
 
     public Vector3 m_lastVelocity;
     public float m_lastMomentumMagnitude = 0f;
@@ -87,6 +88,7 @@ public class Damageable : BaseObject
         base.Awake();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_battleManagerRef = FindObjectOfType<BattleManager>();
+        m_musicPlayerRef = FindObjectOfType<MusicPlayer>();
         m_statHandler = new CharacterStatHandler();
         m_statHandler.Init(false);
         m_originalColor = m_spriteRenderer.color;
@@ -169,6 +171,7 @@ public class Damageable : BaseObject
         {
             m_rigidBody.AddForce(a_flingVector * a_flingStrength);
         }
+        m_musicPlayerRef.PlayFlingSound();
     }
 
     private void StartDamageFlashTimer()
@@ -210,6 +213,9 @@ public class Damageable : BaseObject
 
             //Spawn damage text
             SpawnDamageText(a_change);
+
+            //Play bounce sound
+            m_musicPlayerRef.PlayBounceSound();
         }
 
         //If the dmgble is below minimum health
@@ -245,8 +251,10 @@ public class Damageable : BaseObject
         if (m_bloodSplatterTemplate != null)
         {
             GameObject blood = Instantiate(m_bloodSplatterTemplate, transform.position, new Quaternion());
+            m_musicPlayerRef.PlayDamageSound();
             blood.GetComponent<SpriteRenderer>().color = m_bloodColor;
             blood.transform.localScale *= a_bleedAmount * 1f;
+            
         }
     }
 

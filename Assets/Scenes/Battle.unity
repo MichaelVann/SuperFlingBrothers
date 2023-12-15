@@ -9938,13 +9938,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_audioMixer: {fileID: 24100000, guid: e6911c7f548a44cf189772e6205e196a, type: 2}
-  m_characterMusic: {fileID: 0}
-  m_heartBeatMusic: {fileID: 0}
-  m_idlerMusic: {fileID: 0}
-  m_inertiaDasherMusic: {fileID: 0}
-  m_dodgerMusic: {fileID: 0}
-  m_healerMusic: {fileID: 0}
-  m_strikerMusic: {fileID: 0}
+  m_characterMusic: {fileID: 8300000, guid: 43e9f2a874cd84c62a56c6ec2219dc89, type: 3}
+  m_heartBeatMusic: {fileID: 8300000, guid: 22f5c39cb56c94bd39c8cbbd56a11726, type: 3}
+  m_idlerMusic: {fileID: 8300000, guid: f6ad160ae644f4c099d725ec22eb437d, type: 3}
+  m_inertiaDasherMusic: {fileID: 8300000, guid: ff484ee31ae834c6e9399b8bc8acf9f3,
+    type: 3}
+  m_dodgerMusic: {fileID: 8300000, guid: 5e0e45a621726491ab788c68daf28e80, type: 3}
+  m_healerMusic: {fileID: 8300000, guid: ea94ec3457a134b4baa77411854075d5, type: 3}
+  m_strikerMusic: {fileID: 8300000, guid: 427aaafebf10d47088d21c5fa328eda4, type: 3}
+  m_damageSound: {fileID: 8300000, guid: 7c0608ee3e0064a42b7407e03e86f350, type: 3}
 --- !u!169 &7536694725050579456
 AudioLowPassFilter:
   m_ObjectHideFlags: 0
@@ -9960,7 +9962,7 @@ AudioLowPassFilter:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.20841292
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0

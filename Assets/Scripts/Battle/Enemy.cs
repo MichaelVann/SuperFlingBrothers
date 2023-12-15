@@ -270,6 +270,7 @@ public class Enemy : Damageable
         {
             TakePocketDamage(a_collision.contacts[0].point);
             PocketFling(a_collision.gameObject.transform.position);
+            m_musicPlayerRef.PlayPocketSound();
         }
         else if (a_collision.gameObject.GetComponent<Nucleus>() != null && m_enemyType == eEnemyType.Idler)
         {
