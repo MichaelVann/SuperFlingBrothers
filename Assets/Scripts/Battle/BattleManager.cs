@@ -16,6 +16,12 @@ public enum eEndGameType
 
 public class BattleManager : MonoBehaviour
 {
+    internal BattleUIHandler m_uiHandlerRef;
+    public GameHandler m_gameHandlerRef;
+    public GameObject m_gameHandlerTemplate;
+    public GameObject m_playerTemplate;
+    [SerializeField] internal Canvas m_canvasRef;
+
     //Debug
     public Text m_debugText;
     public TextMeshProUGUI m_fpsText;
@@ -24,10 +30,6 @@ public class BattleManager : MonoBehaviour
 
     static public float m_shadowDistance = 0.1f;
 
-    internal BattleUIHandler m_uiHandlerRef;
-    public GameHandler m_gameHandlerRef;
-    public GameObject m_gameHandlerTemplate;
-    public GameObject m_playerTemplate;
 
     //Enemy Templates
     public GameObject m_enemyTemplate;
@@ -63,7 +65,8 @@ public class BattleManager : MonoBehaviour
     public SpriteRenderer[] m_wallSpriteRenderers;
 
     Player m_player;
-    List<Enemy> m_enemies;
+    internal List<Enemy> m_enemies;
+    internal int[] m_enemyTypeCounts;
 
     //Player Spawn Intro
     bool m_introActive = true;
@@ -124,6 +127,9 @@ public class BattleManager : MonoBehaviour
     //Audio section
     public MusicPlayer m_musicPlayerRef;
 
+    internal delegate void onEnemyCountChangeDelegate();
+    internal onEnemyCountChangeDelegate m_enemyCountChangeDelegate;
+
     public float GetMaxGameEndTimer()
     {
         return m_maxGameEndTimer;
@@ -153,6 +159,8 @@ public class BattleManager : MonoBehaviour
         FindGameSpace();
 
         SetupEnvironmentalEffects();
+        m_enemies = new List<Enemy>();
+        m_enemyTypeCounts = new int[(int) Enemy.eEnemyType.Count];
     }
 
     public void Start()
@@ -176,6 +184,7 @@ public class BattleManager : MonoBehaviour
         SpawnEnemies();
         //m_levelDifficultyText.text = "Level Difficulty: " + m_gameHandlerRef.m_battleDifficulty;
         m_upperLowerFlingPositionBounds = m_wallSpriteRenderers[3].gameObject.transform.position.y;
+        m_gameHandlerRef.m_musicPlayerRef.PlayBattleMusic(this);
 
     }
 
@@ -468,6 +477,8 @@ public class BattleManager : MonoBehaviour
         enemyObj = Instantiate<GameObject>(template, a_spawnLocation, Quaternion.identity, m_gameViewRef.transform);
         Enemy enemy = enemyObj.GetComponent<Enemy>();
         enemy.SetUpType(a_type);
+        m_enemies.Add(enemy);
+        ChangeEnemyCount(1, enemy.m_enemyType);
     }
 
     public void SpawnEnemies()
@@ -611,13 +622,17 @@ public class BattleManager : MonoBehaviour
 
             Vector3 spawnLocation = m_enemySpawnPointsRefs[i].transform.position;
             SpawnEnemy(spawnLocation, enemyType);
-            ChangeEnemyCount(1);
         }
     }
 
-    public void ChangeEnemyCount(int a_change)
+    public void ChangeEnemyCount(int a_change, Enemy.eEnemyType a_type)
     {
         m_enemyCount += a_change;
+        m_enemyTypeCounts[(int) a_type] += a_change;
+        if (m_enemyCountChangeDelegate != null)
+        {
+            m_enemyCountChangeDelegate.Invoke();
+        }
         if (m_enemyCount <= 0)
         {
             StartEndingGame(eEndGameType.win);
@@ -666,7 +681,7 @@ public class BattleManager : MonoBehaviour
         m_gameFinished = true;
         UpdateTimeScale();
         CalculateFinishedGame();
-        FindObjectOfType<GameHandler>().ChangeScene(GameHandler.eScene.postBattle);
+        FindObjectOfType<GameHandler>().TransitionScene(GameHandler.eScene.postBattle);
     }
 
     public void StartEndingGame(eEndGameType a_type)
@@ -728,7 +743,7 @@ public class BattleManager : MonoBehaviour
     {
         m_gameEndTimer += Time.deltaTime;
         m_fadeToBlackRef.color = new Color(0f, 0f, 0f, Mathf.Pow(m_gameEndTimer / m_maxGameEndTimer, 3f));
-        if (m_gameEndTimer >= m_maxGameEndTimer)
+        if (!m_gameFinished && m_gameEndTimer >= m_maxGameEndTimer)
         {
             FinishGame();
         }

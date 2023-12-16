@@ -237,7 +237,7 @@ public class Enemy : Damageable
         Enemy clonedEnemy = clonedObject.GetComponent<Enemy>();
         clonedEnemy.m_rigidBody.velocity = -m_rigidBody.velocity;
         clonedEnemy.Copy(this);
-        m_battleManagerRef.ChangeEnemyCount(1);
+        m_battleManagerRef.ChangeEnemyCount(1, clonedEnemy.m_enemyType);
     }
 
     void DuplicationUpdate()
@@ -270,6 +270,7 @@ public class Enemy : Damageable
         {
             TakePocketDamage(a_collision.contacts[0].point);
             PocketFling(a_collision.gameObject.transform.position);
+            m_musicPlayerRef.PlayPocketSound();
         }
         else if (a_collision.gameObject.GetComponent<Nucleus>() != null && m_enemyType == eEnemyType.Idler)
         {
@@ -428,7 +429,7 @@ public class Enemy : Damageable
 
         SpawnXpText();
 
-        m_battleManagerRef.ChangeEnemyCount(-1);
+        m_battleManagerRef.ChangeEnemyCount(-1, m_enemyType);
 
         SpawnDeathLoot();
 

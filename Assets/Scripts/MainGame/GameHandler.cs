@@ -6,6 +6,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using static GameHandler;
 using static UnityEngine.UI.CanvasScaler;
 
@@ -15,8 +16,8 @@ public class GameHandler : MonoBehaviour
 {
     internal static GameHandler m_staticAutoRef;
 
-    public const int MAIN_VERSION_NUMBER = 24;
-    public const int SUB_VERSION_NUMBER = 5;
+    public const int MAIN_VERSION_NUMBER = 25;
+    public const int SUB_VERSION_NUMBER = 0;
 
     static internal bool DEBUG_MODE = true;
 
@@ -40,6 +41,8 @@ public class GameHandler : MonoBehaviour
     static internal float DAMAGEABLE_PocketFlingStrength = 100f;
     static internal float DAMAGEABLE_DamagePerSpeedDivider = 8f;
 
+    [SerializeField] internal MusicPlayer m_musicPlayerRef;
+
     //Player
 
     // -- END OF BALANCE --
@@ -51,6 +54,12 @@ public class GameHandler : MonoBehaviour
         battle,
         postBattle
     } eScene m_currentScene;
+    eScene m_queuedScene;
+    [SerializeField] Image m_sceneFadeImageRef;
+    [SerializeField] Canvas m_sceneFadeCanvasRef;
+    vTimer m_sceneFadeTimer;
+    bool m_sceneFadingOut;
+    const float m_sceneFadeDuration = 0.35f;
 
     private float m_cash = 0;
     
@@ -91,8 +100,6 @@ public class GameHandler : MonoBehaviour
     public List<Equipment> m_equipmentInventory;
 
     StockHandler m_stockHandler;
-
-    internal AudioManager m_audioManager;
 
     [Serializable]
     struct SaveData
@@ -165,7 +172,7 @@ public class GameHandler : MonoBehaviour
 
 
         //Battle
-        m_audioManager =  new AudioManager();
+        
     }
 
     private void SetupHumanBody()
@@ -322,6 +329,25 @@ public class GameHandler : MonoBehaviour
         m_humanBody.Refresh();
     }
 
+    internal void SceneFadeUpdate()
+    {
+        if (m_sceneFadeTimer != null && !m_sceneFadeTimer.m_finished)
+        {
+            if (m_sceneFadeTimer.Update())
+            {
+                if (m_sceneFadingOut)
+                {
+                    ChangeScene();
+                }
+            }
+            float compPerc = m_sceneFadeTimer.GetCompletionPercentage();
+            float fade = m_sceneFadingOut ? compPerc : 1f- compPerc;
+            fade = Mathf.Clamp(fade, 0f, 1f);
+            m_sceneFadeImageRef.color = new Color(0f, 0f, 0f, fade);
+            m_musicPlayerRef.m_sceneFadeAmount = fade;
+        }
+    }
+
     void Update()
     {
         if (Input.GetKey(KeyCode.K))
@@ -350,13 +376,25 @@ public class GameHandler : MonoBehaviour
             PickUpEquipment(new Equipment(m_xCellSquad.m_playerXCell.m_statHandler.m_RPGLevel.m_level));
         }
         m_stockHandler.Update();
+        SceneFadeUpdate();
         //BATTLE_ShadowAngle = Mathf.Sin(Time.unscaledTime)*360f;
     }
 
-    public void ChangeScene(eScene a_scene)
+    public void TransitionScene(eScene a_scene)
     {
-        m_currentScene = a_scene;
-        switch (a_scene)
+        m_queuedScene = a_scene;
+        m_sceneFadeTimer = new vTimer(m_sceneFadeDuration, true, true, false, false);
+        m_sceneFadingOut = true;
+        m_sceneFadeCanvasRef.worldCamera = FindObjectOfType<Camera>();
+        m_sceneFadeCanvasRef.sortingLayerName = "UI";
+        m_sceneFadeCanvasRef.sortingOrder = 20;
+    }
+
+    internal void ChangeScene()
+    {
+        m_currentScene = m_queuedScene;
+
+        switch (m_queuedScene)
         {
             case eScene.mainMenu:
                 SceneManager.LoadScene("Main Menu");
@@ -374,6 +412,8 @@ public class GameHandler : MonoBehaviour
             default:
                 break;
         }
+        m_sceneFadeTimer = new vTimer(m_sceneFadeDuration, true, true, false, false);
+        m_sceneFadingOut = false;
     }
 
     public void SaveGame()

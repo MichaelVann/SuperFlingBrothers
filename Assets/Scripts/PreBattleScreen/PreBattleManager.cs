@@ -90,12 +90,12 @@ public class PreBattleManager : MonoBehaviour
         m_gameHandlerRef.SetBattleDifficulty(m_mapHandlerRef.m_selectedBattleNode.m_difficulty);
         int maxEnemyDifficulty = HumanBody.m_maxEnemyDifficulty;
         m_gameHandlerRef.SetMaxEnemyDifficulty(maxEnemyDifficulty);
-        m_gameHandlerRef.ChangeScene(GameHandler.eScene.battle);
+        m_gameHandlerRef.TransitionScene(GameHandler.eScene.battle);
     }
 
     public void ReturnToMainMenu()
     {
-        m_gameHandlerRef.ChangeScene(GameHandler.eScene.mainMenu);
+        m_gameHandlerRef.TransitionScene(GameHandler.eScene.mainMenu);
     }
 
     // Update is called once per frame

@@ -7,7 +7,7 @@ public class LoadingHandler : MonoBehaviour
 {
     void Start()
     {
-        FindObjectOfType<GameHandler>().ChangeScene(GameHandler.eScene.mainMenu);
+        FindObjectOfType<GameHandler>().TransitionScene(GameHandler.eScene.mainMenu);
     }
 
     void Update()

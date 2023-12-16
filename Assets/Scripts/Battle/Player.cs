@@ -392,6 +392,7 @@ public class Player : Damageable
         {
             TakePocketDamage(a_collision.contacts[0].point);
             PocketFling(a_collision.gameObject.transform.position);
+            m_musicPlayerRef.PlayPocketSound();
         }
         else if (a_collision.gameObject.GetComponent<Nucleus>())
         {
@@ -433,7 +434,7 @@ public class Player : Damageable
 
             if (m_coinValueText == null)
             {
-                m_coinValueText = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(0f, m_damageTextYOffset), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
+                m_coinValueText = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(0f, m_damageTextYOffset), new Quaternion(), m_battleManagerRef.m_canvasRef.transform).GetComponent<RisingFadingText>();
                 m_cumulativeCoinValue = 0f;
                 m_coinValueText.SetImageEnabled(true);
                 m_coinValueText.SetOriginalColor(Color.magenta);
@@ -453,7 +454,7 @@ public class Player : Damageable
         else if (equipmentDrop != null && !equipmentDrop.m_movingToTargetPos)
         {
             m_battleManagerRef.PickUpEquipment(a_collider.gameObject.GetComponent<EquipmentDrop>().m_equipment);
-            RisingFadingText equipmentRFT = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(m_damageTextYOffset/2f, m_damageTextYOffset*1.5f), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
+            RisingFadingText equipmentRFT = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(m_damageTextYOffset/2f, m_damageTextYOffset*1.5f), new Quaternion(), m_battleManagerRef.m_canvasRef.transform).GetComponent<RisingFadingText>();
             equipmentRFT.SetImageEnabled(true);
             equipmentRFT.SetOriginalColor(Color.blue);
             equipmentRFT.SetOriginalScale(1.2f);
@@ -470,7 +471,7 @@ public class Player : Damageable
 
     void SpawnBlockText(float a_value)
     {
-        RisingFadingText damageText = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(m_damageTextYOffset, 0), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
+        RisingFadingText damageText = Instantiate(m_risingFadingTextPrefab, transform.position + new Vector3(m_damageTextYOffset, 0), new Quaternion(), m_battleManagerRef.m_canvasRef.transform).GetComponent<RisingFadingText>();
         damageText.SetImageEnabled(false);
         damageText.SetGravityAffected(true);
         damageText.SetTextContent("Block " + a_value);

@@ -22,11 +22,11 @@ public class GameModeHandler : MonoBehaviour
 
     public void Play()
     {
-        FindObjectOfType<GameHandler>().ChangeScene(GameHandler.eScene.battle);
+        FindObjectOfType<GameHandler>().TransitionScene(GameHandler.eScene.battle);
     }
 
     public void Back()
     {
-        FindObjectOfType<GameHandler>().ChangeScene(GameHandler.eScene.mainMenu);
+        FindObjectOfType<GameHandler>().TransitionScene(GameHandler.eScene.mainMenu);
     }
 }

@@ -10,9 +10,10 @@ public class vTimer
     float m_timer;
     float m_timerMax;
     bool m_onceOff;
-    bool m_finished;
+    internal bool m_finished;
     bool m_active;
     bool m_resetsTimerOnComplete;
+    bool m_usingUnscaledDeltaTime;
 
     public void SetActive(bool a_active) { m_active = a_active; }
     public float GetTimer() { return m_timer; }
@@ -20,18 +21,19 @@ public class vTimer
     public float GetCompletionPercentage() { return m_timer / m_timerMax; }
     public float GetTimerMax() { return m_timerMax; }
 
-    private void Init(float a_maxTime, bool a_onceOff, bool a_active, bool a_resetsTimerOnComplete)
+    private void Init(float a_maxTime, bool a_onceOff, bool a_active, bool a_resetsTimerOnComplete, bool a_usingUnscaledDeltaTime)
     {
         m_timer = 0f;
         m_timerMax = a_maxTime;
         m_onceOff = a_onceOff;
         m_active = a_active;
         m_resetsTimerOnComplete = a_resetsTimerOnComplete;
+        m_usingUnscaledDeltaTime = a_usingUnscaledDeltaTime;
     }
 
-    public vTimer(float a_maxTime, bool a_onceOff = false, bool a_active = true, bool a_resetsTimerOnComplete = true)
+    public vTimer(float a_maxTime, bool a_onceOff = false, bool a_active = true, bool a_resetsTimerOnComplete = true, bool a_usingUnscaledDeltaTime = false)
     {
-        Init(a_maxTime, a_onceOff, a_active, a_resetsTimerOnComplete);
+        Init(a_maxTime, a_onceOff, a_active, a_resetsTimerOnComplete, a_usingUnscaledDeltaTime);
     }
 
     public void Reset()
@@ -44,7 +46,8 @@ public class vTimer
     {
         if (!m_finished && m_active)
         {
-            m_timer += Time.deltaTime;
+            m_timer += m_usingUnscaledDeltaTime ? Time.unscaledDeltaTime: Time.deltaTime;
+            //Debug.Log(m_timer);
         }
 
         if (m_timer >= m_timerMax && m_active)

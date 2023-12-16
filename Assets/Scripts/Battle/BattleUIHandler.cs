@@ -83,7 +83,7 @@ public class BattleUIHandler : MonoBehaviour
 
     internal void SpawnXpRisingText(GameObject a_risingTextPrefab, float a_xpReward)
     {
-        RisingFadingText xpText = Instantiate(a_risingTextPrefab, m_xpBarHandlerRef.gameObject.transform.position + new Vector3(400f, 0f, 0f), new Quaternion(), FindObjectOfType<Canvas>().transform).GetComponent<RisingFadingText>();
+        RisingFadingText xpText = Instantiate(a_risingTextPrefab, m_xpBarHandlerRef.gameObject.transform.position + new Vector3(400f, 0f, 0f), new Quaternion(), m_battleManagerRef.m_canvasRef.transform).GetComponent<RisingFadingText>();
         xpText.SetImageEnabled(false);
         xpText.SetGravityAffected(false);
         xpText.SetHorizontalSpeed(0f);

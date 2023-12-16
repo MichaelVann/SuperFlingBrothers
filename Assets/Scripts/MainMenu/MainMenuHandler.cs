@@ -17,11 +17,12 @@ public class MainMenuHandler : MonoBehaviour
     void Start()
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        m_gameHandlerRef.m_musicPlayerRef.PlayMenuMusic();
     }
 
     public void Play()
     {
-        FindObjectOfType<GameHandler>().ChangeScene(GameHandler.eScene.preBattle);
+        FindObjectOfType<GameHandler>().TransitionScene(GameHandler.eScene.preBattle);
     }
 
     // Update is called once per frame
