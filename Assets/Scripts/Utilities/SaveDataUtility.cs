@@ -10,6 +10,21 @@ public class SaveDataUtility
     const string m_saveFileName = "Data2.txt";
 
     [Serializable]
+    struct UpgradeTreeData
+    {
+        [Serializable]
+        public struct UpgradeData
+        {
+            public float cost;
+            public bool owned;
+            public int level;
+
+            public bool unlocked;
+        }
+        public List<UpgradeData> upgrades;
+    }
+
+    [Serializable]
     internal struct BattleNodeData
     {
         public int difficulty;
@@ -63,6 +78,7 @@ public class SaveDataUtility
     [Serializable]
     struct SaveData
     {
+        public UpgradeTreeData upgradeTreeData;
         public HumanBodyData humanBodyData;
         public AudioData audioData;
     }
@@ -80,6 +96,35 @@ public class SaveDataUtility
     {
         m_saveData = new SaveData();
         m_gameHandlerRef = a_gameHandlerRef;
+    }
+
+    void SaveUpgradeTree()
+    {
+        m_saveData.upgradeTreeData.upgrades = new List<UpgradeTreeData.UpgradeData>();
+        for (int i = 0; i < m_gameHandlerRef.m_upgradeTree.m_upgradeItemList.Count; i++)
+        {
+            UpgradeTreeData.UpgradeData upgradeData = new UpgradeTreeData.UpgradeData();
+            UpgradeItem upgradeItem = m_gameHandlerRef.m_upgradeTree.m_upgradeItemList[i];
+            upgradeData.cost = upgradeItem.m_cost;
+            upgradeData.level = upgradeItem.m_level;
+            upgradeData.unlocked = upgradeItem.m_unlocked;
+            upgradeData.owned = upgradeItem.m_owned;
+            m_saveData.upgradeTreeData.upgrades.Add(upgradeData);
+        }
+    }
+
+    void LoadUpgradeTree()
+    {
+        for (int i = 0; i < m_saveData.upgradeTreeData.upgrades.Count; i++)
+        {
+            UpgradeTreeData.UpgradeData upgradeData = m_saveData.upgradeTreeData.upgrades[i];
+            UpgradeItem upgradeItem = m_gameHandlerRef.m_upgradeTree.m_upgradeItemList[i];
+            upgradeItem.m_cost = upgradeData.cost;
+            upgradeItem.m_level = upgradeData.level;
+            upgradeItem.m_unlocked = upgradeData.unlocked;
+            upgradeItem.m_owned = upgradeData.owned;
+        }
+
     }
 
     void SaveHumanBody()
@@ -184,6 +229,7 @@ public class SaveDataUtility
 
     internal void Save()
     {
+        SaveUpgradeTree();
         SaveHumanBody();
         SaveAudioData();
         string path = GetSaveDataPath();
@@ -199,6 +245,7 @@ public class SaveDataUtility
         {
             string loadedString = File.ReadAllText(path);
             m_saveData = JsonUtility.FromJson<SaveData>(loadedString);
+            LoadUpgradeTree();
             LoadHumanBody();
             LoadAudioData();
             retVal = true;

@@ -89,7 +89,7 @@ public class AudioHandler : MonoBehaviour
         SetupAudioSource(m_menuMusicAudioSource, m_menuMusic, "Music");
 
         m_muted = false;
-        m_musicEnabled = true;
+        m_musicEnabled = false;
         m_soundEffectsEnabled = true;
     }
 
@@ -101,16 +101,13 @@ public class AudioHandler : MonoBehaviour
     internal void PlayBattleMusic(BattleManager a_battleManagerRef)
     { 
         m_inBattle = true;
-        if (m_musicEnabled)
-        {
-            m_battleManagerRef = a_battleManagerRef;
-            m_characterAudioSource.Play();
-            m_heartBeatAudioSource.Play();
-            m_menuMusicAudioSource.Stop();
-            RefreshBattleMusic();
-            Refresh();
-            m_battleManagerRef.m_enemyCountChangeDelegate = new BattleManager.onEnemyCountChangeDelegate(OnEnemyCountChange);
-        }
+        m_battleManagerRef = a_battleManagerRef;
+        m_characterAudioSource.Play();
+        m_heartBeatAudioSource.Play();
+        m_menuMusicAudioSource.Stop();
+        RefreshBattleMusic();
+        Refresh();
+        m_battleManagerRef.m_enemyCountChangeDelegate = new BattleManager.onEnemyCountChangeDelegate(OnEnemyCountChange);
     }
 
     internal void PlayMenuMusic()
@@ -194,7 +191,7 @@ public class AudioHandler : MonoBehaviour
                 // Freeze has just happened
                 m_timeWasFrozen = true;
                 m_audioMixer.SetFloat("heartBeatVol", 4f);
-                m_audioMixer.SetFloat("musicVol", -6f);                
+                m_audioMixer.SetFloat("battleMusicVol", -6f);                
             }
         }
         else
@@ -205,7 +202,7 @@ public class AudioHandler : MonoBehaviour
                 m_timeWasFrozen = false;
 
                 m_audioMixer.SetFloat("heartBeatVol", -80f);
-                m_audioMixer.SetFloat("musicVol", 0f);
+                m_audioMixer.SetFloat("battleMusicVol", 0f);
             }
         }
     }

@@ -103,3 +103,4 @@ MonoBehaviour:
   - {fileID: 21300000, guid: f39cdcacafa2cfd4f924c6043a57f058, type: 3}
   - {fileID: 21300000, guid: aa27436920bef4248b5cd9e5d1d771cf, type: 3}
   - {fileID: 21300000, guid: 751ad1708f0428b4d946715909a40573, type: 3}
+  m_thudSound: {fileID: 8300000, guid: 61abc5e78c1d24bfea9a4446a2c70c89, type: 3}

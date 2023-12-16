@@ -102,7 +102,6 @@ public class RisingFadingText : MonoBehaviour
 
         float scale = -1f;
         float maxScale = 2f * m_originalScale;
-        const float landingScale = 1f;
         Color fadedColor = new Color(m_secondColor.r, m_secondColor.g, m_secondColor.b, 0f);
 
         Color color = Color.white;
@@ -124,30 +123,30 @@ public class RisingFadingText : MonoBehaviour
 
             case float n when (n > m_peakTime && n < m_firstColorFadeTime):
                 lerpTime = (n - m_peakTime) / (m_landingTime - m_peakTime);
-                scale = Mathf.Lerp(maxScale, landingScale, lerpTime);
+                scale = Mathf.Lerp(maxScale, m_originalScale, lerpTime);
                 break;
 
             case float n when (n > m_firstColorFadeTime && n < m_landingTime):
                 lerpTime = (n - m_peakTime) / (m_landingTime - m_peakTime);
-                scale = Mathf.Lerp(maxScale, landingScale, lerpTime);
+                scale = Mathf.Lerp(maxScale, m_originalScale, lerpTime);
                 lerpTime = (n - m_firstColorFadeTime) / (m_landingTime - m_firstColorFadeTime);
                 color = Color.Lerp(m_firstColor, m_secondColor, lerpTime);
                 break;
 
             case float n when (n > m_landingTime && n < m_fadeStartTime):
                 color = m_secondColor;
-                scale = landingScale;
+                scale = m_originalScale;
                 break;
 
             case float n when (n > m_fadeStartTime && n < m_lifeTimerMax):
                 lerpTime = (n - m_fadeStartTime) / (m_lifeTimerMax - m_fadeStartTime);
                 color = Color.Lerp(m_secondColor, fadedColor, lerpTime);
-                scale = landingScale;
+                scale = m_originalScale;
                 break;
             default:
                 break;
         }
-        scale *= m_originalScale;
+        //scale *= m_originalScale;
         transform.localScale = new Vector3(scale, scale, 1f);
         GetComponent<Text>().color = color;
 

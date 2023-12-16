@@ -48,7 +48,7 @@ public class EquipmentInteractButton : MonoBehaviour
             if (!equipped)
             {
                 equipButtonColor = Color.white;
-                m_equipButtonTextRef.color = Color.gray;
+                m_equipButtonTextRef.color = Color.green;
                 equipButtonString = "Equip";
             }
             else if (equipped && sameSlot)
