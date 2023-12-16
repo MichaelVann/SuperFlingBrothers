@@ -66,28 +66,28 @@ public class OptionsMenu : MonoBehaviour
 
     internal void Refresh()
     {
-        m_muteCheckBox.SetToggled(m_gameHandlerRef.m_audioManager.m_muted);
-        m_musicCheckBox.SetToggled(m_gameHandlerRef.m_audioManager.m_musicEnabled);
-        m_soundEffectCheckBox.SetToggled(m_gameHandlerRef.m_audioManager.m_soundEffectsEnabled);
+        m_muteCheckBox.SetToggled(m_gameHandlerRef.m_musicPlayerRef.m_muted);
+        m_musicCheckBox.SetToggled(m_gameHandlerRef.m_musicPlayerRef.m_musicEnabled);
+        m_soundEffectCheckBox.SetToggled(m_gameHandlerRef.m_musicPlayerRef.m_soundEffectsEnabled);
         m_resolutionTextRef.text = "Resolution: " + Screen.width + " x " + Screen.height;
         m_safeAreaTextRef.text = "Safe Area: " + Screen.safeArea.width + " x " + Screen.safeArea.height;
     }
 
     public void ToggleMuted()
     {
-        m_gameHandlerRef.m_audioManager.ToggleMuted();
+        m_gameHandlerRef.m_musicPlayerRef.ToggleMuted();
         Refresh();
     }
 
     public void ToggleMusic()
     {
-        m_gameHandlerRef.m_audioManager.ToggleMusic();
+        m_gameHandlerRef.m_musicPlayerRef.ToggleMusic();
         Refresh();
     }
 
     public void ToggleSoundEffects()
     {
-        m_gameHandlerRef.m_audioManager.ToggleMuted();
+        m_gameHandlerRef.m_musicPlayerRef.ToggleMuted();
         Refresh();
     }
 

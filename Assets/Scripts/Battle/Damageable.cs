@@ -274,6 +274,7 @@ public class Damageable : BaseObject
     {
         Instantiate(m_explosionPrefab, transform.position, new Quaternion());
         Destroy(gameObject);
+        m_musicPlayerRef.PlayExplosionSound();
     }
 
     public float GetChanceToHit(Vector2 a_contactPoint)

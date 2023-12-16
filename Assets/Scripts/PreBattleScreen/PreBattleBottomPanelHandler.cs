@@ -31,7 +31,7 @@ public class PreBattleBottomPanelHandler : MonoBehaviour
     public void PassButtonPressed()
     {
         FindObjectOfType<GameHandler>().PassBattle();
-        m_gameHandlerRef.ChangeScene(GameHandler.eScene.preBattle);
+        m_gameHandlerRef.TransitionScene(GameHandler.eScene.preBattle);
 
     }
 }

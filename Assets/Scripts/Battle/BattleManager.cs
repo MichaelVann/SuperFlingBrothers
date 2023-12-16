@@ -182,6 +182,7 @@ public class BattleManager : MonoBehaviour
         SpawnEnemies();
         //m_levelDifficultyText.text = "Level Difficulty: " + m_gameHandlerRef.m_battleDifficulty;
         m_upperLowerFlingPositionBounds = m_wallSpriteRenderers[3].gameObject.transform.position.y;
+        m_gameHandlerRef.m_musicPlayerRef.PlayBattleMusic(this);
 
     }
 
@@ -678,7 +679,7 @@ public class BattleManager : MonoBehaviour
         m_gameFinished = true;
         UpdateTimeScale();
         CalculateFinishedGame();
-        FindObjectOfType<GameHandler>().ChangeScene(GameHandler.eScene.postBattle);
+        FindObjectOfType<GameHandler>().TransitionScene(GameHandler.eScene.postBattle);
     }
 
     public void StartEndingGame(eEndGameType a_type)
@@ -740,7 +741,7 @@ public class BattleManager : MonoBehaviour
     {
         m_gameEndTimer += Time.deltaTime;
         m_fadeToBlackRef.color = new Color(0f, 0f, 0f, Mathf.Pow(m_gameEndTimer / m_maxGameEndTimer, 3f));
-        if (m_gameEndTimer >= m_maxGameEndTimer)
+        if (!m_gameFinished && m_gameEndTimer >= m_maxGameEndTimer)
         {
             FinishGame();
         }
