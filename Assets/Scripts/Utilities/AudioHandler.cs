@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Dynamic;
 using UnityEngine;
 using UnityEngine.Audio;
 
-public class MusicPlayer : MonoBehaviour
+public class AudioHandler : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
     BattleManager m_battleManagerRef;
@@ -25,7 +26,8 @@ public class MusicPlayer : MonoBehaviour
     AudioSource m_dodgerAudioSource;
     AudioSource m_healerAudioSource;
     AudioSource m_strikerAudioSource;
-    List<AudioSource> m_enemyAudioSources;
+    AudioSource[] m_enemyAudioSources;
+
     AudioSource m_soundEffectsAudioSource;
     AudioSource m_menuMusicAudioSource;
 
@@ -49,17 +51,17 @@ public class MusicPlayer : MonoBehaviour
 
     internal bool m_inBattle = false;
 
-    internal void ToggleMuted() { m_muted = !m_muted; }
+    internal void ToggleMuted() { m_muted = !m_muted; Refresh(); }
 
-    internal void ToggleMusic() { m_musicEnabled = !m_musicEnabled; }
+    internal void ToggleMusic() { m_musicEnabled = !m_musicEnabled; Refresh(); }
 
-    internal void ToggleSoundEffects() { m_soundEffectsEnabled = !m_soundEffectsEnabled; }
+    internal void ToggleSoundEffects() { m_soundEffectsEnabled = !m_soundEffectsEnabled; Refresh(); }
 
     void Awake()
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_menuMusicAudioSource = gameObject.AddComponent<AudioSource>();
-        m_enemyAudioSources = new List<AudioSource>();
+        m_enemyAudioSources = new AudioSource[(int)Enemy.eEnemyType.Count];
         // create AudioSources for various streams
         m_characterAudioSource = gameObject.AddComponent<AudioSource>();
         m_heartBeatAudioSource = gameObject.AddComponent<AudioSource>();
@@ -75,11 +77,14 @@ public class MusicPlayer : MonoBehaviour
       
         SetupAudioSource(m_characterAudioSource, m_characterMusic, "Character");
         SetupAudioSource(m_heartBeatAudioSource, m_heartBeatMusic, "Heartbeat");
-        SetupAudioSource(m_idlerAudioSource, m_idlerMusic, "Enemies");
-        SetupAudioSource(m_inertiaDasherAudioSource, m_inertiaDasherMusic, "Enemies");
-        SetupAudioSource(m_dodgerAudioSource, m_dodgerMusic, "Enemies");
-        SetupAudioSource(m_healerAudioSource, m_healerMusic, "Enemies");
-        SetupAudioSource(m_strikerAudioSource, m_strikerMusic, "Enemies");
+
+        SetupEnemyMusicSource(m_idlerAudioSource, m_idlerMusic, Enemy.eEnemyType.Idler);
+        SetupEnemyMusicSource(m_inertiaDasherAudioSource, m_inertiaDasherMusic, Enemy.eEnemyType.InertiaDasher);
+        SetupEnemyMusicSource(m_dodgerAudioSource, m_dodgerMusic, Enemy.eEnemyType.Dodger);
+        SetupEnemyMusicSource(m_healerAudioSource, m_healerMusic, Enemy.eEnemyType.Healer);
+        SetupEnemyMusicSource(m_strikerAudioSource, m_strikerMusic, Enemy.eEnemyType.Striker);
+
+
         SetupAudioSource(m_soundEffectsAudioSource, null, "Sound Effects");
         SetupAudioSource(m_menuMusicAudioSource, m_menuMusic, "Music");
 
@@ -95,20 +100,22 @@ public class MusicPlayer : MonoBehaviour
 
     internal void PlayBattleMusic(BattleManager a_battleManagerRef)
     { 
+        m_inBattle = true;
         if (m_musicEnabled)
         {
             m_battleManagerRef = a_battleManagerRef;
             m_characterAudioSource.Play();
             m_heartBeatAudioSource.Play();
             m_menuMusicAudioSource.Stop();
+            RefreshBattleMusic();
             Refresh();
             m_battleManagerRef.m_enemyCountChangeDelegate = new BattleManager.onEnemyCountChangeDelegate(OnEnemyCountChange);
         }
-        m_inBattle = true;
     }
 
     internal void PlayMenuMusic()
     {
+        m_inBattle = false;
         if (m_musicEnabled && !m_menuMusicAudioSource.isPlaying)
         {
             m_menuMusicAudioSource.clip = m_menuMusic;
@@ -135,29 +142,42 @@ public class MusicPlayer : MonoBehaviour
         {
             RegularUpdate();
         }
-        UpdateVolumes();
+    }
+
+    float VolumeScaleToDB(float a_volume)
+    {
+        float volInDB = -80f;
+
+        if (a_volume > 0f)
+        {
+            const float mult = 33.2f; // 10/Log(2)
+            volInDB = mult * Mathf.Log10(a_volume);
+        }
+
+        return volInDB;
     }
 
     void UpdateVolumes()
     {
+        //Sound
+        float soundVol = 1f;
+        soundVol *= m_soundEffectsVolume;
+        soundVol *= m_soundEffectsEnabled ? 1f : 0f;
+        m_audioMixer.SetFloat("soundEffectsVol", VolumeScaleToDB(soundVol));
 
+        //Music
+        float musicVol = 1f;
+        musicVol *= m_musicVolume;
+        musicVol *= m_musicEnabled ? 1f : 0f;
+        m_audioMixer.SetFloat("musicVol", VolumeScaleToDB(musicVol));
 
         //Master
         float masterVol = 1f;
         masterVol *= (1f - m_sceneFadeAmount);
         masterVol *= m_masterVolume;
-        float volIndB;
-        if (masterVol == 0f)
-        {
-            volIndB = -80f;
-        }
-        else
-        {
-            volIndB = 33.2f * Mathf.Log10(masterVol);
-        }
-        Debug.Log(masterVol);
-        m_audioMixer.SetFloat("masterVol", volIndB);
+        masterVol *= m_muted ? 0f : 1f;
 
+        m_audioMixer.SetFloat("masterVol", VolumeScaleToDB(masterVol));
     }
 
     internal void BattleUpdate()
@@ -202,73 +222,48 @@ public class MusicPlayer : MonoBehaviour
         a_audioSource.outputAudioMixerGroup = m_audioMixer.FindMatchingGroups(a_mixerGroupName)[0];
     }
 
-    void Refresh()
+    void SetupEnemyMusicSource(AudioSource a_audioSource, AudioClip a_clip, Enemy.eEnemyType a_type)
     {
-        if (m_musicEnabled)
+        SetupAudioSource(a_audioSource, a_clip, "Enemies");
+        m_enemyAudioSources[(int)a_type] = a_audioSource;
+    }
+
+    internal void RefreshBattleMusic()
+    {
+        if (m_inBattle)
         {
-            if (m_idlerAudioSource.isPlaying &&
-          m_battleManagerRef.m_enemyTypeCounts[0] == 0)
+            for (int i = 0; i < m_enemyAudioSources.Length; i++)
             {
-                m_idlerAudioSource.Stop();
-            }
-            else if (!m_idlerAudioSource.isPlaying &&
-                m_battleManagerRef.m_enemyTypeCounts[0] > 0)
-            {
-                m_idlerAudioSource.Play();
-            }
-
-            if (m_inertiaDasherAudioSource.isPlaying &&
-                m_battleManagerRef.m_enemyTypeCounts[1] == 0)
-            {
-                m_inertiaDasherAudioSource.Stop();
-            }
-            else if (!m_inertiaDasherAudioSource.isPlaying &&
-                m_battleManagerRef.m_enemyTypeCounts[1] > 0)
-            {
-                m_inertiaDasherAudioSource.Play();
-            }
-
-            if (m_dodgerAudioSource.isPlaying &&
-                m_battleManagerRef.m_enemyTypeCounts[2] == 0)
-            {
-                m_dodgerAudioSource.Stop();
-            }
-            else if (!m_dodgerAudioSource.isPlaying &&
-                m_battleManagerRef.m_enemyTypeCounts[2] > 0)
-            {
-                m_dodgerAudioSource.Play();
-            }
-
-            if (m_healerAudioSource.isPlaying &&
-                m_battleManagerRef.m_enemyTypeCounts[3] == 0)
-            {
-                m_healerAudioSource.Stop();
-            }
-            else if (!m_healerAudioSource.isPlaying &&
-                m_battleManagerRef.m_enemyTypeCounts[3] > 0)
-            {
-                m_healerAudioSource.Play();
-            }
-
-            if (m_strikerAudioSource.isPlaying &&
-                m_battleManagerRef.m_enemyTypeCounts[4] == 0)
-            {
-                m_strikerAudioSource.Stop();
-            }
-            else if (!m_strikerAudioSource.isPlaying &&
-                m_battleManagerRef.m_enemyTypeCounts[4] > 0)
-            {
-                m_strikerAudioSource.Play();
+                AudioSource source = m_enemyAudioSources[i];
+                if (source.isPlaying && m_battleManagerRef.m_enemyTypeCounts[i] == 0)
+                {
+                    source.Stop();
+                }
+                else if (!source.isPlaying && m_battleManagerRef.m_enemyTypeCounts[i] > 0)
+                {
+                    source.Play();
+                }
             }
         }
-      
+    }
+
+    internal void Refresh()
+    {
+        UpdateVolumes();
+    }
+
+    void StopMusic()
+    {
+        for (int i = 0; i < m_enemyAudioSources.Length; i++)
+        {
+            m_enemyAudioSources[i].Stop();
+        }
+        m_menuMusicAudioSource.Stop();
     }
 
     void OnEnemyCountChange()
     {
-
-        Refresh();      
-        
+        RefreshBattleMusic();      
     }
 
     public void PlaySoundEffect(AudioClip a_clip, float a_volume)
@@ -277,19 +272,16 @@ public class MusicPlayer : MonoBehaviour
         {
             m_soundEffectsAudioSource.PlayOneShot(a_clip, a_volume);
         }
-
     }
 
     public void PlayDamageSound()
     {
         PlaySoundEffect(m_damageSound, 1);     
-          
     }
 
     public void PlayBounceSound()
     {
         PlaySoundEffect(m_bounceSound, 1);       
-        
     }
 
     public void PlayFlingSound()
@@ -300,13 +292,11 @@ public class MusicPlayer : MonoBehaviour
     public void PlayPocketSound()
     {
         PlaySoundEffect(m_pocketSound, 0.8f);        
-        
     }
 
     public void PlayExplosionSound()
     {
         PlaySoundEffect(m_explosionSound, 1f);        
-
     }
 }
 

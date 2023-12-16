@@ -125,7 +125,7 @@ public class BattleManager : MonoBehaviour
     int m_invaderStrengthChange = 0;
 
     //Audio section
-    public MusicPlayer m_musicPlayerRef;
+    public AudioHandler m_musicPlayerRef;
 
     internal delegate void onEnemyCountChangeDelegate();
     internal onEnemyCountChangeDelegate m_enemyCountChangeDelegate;
@@ -184,7 +184,7 @@ public class BattleManager : MonoBehaviour
         SpawnEnemies();
         //m_levelDifficultyText.text = "Level Difficulty: " + m_gameHandlerRef.m_battleDifficulty;
         m_upperLowerFlingPositionBounds = m_wallSpriteRenderers[3].gameObject.transform.position.y;
-        m_gameHandlerRef.m_musicPlayerRef.PlayBattleMusic(this);
+        m_gameHandlerRef.m_audioHandlerRef.PlayBattleMusic(this);
 
     }
 

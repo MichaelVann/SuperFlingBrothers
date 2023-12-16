@@ -367,17 +367,21 @@ public class Player : Damageable
 
 
             float damageDealt = CalculateDamageDealtFromCollision(enemy, a_collision);
-            if (m_comboHitEnabled)
+            if (damageDealt > 0)
             {
-                damageDealt *= m_comboHit;
-                string comboString = VLib.RoundToDecimalPlaces(m_comboHit, 2) + "X";
-                SpawnRisingFadingText(comboString, Color.white, true, 2f);
+                if (m_comboHitEnabled)
+                {
+                    damageDealt *= m_comboHit;
+                    string comboString = VLib.RoundToDecimalPlaces(m_comboHit, 2) + "X";
+                    SpawnRisingFadingText(comboString, Color.white, true, 2f);
+                }
+                enemy.ReceiveDamageFromCollision(gameObject, damageDealt, a_collision.contacts[0].point);
+                if (m_comboHitEnabled)
+                {
+                    m_comboHit *= m_comboHitExponent;
+                }
             }
-            enemy.ReceiveDamageFromCollision(gameObject, damageDealt, a_collision.contacts[0].point);
-            if (m_comboHitEnabled)
-            {
-                m_comboHit *= m_comboHitExponent;
-            }
+
         }
         else if (retreatZone)
         {

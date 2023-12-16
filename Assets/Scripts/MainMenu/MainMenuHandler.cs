@@ -17,7 +17,7 @@ public class MainMenuHandler : MonoBehaviour
     void Start()
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_gameHandlerRef.m_musicPlayerRef.PlayMenuMusic();
+        m_gameHandlerRef.m_audioHandlerRef.PlayMenuMusic();
     }
 
     public void Play()

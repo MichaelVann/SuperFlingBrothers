@@ -46,18 +46,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e122116b6dca5c42afa7fe1b18ae3a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_musicPlayerRef: {fileID: 5766548397634567605}
+  m_audioHandlerRef: {fileID: 5766548397634567605}
   m_sceneFadeImageRef: {fileID: 268414004633277010}
   m_sceneFadeCanvasRef: {fileID: 2551137344319274558}
-  m_lastGameResult: 2
-  m_xpEarnedLastGame: 0
-  m_invaderStrengthChangeLastGame: 0
-  m_teamLevelAtStartOfBattle: 0
-  m_dnaEarnedLastGame: 0
-  m_equipmentCollectedLastGame: 0
-  m_lastXpBonus: 0
-  m_lastDnaBonus: 0
-  m_upgrades: []
   m_equipmentInventory: []
   references:
     version: 2
@@ -250,7 +241,7 @@ PrefabInstance:
     - target: {fileID: 1997889275960016613, guid: 982f1258c94d84825a59c06f41668aac,
         type: 3}
       propertyPath: m_Name
-      value: Music Player
+      value: Audio Handler
       objectReference: {fileID: 0}
     - target: {fileID: 2767019639206211556, guid: 982f1258c94d84825a59c06f41668aac,
         type: 3}

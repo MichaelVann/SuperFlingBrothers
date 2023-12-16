@@ -16,6 +16,10 @@ public class OptionsMenu : MonoBehaviour
 
     public GameObject m_confirmationBoxPrefab;
 
+    [SerializeField] Slider m_volumeSlider;
+    [SerializeField] Slider m_soundFXVolumeSlider;
+    [SerializeField] Slider m_musicVolumeSlider;
+
     void Start()
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
@@ -44,6 +48,31 @@ public class OptionsMenu : MonoBehaviour
 
     }
 
+    public void OnVolumeSliderChanged()
+    {
+        m_gameHandlerRef.m_audioHandlerRef.m_masterVolume = m_volumeSlider.value;
+        m_gameHandlerRef.m_audioHandlerRef.Refresh();
+    }
+
+    public void OnSoundEffectsSliderChanged()
+    {
+        m_gameHandlerRef.m_audioHandlerRef.m_soundEffectsVolume = m_soundFXVolumeSlider.value;
+        m_gameHandlerRef.m_audioHandlerRef.Refresh();
+    }
+
+    public void OnMusicSliderChanged()
+    {
+        m_gameHandlerRef.m_audioHandlerRef.m_musicVolume = m_musicVolumeSlider.value;
+        m_gameHandlerRef.m_audioHandlerRef.Refresh();
+    }
+
+    void LoadAudioSliderValues()
+    {
+        m_volumeSlider.value = m_gameHandlerRef.m_audioHandlerRef.m_masterVolume;
+        m_soundFXVolumeSlider.value = m_gameHandlerRef.m_audioHandlerRef.m_soundEffectsVolume;
+        m_musicVolumeSlider.value = m_gameHandlerRef.m_audioHandlerRef.m_musicVolume;
+    }
+
     public void SaveButtonPressed()
     {
         m_gameHandlerRef.SaveGame();
@@ -59,35 +88,37 @@ public class OptionsMenu : MonoBehaviour
             confirmationBox.SetToAcknowledgeOnlyMode();
             //confirmationBox.m_confirmationResponseDelegate = new ConfirmationBox.ConfirmationResponseDelegate(SellAllUnequippedEquipment);
         }
-        
-
         Refresh();
     }
 
     internal void Refresh()
     {
-        m_muteCheckBox.SetToggled(m_gameHandlerRef.m_musicPlayerRef.m_muted);
-        m_musicCheckBox.SetToggled(m_gameHandlerRef.m_musicPlayerRef.m_musicEnabled);
-        m_soundEffectCheckBox.SetToggled(m_gameHandlerRef.m_musicPlayerRef.m_soundEffectsEnabled);
+        m_muteCheckBox.SetToggled(!m_gameHandlerRef.m_audioHandlerRef.m_muted);
+        m_musicCheckBox.SetToggled(m_gameHandlerRef.m_audioHandlerRef.m_musicEnabled);
+        m_soundEffectCheckBox.SetToggled(m_gameHandlerRef.m_audioHandlerRef.m_soundEffectsEnabled);
+
+        LoadAudioSliderValues();
+        m_gameHandlerRef.m_audioHandlerRef.Refresh();
+
         m_resolutionTextRef.text = "Resolution: " + Screen.width + " x " + Screen.height;
         m_safeAreaTextRef.text = "Safe Area: " + Screen.safeArea.width + " x " + Screen.safeArea.height;
     }
 
     public void ToggleMuted()
     {
-        m_gameHandlerRef.m_musicPlayerRef.ToggleMuted();
+        m_gameHandlerRef.m_audioHandlerRef.ToggleMuted();
         Refresh();
     }
 
     public void ToggleMusic()
     {
-        m_gameHandlerRef.m_musicPlayerRef.ToggleMusic();
+        m_gameHandlerRef.m_audioHandlerRef.ToggleMusic();
         Refresh();
     }
 
     public void ToggleSoundEffects()
     {
-        m_gameHandlerRef.m_musicPlayerRef.ToggleMuted();
+        m_gameHandlerRef.m_audioHandlerRef.ToggleSoundEffects();
         Refresh();
     }
 

@@ -55,6 +55,9 @@ public class SaveDataUtility
         public bool muted;
         public bool musicEnabled;
         public bool soundEffectsEnabled;
+        public float masterVolume;
+        public float soundEffectsVolume;
+        public float musicVoume;
     }
 
     [Serializable]
@@ -158,16 +161,25 @@ public class SaveDataUtility
 
     void SaveAudioData()
     {
-        m_saveData.audioData.muted = m_gameHandlerRef.m_musicPlayerRef.m_musicEnabled;
-        m_saveData.audioData.musicEnabled = m_gameHandlerRef.m_musicPlayerRef.m_musicEnabled;
-        m_saveData.audioData.soundEffectsEnabled = m_gameHandlerRef.m_musicPlayerRef.m_soundEffectsEnabled;
+        m_saveData.audioData.muted = m_gameHandlerRef.m_audioHandlerRef.m_muted;
+        m_saveData.audioData.musicEnabled = m_gameHandlerRef.m_audioHandlerRef.m_musicEnabled;
+        m_saveData.audioData.soundEffectsEnabled = m_gameHandlerRef.m_audioHandlerRef.m_soundEffectsEnabled;
+
+        //Volume
+        m_saveData.audioData.masterVolume = m_gameHandlerRef.m_audioHandlerRef.m_masterVolume;
+        m_saveData.audioData.soundEffectsVolume = m_gameHandlerRef.m_audioHandlerRef.m_soundEffectsVolume;
+        m_saveData.audioData.musicVoume = m_gameHandlerRef.m_audioHandlerRef.m_musicVolume;
     }
 
     void LoadAudioData()
     {
-        m_gameHandlerRef.m_musicPlayerRef.m_muted = m_saveData.audioData.muted;
-        m_gameHandlerRef.m_musicPlayerRef.m_musicEnabled = m_saveData.audioData.musicEnabled;
-        m_gameHandlerRef.m_musicPlayerRef.m_soundEffectsEnabled = m_saveData.audioData.soundEffectsEnabled;
+        m_gameHandlerRef.m_audioHandlerRef.m_muted = m_saveData.audioData.muted;
+        m_gameHandlerRef.m_audioHandlerRef.m_musicEnabled = m_saveData.audioData.musicEnabled;
+        m_gameHandlerRef.m_audioHandlerRef.m_soundEffectsEnabled = m_saveData.audioData.soundEffectsEnabled;
+
+        m_gameHandlerRef.m_audioHandlerRef.m_masterVolume = m_saveData.audioData.masterVolume;
+        m_gameHandlerRef.m_audioHandlerRef.m_soundEffectsVolume = m_saveData.audioData.soundEffectsVolume;
+        m_gameHandlerRef.m_audioHandlerRef.m_musicVolume = m_saveData.audioData.musicVoume;
     }
 
     internal void Save()

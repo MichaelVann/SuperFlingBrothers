@@ -17,7 +17,7 @@ public class GameHandler : MonoBehaviour
     internal static GameHandler m_staticAutoRef;
 
     public const int MAIN_VERSION_NUMBER = 25;
-    public const int SUB_VERSION_NUMBER = 0;
+    public const int SUB_VERSION_NUMBER = 1;
 
     static internal bool DEBUG_MODE = true;
 
@@ -41,7 +41,7 @@ public class GameHandler : MonoBehaviour
     static internal float DAMAGEABLE_PocketFlingStrength = 100f;
     static internal float DAMAGEABLE_DamagePerSpeedDivider = 8f;
 
-    [SerializeField] internal MusicPlayer m_musicPlayerRef;
+    [SerializeField] internal AudioHandler m_audioHandlerRef;
 
     //Player
 
@@ -344,7 +344,8 @@ public class GameHandler : MonoBehaviour
             float fade = m_sceneFadingOut ? compPerc : 1f- compPerc;
             fade = Mathf.Clamp(fade, 0f, 1f);
             m_sceneFadeImageRef.color = new Color(0f, 0f, 0f, fade);
-            m_musicPlayerRef.m_sceneFadeAmount = fade;
+            m_audioHandlerRef.m_sceneFadeAmount = fade;
+            m_audioHandlerRef.Refresh();
         }
     }
 
