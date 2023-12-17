@@ -113,7 +113,7 @@ public class AudioHandler : MonoBehaviour
     internal void PlayMenuMusic()
     {
         m_inBattle = false;
-        if (m_musicEnabled && !m_menuMusicAudioSource.isPlaying)
+        if (!m_menuMusicAudioSource.isPlaying)
         {
             m_menuMusicAudioSource.clip = m_menuMusic;
             m_menuMusicAudioSource.Play();
@@ -126,6 +126,7 @@ public class AudioHandler : MonoBehaviour
             m_healerAudioSource.Stop();
             m_strikerAudioSource.Stop();
         }
+        Refresh();
     }
 
     // Update is called once per frame

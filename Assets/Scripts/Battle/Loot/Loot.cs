@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Loot : MonoBehaviour
 {
-    BattleManager m_battleManagerRef;
+    protected BattleManager m_battleManagerRef;
     Player m_playerRef;
     float m_endSpeed = 5f;
 
@@ -19,6 +19,7 @@ public class Loot : MonoBehaviour
     float m_jumpTimerMax = 1f;
     public ObjectShadow m_shadowRef;
     const float m_pushOutSpeed = 10f;
+    const float m_closestLootSpawnAngle = 45f;
 
     // Start is called before the first frame update
     virtual public void Start()
@@ -56,7 +57,6 @@ public class Loot : MonoBehaviour
                 m_endSpeed = Mathf.Clamp(m_endSpeed, 0f, 30f);
                 m_movingToTargetPos = false;
             }
-
         }
         else if (m_movingToTargetPos)
         {
@@ -98,7 +98,7 @@ public class Loot : MonoBehaviour
         }
     }
 
-    public void OnTriggerEnter2D(Collider2D a_collider)
+    public virtual void OnTriggerEnter2D(Collider2D a_collider)
     {
         //If the coin collides with the player
         if (a_collider.gameObject.GetComponent<Player>() && !m_movingToTargetPos)
@@ -107,5 +107,33 @@ public class Loot : MonoBehaviour
             Destroy(this.gameObject);
         }
 
+    }
+
+    static internal void SpawnLoot(BattleManager a_battleManager, GameObject a_lootTemplate, float a_lootSpawnOffset, Vector3 a_owningPos, int a_lootToSpawn = 1)
+    {
+        List<float> spawnDirections = new List<float>();
+        float rotationOffset = VLib.vRandom(0f, 360f);
+        for (int i = 0; i < a_lootToSpawn; i++)
+        {
+            spawnDirections.Add(i * (360f / a_lootToSpawn));
+        }
+
+        for (int i = 0; i < a_lootToSpawn; i++)
+        {
+            int selectedDirectionIndex = VLib.vRandom(0, spawnDirections.Count - 1);
+            float direction = spawnDirections[selectedDirectionIndex];
+            spawnDirections.RemoveAt(selectedDirectionIndex);
+
+            Vector3 spawnLocation = new Vector3(a_lootSpawnOffset, 0f, 0f);
+            spawnLocation = Quaternion.AngleAxis(direction + rotationOffset, Vector3.forward) * spawnLocation;
+            spawnLocation = a_owningPos + spawnLocation;
+
+            //Pad out the loot so it doesn't spawn with it's middle on the edge
+            float spawnBoundsPadding = 0.15f;
+            Vector2 spawnBounds = new Vector2(a_battleManager.m_gameSpace.x - spawnBoundsPadding, a_battleManager.m_gameSpace.y - spawnBoundsPadding);
+            spawnLocation = new Vector3(Mathf.Clamp(spawnLocation.x, -spawnBounds.x, spawnBounds.x), Mathf.Clamp(spawnLocation.y, -spawnBounds.y, spawnBounds.y), spawnLocation.z);
+            GameObject loot = Instantiate<GameObject>(a_lootTemplate, a_owningPos, new Quaternion());
+            loot.GetComponent<Loot>().Init(spawnLocation);
+        }
     }
 }

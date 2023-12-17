@@ -72,7 +72,6 @@ public class Enemy : Damageable
     //Loot
     float m_lootSpawnOffset = 0.3f;
     int m_coinsToSpawn = 3;
-    float m_closestLootSpawnAngle = 15f;
     float m_equipmentDropRate = 0.1f;
 
     Vector2 m_duplicationPositionClampMax = new Vector2(1.956f,2.84f);
@@ -363,33 +362,7 @@ public class Enemy : Damageable
 
     private void SpawnLoot(GameObject a_lootTemplate, int a_lootToSpawn = 1)
     {
-        float[] spawnDirection;
-
-        for (int i = 0; i < a_lootToSpawn; i++)
-        {
-            spawnDirection = new float[a_lootToSpawn];
-
-            spawnDirection[i] = UnityEngine.Random.Range(0f, 360f);
-            for (int j = 0; j < i; j++)
-            {
-                if ((spawnDirection[i] - spawnDirection[j] <= m_closestLootSpawnAngle) || (spawnDirection[i] - spawnDirection[j] >= 360f - m_closestLootSpawnAngle))
-                {
-                    spawnDirection[i] = UnityEngine.Random.Range(0f, 360f);
-                    j--;
-                }
-            }
-
-            Vector3 spawnLocation = new Vector3(m_lootSpawnOffset, 0f, 0f);
-            spawnLocation = Quaternion.AngleAxis(spawnDirection[i], Vector3.forward) * spawnLocation;
-            spawnLocation = transform.position + spawnLocation;
-
-            //Pad out the loot so it doesn't spawn with it's middle on the edge
-            float spawnBoundsPadding = 0.15f;
-            Vector2 spawnBounds = new Vector2(m_battleManagerRef.m_gameSpace.x -  spawnBoundsPadding, m_battleManagerRef.m_gameSpace.y - spawnBoundsPadding);
-            spawnLocation = new Vector3(Mathf.Clamp(spawnLocation.x, -spawnBounds.x, spawnBounds.x), Mathf.Clamp(spawnLocation.y, -spawnBounds.y, spawnBounds.y), spawnLocation.z);
-            GameObject loot = Instantiate<GameObject>(a_lootTemplate, transform.position, new Quaternion());
-            loot.GetComponent<Loot>().Init(spawnLocation);
-        }
+        Loot.SpawnLoot(m_battleManagerRef, a_lootTemplate, m_lootSpawnOffset, transform.position, a_lootToSpawn);
     }
 
     void SpawnXpText()

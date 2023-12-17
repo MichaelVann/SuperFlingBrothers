@@ -132,7 +132,7 @@ AudioMixerController:
   - guid: 83f07341323ba4fa596496da0fb47429
     name: ambienceVol
   - guid: 620b409ba5b8843488bb0d79c22a2429
-    name: battleMusicBol
+    name: battleMusicVol
   - guid: 913f643bda4ca467394a95438b611500
     name: characterVol
   - guid: b04045a2eb9ef48638c3520e711cf01a
