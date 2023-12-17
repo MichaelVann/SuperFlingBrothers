@@ -5,6 +5,7 @@ using UnityEngine;
 public class CoinChest : Loot
 {
     [SerializeField] GameObject m_coinPrefab;
+    [SerializeField] GameObject m_popParticlesPrefab;
     internal int m_coinCount = 4;
     
     // Start is called before the first frame update
@@ -18,7 +19,7 @@ public class CoinChest : Loot
     {
         if (m_battleManagerRef.m_endingGame && m_battleManagerRef.m_endGameType == eEndGameType.win)
         {
-            PopChest();
+            PopChest(true);
         }
     }
 
@@ -27,9 +28,10 @@ public class CoinChest : Loot
         m_coinCount = a_coinCount;
     }
 
-    void PopChest()
+    void PopChest(bool a_instantDispersal)
     {
-        Loot.SpawnLoot(m_battleManagerRef, m_coinPrefab, 0.3f, transform.position, m_coinCount);
+        Loot.SpawnLoot(m_battleManagerRef, m_coinPrefab, 0.3f, transform.position, m_coinCount, a_instantDispersal);
+        Instantiate(m_popParticlesPrefab, transform.position, Quaternion.AngleAxis(-90f,new Vector3(1f,0f,0f)));
         Destroy(gameObject);
     }
 
@@ -37,7 +39,7 @@ public class CoinChest : Loot
     {
         if (a_collider.gameObject.GetComponent<Player>())
         {
-            PopChest();
+            PopChest(false);
         }
     }
 }

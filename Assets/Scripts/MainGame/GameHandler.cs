@@ -17,7 +17,7 @@ public class GameHandler : MonoBehaviour
     internal static GameHandler m_staticAutoRef;
 
     public const int MAIN_VERSION_NUMBER = 25;
-    public const int SUB_VERSION_NUMBER = 5;
+    public const int SUB_VERSION_NUMBER = 6;
 
     static internal bool DEBUG_MODE = true;
 
@@ -117,6 +117,13 @@ public class GameHandler : MonoBehaviour
     SaveData m_saveData;
     //SaveDataUtility m_saveDataUtility;
     bool m_autoLoadDataOnLaunch = false;
+
+    internal float GetBattleDifficultyBonus()
+    {
+        float bonusMult = Mathf.Pow(1.022f, m_battleDifficulty);
+        bonusMult = VLib.TruncateFloatsDecimalPlaces(bonusMult, 2);
+        return bonusMult;
+    }
 
     internal int GetGeneratedEquipmentLevel(bool a_junk) { return (int)(m_xCellSquad.m_statHandler.m_RPGLevel.m_level * (a_junk ? m_junkEquipmentLevelScale : 1f)); }
 

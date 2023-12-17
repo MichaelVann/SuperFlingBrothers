@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5875264469770064987}
   - component: {fileID: 2554887838845262716}
   m_Layer: 0
-  m_Name: Explosion Light
+  m_Name: Nucleus Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

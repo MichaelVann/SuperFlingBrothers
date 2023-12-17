@@ -28,13 +28,22 @@ public class Loot : MonoBehaviour
         m_playerRef = FindObjectOfType<Player>();
     }
 
-    virtual public void Init(Vector3 a_targetPosition)
+    virtual public void Init(Vector3 a_targetPosition, bool a_instantDispersal)
     {
-        m_targetPosition = a_targetPosition;
-        m_startingPosition = transform.position;
-        m_originalScale = transform.localScale;
-        m_movingToTargetPos = true;
-        GetComponent<CircleCollider2D>().enabled = false;
+        if (a_instantDispersal)
+        {
+            m_movingToTargetPos = false;
+            transform.position = a_targetPosition;
+            GetComponent<CircleCollider2D>().enabled = true;
+        }
+        else
+        {
+            m_targetPosition = a_targetPosition;
+            m_startingPosition = transform.position;
+            m_originalScale = transform.localScale;
+            m_movingToTargetPos = true;
+            GetComponent<CircleCollider2D>().enabled = false;
+        }
     }
 
     // Update is called once per frame
@@ -109,7 +118,7 @@ public class Loot : MonoBehaviour
 
     }
 
-    static internal void SpawnLoot(BattleManager a_battleManager, GameObject a_lootTemplate, float a_lootSpawnOffset, Vector3 a_owningPos, int a_lootToSpawn = 1)
+    static internal void SpawnLoot(BattleManager a_battleManager, GameObject a_lootTemplate, float a_lootSpawnOffset, Vector3 a_owningPos, int a_lootToSpawn = 1, bool a_instantDispersal = false)
     {
         List<float> spawnDirections = new List<float>();
         float rotationOffset = VLib.vRandom(0f, 360f);
@@ -133,7 +142,7 @@ public class Loot : MonoBehaviour
             Vector2 spawnBounds = new Vector2(a_battleManager.m_gameSpace.x - spawnBoundsPadding, a_battleManager.m_gameSpace.y - spawnBoundsPadding);
             spawnLocation = new Vector3(Mathf.Clamp(spawnLocation.x, -spawnBounds.x, spawnBounds.x), Mathf.Clamp(spawnLocation.y, -spawnBounds.y, spawnBounds.y), spawnLocation.z);
             GameObject loot = Instantiate<GameObject>(a_lootTemplate, a_owningPos, new Quaternion());
-            loot.GetComponent<Loot>().Init(spawnLocation);
+            loot.GetComponent<Loot>().Init(spawnLocation, a_instantDispersal);
         }
     }
 }

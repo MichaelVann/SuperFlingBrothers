@@ -1,4 +1,5 @@
-﻿using System;
+﻿using JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -29,7 +30,6 @@ public class BattleManager : MonoBehaviour
     private BattleNode m_battleNodeRef;
 
     static public float m_shadowDistance = 0.1f;
-
 
     //Enemy Templates
     public GameObject m_enemyTemplate;
@@ -99,6 +99,12 @@ public class BattleManager : MonoBehaviour
     List<GameObject> m_enemySpawnPointsRefs;
     internal int m_enemiesToSpawn = 12;
     int m_maxEnemyDifficulty = 0;
+
+    //Coin Chests
+    [SerializeField] GameObject m_coinChestPrefab;
+    const int m_coinChestCoinsToSpawn = 8;
+    [SerializeField] List<GameObject> m_coinChestSpawnPositions;
+    const int m_maxCoinsPerCoinChest = 8;
 
     //Active Abilities
     public EquipmentAbility[] m_activeAbilities;
@@ -176,16 +182,15 @@ public class BattleManager : MonoBehaviour
         InitialiseAbilities();
 
         SpawnPlayer();
-        foreach (SpriteRenderer spriteRendererRef in m_enemySpawnPointContainerRef.GetComponentsInChildren<SpriteRenderer>())
+        foreach (Transform enemySpawnTransform in m_enemySpawnPointContainerRef.transform)
         {
-            m_enemySpawnPointsRefs.Add(spriteRendererRef.gameObject);
-            spriteRendererRef.enabled = false;
+            m_enemySpawnPointsRefs.Add(enemySpawnTransform.gameObject);
         }
         SpawnEnemies();
         //m_levelDifficultyText.text = "Level Difficulty: " + m_gameHandlerRef.m_battleDifficulty;
         m_upperLowerFlingPositionBounds = m_wallSpriteRenderers[3].gameObject.transform.position.y;
         m_gameHandlerRef.m_audioHandlerRef.PlayBattleMusic(this);
-
+        SpawnCoinChests();
     }
 
     public void SetFrozen(bool a_frozen)
@@ -211,7 +216,6 @@ public class BattleManager : MonoBehaviour
         m_gameSpace[0] = m_gameSpaceMarker.transform.position.x;
         m_gameSpace[1] = m_gameSpaceMarker.transform.position.y;
     }
-
 
     internal void ActivateAbility(int a_id)
     {
@@ -262,7 +266,6 @@ public class BattleManager : MonoBehaviour
         }
  
     }
-
 
     public void UseExtraTurn()
     {
@@ -325,6 +328,27 @@ public class BattleManager : MonoBehaviour
         UpdateTimeScale();
     }
 
+    void SpawnCoinChests()
+    {
+        int totalCoinsToSpawn = (int)(m_coinChestCoinsToSpawn * m_gameHandlerRef.GetBattleDifficultyBonus());
+        List<Vector3> spawnPositions = new List<Vector3>();
+        foreach (GameObject spawnGameObject in m_coinChestSpawnPositions)
+        {
+            spawnPositions.Add(spawnGameObject.transform.position);
+        }
+
+        
+        while(totalCoinsToSpawn > 0 &&  m_coinChestSpawnPositions.Count > 0)
+        {
+            int coinsToSpawn = Mathf.Clamp(totalCoinsToSpawn, 0, m_maxCoinsPerCoinChest);
+            int spawnLocationIndex = VLib.vRandom(0, spawnPositions.Count - 1);
+            CoinChest coinChest = Instantiate(m_coinChestPrefab, spawnPositions[spawnLocationIndex], Quaternion.identity).GetComponent<CoinChest>();
+            spawnPositions.RemoveAt(spawnLocationIndex);
+            coinChest.Init(coinsToSpawn);
+            totalCoinsToSpawn -= coinsToSpawn;
+        }
+    }
+    
     void SetupDebug()
     {
         m_debugText.gameObject.SetActive(GameHandler.DEBUG_MODE);
@@ -569,47 +593,7 @@ public class BattleManager : MonoBehaviour
                 spawnSpots.RemoveAt(roll);
             }
         }
-
-        /////// OLD Spawning system
-        /*
-        //Go through and upgrade the enemies from top down, upgrading the first enemy as much as possible then moving to the second, and so forth
-        for (int i = 0; i < spawnLocationsTypes.Length; i++)
-        {
-            //Redundant upgrade check that shouldn't be hit, but for future prrofing in case we ever spawn the top tier enemy straight away
-            if (spawnLocationsTypes[i] + 1 >= GameHandler.m_enemyTypeTraits.Length)
-            {
-                continue;
-            }
-
-            //Find the upgrade cost of upgrading this enemy to the next enemy
-            int currentLevelDifficulty = spawnLocationsTypes[i] <0 ? 0 : GameHandler.m_enemyTypeTraits[spawnLocationsTypes[i]].difficulty;
-            int nextLevelDifficulty = GameHandler.m_enemyTypeTraits[spawnLocationsTypes[i] + 1].difficulty;
-            int upgradeCost = nextLevelDifficulty - currentLevelDifficulty;
-
-            //Check whether we can upgrade the enemy with the current budget
-            bool upgradeAvailable = difficultyBudget >= upgradeCost;
-
-            //Try to recursively upgrade the enemy until 
-            while (upgradeAvailable)
-            {
-                spawnLocationsTypes[i]++;
-                difficultyBudget -= upgradeCost;
-
-                //If the coming upgrade is higher than available enemy types, break
-                if (spawnLocationsTypes[i] + 1 >= GameHandler.m_enemyTypeTraits.Length)
-                {
-                    upgradeAvailable = false;
-                    break;
-                }
-
-                //Check to see if the next upgrade is viable via being affordable and not over the set m_maxEnemyDifficulty
-                upgradeCost = GameHandler.m_enemyTypeTraits[spawnLocationsTypes[i] + 1].difficulty - GameHandler.m_enemyTypeTraits[spawnLocationsTypes[i]].difficulty;
-                bool enoughDifficulty = difficultyBudget >= upgradeCost;
-                bool notOverDifficultyCap = GameHandler.m_enemyTypeTraits[spawnLocationsTypes[i] + 1].difficulty <= m_maxEnemyDifficulty;
-                upgradeAvailable = (enoughDifficulty && notOverDifficultyCap);
-            }
-        }
-        */
+ 
 
         //Spawn the enemies in by iterating through spawnLocationsTypes and spawning the corresponding enemy at the corresponding location
         for (int i = 0; i < processedSpawnSpots.Count; i++)

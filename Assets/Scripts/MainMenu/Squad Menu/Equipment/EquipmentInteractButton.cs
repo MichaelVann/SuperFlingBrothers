@@ -40,6 +40,8 @@ public class EquipmentInteractButton : MonoBehaviour
         if (m_equipmentRef.IsBroken())
         {
             equipButtonColor = Color.grey;
+            m_equipButtonTextRef.color = Color.red;
+
             equipButtonString = "Repair" + "(" + m_equipmentRef.GetRepairCost() + ")";
             m_buttonRef.interactable = m_gameHandlerRef.GetCurrentCash() >= m_equipmentRef.GetRepairCost();
         }
