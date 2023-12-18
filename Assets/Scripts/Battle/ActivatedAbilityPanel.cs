@@ -7,7 +7,7 @@ public class ActivatedAbilityPanel : MonoBehaviour
 {
     public TextMeshProUGUI m_titleText;
     public TextMeshProUGUI m_descriptionText;
-    public TextMeshProUGUI m_ammoCountText;
+    public TextMeshProUGUI m_coolDownText;
 
     EquipmentAbility m_equipmentAbilityRef;
 
@@ -28,7 +28,7 @@ public class ActivatedAbilityPanel : MonoBehaviour
         m_equipmentAbilityRef = a_ability;
         m_titleText.text = a_ability.GetName();
         m_descriptionText.text = a_ability.GetAbilityDescription();
-        m_ammoCountText.text = a_ability.m_ammo.ToString();
+        m_coolDownText.text = a_ability.m_cooldown.ToString();
     }
 
     public void ButtonPressed()

@@ -238,7 +238,7 @@ public class Player : Damageable
             m_comboHit = 1f;
         }
         m_flinging = false;
-        m_battleManagerRef.SetFrozen(false);
+        m_battleManagerRef.NextTurn();
         m_statHandler.m_stats[(int)eCharacterStatType.dexterity].ChangeXP(m_flingDexterityXP * GameHandler.BATTLE_SkillXPScale);
 
         //Handle Projectile Shooting
@@ -247,13 +247,13 @@ public class Player : Damageable
         {
             if (abil.m_abilityType == EquipmentAbility.eAbilityType.Bullet)
             {
-                abil.m_ammo--;
+                abil.Expend();
                 abil.m_activated = false;
                 ShootProjectile(a_flingVector, abil);
             }
             else if (abil.m_abilityType == EquipmentAbility.eAbilityType.Snare)
             {
-                abil.m_ammo--;
+                abil.Expend();
                 abil.m_activated = false;
                 ShootProjectile(a_flingVector, abil);
             }

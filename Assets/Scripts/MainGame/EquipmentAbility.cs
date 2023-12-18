@@ -12,8 +12,7 @@ public class EquipmentAbility
     public Equipment m_parentEquipment;
     //public bool m_enabled = false;
     public int m_cooldown;
-    public int m_ammo;
-    public int m_maxAmmo;
+    public int m_maxCooldown;
     public bool m_passive = true;
     public bool m_activated = false;
     public int m_level;
@@ -72,6 +71,17 @@ public class EquipmentAbility
         }
         return retVal;
     }
+
+    internal void Expend()
+    {
+        m_cooldown = m_maxCooldown;
+    }
+
+    internal void CoolDown()
+    {
+        m_cooldown = Mathf.Clamp(m_cooldown-1,0, m_maxCooldown);
+    }
+
 
     void ApplyAffixes()
     {
@@ -144,15 +154,13 @@ public class EquipmentAbility
                 break;
             case eAbilityType.ExtraTurn:
                 m_passive = false;
-                m_cooldown = 1;
-                m_maxAmmo = 1;
+                m_maxCooldown = 4;
                 m_level = 1;
                 break;
 
             case eAbilityType.Bullet:
                 m_passive = false;
-                m_cooldown = 1;
-                m_maxAmmo = 5;
+                m_maxCooldown = 3;
                 m_level = 1;
                 break;
 
@@ -167,7 +175,7 @@ public class EquipmentAbility
                 m_passive = false;
                 m_activated = false;
                 m_level = 1;
-                m_maxAmmo = 5;
+                m_maxCooldown = 3;
                 break;
 
             case eAbilityType.Count:
@@ -175,7 +183,8 @@ public class EquipmentAbility
             default:
                 break;
         }
-        m_ammo = m_maxAmmo;
+        m_cooldown = 0;
+
         if (a_rarity > Equipment.eRarityTier.Normal)
         {
             RollAffixes(a_rarity);
@@ -252,7 +261,7 @@ public class EquipmentAbility
     {
         m_abilityType = a_ability.m_abilityType;
         m_cooldown = a_ability.m_cooldown;
-        m_ammo = a_ability.m_ammo;
+        m_maxCooldown = a_ability.m_maxCooldown;
         m_passive = a_ability.m_passive;
         m_activated = a_ability.m_activated;
         m_level = a_ability.m_level;
@@ -261,9 +270,9 @@ public class EquipmentAbility
 
     internal void PrepareForBattle()
     {
-        if (m_maxAmmo != 0)
+        if (!m_passive)
         {
-            m_ammo = m_maxAmmo;
+            m_cooldown = m_maxCooldown;
         }
     }
 }

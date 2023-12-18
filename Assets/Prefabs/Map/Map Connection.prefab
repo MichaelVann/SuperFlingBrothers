@@ -54,7 +54,7 @@ MonoBehaviour:
   m_colliderRef: {fileID: 1999369917837639265}
   m_UIBattleNodeTemplate: {fileID: 4761417700377774800, guid: 12a72119c1bc87440bc1e8e7b5beddb1,
     type: 3}
-  m_nodeGameobjectList: []
+  m_nodeGameObjectList: []
   m_isaFront: 0
   m_roadMaterial: {fileID: 2100000, guid: 124cc43cae7057940bc0ddb1c2bfffbe, type: 2}
   m_winningPercentText: {fileID: 8724973508564736077}
@@ -355,9 +355,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -1994033971
-  m_SortingLayer: -1
-  m_SortingOrder: 2
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: 5c8359f90ee9c334a9b9b81126c5ce2d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

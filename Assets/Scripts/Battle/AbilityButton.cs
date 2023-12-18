@@ -55,15 +55,14 @@ public class AbilityButton : MonoBehaviour
             else if (m_equipmentRef.m_activeAbility != null)
             {
                 EquipmentAbility ability = m_equipmentRef.m_activeAbility;
-                bool interactable = ability.m_ammo > 0;
-                m_buttonRef.interactable = interactable;
+                m_buttonRef.interactable = !ability.m_passive && ability.m_cooldown == 0;
                 //Set the Color of the button depending on the type of ability and it's activation
                 if (!ability.m_passive)
                 {
                     Color buttonColor = Color.grey;
                     m_panelImageRef.color = buttonColor;
                 }
-                m_abilityNameText.text = ability.GetName() + (ability.m_passive ? "" : "(" + ability.m_ammo + ")");
+                m_abilityNameText.text = ability.GetName() + (ability.m_passive ? "" : "(" + ability.m_cooldown + ")");
                 m_affixText.text = ability.GetAffixNames();
             }
 

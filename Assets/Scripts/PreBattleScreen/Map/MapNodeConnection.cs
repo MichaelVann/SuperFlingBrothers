@@ -418,7 +418,7 @@ public class MapNodeConnection : MonoBehaviour
         {
             Color lineColor = Color.white;
 
-            lineColor = m_mapNodes[i].m_overrun ? Color.green : Color.red;
+            lineColor = m_mapNodes[i].m_overrun ? Color.green : Color.white;
 
             CreateLine(m_mapNodes[i].transform.position, lineColor, m_roadMaterial);
         }

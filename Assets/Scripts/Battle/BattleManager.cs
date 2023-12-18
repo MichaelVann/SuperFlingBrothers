@@ -209,6 +209,18 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    internal void NextTurn()
+    {
+        SetFrozen(false);
+        for (int i = 0; i < m_activeAbilities.Length; i++)
+        {
+            if (m_activeAbilities[i] != null)
+            {
+                m_activeAbilities[i].CoolDown();
+            }
+        }
+    }
+
     void FindGameSpace()
     {
         m_gameSpace = new Vector2();
@@ -246,16 +258,6 @@ public class BattleManager : MonoBehaviour
                                 break;
                         }
                     }
-                    else if (abil.m_ammo >= 1)
-                    {
-                        switch (abil.m_abilityType)
-                        {
-                            case EquipmentAbility.eAbilityType.Count:
-                                break;
-                            default:
-                                break;
-                        }
-                    }
                 }
                 else
                 {
@@ -274,7 +276,7 @@ public class BattleManager : MonoBehaviour
             {
                 if (m_activeAbilities[i].m_abilityType == EquipmentAbility.eAbilityType.ExtraTurn && m_activeAbilities[i].m_activated)
                 {
-                    m_activeAbilities[i].m_ammo--;
+                    m_activeAbilities[i].Expend();
                     //m_turnFreezeTimer = m_turnFreezeTimerMax;
                     //m_turnFreezingTimer = m_turnFreezingTimerMax / 2f;
                     SetFrozen(true);

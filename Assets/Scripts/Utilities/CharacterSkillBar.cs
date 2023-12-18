@@ -65,14 +65,15 @@ public class CharacterSkillBar : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    { 
         if (m_animating)
         {
             RPGLevel oldLevel = m_trackedStat.m_lastSeenRPGLevel;
             RPGLevel level = m_trackedStat.m_RPGLevel;
             float m_lerpProgress = 0f;
             m_lerpTimer.Update();
-            m_lerpProgress = m_lerpTimer.GetCompletionPercentage();
+            float m_completionPercentage = m_lerpTimer.GetCompletionPercentage();
+            m_lerpProgress = m_completionPercentage;
             m_lerpProgress = VLib.SigmoidLerp(0f, m_totalProgress,m_lerpProgress, m_lerpSensitivity);// VLib.Eerp(0f, m_totalProgress, m_lerpProgress, m_lerpExponent);
             oldLevel.ChangeXP(m_lerpProgress - m_currentProgress);
 
@@ -101,10 +102,7 @@ public class CharacterSkillBar : MonoBehaviour
 
 
 
-            bool higherLevel = level.m_level > oldLevel.m_level;
-            bool higherXP = level.m_XP > oldLevel.m_XP;
-
-            if (!higherLevel && !higherXP)
+            if (m_completionPercentage >= 1f)
             {
                 oldLevel.m_XP = level.m_XP;
                 m_animating = false;
