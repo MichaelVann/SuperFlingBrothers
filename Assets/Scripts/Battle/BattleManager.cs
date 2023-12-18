@@ -420,7 +420,7 @@ public class BattleManager : MonoBehaviour
         {
             if (m_battleNodeRef.m_environmentalEffects.megaGravityWellEnabled)
             {
-                GravityWell gravityWell = Instantiate<GameObject>(m_gravityWellRef, new Vector3(0f,0f,90f), new Quaternion(), m_gameViewRef.transform).GetComponent<GravityWell>();
+                GravityWell gravityWell = Instantiate<GameObject>(m_gravityWellRef, new Vector3(0f,0f,0f), new Quaternion(), m_gameViewRef.transform).GetComponent<GravityWell>();
                 gravityWell.Init(GravityWell.eGravityWellType.MegaWhirlpool);
             }
             else
