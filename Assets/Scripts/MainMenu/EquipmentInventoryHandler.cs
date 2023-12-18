@@ -151,6 +151,7 @@ public class EquipmentInventoryHandler : MonoBehaviour
         {
             m_equipmentDigestRef.GetComponent<EquipmentDigest>().SetEquipmentRef(a_equipment);
             m_equipmentDigestRef.GetComponent<EquipmentDigest>().Refresh();
+            a_equipment.m_newToPlayer = false;
         }
     }
 

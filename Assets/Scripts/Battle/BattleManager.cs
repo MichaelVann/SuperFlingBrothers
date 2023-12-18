@@ -25,7 +25,6 @@ public class BattleManager : MonoBehaviour
 
     //Debug
     public Text m_debugText;
-    public TextMeshProUGUI m_fpsText;
 
     private BattleNode m_battleNodeRef;
 
@@ -736,8 +735,7 @@ public class BattleManager : MonoBehaviour
     void Update()
     {
         //m_enemyCountText.text = "Enemy Count: " + m_enemyCount;
-        int fps = (int)(1f / Time.unscaledDeltaTime);
-        m_fpsText.text = fps + " fps";
+
         //Intro
         if (m_introActive)
         {

@@ -2514,6 +2514,7 @@ GameObject:
   - component: {fileID: 612851206}
   - component: {fileID: 612851208}
   - component: {fileID: 612851207}
+  - component: {fileID: 612851209}
   m_Layer: 5
   m_Name: FPS Counter
   m_TagString: Untagged
@@ -2562,8 +2563,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 60 fps
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a3496876239ceca4bb817730d8a49445, type: 2}
+  m_sharedMaterial: {fileID: 8062898781783506685, guid: a3496876239ceca4bb817730d8a49445,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2593,7 +2595,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -2637,6 +2639,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 612851205}
   m_CullTransparentMesh: 1
+--- !u!114 &612851209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 612851205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1523648892dd7314db6a98f6661d5b31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_textRef: {fileID: 612851207}
+  m_sampleRateInSeconds: 0.1
 --- !u!1 &616174667
 GameObject:
   m_ObjectHideFlags: 0
@@ -8735,7 +8751,6 @@ MonoBehaviour:
     type: 3}
   m_canvasRef: {fileID: 1223203180}
   m_debugText: {fileID: 1447040929}
-  m_fpsText: {fileID: 612851207}
   m_enemyTemplate: {fileID: 3251009404937321060, guid: 8c1a46675eabcda4e93b7fa4171e3d18,
     type: 3}
   m_idleEnemyTemplate: {fileID: 8952112373810028054, guid: 4a54d43343975d14580a393a4a9ad67c,

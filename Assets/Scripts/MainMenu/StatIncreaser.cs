@@ -8,8 +8,8 @@ public class StatIncreaser : MonoBehaviour
 {
     public eCharacterStatType m_statIndex;
     GameHandler m_gameHandlerRef;
-    public Text m_effectDescriptionTextRef;
-    public Text m_effectSuffixTextRef;
+    public TextMeshProUGUI m_effectDescriptionTextRef;
+    public TextMeshProUGUI m_effectSuffixTextRef;
     public TextMeshProUGUI m_effectIntervalText;
     public Counter m_statCounterRef;
     public Button m_increaseButtonRef;

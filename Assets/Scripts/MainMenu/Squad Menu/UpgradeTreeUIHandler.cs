@@ -156,7 +156,7 @@ public class UpgradeTreeUIHandler : MonoBehaviour
         }
     }
 
-    void Refresh()
+    public void Refresh()
     {
         for (int i = 0; i < m_upgradeNodes.Count; i++)
         {

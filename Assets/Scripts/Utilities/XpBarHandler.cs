@@ -18,6 +18,6 @@ public class XpBarHandler : UIBar
     {
         CharacterStatHandler statHandler = m_gameHandlerRef.m_xCellSquad.m_statHandler;
         Init(statHandler.m_RPGLevel.m_XP, statHandler.m_RPGLevel.m_maxXP);
-        SetLabeltext("Level " + statHandler.m_RPGLevel.m_level);
+        SetLabeltext("Squad Level " + statHandler.m_RPGLevel.m_level);
     }
 }

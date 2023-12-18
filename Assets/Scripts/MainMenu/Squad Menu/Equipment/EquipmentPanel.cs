@@ -12,13 +12,13 @@ public class EquipmentPanel : MonoBehaviour
 
     public Equipment m_equipmentRef;
 
-    public Text m_nameTextRef;
+    public TextMeshProUGUI m_abilityTypeText;
+    public TextMeshProUGUI m_nameTextRef;
     public TextMeshProUGUI m_healthText;
-    public Text m_rarityTextRef;
-    public Text[] m_statNameTextRefs;
-    public Text[] m_statTextRefs;
-    public Text[] m_statDeltaTextRefs;
-    public Text m_abilityTextRef;
+    public TextMeshProUGUI m_rarityTextRef;
+    public TextMeshProUGUI[] m_statNameTextRefs;
+    public TextMeshProUGUI[] m_statTextRefs;
+    public TextMeshProUGUI[] m_statDeltaTextRefs;
     public Text m_goldValueTextRef;
     public Image m_outline;
 
@@ -26,7 +26,7 @@ public class EquipmentPanel : MonoBehaviour
 
     //public Text m_costTextRef;
     //public GameObject m_levelDisplayRef;
-    public Text m_levelTextRef;
+    public TextMeshProUGUI m_levelTextRef;
     public EquipmentPortrait m_equipmentPortrait;
     public EquipmentInteractButton m_equipButtonRef;
     public Text m_equipButtonTextRef;
@@ -57,12 +57,13 @@ public class EquipmentPanel : MonoBehaviour
         //m_imageRef.sprite = m_upgradeScreenHandler.m_upgradeSprites[m_upgradeID];
         float[] statDeltas = new float[4];
 
-        m_nameTextRef.text = m_equipmentRef.m_name;
+        m_abilityTypeText.text = m_equipmentRef.m_activeAbility.GetName();
+        m_abilityTypeText.color = m_equipmentRef.m_rarity.color;
+        m_nameTextRef.text = "\""  + m_equipmentRef.m_name + "\"";
         m_healthText.text = VLib.RoundToDecimalPlaces(m_equipmentRef.m_health,1) + "/" + VLib.RoundToDecimalPlaces(m_equipmentRef.m_maxHealth,1);
         m_healthText.color = VLib.RatioToColorRGB(m_equipmentRef.m_health / m_equipmentRef.m_maxHealth);
         m_rarityTextRef.text = m_equipmentRef.m_rarity.name;
         m_rarityTextRef.color = m_equipmentRef.m_rarity.color;
-        m_nameTextRef.color = m_equipmentRef.m_rarity.color;
 
         for (int i = 0; i < m_statTextRefs.Length; i++)
         {
@@ -83,7 +84,6 @@ public class EquipmentPanel : MonoBehaviour
         Equipment openedEquipment = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_equipmentInventoryHandlerRef.m_squadOverviewHandlerRef.m_openedEquipmentSlotId];
         for (int i = 0; openedEquipment != null && i < openedEquipment.m_stats.Count; i++)
         {
-
             int index = (int)openedEquipment.m_stats[i].statType;
             float statEffectiveValue = CharacterStat.ConvertNominalValueToEffectiveValue(openedEquipment.m_stats[i].value, openedEquipment.m_stats[i].statType);
             statDeltas[index] -= statEffectiveValue;
@@ -98,7 +98,7 @@ public class EquipmentPanel : MonoBehaviour
         //m_costTextRef.text = "" + m_upgradeRef.m_cost;
         m_levelTextRef.text = "" + m_equipmentRef.m_level;
         m_goldValueTextRef.text = "" + m_equipmentRef.GetSellValue();
-        m_abilityTextRef.text = m_equipmentRef.m_activeAbility.GetName();
+        //m_abilityTextRef.text = m_equipmentRef.m_activeAbility.GetName();
 
         SetEquipButtonStatus();
         m_equipmentPortrait.SetEquipmentRef(m_equipmentRef);
@@ -140,5 +140,6 @@ public class EquipmentPanel : MonoBehaviour
     public void OpenEquipmentDigest()
     {
         m_equipmentInventoryHandlerRef.SetEquipmentDigestStatus(true, m_equipmentRef);
+        Refresh();
     }
 }

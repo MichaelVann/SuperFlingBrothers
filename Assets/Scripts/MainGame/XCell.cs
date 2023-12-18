@@ -26,6 +26,7 @@ public class XCell
     {
         m_equippedEquipment = new Equipment[4];
         m_name = VLib.GenerateRandomizedName(3, 3);
+        m_name += "-";
         m_name += VLib.vRandom(100, 999);
         m_statHandler = new CharacterStatHandler();
         m_statHandler.Init(true);

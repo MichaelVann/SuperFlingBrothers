@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 207e1b6ccdce8824099c21af003b650f
+guid: e948710415662894889c18c870c44263
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -9,7 +9,7 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - Playfair Display
+  - Edu NSW ACT Foundation
   fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
