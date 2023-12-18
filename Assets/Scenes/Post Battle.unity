@@ -1249,6 +1249,8 @@ MonoBehaviour:
   m_XPBonusText: {fileID: 1445622328}
   m_goldBonusText: {fileID: 1397367558}
   m_equipmentCollectedText: {fileID: 99669638}
+  m_characterSkillsDigestRef: {fileID: 1682989748}
+  m_continueButtonRef: {fileID: 1803135425}
 --- !u!1 &1236951140
 GameObject:
   m_ObjectHideFlags: 0
@@ -2013,6 +2015,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7f5183d7208f90246a3d3af998522717, type: 3}
+--- !u!114 &1682989748 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1477435099487755962, guid: 7f5183d7208f90246a3d3af998522717,
+    type: 3}
+  m_PrefabInstance: {fileID: 1682989747}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 555da56ad34adc747883fb9cc5861fff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1698526574
 GameObject:
   m_ObjectHideFlags: 0
@@ -2218,6 +2232,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6986673273068323110, guid: df1e7600a35a020488cd88e3f6970a34,
         type: 3}
+      propertyPath: m_Colors.m_DisabledColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6986673273068323110, guid: df1e7600a35a020488cd88e3f6970a34,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1129368767}
@@ -2247,6 +2266,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 1803135423}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1803135425 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6986673273068323110, guid: df1e7600a35a020488cd88e3f6970a34,
+    type: 3}
+  m_PrefabInstance: {fileID: 1803135423}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1889942452
 GameObject:
   m_ObjectHideFlags: 0

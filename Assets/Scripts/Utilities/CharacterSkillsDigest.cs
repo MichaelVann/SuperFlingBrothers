@@ -30,6 +30,18 @@ public class CharacterSkillsDigest : MonoBehaviour
         m_characterNameText.text = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_name.ToString();
     }
 
+    internal bool SkillBarsFinishedAnimating()
+    {
+        bool retVal = true;
+
+        for (int i = 0; i < m_skillBars.Count; i++)
+        {
+            retVal &= !m_skillBars[i].m_animating;
+        }
+
+        return retVal;
+    }
+
     // Update is called once per frame
     void Update()
     {

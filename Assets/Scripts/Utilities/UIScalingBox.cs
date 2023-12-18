@@ -8,6 +8,7 @@ public class UIScalingBox : MonoBehaviour
 {
     [SerializeField]TextMeshProUGUI m_titleTextRef;
     [SerializeField]TextMeshProUGUI m_descriptionTextRef;
+    [SerializeField]GameObject m_container;
 
     internal delegate void OnCloseDelegate();
     OnCloseDelegate m_onCloseDelegate;
@@ -20,7 +21,7 @@ public class UIScalingBox : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gameObject.AddComponent<ZoomExpandComponent>().SetUp(1f,0f,0.3f, 2f);
+        m_container.AddComponent<ZoomExpandComponent>().SetUp(0f,1f,0.3f, 2f);
     }
 
     // Update is called once per frame
@@ -40,12 +41,17 @@ public class UIScalingBox : MonoBehaviour
         m_descriptionTextRef.text += '\n' + a_descriptionString;
     }
 
-    public void Close()
+    void Exit()
     {
         if (m_onCloseDelegate != null)
         {
             m_onCloseDelegate.Invoke();
         }
         Destroy(gameObject);
+    }
+
+    public void Close()
+    {
+        m_container.AddComponent<ZoomExpandComponent>().SetUp(1f, 0f, 0.3f, 2f, Exit);
     }
 }

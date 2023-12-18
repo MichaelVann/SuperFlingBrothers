@@ -18,6 +18,9 @@ public class PostBattleHandler : MonoBehaviour
     public Text m_goldBonusText;
     public Text m_equipmentCollectedText;
 
+    [SerializeField] CharacterSkillsDigest m_characterSkillsDigestRef;
+    [SerializeField] Button m_continueButtonRef;
+
     eEndGameType m_winResult = eEndGameType.lose;
 
     public void ContinuePressed()
@@ -79,6 +82,6 @@ public class PostBattleHandler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        m_continueButtonRef.interactable = m_characterSkillsDigestRef.SkillBarsFinishedAnimating();
     }
 }

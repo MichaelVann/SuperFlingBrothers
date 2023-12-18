@@ -46,7 +46,7 @@ public class PreBattleManager : MonoBehaviour
             resultsBox.SetUp("Frontline News", "Viruses Effort: " + VLib.RoundToDecimalPlaces(m_gameHandlerRef.m_lastFrontLineEnemyEffect - contestAmount, 2) * scale);
             resultsBox.AddDescriptionString("Immune Forces's Effort: " + VLib.RoundToDecimalPlaces(m_gameHandlerRef.m_lastFrontLineEnemyEffect + contestAmount,2) * scale);
             resultsBox.AddDescriptionString("SFB Resistance: " + m_gameHandlerRef.m_lastFrontLinePlayerEffect * scale);
-            resultsBox.AddDescriptionString("Net Frontline Shift: " + m_gameHandlerRef.m_lastFrontLineChange * scale);
+            resultsBox.AddDescriptionString("Net Frontline Shift: " + VLib.RoundToDecimalPlaces(m_gameHandlerRef.m_lastFrontLineChange * scale, 2));
         }
     }
 
