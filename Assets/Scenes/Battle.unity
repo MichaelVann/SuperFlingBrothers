@@ -4504,10 +4504,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1223203181}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 292.09998, y: 0}
-  m_SizeDelta: {x: 575.80005, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 832.1, y: 0}
+  m_SizeDelta: {x: 575.80005, y: 2240}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &990665699
 MonoBehaviour:
@@ -7937,10 +7937,10 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1223203181}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -292.09998, y: 0}
-  m_SizeDelta: {x: 575.8, y: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -832.1, y: 0}
+  m_SizeDelta: {x: 575.80005, y: 2240}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1936977850
 MonoBehaviour:
@@ -8809,7 +8809,6 @@ MonoBehaviour:
   m_xpEarned: 0
   m_enemyCount: 0
   m_pocketDamage: 2
-  m_musicPlayerRef: {fileID: 0}
   references:
     version: 2
     RefIds: []
