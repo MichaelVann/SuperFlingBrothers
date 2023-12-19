@@ -8794,7 +8794,6 @@ MonoBehaviour:
   m_xpEarned: 0
   m_enemyCount: 0
   m_pocketDamage: 2
-  m_musicPlayerRef: {fileID: 0}
   references:
     version: 2
     RefIds: []
@@ -9311,6 +9310,12 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1528747289314863593, guid: 4b8785191c480f0458d55cd78531c855,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 77cc971a48c6b406f980b470a31b8c4b,
+        type: 3}
     - target: {fileID: 1528747289314863593, guid: 4b8785191c480f0458d55cd78531c855,
         type: 3}
       propertyPath: m_Color.b
