@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -7,16 +8,16 @@ using UnityEngine.UI;
 public class PostBattleHandler : MonoBehaviour
 {
     public GameHandler m_gameHandlerRef;
-    public Text m_resultTextRef;
-    public Text m_goldCollectedTextRef;
-    public Text m_levelsGainedTextRef;
-    public Text m_xpGainedTextRef;
+    public TextMeshProUGUI m_resultTextRef;
+    public TextMeshProUGUI m_goldCollectedTextRef;
+    public TextMeshProUGUI m_levelsGainedTextRef;
+    public TextMeshProUGUI m_xpGainedTextRef;
     public RollingText m_totalGoldTextRef;
 
     public GameObject m_winBonusRef;
-    public Text m_XPBonusText;
-    public Text m_goldBonusText;
-    public Text m_equipmentCollectedText;
+    public TextMeshProUGUI m_XPBonusText;
+    public TextMeshProUGUI m_goldBonusText;
+    public TextMeshProUGUI m_equipmentCollectedText;
 
     [SerializeField] CharacterSkillsDigest m_characterSkillsDigestRef;
     [SerializeField] Button m_continueButtonRef;

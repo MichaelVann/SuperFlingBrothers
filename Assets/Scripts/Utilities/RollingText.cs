@@ -1,18 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class RollingText : MonoBehaviour
 {
-    Text m_localTextRef;
+    TextMeshProUGUI m_localTextRef;
 
     float m_desiredValue = 100;
     float m_currentValue = 0;
 
     float m_rollTime= 1.5f;
     float m_elapsedTime = 0f;
-
 
     public void SetDesiredValue(float a_value)
     {
@@ -27,7 +27,7 @@ public class RollingText : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_localTextRef = GetComponent<Text>();
+        m_localTextRef = GetComponent<TextMeshProUGUI>();
         m_localTextRef.text = "" + m_currentValue;
     }
 
