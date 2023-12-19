@@ -48,7 +48,7 @@ public class SquadOverviewHandler : MonoBehaviour
 
     void RefreshNewEquipmentNotifiers()
     {
-        int newEquipmentCount = m_gameHandlerRef.m_equipmentCollectedLastGame;
+        int newEquipmentCount = m_gameHandlerRef.m_lastGameStats.m_equipmentCollectedLastGame;
         for (int i = 0; i < m_newEquipmentNotifiers.Length; i++)
         {
             if (m_newEquipmentNotifiers[i] != null)

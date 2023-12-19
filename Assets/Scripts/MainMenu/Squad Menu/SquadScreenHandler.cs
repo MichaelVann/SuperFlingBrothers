@@ -52,7 +52,7 @@ public class SquadScreenHandler : MonoBehaviour
             }
         }
 
-        int newEquipmentCount = m_gameHandlerRef.m_equipmentCollectedLastGame;
+        int newEquipmentCount = m_gameHandlerRef.m_lastGameStats.m_equipmentCollectedLastGame;
         m_equipmentAllocationNotifierRef.SetActive(newEquipmentCount > 0);
         if (newEquipmentCount > 0)
         {

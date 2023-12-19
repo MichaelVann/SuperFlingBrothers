@@ -174,8 +174,8 @@ public class BattleManager : MonoBehaviour
         m_healthBarRef.Init(m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatType.constitution].m_finalValue, m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_statHandler.m_stats[(int)eCharacterStatType.constitution].m_finalValue);
 
         //Reset Trackers
-        m_gameHandlerRef.m_teamLevelAtStartOfBattle = m_gameHandlerRef.m_xCellSquad.m_statHandler.m_RPGLevel.m_level;
-        m_gameHandlerRef.m_xpEarnedLastGame = 0;
+        m_gameHandlerRef.m_lastGameStats.m_teamLevelAtStartOfBattle = m_gameHandlerRef.m_xCellSquad.m_statHandler.m_RPGLevel.m_level;
+        m_gameHandlerRef.m_lastGameStats.m_xpEarnedLastGame = 0;
 
         InitialiseAbilities();
 
@@ -655,9 +655,9 @@ public class BattleManager : MonoBehaviour
 
     void FinishGame()
     {
-        m_gameHandlerRef.m_dnaEarnedLastGame = m_score;
-        m_gameHandlerRef.m_equipmentCollectedLastGame = m_equipmentCollected.Count;
-        m_gameHandlerRef.m_invaderStrengthChangeLastGame = m_invaderStrengthChange;
+        m_gameHandlerRef.m_lastGameStats.m_dnaEarnedLastGame = m_score;
+        m_gameHandlerRef.m_lastGameStats.m_equipmentCollectedLastGame = m_equipmentCollected.Count;
+        m_gameHandlerRef.m_lastGameStats.m_invaderStrengthChangeLastGame = m_invaderStrengthChange;
         for (int i = 0; i < m_equipmentCollected.Count; i++)
         {
             m_gameHandlerRef.PickUpEquipment(m_equipmentCollected[i]);

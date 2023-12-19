@@ -17,7 +17,7 @@ public class GameHandler : MonoBehaviour
     internal static GameHandler m_staticAutoRef;
 
     public const int MAIN_VERSION_NUMBER = 26;
-    public const int SUB_VERSION_NUMBER = 3;
+    public const int SUB_VERSION_NUMBER = 4;
 
     static internal bool DEBUG_MODE = true;
 
@@ -31,7 +31,7 @@ public class GameHandler : MonoBehaviour
     static internal float BATTLE_EnemyEquipmentDropChanceScale = 0.5f;
     internal const int    BATTLE_EnemySpawnPointCount = 19;
 
-    static internal float PRE_BATTLE_WarfrontChange = -0.17f; //Default is -0.17f
+    static internal float PRE_BATTLE_WarfrontChange = -1f; //Default is -0.17f
     //Damageables
     static internal float DAMAGEABLE_DragCoefficient = 1.25f;
     static internal float DAMAGEABLE_HitVelocityMultiplier = 1.6f;
@@ -61,7 +61,7 @@ public class GameHandler : MonoBehaviour
     bool m_sceneFadingOut;
     const float m_sceneFadeDuration = 0.35f;
 
-    private float m_cash = 0;
+    private float m_cash;
     
     //Player
     internal XCellSquad m_xCellSquad;
@@ -76,24 +76,28 @@ public class GameHandler : MonoBehaviour
     internal int m_maxEnemyDifficulty; //Set from humanbody
 
     //Last Game
-    public BattleNode m_lastAttemptedBattleNode;
-    internal eEndGameType m_lastGameResult = eEndGameType.lose;
-    internal float m_xpEarnedLastGame = 0f;
-    internal int m_invaderStrengthChangeLastGame = 0;
-    internal int m_teamLevelAtStartOfBattle = 0;
-    internal float m_dnaEarnedLastGame = 0f;
-    internal int m_equipmentCollectedLastGame = 0;
-    internal int m_lastXpBonus = 0;
-    internal int m_lastDnaBonus = 0;
-    internal bool m_frontLineResultsPending = false;
-    internal float m_lastFrontLinePlayerEffect = 0f;
-    internal float m_lastFrontLineEnemyEffect = 0f;
-    internal float m_lastFrontLineChange = 0f;
+    internal struct LastGameStats
+    {
+        public BattleNode m_lastAttemptedBattleNode;
+        internal eEndGameType m_lastGameResult;
+        internal float m_xpEarnedLastGame;
+        internal int m_invaderStrengthChangeLastGame;
+        internal int m_teamLevelAtStartOfBattle;
+        internal float m_dnaEarnedLastGame;
+        internal int m_equipmentCollectedLastGame;
+        internal int m_lastXpBonus;
+        internal int m_lastDnaBonus;
+        internal bool m_frontLineResultsPending;
+        internal float m_lastFrontLinePlayerEffect;
+        internal float m_lastFrontLineEnemyEffect;
+        internal float m_lastFrontLineChange;
+    }
+    internal LastGameStats m_lastGameStats;
 
     //Store
     internal UpgradeTree m_upgradeTree;
-    internal float m_junkEquipmentLevelScale = 0.5f;
-    internal float m_junkEquipmentCostScale = 10f;
+    internal float m_junkEquipmentLevelScale;
+    internal float m_junkEquipmentCostScale;
 
     //Equipment
     const int m_startingEquipment = 1;
@@ -116,7 +120,21 @@ public class GameHandler : MonoBehaviour
     }
     SaveData m_saveData;
     //SaveDataUtility m_saveDataUtility;
-    bool m_autoLoadDataOnLaunch = false;
+    const bool m_autoLoadDataOnLaunch = false;
+    const bool m_autoSaving = false;
+
+    //Highscores
+    internal struct Highscore
+    {
+        internal Highscore(string a_name, float a_score)
+        {
+            name = a_name;
+            score = a_score;
+        }
+        internal string name;
+        internal float score;
+    }
+    internal List<Highscore> m_highscoreList;
 
     internal float GetBattleDifficultyBonus()
     {
@@ -140,7 +158,7 @@ public class GameHandler : MonoBehaviour
         }
     }
 
-    public void SetLastGameResult(eEndGameType a_value) { m_lastGameResult = a_value; }
+    public void SetLastGameResult(eEndGameType a_value) { m_lastGameStats.m_lastGameResult = a_value; }
 
     public void ChangeCash(float a_change) { m_cash += a_change; }
 
@@ -158,16 +176,7 @@ public class GameHandler : MonoBehaviour
         m_staticAutoRef = this;
         DontDestroyOnLoad(gameObject);
         //m_saveDataUtility = new SaveDataUtility(this);
-        m_xCellSquad = new XCellSquad();
-        m_xCellSquad.Init();
-        //Stocks
-        m_stockHandler = new StockHandler(this);
-        Enemy.SetUpEnemyTypes();
-
-        SetupHumanBody();
-
-        m_upgradeTree = new UpgradeTree();
-        SetupEquipment();
+        ResetRoguelike();
         if (m_autoLoadDataOnLaunch)
         {
             LoadGame();
@@ -176,10 +185,50 @@ public class GameHandler : MonoBehaviour
         {
             Application.targetFrameRate = (int)Screen.currentResolution.refreshRateRatio.value;
         }
+        m_highscoreList = new List<Highscore>();
+    }
 
+    void ResetRoguelike()
+    {
+        m_cash = 0f;
+        m_xCellSquad = new XCellSquad();
+        m_xCellSquad.Init();
+        m_stockHandler = new StockHandler(this);
+        Enemy.SetUpEnemyTypes();
+        SetupHumanBody();
+        m_upgradeTree = new UpgradeTree();
+        SetupEquipment();
+        SetupLastGameStats();
 
-        //Battle
-        
+        m_junkEquipmentLevelScale = 0.5f;
+        m_junkEquipmentCostScale = 10f;
+    }
+
+    internal void LoseRougelike()
+    {
+        m_highscoreList.Add(new Highscore(m_xCellSquad.m_name, m_humanBody.m_battlesCompleted));
+        ResetRoguelike();
+        if (m_autoSaving)
+        {
+            SaveGame();
+        }
+    }
+
+    void SetupLastGameStats()
+    {
+        m_lastGameStats = new LastGameStats();
+        m_lastGameStats.m_lastGameResult = eEndGameType.lose;
+        m_lastGameStats.m_xpEarnedLastGame = 0f;
+        m_lastGameStats.m_invaderStrengthChangeLastGame = 0;
+        m_lastGameStats.m_teamLevelAtStartOfBattle = 0;
+        m_lastGameStats.m_dnaEarnedLastGame = 0f;
+        m_lastGameStats.m_equipmentCollectedLastGame = 0;
+        m_lastGameStats.m_lastXpBonus = 0;
+        m_lastGameStats.m_lastDnaBonus = 0;
+        m_lastGameStats.m_frontLineResultsPending = false;
+        m_lastGameStats.m_lastFrontLinePlayerEffect = 0f;
+        m_lastGameStats.m_lastFrontLineChange = 0f;
+        m_lastGameStats.m_lastFrontLineEnemyEffect = 0f;
     }
 
     private void SetupHumanBody()
@@ -300,7 +349,7 @@ public class GameHandler : MonoBehaviour
         if (m_attemptedBattleNode != null)
         {
             m_humanBody.ProgressEnemyFronts();
-            m_lastAttemptedBattleNode = m_attemptedBattleNode;
+            m_lastGameStats.m_lastAttemptedBattleNode = m_attemptedBattleNode;
 
             //if (m_lastGameResult == eEndGameType.lose || m_lastGameResult == eEndGameType.escape)
             //{
@@ -309,21 +358,21 @@ public class GameHandler : MonoBehaviour
             float warfrontBalanceChange = PRE_BATTLE_WarfrontChange;
             m_playerWasKilledLastBattle = false;
 
-            if (m_lastGameResult == eEndGameType.win)
+            if (m_lastGameStats.m_lastGameResult == eEndGameType.win)
             {
-                float warfrontBalanceChangeAmount = (float)m_lastAttemptedBattleNode.m_difficulty / (float)HumanBody.m_battleMaxDifficulty;
+                float warfrontBalanceChangeAmount = (float)m_lastGameStats.m_lastAttemptedBattleNode.m_difficulty / (float)HumanBody.m_battleMaxDifficulty;
                 warfrontBalanceChangeAmount *= -warfrontBalanceChange;//Turn to percentage
                 warfrontBalanceChangeAmount = Mathf.Clamp(warfrontBalanceChangeAmount, 0f, -warfrontBalanceChange);
-                m_lastAttemptedBattleNode.m_owningConnection.ChangeWarfrontBalance(warfrontBalanceChangeAmount);
-                m_lastFrontLinePlayerEffect = warfrontBalanceChangeAmount;
+                m_lastGameStats.m_lastAttemptedBattleNode.m_owningConnection.ChangeWarfrontBalance(warfrontBalanceChangeAmount);
+                m_lastGameStats.m_lastFrontLinePlayerEffect = warfrontBalanceChangeAmount;
                 //warfrontBalanceChange += warfrontBalanceChangeAmount;
             }
-            else if (m_lastGameResult == eEndGameType.lose)
+            else if (m_lastGameStats.m_lastGameResult == eEndGameType.lose)
             {
                 m_playerWasKilledLastBattle = true;
                 KillPlayer();
             }
-            m_lastFrontLineChange = m_lastFrontLineEnemyEffect + m_lastFrontLinePlayerEffect;
+            m_lastGameStats.m_lastFrontLineChange = m_lastGameStats.m_lastFrontLineEnemyEffect + m_lastGameStats.m_lastFrontLinePlayerEffect;
 
             m_humanBody.m_battlesCompleted++;
             m_humanBody.Refresh();
@@ -382,6 +431,11 @@ public class GameHandler : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.H))
         {
             PickUpEquipment(new Equipment(m_xCellSquad.m_playerXCell.m_statHandler.m_RPGLevel.m_level));
+        }
+        if (Input.GetKeyUp(KeyCode.R))
+        {
+            SceneManager.LoadScene("Main Menu");
+            ResetRoguelike();
         }
         m_stockHandler.Update();
         SceneFadeUpdate();

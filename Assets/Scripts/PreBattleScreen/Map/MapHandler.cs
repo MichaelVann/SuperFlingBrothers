@@ -20,10 +20,14 @@ public class MapHandler : MonoBehaviour
     static float m_startingCameraSize = 5f;
     float m_startingCameraZPos;
     static Vector3 m_currentPan = new Vector3(0f,0f,-110f);
-    static Vector3 m_cameraMinBounds = new Vector3(-14f, -3, 0f);
-    static Vector3 m_cameraMaxBounds = new Vector3(2.85f, 15f, 0f);
+    static Vector3 m_cameraMinBounds;
+    static Vector3 m_cameraMaxBounds;
+    static Vector3 m_cameraCornerBounds;
 
-    public GameObject m_bodyMapPrefab;
+    [SerializeField] RectTransform m_viewFrameRect;
+
+    [SerializeField] GameObject m_bodyMapPrefab;
+
     public HumanBodyUI m_viewedBodyPartUI;
 
     public GameObject m_partInfoPanel;
@@ -31,6 +35,9 @@ public class MapHandler : MonoBehaviour
 
     // UI Popup
     public GameObject m_lostNotificationRef;
+    [SerializeField] GameObject m_cameraMaxBoundsRef;
+    [SerializeField] GameObject m_cameraMinBoundsRef;
+    [SerializeField] GameObject m_cameraCornerBoundsRef;
 
     MapNode m_residingMapNode;
 
@@ -38,6 +45,7 @@ public class MapHandler : MonoBehaviour
     int m_selectedBattleNodeId = -1;
     public BattleNode m_selectedBattleNode;
     UIBattleNode m_selectedUIBattleNode;
+    [SerializeField] GameObject m_testMarkerPrefab;
 
     //Camera
 
@@ -61,6 +69,9 @@ public class MapHandler : MonoBehaviour
         m_residingMapNode = m_viewedBodyPartUI.GetResidingMapNode();
         m_currentPan = m_residingMapNode.transform.position;
         m_currentPan.z = m_startingCameraZPos;
+        m_cameraMinBounds = m_cameraMinBoundsRef.transform.position;
+        m_cameraMaxBounds = m_cameraMaxBoundsRef.transform.position;
+        m_cameraCornerBounds = m_cameraCornerBoundsRef.transform.position;
         ApplyZoomAndPan();
     }
 
@@ -106,6 +117,13 @@ public class MapHandler : MonoBehaviour
             debugPan += new Vector3(0f,-Time.deltaTime, 0f);
             ApplyZoomAndPan();
         }
+        if (Input.GetKeyUp(KeyCode.B))
+        {
+            Vector3 screenToWorldPos = m_cameraRef.ScreenToWorldPoint(new Vector3(Screen.width,0f,0f));
+            //Vector3 screenToWorldPos = m_cameraRef.ScreenToWorldPoint(new Vector3(m_cameraRef.scaledPixelWidth / 2f, m_cameraRef.scaledPixelHeight / 2f, 0f));
+            //screenToWorldPos += m_cameraRef.transform.position;
+            Instantiate(m_testMarkerPrefab, screenToWorldPos, Quaternion.identity);
+        }
 
         debugPan *= (5f / m_currentZoom);
         m_currentPan += debugPan;
@@ -149,15 +167,40 @@ public class MapHandler : MonoBehaviour
 
     void ClampCameraPan()
     {
-        m_currentPan.x = Mathf.Clamp(m_currentPan.x, m_cameraMinBounds.x, m_cameraMaxBounds.x);
-        m_currentPan.y = Mathf.Clamp(m_currentPan.y, m_cameraMinBounds.y, m_cameraMaxBounds.y);
+        float boundsZoomOffsetX = (m_cameraRef.orthographicSize*m_cameraRef.aspect);
+        float boundsZoomOffsetY = (m_cameraRef.orthographicSize * (5f-1.62f)/5f);
+
+        Vector2 minBounds = m_cameraMinBounds;
+        Vector2 maxBounds = m_cameraMaxBounds;
+        Vector3 bottomLeftWorldPoint = m_cameraRef.ScreenToWorldPoint(new Vector3(0f, m_viewFrameRect.offsetMin.y, 0f));
+        float yCornerOffset = bottomLeftWorldPoint.y - m_cameraCornerBounds.y;
+        float xCornerOffset = bottomLeftWorldPoint.x - m_cameraCornerBounds.x;
+        if (bottomLeftWorldPoint.y < m_cameraCornerBounds.y && bottomLeftWorldPoint.x < m_cameraCornerBounds.x)
+        {
+            if (xCornerOffset < yCornerOffset)
+            {
+                minBounds.y = m_cameraCornerBounds.y;
+            }
+            else
+            {
+                minBounds.x = m_cameraCornerBounds.x;
+            }
+        }
+        //if (bottomLeftWorldPoint.x < m_cameraCornerBounds.x)
+        //{
+        //    minBounds.y = m_cameraCornerBounds.y;
+        //}
+
+
+        m_currentPan.x = Mathf.Clamp(m_currentPan.x, minBounds.x + boundsZoomOffsetX, maxBounds.x - boundsZoomOffsetX);
+        m_currentPan.y = Mathf.Clamp(m_currentPan.y, minBounds.y + boundsZoomOffsetY, maxBounds.y - boundsZoomOffsetY);
     }
 
     void ApplyZoomAndPan()
     {
-        ClampCameraPan();
         m_cameraRef.transform.position = m_currentPan;// * m_currentZoom;
-        //Debug.Log(m_currentZoomLocation);
+
+        m_currentZoom = Mathf.Clamp(m_currentZoom, m_minZoom, m_maxZoom);
         m_cameraRef.orthographicSize = m_startingCameraSize/m_currentZoom;// new Vector3(m_currentZoom, m_currentZoom, 1f);
     }
 
@@ -174,7 +217,7 @@ public class MapHandler : MonoBehaviour
             if (m_wasPinchingLastFrame)
             {
                 float deltaPinchDistance = pinchDistance / m_lastPinchDistance;
-                m_currentZoom = Mathf.Clamp(m_currentZoom * deltaPinchDistance, m_minZoom, m_maxZoom);
+                m_currentZoom = m_currentZoom * deltaPinchDistance;
                 ApplyZoomAndPan();
             }
 
@@ -207,6 +250,7 @@ public class MapHandler : MonoBehaviour
         {
             m_wasPanning = false;
         }
+        ClampCameraPan();
     }
 
     public void DismissNotification()

@@ -76,11 +76,25 @@ public class SaveDataUtility
     }
 
     [Serializable]
+
+    struct HighScoreListData
+    {
+        [Serializable]
+        public struct HighScoreData
+        {
+            public string name;
+            public float score;
+        }
+        public List<HighScoreData> highScores;
+    }
+
+    [Serializable]
     struct SaveData
     {
         public UpgradeTreeData upgradeTreeData;
         public HumanBodyData humanBodyData;
         public AudioData audioData;
+        public HighScoreListData highScoreListData;
     }
     [SerializeField]
     SaveData m_saveData;
@@ -124,7 +138,6 @@ public class SaveDataUtility
             upgradeItem.m_unlocked = upgradeData.unlocked;
             upgradeItem.m_owned = upgradeData.owned;
         }
-
     }
 
     void SaveHumanBody()
@@ -227,11 +240,38 @@ public class SaveDataUtility
         m_gameHandlerRef.m_audioHandlerRef.m_musicVolume = m_saveData.audioData.musicVoume;
     }
 
+    void SaveHighscores()
+    {
+        m_saveData.highScoreListData.highScores = new List<HighScoreListData.HighScoreData>();
+        for (int i = 0; i < m_gameHandlerRef.m_highscoreList.Count; i++)
+        {
+            GameHandler.Highscore highscore = m_gameHandlerRef.m_highscoreList[i];
+            HighScoreListData.HighScoreData highScoreData = new HighScoreListData.HighScoreData();
+            highScoreData.name = highscore.name;
+            highScoreData.score = highscore.score;
+            m_saveData.highScoreListData.highScores.Add(highScoreData);
+        }
+    }
+
+    void LoadHighscores()
+    {
+        m_gameHandlerRef.m_highscoreList = new List<GameHandler.Highscore>();
+        for (int i = 0; i < m_saveData.highScoreListData.highScores.Count; i++)
+        {
+            GameHandler.Highscore highscore = new GameHandler.Highscore();
+            HighScoreListData.HighScoreData highScoreData = m_saveData.highScoreListData.highScores[i];
+            highscore.name = highScoreData.name;
+            highscore.score = highScoreData.score;
+            m_gameHandlerRef.m_highscoreList.Add(highscore);
+        }
+    }
+
     internal void Save()
     {
         SaveUpgradeTree();
         SaveHumanBody();
         SaveAudioData();
+        SaveHighscores();
         string path = GetSaveDataPath();
         string json = JsonUtility.ToJson(m_saveData);
         File.WriteAllText(path, json);
@@ -248,6 +288,7 @@ public class SaveDataUtility
             LoadUpgradeTree();
             LoadHumanBody();
             LoadAudioData();
+            LoadHighscores();
             retVal = true;
         }
         else

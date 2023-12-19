@@ -248,7 +248,7 @@ public class HumanBody
             activeFronts[i].ChangeWarfrontBalance(warFrontChange);
             if (m_gameHandlerRef.m_attemptedBattleNode.m_owningConnection == activeFronts[i])
             {
-                m_gameHandlerRef.m_lastFrontLineEnemyEffect = warFrontChange;
+                m_gameHandlerRef.m_lastGameStats.m_lastFrontLineEnemyEffect = warFrontChange;
             }
         }
     }

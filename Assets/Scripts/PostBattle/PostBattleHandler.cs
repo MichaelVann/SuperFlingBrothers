@@ -39,9 +39,9 @@ public class PostBattleHandler : MonoBehaviour
     {
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         
-        m_winResult = m_gameHandlerRef.m_lastGameResult;
+        m_winResult = m_gameHandlerRef.m_lastGameStats.m_lastGameResult;
         m_winBonusRef.SetActive(m_winResult == eEndGameType.win);
-        m_gameHandlerRef.m_frontLineResultsPending = true;
+        m_gameHandlerRef.m_lastGameStats.m_frontLineResultsPending = true;
         switch (m_winResult)
         {
             case eEndGameType.retreat:
@@ -51,14 +51,14 @@ public class PostBattleHandler : MonoBehaviour
                 m_resultTextRef.text ="Victory";
                 //m_gameHandlerRef.m_lastXpBonus = m_gameHandlerRef.m_lastDnaBonus = Mathf.RoundToInt(Mathf.Pow(m_gameHandlerRef.m_battleDifficulty, 1.1f));
                 float bonusMult = m_gameHandlerRef.GetBattleDifficultyBonus();
-                m_gameHandlerRef.m_lastXpBonus = (int)(m_gameHandlerRef.m_xpEarnedLastGame * bonusMult);
+                m_gameHandlerRef.m_lastGameStats.m_lastXpBonus = (int)(m_gameHandlerRef.m_lastGameStats.m_xpEarnedLastGame * bonusMult);
                 //m_gameHandlerRef.m_lastDnaBonus = (int)(m_gameHandlerRef.m_dnaEarnedLastGame);
                 //m_gameHandlerRef.m_dnaEarnedLastGame += m_gameHandlerRef.m_lastDnaBonus;
                 //m_goldBonusText.text = "" + m_gameHandlerRef.m_lastDnaBonus + "(x" + (1 + bonusMult) + ")";
-                m_gameHandlerRef.m_xpEarnedLastGame += m_gameHandlerRef.m_lastXpBonus;
-                m_gameHandlerRef.m_xCellSquad.m_statHandler.m_RPGLevel.ChangeXP(m_gameHandlerRef.m_lastXpBonus);
+                m_gameHandlerRef.m_lastGameStats.m_xpEarnedLastGame += m_gameHandlerRef.m_lastGameStats.m_lastXpBonus;
+                m_gameHandlerRef.m_xCellSquad.m_statHandler.m_RPGLevel.ChangeXP(m_gameHandlerRef.m_lastGameStats.m_lastXpBonus);
 
-                m_XPBonusText.text = "" + m_gameHandlerRef.m_lastXpBonus + "(<color=red>x" + (1 + bonusMult) + "</color>)";
+                m_XPBonusText.text = "" + m_gameHandlerRef.m_lastGameStats.m_lastXpBonus + "(<color=red>x" + (1 + bonusMult) + "</color>)";
 
                 break;
             case eEndGameType.lose:
@@ -68,14 +68,14 @@ public class PostBattleHandler : MonoBehaviour
                 break;
         }
 
-        m_goldCollectedTextRef.text = "" + (float)m_gameHandlerRef.m_dnaEarnedLastGame;
+        m_goldCollectedTextRef.text = "" + (float)m_gameHandlerRef.m_lastGameStats.m_dnaEarnedLastGame;
         //m_goldCollectedTextRef.SetDesiredValue(0);
         m_totalGoldTextRef.SetCurrentValue(m_gameHandlerRef.GetCurrentCash());
-        m_gameHandlerRef.ChangeCash(m_gameHandlerRef.m_dnaEarnedLastGame);
+        m_gameHandlerRef.ChangeCash(m_gameHandlerRef.m_lastGameStats.m_dnaEarnedLastGame);
         m_totalGoldTextRef.SetDesiredValue(m_gameHandlerRef.GetCurrentCash());
-        m_xpGainedTextRef.text = "" + m_gameHandlerRef.m_xpEarnedLastGame;
-        m_levelsGainedTextRef.text = "" + (m_gameHandlerRef.m_xCellSquad.m_statHandler.m_RPGLevel.m_level - m_gameHandlerRef.m_teamLevelAtStartOfBattle);
-        m_equipmentCollectedText.text = "" + m_gameHandlerRef.m_equipmentCollectedLastGame;
+        m_xpGainedTextRef.text = "" + m_gameHandlerRef.m_lastGameStats.m_xpEarnedLastGame;
+        m_levelsGainedTextRef.text = "" + (m_gameHandlerRef.m_xCellSquad.m_statHandler.m_RPGLevel.m_level - m_gameHandlerRef.m_lastGameStats.m_teamLevelAtStartOfBattle);
+        m_equipmentCollectedText.text = "" + m_gameHandlerRef.m_lastGameStats.m_equipmentCollectedLastGame;
         m_gameHandlerRef.UnEquipDestroyedEquipment();
         m_gameHandlerRef.m_audioHandlerRef.PlayMenuMusic();
     }

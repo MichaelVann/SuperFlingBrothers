@@ -85,7 +85,7 @@ public class EquipmentInventoryHandler : MonoBehaviour
         SetTopPanelEquipmentRef(m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_squadOverviewHandlerRef.m_openedEquipmentSlotId]);
         m_gameHandlerRef.SortEquipmentInventory();
         InstantiateEquipmentInventory();
-        m_gameHandlerRef.m_equipmentCollectedLastGame = 0;
+        m_gameHandlerRef.m_lastGameStats.m_equipmentCollectedLastGame = 0;
         m_noEquipmentText.SetActive(m_equipmentItemPanels.Count < 1);
         for (int i = 0; i < m_equipmentItemPanels.Count; i++)
         {
