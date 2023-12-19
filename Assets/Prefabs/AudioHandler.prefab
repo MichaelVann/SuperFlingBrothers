@@ -156,5 +156,5 @@ MonoBehaviour:
   m_flingSound: {fileID: 8300000, guid: 9fc5cb487f4ac49a0ac620e6c2cb12eb, type: 3}
   m_pocketSound: {fileID: 8300000, guid: da7d4a3a4231a4b1da32efeae1980ef1, type: 3}
   m_explosionSound: {fileID: 8300000, guid: 5dff105b96c4d4969b6604dd05d17b9b, type: 3}
+  m_chestPopSound: {fileID: 8300000, guid: 326e3fcee076c46d2a99582e5eb52472, type: 3}
   m_menuMusic: {fileID: 8300000, guid: 739a1f99d582041d3a83ff3b2b79e408, type: 3}
-  m_defaultAudioSource: {fileID: 0}

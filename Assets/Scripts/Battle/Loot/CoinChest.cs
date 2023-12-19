@@ -31,7 +31,8 @@ public class CoinChest : Loot
     void PopChest(bool a_instantDispersal)
     {
         Loot.SpawnLoot(m_battleManagerRef, m_coinPrefab, 0.3f, transform.position, m_coinCount, a_instantDispersal);
-        Instantiate(m_popParticlesPrefab, transform.position, Quaternion.AngleAxis(-90f,new Vector3(1f,0f,0f)));
+        Instantiate(m_popParticlesPrefab, transform.position, Quaternion.AngleAxis(-90f, new Vector3(1f, 0f, 0f)));
+        m_battleManagerRef.m_gameHandlerRef.m_audioHandlerRef.PlayChestPopSound();
         Destroy(gameObject);
     }
 
