@@ -150,7 +150,7 @@ MonoBehaviour:
     type: 3}
   m_dodgerMusic: {fileID: 8300000, guid: 5e0e45a621726491ab788c68daf28e80, type: 3}
   m_healerMusic: {fileID: 8300000, guid: ea94ec3457a134b4baa77411854075d5, type: 3}
-  m_strikerMusic: {fileID: 8300000, guid: 427aaafebf10d47088d21c5fa328eda4, type: 3}
+  m_strikerMusic: {fileID: 8300000, guid: a65112342223e41e1855a87320f136e1, type: 3}
   m_damageSound: {fileID: 8300000, guid: 5dff105b96c4d4969b6604dd05d17b9b, type: 3}
   m_bounceSound: {fileID: 8300000, guid: 61abc5e78c1d24bfea9a4446a2c70c89, type: 3}
   m_flingSound: {fileID: 8300000, guid: 9fc5cb487f4ac49a0ac620e6c2cb12eb, type: 3}
