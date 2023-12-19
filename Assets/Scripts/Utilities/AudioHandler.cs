@@ -46,6 +46,7 @@ public class AudioHandler : MonoBehaviour
     public AudioClip m_flingSound;
     public AudioClip m_pocketSound;
     public AudioClip m_explosionSound;
+    public AudioClip m_chestPopSound;
 
     public AudioClip m_menuMusic;
 
@@ -303,5 +304,11 @@ public class AudioHandler : MonoBehaviour
     {
         PlaySoundEffect(m_explosionSound, 1f);        
     }
+
+    public void PlayChestPopSound()
+    {
+        PlaySoundEffect(m_chestPopSound, 1f);
+    }
+
 }
 

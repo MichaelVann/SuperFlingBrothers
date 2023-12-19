@@ -481,6 +481,7 @@ GameObject:
   - component: {fileID: 578015526}
   - component: {fileID: 578015528}
   - component: {fileID: 578015527}
+  - component: {fileID: 578015529}
   m_Layer: 5
   m_Name: Total DNA
   m_TagString: Untagged
@@ -606,6 +607,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 578015525}
   m_CullTransparentMesh: 1
+--- !u!114 &578015529
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 578015525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 466a3a53429607c44b6982d9abe39386, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &630023639
 GameObject:
   m_ObjectHideFlags: 0
@@ -1317,14 +1330,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_gameHandlerRef: {fileID: 0}
   m_resultTextRef: {fileID: 1344874559}
-  m_goldCollectedTextRef: {fileID: 0}
-  m_levelsGainedTextRef: {fileID: 0}
-  m_xpGainedTextRef: {fileID: 0}
-  m_totalGoldTextRef: {fileID: 0}
+  m_goldCollectedTextRef: {fileID: 1996598340}
+  m_levelsGainedTextRef: {fileID: 846442322}
+  m_xpGainedTextRef: {fileID: 630023641}
+  m_totalGoldTextRef: {fileID: 578015529}
   m_winBonusRef: {fileID: 37993576}
   m_XPBonusText: {fileID: 845065744}
   m_goldBonusText: {fileID: 0}
-  m_equipmentCollectedText: {fileID: 0}
+  m_equipmentCollectedText: {fileID: 2085808834}
   m_characterSkillsDigestRef: {fileID: 1682989748}
   m_continueButtonRef: {fileID: 1803135425}
 --- !u!1 &1344874556
@@ -1361,8 +1374,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -11.4, y: 890.8}
-  m_SizeDelta: {x: 430.5, y: 132}
+  m_AnchoredPosition: {x: 0, y: 890.8}
+  m_SizeDelta: {x: 892.4, y: 132}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1344874558
 CanvasRenderer:

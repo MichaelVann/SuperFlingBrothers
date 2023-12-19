@@ -10,7 +10,6 @@ public class Enemy : Damageable
     public GameObject m_coinPrefab;
     public GameObject m_equipmentDropPrefab;
 
-    public GameObject[] m_exclamationMarkRefs;
     public GameObject m_flingReadinessIndicatorRef;
     public GameObject m_velocityIndicatorRef;
     public GameObject m_visionConeRef;
@@ -87,6 +86,7 @@ public class Enemy : Damageable
         m_damageTextColor = Color.yellow;
 
         m_playerVulnerableTimer = new vTimer(m_playerVulnerableLength, true);
+
     }
 
     public void SetUpType(eEnemyType a_type)
@@ -142,6 +142,12 @@ public class Enemy : Damageable
             m_flingDirectionIndicatorRef.SetActive(false);
         }
 
+
+        if (m_typeTrait.flinger)
+        {
+            m_visionConeRef.SetActive(true);
+        }
+
         //Store next fling direction ahead of time, rotate fling direction indicator towards it
         FindNextRandomFlingDirection();
 
@@ -184,6 +190,7 @@ public class Enemy : Damageable
         m_enemyTypeTraits[(int)eEnemyType.Healer].type = Enemy.eEnemyType.Healer;
         m_enemyTypeTraits[(int)eEnemyType.Healer].dodger = true;
         m_enemyTypeTraits[(int)eEnemyType.Healer].difficulty = 8;
+        m_enemyTypeTraits[(int)eEnemyType.Healer].canRotate = true;
         m_enemyTypeTraits[(int)eEnemyType.Healer].duplicator = false;
         m_enemyTypeTraits[(int)eEnemyType.Healer].healer = true;
 
@@ -209,10 +216,6 @@ public class Enemy : Damageable
         m_flingPieIndicatorRef.SetPieFillAmount(0);
         m_playerRef = FindObjectOfType<Player>();
         m_velocityIndicatorRef.SetActive(m_gameHandlerRef.m_upgradeTree.m_upgradeItemList[(int)UpgradeItem.UpgradeId.enemyVector].m_owned);
-        for (int i = 0; i < m_exclamationMarkRefs.Length; i++)
-        {
-            m_exclamationMarkRefs[i].SetActive(false);
-        }
     }
 
     public void Copy(Enemy a_ref)
@@ -256,7 +259,8 @@ public class Enemy : Damageable
     {
         float angle = VLib.vRandom(0f, 360f);
         m_nextFlingDirection = VLib.RotateVector3In2D(new Vector3(1f,0f,0f), angle);
-        m_flingDirectionIndicatorRef.transform.localRotation = VLib.Vector2DirectionToQuaternion(m_nextFlingDirection);
+        m_flingDirectionIndicatorRef.transform.eulerAngles = new Vector3(0f,0f,VLib.Vector2ToEulerAngle(m_nextFlingDirection.ToVector2())) - transform.eulerAngles;
+        //m_flingDirectionIndicatorRef.transform.rotation = VLib.Vector2DirectionToQuaternion(m_nextFlingDirection);
     }
 
     public override void OnCollisionEnter2D(Collision2D a_collision)
@@ -357,6 +361,12 @@ public class Enemy : Damageable
             }
         }
 
+        if (m_typeTrait.canRotate && m_flingDirectionIndicatorRef.gameObject.activeSelf)
+        {
+            m_flingDirectionIndicatorRef.transform.eulerAngles = new Vector3(0f, 0f, VLib.Vector2ToEulerAngle(m_nextFlingDirection.ToVector2()));
+            //m_flingDirectionIndicatorRef.transform.eulerAngles = -transform.eulerAngles;
+        }
+
         VisionConeUpdate();
     }
 
@@ -451,34 +461,7 @@ public class Enemy : Damageable
     {
         m_flingPieIndicatorRef.SetPieFillAmount(m_flingTimer / m_flingTimerMax);
         Vector3 playerPos = m_playerRef.transform.position;
-        if (m_typeTrait.inertiaDasher)
-        {
-            RunFlingTimer();
-        }
-        else
-        {
-            if ((playerPos - transform.position).magnitude <= m_sightRadius)
-            {
-                if (m_typeTrait.flinger)
-                {
-                    m_visionConeRef.SetActive(true);
-                }
-                for (int i = 0; i < m_exclamationMarkRefs.Length; i++)
-                {
-                    m_exclamationMarkRefs[i].SetActive(true);
-                }
-                RunFlingTimer();
-                return;
-            }
-            else
-            {
-                for (int i = 0; i < m_exclamationMarkRefs.Length; i++)
-                {
-                    m_exclamationMarkRefs[i].SetActive(false);
-                }
-                m_visionConeRef.SetActive(false);
-            }
-        }
+        RunFlingTimer();
     }
 
     //AI

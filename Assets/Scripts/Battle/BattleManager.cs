@@ -130,8 +130,7 @@ public class BattleManager : MonoBehaviour
     int m_invaderStrengthChange = 0;
 
     //Audio section
-    public AudioHandler m_musicPlayerRef;
-
+    
     internal delegate void onEnemyCountChangeDelegate();
     internal onEnemyCountChangeDelegate m_enemyCountChangeDelegate;
 
