@@ -34,7 +34,7 @@ public class RPGLevel
 
     public RPGLevel()
     {
-
+        m_maxXP = GetXpNeededForLevelUP(m_level);
     }
 
     public void Copy(RPGLevel a_level)
@@ -66,7 +66,7 @@ public class RPGLevel
         return xpNeeded;
     }
 
-    public float GetXpDifference(RPGLevel a_lowerLevel, RPGLevel a_upperLevel)
+    static internal float GetXpDifference(RPGLevel a_lowerLevel, RPGLevel a_upperLevel)
     {
         float xpDiff = 0f;
         for (int i = a_lowerLevel.m_level; i < a_upperLevel.m_level; i++)
@@ -76,6 +76,20 @@ public class RPGLevel
         xpDiff -= a_lowerLevel.m_XP;
         xpDiff += a_upperLevel.m_XP;
         return xpDiff;
+    }
+
+    internal float GetTotalXP()
+    {
+        float xp = 0f;
+        GetXpDifference(new RPGLevel(), this);
+        return xp;
+    }
+
+    static internal RPGLevel TotalXPToLevel(float a_xp)
+    {
+        RPGLevel level = new RPGLevel();
+        level.ChangeXP(a_xp);
+        return level;
     }
 }
 

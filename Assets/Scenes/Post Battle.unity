@@ -481,7 +481,6 @@ GameObject:
   - component: {fileID: 578015526}
   - component: {fileID: 578015528}
   - component: {fileID: 578015527}
-  - component: {fileID: 578015529}
   m_Layer: 5
   m_Name: Total DNA
   m_TagString: Untagged
@@ -607,18 +606,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 578015525}
   m_CullTransparentMesh: 1
---- !u!114 &578015529
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 578015525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 466a3a53429607c44b6982d9abe39386, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &630023639
 GameObject:
   m_ObjectHideFlags: 0
@@ -912,8 +899,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 450.32, y: 1}
-  m_SizeDelta: {x: 316.24, y: 144.05}
+  m_AnchoredPosition: {x: 488.8, y: 1}
+  m_SizeDelta: {x: 393.1, y: 144.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &845065743
 CanvasRenderer:
@@ -1333,7 +1320,7 @@ MonoBehaviour:
   m_goldCollectedTextRef: {fileID: 1996598340}
   m_levelsGainedTextRef: {fileID: 846442322}
   m_xpGainedTextRef: {fileID: 630023641}
-  m_totalGoldTextRef: {fileID: 578015529}
+  m_totalGoldTextRef: {fileID: 1448480121}
   m_winBonusRef: {fileID: 37993576}
   m_XPBonusText: {fileID: 845065744}
   m_goldBonusText: {fileID: 0}
@@ -1486,6 +1473,7 @@ GameObject:
   - component: {fileID: 1448480118}
   - component: {fileID: 1448480120}
   - component: {fileID: 1448480119}
+  - component: {fileID: 1448480121}
   m_Layer: 5
   m_Name: Value
   m_TagString: Untagged
@@ -1610,6 +1598,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1448480117}
   m_CullTransparentMesh: 1
+--- !u!114 &1448480121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1448480117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 466a3a53429607c44b6982d9abe39386, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1597601554
 GameObject:
   m_ObjectHideFlags: 0

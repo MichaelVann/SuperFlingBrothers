@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.WSA;
 
 public class CharacterSkillBar : MonoBehaviour
 {
@@ -19,6 +20,8 @@ public class CharacterSkillBar : MonoBehaviour
     float m_lerpExponent = 0.1f;
     int m_lerpSensitivity = 3;
 
+    public RPGLevel m_lerpedRPGLevel;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -28,12 +31,13 @@ public class CharacterSkillBar : MonoBehaviour
     internal void Init(CharacterStat a_stat)
     {
         m_trackedStat = a_stat;
+        m_lerpedRPGLevel.Copy(m_trackedStat.m_lastSeenRPGLevel);
         Refresh();
     }
 
     internal void Refresh()
     {
-        m_totalProgress = m_trackedStat.m_RPGLevel.GetXpDifference(m_trackedStat.m_lastSeenRPGLevel, m_trackedStat.m_RPGLevel);
+        m_totalProgress = RPGLevel.GetXpDifference(m_trackedStat.m_lastSeenRPGLevel, m_trackedStat.m_RPGLevel);
 
         m_lerpTotalTime = Mathf.Log10(m_totalProgress+1f);
         if (m_totalProgress > 0.01f)
@@ -58,8 +62,8 @@ public class CharacterSkillBar : MonoBehaviour
     {
         if (m_UIBarRef != null)
         {
-            m_UIBarRef.Init(m_trackedStat.m_lastSeenRPGLevel.m_XP, m_trackedStat.m_lastSeenRPGLevel.m_maxXP);
-            m_UIBarRef.SetLabeltext("Level " + m_trackedStat.m_lastSeenRPGLevel.m_level);
+            m_UIBarRef.Init(m_lerpedRPGLevel.m_XP, m_lerpedRPGLevel.m_maxXP);
+            m_UIBarRef.SetLabeltext("Level " + m_lerpedRPGLevel.m_level);
         }
     }
 
@@ -73,9 +77,11 @@ public class CharacterSkillBar : MonoBehaviour
             float m_lerpProgress = 0f;
             m_lerpTimer.Update();
             float m_completionPercentage = m_lerpTimer.GetCompletionPercentage();
+            m_completionPercentage = Mathf.Clamp(m_completionPercentage, 0f, 1f);
             m_lerpProgress = m_completionPercentage;
             m_lerpProgress = VLib.SigmoidLerp(0f, m_totalProgress,m_lerpProgress, m_lerpSensitivity);// VLib.Eerp(0f, m_totalProgress, m_lerpProgress, m_lerpExponent);
-            oldLevel.ChangeXP(m_lerpProgress - m_currentProgress);
+            m_lerpedRPGLevel.Copy(m_trackedStat.m_lastSeenRPGLevel);
+            m_lerpedRPGLevel.ChangeXP(m_lerpProgress);
 
             m_currentProgress = m_lerpProgress;
             
@@ -84,7 +90,7 @@ public class CharacterSkillBar : MonoBehaviour
 
             if (system == 0)
             {
-                float remainingXp = m_trackedStat.m_RPGLevel.GetXpDifference(m_trackedStat.m_lastSeenRPGLevel, m_trackedStat.m_RPGLevel);
+                float remainingXp = RPGLevel.GetXpDifference(m_trackedStat.m_lastSeenRPGLevel, m_trackedStat.m_RPGLevel);
                 float speed = remainingXp * 0.99f;// Mathf.Pow(remainingXp,1.15f) /1f;
                 speed = VLib.LilClamp(speed, 1f);
                 float xpChange = speed * Time.deltaTime;
@@ -100,11 +106,9 @@ public class CharacterSkillBar : MonoBehaviour
                 m_currentProgress += xpChange;
             }
 
-
-
             if (m_completionPercentage >= 1f)
             {
-                oldLevel.m_XP = level.m_XP;
+                m_trackedStat.m_lastSeenRPGLevel.Copy(m_trackedStat.m_RPGLevel);
                 m_animating = false;
             }
             if (m_currentProgress > m_totalProgress)

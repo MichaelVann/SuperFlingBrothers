@@ -58,7 +58,7 @@ public class PostBattleHandler : MonoBehaviour
                 m_gameHandlerRef.m_xpEarnedLastGame += m_gameHandlerRef.m_lastXpBonus;
                 m_gameHandlerRef.m_xCellSquad.m_statHandler.m_RPGLevel.ChangeXP(m_gameHandlerRef.m_lastXpBonus);
 
-                m_XPBonusText.text = "" + m_gameHandlerRef.m_lastXpBonus + "(x" + (1 + bonusMult) + ")";
+                m_XPBonusText.text = "" + m_gameHandlerRef.m_lastXpBonus + "(<color=red>x" + (1 + bonusMult) + "</color>)";
 
                 break;
             case eEndGameType.lose:
