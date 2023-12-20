@@ -198,6 +198,7 @@ public class MapHandler : MonoBehaviour
 
     void ApplyZoomAndPan()
     {
+        ClampCameraPan();
         m_cameraRef.transform.position = m_currentPan;// * m_currentZoom;
 
         m_currentZoom = Mathf.Clamp(m_currentZoom, m_minZoom, m_maxZoom);
@@ -250,7 +251,6 @@ public class MapHandler : MonoBehaviour
         {
             m_wasPanning = false;
         }
-        ClampCameraPan();
     }
 
     public void DismissNotification()
