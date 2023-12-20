@@ -18,6 +18,8 @@ public class SquadOverviewHandler : MonoBehaviour
 
     public EquipmentSlotUI[] m_equipmentSlotUIRefs;
 
+    [SerializeField] GameObject m_confirmationBoxPrefab;
+
     bool m_inited = false;
 
     // Start is called before the first frame update
@@ -33,10 +35,21 @@ public class SquadOverviewHandler : MonoBehaviour
 
     private void OnEnable()
     {
+        if (m_gameHandlerRef == null)
+        {
+            m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        }
         if (m_inited)
         {
             RefreshEquipmentSlots();
             RefreshNewEquipmentNotifiers();
+        }
+        if (m_gameHandlerRef.m_squadRenameNotificationPending)
+        {
+            m_gameHandlerRef.m_squadRenameNotificationPending = false;
+            ConfirmationBox confirmationBox = Instantiate(m_confirmationBoxPrefab, transform).GetComponent<ConfirmationBox>();
+            confirmationBox.SetMessageText("Congratulations, due to your success your team has begun to be refered to as <color=red>" + m_gameHandlerRef.m_xCellSquad.m_name + "</color>.");
+            confirmationBox.SetToAcknowledgeOnlyMode();
         }
     }
 

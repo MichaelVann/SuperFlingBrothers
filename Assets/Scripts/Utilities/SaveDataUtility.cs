@@ -83,7 +83,7 @@ public class SaveDataUtility
         public struct HighScoreData
         {
             public string name;
-            public float score;
+            public int score;
         }
         public List<HighScoreData> highScores;
     }

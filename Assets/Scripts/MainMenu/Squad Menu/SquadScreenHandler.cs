@@ -74,7 +74,7 @@ public class SquadScreenHandler : MonoBehaviour
         CloseAllScreens();
         m_squadOverview.SetActive(true);
         m_navigationBarRef.SetSelected(0);
-        m_titleTextRef.text = "Overview";
+        m_titleTextRef.text = m_gameHandlerRef.m_xCellSquad.m_name;
     }
 
     public void OpenAttributesScreen()

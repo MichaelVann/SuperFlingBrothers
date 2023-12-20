@@ -17,7 +17,7 @@ public class GameHandler : MonoBehaviour
     internal static GameHandler m_staticAutoRef;
 
     public const int MAIN_VERSION_NUMBER = 26;
-    public const int SUB_VERSION_NUMBER = 7;
+    public const int SUB_VERSION_NUMBER = 8;
 
     static internal bool DEBUG_MODE = true;
 
@@ -31,7 +31,7 @@ public class GameHandler : MonoBehaviour
     static internal float BATTLE_EnemyEquipmentDropChanceScale = 0.5f;
     internal const int    BATTLE_EnemySpawnPointCount = 19;
 
-    static internal float PRE_BATTLE_WarfrontChange = -1f; //Default is -0.17f
+    static internal float PRE_BATTLE_WarfrontChange = -0.17f; //Default is -0.17f
     //Damageables
     static internal float DAMAGEABLE_DragCoefficient = 1.25f;
     static internal float DAMAGEABLE_HitVelocityMultiplier = 1.6f;
@@ -66,6 +66,7 @@ public class GameHandler : MonoBehaviour
     //Player
     internal XCellSquad m_xCellSquad;
     bool m_playerWasKilledLastBattle = false;
+    internal bool m_squadRenameNotificationPending = false;
 
     //Body
     public HumanBody m_humanBody;
@@ -126,13 +127,13 @@ public class GameHandler : MonoBehaviour
     //Highscores
     internal struct Highscore
     {
-        internal Highscore(string a_name, float a_score)
+        internal Highscore(string a_name, int a_score)
         {
             name = a_name;
             score = a_score;
         }
         internal string name;
-        internal float score;
+        internal int score;
     }
     internal List<Highscore> m_highscoreList;
 
@@ -206,12 +207,19 @@ public class GameHandler : MonoBehaviour
 
     internal void LoseRougelike()
     {
-        m_highscoreList.Add(new Highscore(m_xCellSquad.m_name, m_humanBody.m_battlesCompleted));
+        m_highscoreList.Insert(0,new Highscore(m_xCellSquad.m_name, m_humanBody.m_battlesCompleted));
+        m_highscoreList.Sort(HighscoreComparison);
+        
+        if (m_highscoreList.Count > 9)
+        {
+            m_highscoreList.RemoveAt(9);
+        }
         ResetRoguelike();
         if (m_autoSaving)
         {
             SaveGame();
         }
+        TransitionScene(eScene.mainMenu);
     }
 
     void SetupLastGameStats()
@@ -272,6 +280,13 @@ public class GameHandler : MonoBehaviour
         }
         returnVal = vals[0] > vals[1] ? 1 : (vals[0] < vals[1] ? -1 : 0);
         return returnVal * -1;
+    }
+
+    int HighscoreComparison(Highscore a_first,  Highscore a_second)
+    {
+        int returnVal = a_second.score - a_first.score;
+
+        return returnVal;
     }
 
     internal void SortEquipmentInventory()
@@ -376,6 +391,7 @@ public class GameHandler : MonoBehaviour
 
             m_humanBody.m_battlesCompleted++;
             m_humanBody.Refresh();
+            m_xCellSquad.Refresh();
         }
     }
 
@@ -434,8 +450,7 @@ public class GameHandler : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.R))
         {
-            SceneManager.LoadScene("Main Menu");
-            ResetRoguelike();
+            LoseRougelike();
         }
         m_stockHandler.Update();
         SceneFadeUpdate();
