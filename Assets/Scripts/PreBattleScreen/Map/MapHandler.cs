@@ -198,11 +198,10 @@ public class MapHandler : MonoBehaviour
 
     void ApplyZoomAndPan()
     {
+        m_currentZoom = Mathf.Clamp(m_currentZoom, m_minZoom, m_maxZoom);
+        m_cameraRef.orthographicSize = m_startingCameraSize / m_currentZoom;// new Vector3(m_currentZoom, m_currentZoom, 1f);
         ClampCameraPan();
         m_cameraRef.transform.position = m_currentPan;// * m_currentZoom;
-
-        m_currentZoom = Mathf.Clamp(m_currentZoom, m_minZoom, m_maxZoom);
-        m_cameraRef.orthographicSize = m_startingCameraSize/m_currentZoom;// new Vector3(m_currentZoom, m_currentZoom, 1f);
     }
 
     void PinchZoom()
