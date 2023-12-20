@@ -15,6 +15,10 @@ public class AbilityButton : MonoBehaviour
     public TextMeshProUGUI m_healthText;
     public TextMeshProUGUI m_maxHealthText;
 
+    [SerializeField] GameObject m_cooldownStatusRef;
+    [SerializeField] TextMeshProUGUI m_cooldownCountTextRef;
+
+
     public void SetEquipmentRef(Equipment a_equipment) { m_equipmentRef = a_equipment; }
 
     bool m_disabled = false;
@@ -62,15 +66,22 @@ public class AbilityButton : MonoBehaviour
                     Color buttonColor = Color.grey;
                     m_panelImageRef.color = buttonColor;
                 }
-                m_abilityNameText.text = ability.GetName() + (ability.m_passive ? "" : "(" + ability.m_cooldown + ")");
+                m_abilityNameText.text = ability.GetName();
                 m_affixText.text = ability.GetAffixNames();
+                m_abilityNameText.color = m_equipmentRef.m_rarity.color;
+
+                m_cooldownStatusRef.SetActive(!ability.m_passive);
+                if (!ability.m_passive)
+                {
+                    m_cooldownCountTextRef.text = "" + ability.m_cooldown;
+                }
             }
 
             //Health Text
             m_healthText.text = m_equipmentRef.m_health.ToString("f0");
             m_healthText.color = VLib.RatioToColorRGB(m_equipmentRef.m_health / m_equipmentRef.m_maxHealth);
             m_maxHealthText.text = m_equipmentRef.m_maxHealth.ToString("f0");
-
+            
         }
     }
 }

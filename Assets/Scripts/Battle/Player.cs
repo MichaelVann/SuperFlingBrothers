@@ -238,7 +238,7 @@ public class Player : Damageable
             m_comboHit = 1f;
         }
         m_flinging = false;
-        m_battleManagerRef.NextTurn();
+        m_battleManagerRef.SetFrozen(false);
         m_statHandler.m_stats[(int)eCharacterStatType.dexterity].ChangeXP(m_flingDexterityXP * GameHandler.BATTLE_SkillXPScale);
 
         //Handle Projectile Shooting

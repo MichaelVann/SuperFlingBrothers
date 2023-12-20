@@ -13,12 +13,13 @@ public class TitleScreenHandler : MonoBehaviour
     public Text m_versionNumberText;
     [SerializeField] GameObject m_highScoreContentRef;
     [SerializeField] GameObject m_highscorePrefab;
-    List<TextMeshProUGUI> m_highScoreList;
+    [SerializeField] GameObject m_noHighscoresTextRef;
+    List<UIHighScore> m_highScoreList;
 
     // Start is called before the first frame update
     void Start()
     {
-        m_highScoreList = new List<TextMeshProUGUI>();
+        m_highScoreList = new List<UIHighScore>();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_versionNumberText.text = "Version " + GameHandler.MAIN_VERSION_NUMBER + "." + GameHandler.SUB_VERSION_NUMBER;
         RefreshHighscoreTable();
@@ -32,10 +33,12 @@ public class TitleScreenHandler : MonoBehaviour
         }
         m_highScoreList.Clear();
 
+        m_noHighscoresTextRef.SetActive(m_gameHandlerRef.m_highscoreList.Count == 0);
+
         for (int i = 0; i < m_gameHandlerRef.m_highscoreList.Count; i++)
         {
-            m_highScoreList.Add(Instantiate(m_highscorePrefab, m_highScoreContentRef.transform).GetComponent<TextMeshProUGUI>());
-            m_highScoreList[i].text = m_gameHandlerRef.m_highscoreList[i].name + ": <color=red>" + m_gameHandlerRef.m_highscoreList[i].score + "</color> days";
+            m_highScoreList.Add(Instantiate(m_highscorePrefab, m_highScoreContentRef.transform).GetComponent<UIHighScore>());
+            m_highScoreList[i].Init((i + 1), m_gameHandlerRef.m_highscoreList[i].name, m_gameHandlerRef.m_highscoreList[i].score);
         }
     }
 

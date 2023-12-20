@@ -210,7 +210,7 @@ public class BattleManager : MonoBehaviour
 
     internal void NextTurn()
     {
-        SetFrozen(false);
+        SetFrozen(true);
         for (int i = 0; i < m_activeAbilities.Length; i++)
         {
             if (m_activeAbilities[i] != null)
@@ -218,6 +218,7 @@ public class BattleManager : MonoBehaviour
                 m_activeAbilities[i].CoolDown();
             }
         }
+        m_uiHandlerRef.RefreshAbilityButtons();
     }
 
     void FindGameSpace()
@@ -336,7 +337,6 @@ public class BattleManager : MonoBehaviour
         {
             spawnPositions.Add(spawnGameObject.transform.position);
         }
-
         
         while(totalCoinsToSpawn > 0 &&  m_coinChestSpawnPositions.Count > 0)
         {
@@ -433,7 +433,6 @@ public class BattleManager : MonoBehaviour
     internal void RefreshUIShieldBar()
     {
         m_shieldBarRef.Init(m_player.m_shield.capacity);
-
     }
 
     public void InitialiseUpgrades()
@@ -647,7 +646,7 @@ public class BattleManager : MonoBehaviour
                 UpdateTimeScale();
                 if (m_turnFreezingTimer >= m_turnFreezingTimerMax)
                 {
-                    SetFrozen(true);
+                    NextTurn();
                 }
             }
         }

@@ -97,6 +97,14 @@ public class XCellSquad
         m_name = "The ";
         m_name += m_teamNamePrefixes[VLib.vRandom(0,m_teamNamePrefixes.Length-1)];
         m_name += " " + m_teamNameSuffixes[VLib.vRandom(0, m_teamNameSuffixes.Length - 1)];
+        for (int i = 0; i < GameHandler.m_staticAutoRef.m_highscoreList.Count; i++)
+        {
+            if (m_name == GameHandler.m_staticAutoRef.m_highscoreList[i].name)
+            {
+                GenerateTeamName();
+                return;
+            }
+        }
     }
 
     internal void Refresh()

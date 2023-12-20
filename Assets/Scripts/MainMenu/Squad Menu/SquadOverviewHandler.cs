@@ -44,7 +44,7 @@ public class SquadOverviewHandler : MonoBehaviour
             RefreshEquipmentSlots();
             RefreshNewEquipmentNotifiers();
         }
-        if (m_gameHandlerRef.m_squadRenameNotificationPending)
+        if (m_gameHandlerRef != null && m_gameHandlerRef.m_squadRenameNotificationPending)
         {
             m_gameHandlerRef.m_squadRenameNotificationPending = false;
             ConfirmationBox confirmationBox = Instantiate(m_confirmationBoxPrefab, transform).GetComponent<ConfirmationBox>();
