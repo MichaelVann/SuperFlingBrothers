@@ -31,6 +31,20 @@ public class HumanBody
 
     internal string GetHumansName() {return m_firstName + " " + m_lastName; }
 
+    internal int GetTownCount() { return m_towns.Count; }
+    internal int GetFriendlyTownCount() 
+    {
+        int townCount = 0;
+        for (int i = 0; i < m_towns.Count; i++)
+        {
+            if (!m_towns[i].m_overrun)
+            {
+                townCount++;
+            }
+        }
+        return townCount;
+    }
+
     static internal int FindMaxPossibleBattleDifficulty()
     {
         int maxBattleDifficulty = 0;

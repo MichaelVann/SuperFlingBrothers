@@ -5,9 +5,11 @@ using UnityEngine;
 
 public class PreBattleBottomPanelHandler : MonoBehaviour
 {
+    GameHandler m_gameHandlerRef;
     public GameObject m_readoutRef;
     public GameObject m_passPanelRef;
-    GameHandler m_gameHandlerRef;
+    [SerializeField] TextMeshProUGUI m_townsRemainingValueTextRef;
+    [SerializeField] TextMeshProUGUI m_townsRemainingMaxTextRef;
     bool inited = false;
 
     // Start is called before the first frame update
@@ -26,6 +28,11 @@ public class PreBattleBottomPanelHandler : MonoBehaviour
             m_readoutRef.gameObject.SetActive(!needToPass);
             m_passPanelRef.gameObject.SetActive(needToPass);
             inited = true;
+            int friendlyTownCount = m_gameHandlerRef.m_humanBody.GetFriendlyTownCount();
+            int totalTownCount = m_gameHandlerRef.m_humanBody.GetTownCount();
+            m_townsRemainingValueTextRef.text = "" + friendlyTownCount;
+            m_townsRemainingValueTextRef.color = VLib.RatioToColorRGB((float)(friendlyTownCount) / (float)(totalTownCount));
+            m_townsRemainingMaxTextRef.text = "/" + totalTownCount;
         }
     }
 
