@@ -8645,7 +8645,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1958141039
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8696,7 +8696,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -8742,6 +8742,7 @@ MonoBehaviour:
   m_titleText: {fileID: 30549110}
   m_descriptionText: {fileID: 146685781}
   m_coolDownText: {fileID: 1065929697}
+  m_buttonRef: {fileID: 1958141040}
 --- !u!4 &1970440345 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2279294649014793167, guid: 2eeca16652b58a1458d7025c898f83b9,

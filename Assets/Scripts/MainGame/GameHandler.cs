@@ -17,7 +17,7 @@ public class GameHandler : MonoBehaviour
     internal static GameHandler m_staticAutoRef;
 
     public const int MAIN_VERSION_NUMBER = 27;
-    public const int SUB_VERSION_NUMBER = 2;
+    public const int SUB_VERSION_NUMBER = 3;
 
     static internal bool DEBUG_MODE = true;
 
@@ -276,7 +276,7 @@ public class GameHandler : MonoBehaviour
         {
             Equipment evaluatedEquipment = i == 0 ? a_first : a_second;
             vals[i] = evaluatedEquipment.GetSellValue();
-            vals[i] += 1000 * (evaluatedEquipment.m_equipped ? 1 : 0);
+            //vals[i] += 1000 * (evaluatedEquipment.m_equipped ? 1 : 0);
         }
         returnVal = vals[0] > vals[1] ? 1 : (vals[0] < vals[1] ? -1 : 0);
         return returnVal * -1;

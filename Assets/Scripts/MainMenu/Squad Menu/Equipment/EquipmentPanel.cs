@@ -129,7 +129,10 @@ public class EquipmentPanel : MonoBehaviour
             m_equipmentInventoryHandlerRef.SetEquipStatus(m_equipmentRef);
         }
 
-        Refresh();
+        if (m_equipmentInventoryHandlerRef.gameObject.activeSelf)
+        {
+            Refresh();
+        }
     }
 
     public void SellEquipment()

@@ -93,8 +93,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 25
-  m_fontSizeBase: 25
+  m_fontSize: 35
+  m_fontSizeBase: 35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -129,7 +129,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -47.939148, y: 11.173666, z: -13.892563, w: 10.585614}
+  m_margin: {x: -47.939148, y: 11.173666, z: 26.00032, w: 10.585614}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -170,8 +170,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -125.4, y: 52.7}
-  m_SizeDelta: {x: 414, y: 36}
+  m_AnchoredPosition: {x: -125.4, y: 55.61687}
+  m_SizeDelta: {x: 414, y: 41.8337}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1422631945010693633
 CanvasRenderer:
@@ -222,32 +222,37 @@ PrefabInstance:
     - target: {fileID: 1804717229503049592, guid: b3fb19598e1f5294283bbd024285a21e,
         type: 3}
       propertyPath: m_fontSize
-      value: 20.7
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 1804717229503049592, guid: b3fb19598e1f5294283bbd024285a21e,
         type: 3}
       propertyPath: m_fontSizeBase
-      value: 20.7
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 1804717229503049592, guid: b3fb19598e1f5294283bbd024285a21e,
+        type: 3}
+      propertyPath: m_VerticalAlignment
+      value: 4096
       objectReference: {fileID: 0}
     - target: {fileID: 2506361712153937127, guid: b3fb19598e1f5294283bbd024285a21e,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 134.8241
+      value: 177.4883
       objectReference: {fileID: 0}
     - target: {fileID: 2506361712153937127, guid: b3fb19598e1f5294283bbd024285a21e,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 25.8142
+      value: 30.968
       objectReference: {fileID: 0}
     - target: {fileID: 2506361712153937127, guid: b3fb19598e1f5294283bbd024285a21e,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1.8133
+      value: -19.5188
       objectReference: {fileID: 0}
     - target: {fileID: 2506361712153937127, guid: b3fb19598e1f5294283bbd024285a21e,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 52.63933
+      value: 56.3
       objectReference: {fileID: 0}
     - target: {fileID: 3125866355467714481, guid: b3fb19598e1f5294283bbd024285a21e,
         type: 3}
@@ -569,3 +574,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_skillNameText: {fileID: 761402219930720279}
+  m_lerpedRPGLevel:
+    m_XP: 0
+    m_maxXP: 75
+    m_level: 0
+    m_allocationPoints: 0

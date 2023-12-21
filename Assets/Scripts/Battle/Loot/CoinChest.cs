@@ -17,10 +17,10 @@ public class CoinChest : Loot
     // Update is called once per frame
     override public void Update()
     {
-        if (m_battleManagerRef.m_endingGame && m_battleManagerRef.m_endGameType == eEndGameType.win)
-        {
-            PopChest(true);
-        }
+        //if (m_battleManagerRef.m_endingGame && m_battleManagerRef.m_endGameType == eEndGameType.win)
+        //{
+        //    PopChest(true);
+        //}
     }
 
     public void Init(int a_coinCount)

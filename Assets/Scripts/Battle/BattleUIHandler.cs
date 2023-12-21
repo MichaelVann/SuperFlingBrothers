@@ -143,7 +143,7 @@ public class BattleUIHandler : MonoBehaviour
             }
         }
         m_activatedAbilityPanel.gameObject.SetActive(activatedAbility);
-         
+        m_activatedAbilityPanel.Refresh();
     }
 
     public void ActivateAbility(int a_id)

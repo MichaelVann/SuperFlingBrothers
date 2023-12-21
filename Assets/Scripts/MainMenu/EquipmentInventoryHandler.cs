@@ -138,7 +138,7 @@ public class EquipmentInventoryHandler : MonoBehaviour
         
         if (closingInventory)
         {
-            //CloseInventoryPanel();
+            m_squadOverviewHandlerRef.CloseInventoryPanel();
         }
     }
 

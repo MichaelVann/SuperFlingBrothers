@@ -16,8 +16,11 @@ public class AbilityButton : MonoBehaviour
     public TextMeshProUGUI m_maxHealthText;
 
     [SerializeField] GameObject m_cooldownStatusRef;
+    [SerializeField] GameObject m_cooldownIconRef;
+    [SerializeField] GameObject m_cooldownReadyTextRef;
     [SerializeField] TextMeshProUGUI m_cooldownCountTextRef;
 
+    BattleManager m_battleManagerRef;
 
     public void SetEquipmentRef(Equipment a_equipment) { m_equipmentRef = a_equipment; }
 
@@ -28,6 +31,7 @@ public class AbilityButton : MonoBehaviour
     {
         //m_buttonRef = null;
         m_buttonRef = GetComponent<Button>();
+        m_battleManagerRef = FindObjectOfType<BattleManager>();
     }
 
     // Update is called once per frame
@@ -73,7 +77,19 @@ public class AbilityButton : MonoBehaviour
                 m_cooldownStatusRef.SetActive(!ability.m_passive);
                 if (!ability.m_passive)
                 {
-                    m_cooldownCountTextRef.text = "" + ability.m_cooldown;
+                    if (ability.m_cooldown == 0)
+                    {
+                        m_cooldownReadyTextRef.SetActive(true);
+                        m_cooldownCountTextRef.gameObject.SetActive(false);
+                        m_cooldownIconRef.gameObject.SetActive(false);
+                    }
+                    else 
+                    {
+                        m_cooldownReadyTextRef.SetActive(false);
+                        m_cooldownCountTextRef.gameObject.SetActive(true);
+                        m_cooldownIconRef.gameObject.SetActive(true);
+                        m_cooldownCountTextRef.text = "" + ability.m_cooldown;
+                    }
                 }
             }
 
@@ -81,7 +97,8 @@ public class AbilityButton : MonoBehaviour
             m_healthText.text = m_equipmentRef.m_health.ToString("f0");
             m_healthText.color = VLib.RatioToColorRGB(m_equipmentRef.m_health / m_equipmentRef.m_maxHealth);
             m_maxHealthText.text = m_equipmentRef.m_maxHealth.ToString("f0");
-            
+
+            m_buttonRef.interactable &= m_battleManagerRef.m_timeFrozen;
         }
     }
 }

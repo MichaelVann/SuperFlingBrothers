@@ -206,11 +206,11 @@ public class BattleManager : MonoBehaviour
         {
             UpdateTimeScale();
         }
+        m_uiHandlerRef.RefreshAbilityButtons();
     }
 
     internal void NextTurn()
     {
-        SetFrozen(true);
         for (int i = 0; i < m_activeAbilities.Length; i++)
         {
             if (m_activeAbilities[i] != null)
@@ -222,7 +222,7 @@ public class BattleManager : MonoBehaviour
                 m_activeAbilities[i].CoolDown();
             }
         }
-        m_uiHandlerRef.RefreshAbilityButtons();
+        SetFrozen(true);
     }
 
     void FindGameSpace()
