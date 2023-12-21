@@ -215,6 +215,10 @@ public class BattleManager : MonoBehaviour
         {
             if (m_activeAbilities[i] != null)
             {
+                if (m_activeAbilities[i].m_abilityType == EquipmentAbility.eAbilityType.Counter && m_activeAbilities[i].m_engaged)
+                {
+                    m_activeAbilities[i].Expend();
+                }
                 m_activeAbilities[i].CoolDown();
             }
         }
@@ -242,15 +246,18 @@ public class BattleManager : MonoBehaviour
                         switch (abil.m_abilityType)
                         {
                             case EquipmentAbility.eAbilityType.ExtraTurn:
-                                abil.m_activated = !abil.m_activated;
+                                abil.m_engaged = !abil.m_engaged;
                                 //TODO: Enable outline around button or something, showing ability is prepared
                                 break;
                             case EquipmentAbility.eAbilityType.Bullet:
-                                abil.m_activated = !abil.m_activated;
+                                abil.m_engaged = !abil.m_engaged;
                                 //TODO: Enable outline around button or something, showing ability is prepared
                                 break;
                             case EquipmentAbility.eAbilityType.Snare:
-                                abil.m_activated = !abil.m_activated;
+                                abil.m_engaged = !abil.m_engaged;
+                                break;
+                            case EquipmentAbility.eAbilityType.Counter:
+                                abil.m_engaged = !abil.m_engaged;
                                 break;
                             case EquipmentAbility.eAbilityType.Count:
                                 break;
@@ -261,11 +268,57 @@ public class BattleManager : MonoBehaviour
                 }
                 else
                 {
-                    m_activeAbilities[i].m_activated = false;
+                    m_activeAbilities[i].m_engaged = false;
                 }
             }
         }
- 
+    }
+
+    void InitialiseAbilities()
+    {
+        m_activeAbilities = new EquipmentAbility[4];
+        for (int i = 0; i < m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment.Length; i++)
+        {
+            if (m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i] != null)
+            {
+                m_activeAbilities[i] = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i].m_activeAbility;
+                m_activeAbilities[i].PrepareForBattle();
+            }
+            //m_activeAbilities[i] = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i] != null ? new EquipmentAbility(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i].m_activeAbility) : null;
+        }
+
+        m_uiHandlerRef.RefreshAbilityButtons();
+    }
+
+    internal EquipmentAbility FindActiveEquipmentAbility()
+    {
+        EquipmentAbility ability = null;
+        EquipmentAbility[] abilityList = m_activeAbilities;
+        for (int i = 0; i < abilityList.Length; i++)
+        {
+            if (abilityList[i] != null && abilityList[i].m_engaged)
+            {
+                ability = abilityList[i];
+            }
+        }
+        return ability;
+    }
+
+    internal List<EquipmentAbility> FindEquipmentAbilities(EquipmentAbility.eAbilityType a_abilityType)
+    {
+        List<EquipmentAbility> abilities = new List<EquipmentAbility>();
+        for (int i = 0; i < m_activeAbilities.Length; i++)
+        {
+            if (m_activeAbilities[i] != null)
+            {
+                EquipmentAbility abil = m_activeAbilities[i];
+                if (abil.m_abilityType == a_abilityType)
+                {
+                    abilities.Add(abil);
+                }
+            }
+        }
+        return abilities;
     }
 
     public void UseExtraTurn()
@@ -274,13 +327,13 @@ public class BattleManager : MonoBehaviour
         {
             if (m_activeAbilities[i] != null)
             {
-                if (m_activeAbilities[i].m_abilityType == EquipmentAbility.eAbilityType.ExtraTurn && m_activeAbilities[i].m_activated)
+                if (m_activeAbilities[i].m_abilityType == EquipmentAbility.eAbilityType.ExtraTurn && m_activeAbilities[i].m_engaged)
                 {
                     m_activeAbilities[i].Expend();
                     //m_turnFreezeTimer = m_turnFreezeTimerMax;
                     //m_turnFreezingTimer = m_turnFreezingTimerMax / 2f;
                     SetFrozen(true);
-                    m_activeAbilities[i].m_activated = false;
+                    m_activeAbilities[i].m_engaged = false;
                     m_uiHandlerRef.RefreshAbilityButtons();
                     break;
                 }
@@ -447,22 +500,6 @@ public class BattleManager : MonoBehaviour
             m_healthBarRef.gameObject.transform.localPosition = new Vector3(0f, m_healthbarMainPos, 0f);
             m_shieldBarRef.gameObject.SetActive(false);
         }
-    }
-
-    void InitialiseAbilities()
-    {
-        m_activeAbilities = new EquipmentAbility[4];
-        for (int i = 0; i < m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment.Length; i++)
-        {
-            if (m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i] != null)
-            {
-                m_activeAbilities[i] = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i].m_activeAbility;
-                m_activeAbilities[i].PrepareForBattle();
-            }
-            //m_activeAbilities[i] = m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i] != null ? new EquipmentAbility(m_gameHandlerRef.m_xCellTeam.m_playerXCell.m_equippedEquipment[i].m_activeAbility) : null;
-        }
-
-        m_uiHandlerRef.RefreshAbilityButtons();
     }
 
     public void SpawnPlayer()

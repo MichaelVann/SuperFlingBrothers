@@ -53,7 +53,7 @@ public class AbilityButton : MonoBehaviour
                 m_buttonRef.interactable = false;
                 m_affixText.text = "DESTROYED";
                 m_disabled = true;
-                m_equipmentRef.m_activeAbility.m_activated = false;
+                m_equipmentRef.m_activeAbility.m_engaged = false;
             }
             //Else if the equipment has an ability
             else if (m_equipmentRef.m_activeAbility != null)

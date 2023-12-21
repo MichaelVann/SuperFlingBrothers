@@ -89,7 +89,6 @@ public class Damageable : BaseObject
         base.Awake();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_battleManagerRef = FindObjectOfType<BattleManager>();
-        m_musicPlayerRef = FindObjectOfType<AudioHandler>();
         m_statHandler = new CharacterStatHandler();
         m_statHandler.Init(false);
         m_originalColor = m_spriteRenderer.color;
@@ -103,6 +102,7 @@ public class Damageable : BaseObject
 
     public virtual void Start()
     {
+        m_musicPlayerRef = FindObjectOfType<AudioHandler>();
         if (m_shieldBarRef)
         {
             m_shieldBarRef.SetHealthColoring(false);

@@ -14,7 +14,7 @@ public class EquipmentAbility
     public int m_cooldown;
     public int m_maxCooldown;
     public bool m_passive = true;
-    public bool m_activated = false;
+    public bool m_engaged = false;
     public int m_level;
 
     [Serializable]
@@ -35,6 +35,7 @@ public class EquipmentAbility
         Bullet,
         Shield,
         Snare,
+        Counter,
         Count
     }
 
@@ -75,13 +76,13 @@ public class EquipmentAbility
     internal void Expend()
     {
         m_cooldown = m_maxCooldown;
+        m_engaged = false;
     }
 
     internal void CoolDown()
     {
         m_cooldown = Mathf.Clamp(m_cooldown-1,0, m_maxCooldown);
     }
-
 
     void ApplyAffixes()
     {
@@ -155,27 +156,27 @@ public class EquipmentAbility
             case eAbilityType.ExtraTurn:
                 m_passive = false;
                 m_maxCooldown = 4;
-                m_level = 1;
                 break;
 
             case eAbilityType.Bullet:
                 m_passive = false;
                 m_maxCooldown = 3;
-                m_level = 1;
                 break;
 
             case eAbilityType.Shield:
                 m_passive = true;
-                m_activated = false;
                 RollCapacitor();
-                m_level = 1;
                 break;
 
             case eAbilityType.Snare:
                 m_passive = false;
-                m_activated = false;
-                m_level = 1;
                 m_maxCooldown = 3;
+                break;
+
+            case eAbilityType.Counter:
+                m_passive = false;
+                m_maxCooldown = 4;
+
                 break;
 
             case eAbilityType.Count:
@@ -184,6 +185,8 @@ public class EquipmentAbility
                 break;
         }
         m_cooldown = 0;
+        m_engaged = false;
+        m_level = 1;
 
         if (a_rarity > Equipment.eRarityTier.Normal)
         {
@@ -263,7 +266,7 @@ public class EquipmentAbility
         m_cooldown = a_ability.m_cooldown;
         m_maxCooldown = a_ability.m_maxCooldown;
         m_passive = a_ability.m_passive;
-        m_activated = a_ability.m_activated;
+        m_engaged = a_ability.m_engaged;
         m_level = a_ability.m_level;
         m_affixes = a_ability.m_affixes;
     }
@@ -272,7 +275,7 @@ public class EquipmentAbility
     {
         if (!m_passive)
         {
-            m_cooldown = m_maxCooldown;
+            m_cooldown = 0;
         }
     }
 }

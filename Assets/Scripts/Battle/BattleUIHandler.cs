@@ -127,7 +127,7 @@ public class BattleUIHandler : MonoBehaviour
             }
             if (m_abilityButtons[i].m_equipmentRef != null)
             {
-                if (m_abilityButtons[i].m_equipmentRef.m_activeAbility.m_activated)
+                if (m_abilityButtons[i].m_equipmentRef.m_activeAbility.m_engaged)
                 {
                     activatedAbility = true;
                     m_activatedAbilityPanel.SetEquipmentAbility(m_abilityButtons[i].m_equipmentRef.m_activeAbility);

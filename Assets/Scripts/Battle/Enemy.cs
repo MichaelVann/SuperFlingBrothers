@@ -268,7 +268,6 @@ public class Enemy : Damageable
         bool runningBaseCollision = true;
         Enemy oppEnemy = a_collision.gameObject.GetComponent<Enemy>();
         Player oppPlayer = a_collision.gameObject.GetComponent<Player>();
-        float dealtDamage = 0f;
         if (a_collision.gameObject.GetComponent<Pocket>())
         {
             TakePocketDamage(a_collision.contacts[0].point);
@@ -297,6 +296,27 @@ public class Enemy : Damageable
             if (m_playerVulnerable)
             {
                 runningBaseCollision = false;
+            }
+
+            //Counter check
+            float damageDealt = CalculateDamageDealtFromCollision(oppPlayer, a_collision);
+            if (damageDealt > 0)
+            {
+                EquipmentAbility activeAbility = oppPlayer.FindActiveEquipmentAbility();
+                if (activeAbility != null && activeAbility.m_abilityType == EquipmentAbility.eAbilityType.Counter)
+                {
+                    activeAbility.Expend();
+
+                    runningBaseCollision = false;
+                    FindObjectOfType<BattleUIHandler>().RefreshAbilityButtons();
+
+                    //Take own damage
+                    if (damageDealt != 0f)
+                    {
+                        ReceiveDamageFromCollision(oppPlayer.gameObject, damageDealt, a_collision.contacts[0].point);
+                        oppPlayer.m_rigidBody.AddForce((a_collision.contacts[0].point - oppPlayer.transform.position.ToVector2()).normalized * GameHandler.BATTLE_FlingStrength/3f);
+                    }
+                }
             }
         }
 

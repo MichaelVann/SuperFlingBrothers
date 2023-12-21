@@ -185,13 +185,13 @@ public class Player : Damageable
         }
     }
 
-    EquipmentAbility FindActiveEquipmentAbility(EquipmentAbility.eAbilityType a_abilityType)
+    internal EquipmentAbility FindActiveEquipmentAbility(EquipmentAbility.eAbilityType a_abilityType)
     {
         EquipmentAbility ability = null;
         List<EquipmentAbility> abilityList = FindEquipmentAbilities(a_abilityType);
         for (int i = 0; i < abilityList.Count; i++)
         {
-            if (abilityList[i].m_activated && abilityList[i].m_abilityType == a_abilityType)
+            if (abilityList[i].m_engaged && abilityList[i].m_abilityType == a_abilityType)
             {
                 ability = abilityList[i];
             }
@@ -199,35 +199,14 @@ public class Player : Damageable
         return ability;
     }
 
-    EquipmentAbility FindActiveEquipmentAbility()
+    internal EquipmentAbility FindActiveEquipmentAbility()
     {
-        EquipmentAbility ability = null;
-        EquipmentAbility[] abilityList = m_battleManagerRef.m_activeAbilities;
-        for (int i = 0; i < abilityList.Length; i++)
-        {
-            if (abilityList[i] != null && abilityList[i].m_activated)
-            {
-                ability = abilityList[i];
-            }
-        }
-        return ability;
+        return m_battleManagerRef.FindActiveEquipmentAbility();
     }
 
-    List<EquipmentAbility> FindEquipmentAbilities(EquipmentAbility.eAbilityType a_abilityType)
+    internal List<EquipmentAbility> FindEquipmentAbilities(EquipmentAbility.eAbilityType a_abilityType)
     {
-        List<EquipmentAbility> abilities = new List<EquipmentAbility>();
-        for (int i = 0; i < m_battleManagerRef.m_activeAbilities.Length; i++)
-        {
-            if (m_battleManagerRef.m_activeAbilities[i] != null)
-            {
-                EquipmentAbility abil = m_battleManagerRef.m_activeAbilities[i];
-                if (abil.m_abilityType == a_abilityType)
-                {
-                    abilities.Add(abil);
-                }
-            }
-        }
-        return abilities;
+        return m_battleManagerRef.FindEquipmentAbilities(a_abilityType);
     }
 
     public override void Fling(Vector3 a_flingVector, float a_flingStrength)
@@ -248,13 +227,13 @@ public class Player : Damageable
             if (abil.m_abilityType == EquipmentAbility.eAbilityType.Bullet)
             {
                 abil.Expend();
-                abil.m_activated = false;
+                abil.m_engaged = false;
                 ShootProjectile(a_flingVector, abil);
             }
             else if (abil.m_abilityType == EquipmentAbility.eAbilityType.Snare)
             {
                 abil.Expend();
-                abil.m_activated = false;
+                abil.m_engaged = false;
                 ShootProjectile(a_flingVector, abil);
             }
 
