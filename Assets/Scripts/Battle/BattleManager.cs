@@ -200,7 +200,7 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < m_wallSpriteRenderers.Length; i++)
         {
             float colourScale = 0.12f;
-            m_wallSpriteRenderers[i].color = m_timeFrozen ? Color.yellow : new Color(colourScale, colourScale, colourScale);
+            m_wallSpriteRenderers[i].color = m_timeFrozen ? Color.yellow : Color.white;// new Color(colourScale, colourScale, colourScale);
         }
         if (!m_endingGame)
         {

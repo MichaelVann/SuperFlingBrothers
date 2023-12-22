@@ -456,14 +456,11 @@ public class Enemy : Damageable
         {
             Vector3 playerPos = m_playerRef.transform.position;
 
-            if ((playerPos - transform.position).magnitude <= m_sightRadius)
-            {
-                Vector3 accurateFlingVector = (playerPos - transform.position).normalized;
+            Vector3 accurateFlingVector = (playerPos - transform.position).normalized;
 
-                Vector3 aimDisturbance = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, m_flingAccuracy) - m_flingAccuracy / 2f, Vector3.forward) * accurateFlingVector;
+            Vector3 aimDisturbance = Quaternion.AngleAxis(UnityEngine.Random.Range(0f, m_flingAccuracy) - m_flingAccuracy / 2f, Vector3.forward) * accurateFlingVector;
 
-                Fling(aimDisturbance, flingStrength);
-            }
+            Fling(aimDisturbance, flingStrength);
         }
     }
 
