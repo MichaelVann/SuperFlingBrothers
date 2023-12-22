@@ -17,7 +17,7 @@ public class GameHandler : MonoBehaviour
     internal static GameHandler m_staticAutoRef;
 
     public const int MAIN_VERSION_NUMBER = 27;
-    public const int SUB_VERSION_NUMBER = 4;
+    public const int SUB_VERSION_NUMBER = 5;
 
     static internal bool DEBUG_MODE = true;
 
