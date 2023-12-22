@@ -189,6 +189,16 @@ public class BattleManager : MonoBehaviour
         m_upperLowerFlingPositionBounds = m_wallSpriteRenderers[3].gameObject.transform.position.y;
         m_gameHandlerRef.m_audioHandlerRef.PlayBattleMusic(this);
         SpawnCoinChests();
+        UpdateWallColours();
+    }
+
+    void UpdateWallColours()
+    {
+        for (int i = 0; i < m_wallSpriteRenderers.Length; i++)
+        {
+            float colourScale = 0.12f;
+            m_wallSpriteRenderers[i].color = m_timeFrozen ? Color.yellow : Color.red;// new Color(colourScale, colourScale, colourScale);
+        }
     }
 
     public void SetFrozen(bool a_frozen)
@@ -197,11 +207,8 @@ public class BattleManager : MonoBehaviour
         m_turnFreezing = false;
         m_timeFrozen = a_frozen;
 
-        for (int i = 0; i < m_wallSpriteRenderers.Length; i++)
-        {
-            float colourScale = 0.12f;
-            m_wallSpriteRenderers[i].color = m_timeFrozen ? Color.yellow : Color.white;// new Color(colourScale, colourScale, colourScale);
-        }
+        UpdateWallColours();
+
         if (!m_endingGame)
         {
             UpdateTimeScale();

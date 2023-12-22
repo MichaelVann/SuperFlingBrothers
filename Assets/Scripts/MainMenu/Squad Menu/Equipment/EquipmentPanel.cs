@@ -13,12 +13,9 @@ public class EquipmentPanel : MonoBehaviour
     public Equipment m_equipmentRef;
 
     public TextMeshProUGUI m_abilityTypeText;
-    public TextMeshProUGUI m_nameTextRef;
     public TextMeshProUGUI m_healthText;
     public TextMeshProUGUI m_rarityTextRef;
-    public TextMeshProUGUI[] m_statNameTextRefs;
-    public TextMeshProUGUI[] m_statTextRefs;
-    public TextMeshProUGUI[] m_statDeltaTextRefs;
+    [SerializeField] TextMeshProUGUI m_affixTextRef;
     public Text m_goldValueTextRef;
     public Image m_outline;
 
@@ -44,11 +41,7 @@ public class EquipmentPanel : MonoBehaviour
         m_equipmentInventoryHandlerRef = a_equipmentScreenHandler;
         m_equipmentRef = a_equipment;
 
-        for (int i = 0; i < m_statNameTextRefs.Length; i++)
-        {
-            m_statNameTextRefs[i].color = CharacterStatHandler.GetStatColor(i);
-            m_statNameTextRefs[i].text = CharacterStatHandler.GetStatName(i, true);
-        }
+
         m_equipButtonRef.Init(m_gameHandlerRef, a_equipmentScreenHandler.m_squadOverviewHandlerRef, m_equipmentRef);
     }
 
@@ -59,41 +52,39 @@ public class EquipmentPanel : MonoBehaviour
 
         m_abilityTypeText.text = m_equipmentRef.m_activeAbility.GetName();
         m_abilityTypeText.color = m_equipmentRef.m_rarity.color;
-        m_nameTextRef.text = "\""  + m_equipmentRef.m_name + "\"";
         m_healthText.text = VLib.RoundToDecimalPlaces(m_equipmentRef.m_health,1) + "/" + VLib.RoundToDecimalPlaces(m_equipmentRef.m_maxHealth,1);
         m_healthText.color = VLib.RatioToColorRGB(m_equipmentRef.m_health / m_equipmentRef.m_maxHealth);
         m_rarityTextRef.text = m_equipmentRef.m_rarity.name;
         m_rarityTextRef.color = m_equipmentRef.m_rarity.color;
-
-        for (int i = 0; i < m_statTextRefs.Length; i++)
+        if (m_equipmentRef.m_name != "")
         {
-            m_statTextRefs[i].text = "0";
+            m_rarityTextRef.text += "\"" + m_equipmentRef.m_name + "\"";
+        }
+        if (m_equipmentRef.m_activeAbility.m_affixes.Count > 0)
+        {
+            m_affixTextRef.text ="";
+
+        }
+        else
+        {
+            m_affixTextRef.text =  "No affixes";
+            m_affixTextRef.color = new Color(0.8f,0.8f,0.8f);
         }
 
-        for (int i = 0; i < m_equipmentRef.m_stats.Count; i++)
+        for (int i = 0; i < m_equipmentRef.m_activeAbility.m_affixes.Count; i++)
         {
-            int index = (int)m_equipmentRef.m_stats[i].statType;
+            if (i > 0)
+            {
+                m_affixTextRef.text += ", ";
+            }
+            m_affixTextRef.text += m_equipmentRef.m_activeAbility.m_affixes[i].ToString();
+            m_affixTextRef.color = Color.red;
 
-            float statEffectiveValue = CharacterStat.ConvertNominalValueToEffectiveValue(m_equipmentRef.m_stats[i].value, m_equipmentRef.m_stats[i].statType);
-
-            m_statTextRefs[index].text = "" + VLib.RoundToDecimalPlaces(statEffectiveValue, Equipment.m_statRoundedDecimals);
-            statDeltas[index] += statEffectiveValue;
-            m_statTextRefs[i].color = Color.white;// CharacterStatHandler.GetStatColor(m_equipmentRef.m_stats[i].statType);
         }
+
 
         Equipment openedEquipment = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_equipmentInventoryHandlerRef.m_squadOverviewHandlerRef.m_openedEquipmentSlotId];
-        for (int i = 0; openedEquipment != null && i < openedEquipment.m_stats.Count; i++)
-        {
-            int index = (int)openedEquipment.m_stats[i].statType;
-            float statEffectiveValue = CharacterStat.ConvertNominalValueToEffectiveValue(openedEquipment.m_stats[i].value, openedEquipment.m_stats[i].statType);
-            statDeltas[index] -= statEffectiveValue;
-        }
 
-        for (int i = 0; i < m_statDeltaTextRefs.Length; i++)
-        {
-            m_statDeltaTextRefs[i].text = "(" + VLib.RoundToDecimalPlaces(statDeltas[i], Equipment.m_statRoundedDecimals) + ")";
-            m_statDeltaTextRefs[i].color = statDeltas[i] < 0 ? Color.red : (statDeltas[i] > 0 ? Color.green : Color.white);
-        }
 
         //m_costTextRef.text = "" + m_upgradeRef.m_cost;
         m_levelTextRef.text = "" + m_equipmentRef.m_level;

@@ -50,18 +50,6 @@ public class Equipment
 
     internal bool m_newToPlayer = true;
 
-    [Serializable]
-    public struct EquipmentStat
-    {
-        public eCharacterStatType statType;
-        public float value;
-    }
-
-    internal const int m_statRoundedDecimals = 2;
-
-
-    //[SerializeReference]
-    public List<EquipmentStat> m_stats;
 
     [SerializeReference]
     public EquipmentAbility m_activeAbility;
@@ -106,7 +94,6 @@ public class Equipment
     public Equipment(int a_level)
     {
         m_health = m_maxHealth;
-        m_stats = new List<EquipmentStat>();
         m_rarity = new Rarity();
         Roll(a_level);
     }
@@ -174,12 +161,17 @@ public class Equipment
             default:
                 break;
         }
+
+        if (m_rarity.tier >= eRarityTier.Unique)
+        {
+            m_name = VLib.GenerateRandomizedName(4, 8);
+        }
         m_rarity.name = m_rarity.tier.ToString();
     }
 
     private void Roll(int a_level)
     {
-        m_name = VLib.GenerateRandomizedName(4,8);
+        m_name = "";
         m_level = a_level;
 
         //Repetitively attempt to uptier the rarity
@@ -192,27 +184,7 @@ public class Equipment
         m_activeAbility = new EquipmentAbility(this);
 
         int points = GetAllocatablePoints();
-        int statsChosenCount = VLib.vRandom(1,m_stats.Count-1);
-        for (int i = 0; i < (int)eCharacterStatType.count; i++)
-        {
-            EquipmentStat newStat = new EquipmentStat();
-            newStat.statType = (eCharacterStatType)i;
-            m_stats.Add(newStat);
-        }
 
-        while (m_stats.Count > statsChosenCount)
-        {
-            m_stats.RemoveAt(UnityEngine.Random.Range(0, m_stats.Count));
-        }
-
-        while (points > 0)
-        {
-            int index = UnityEngine.Random.Range(0, m_stats.Count);
-            EquipmentStat statToEdit = m_stats[index];
-            statToEdit.value += m_valueScale;
-            m_stats[index] = statToEdit;
-            points--;
-        }
         m_goldValue = GetNominalValue();
     }
 

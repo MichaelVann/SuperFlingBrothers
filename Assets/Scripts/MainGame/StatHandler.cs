@@ -106,8 +106,8 @@ public class CharacterStat
     public float m_scale;
     [SerializeField]
     public float m_postAddedValue;
-    [SerializeField]
-    public float m_equipmentAddedValue;
+    //[SerializeField]
+    //public float m_equipmentAddedValue;
     [SerializeField]
     public float m_parentAddedValue;
     [SerializeField]
@@ -128,6 +128,8 @@ public class CharacterStat
     public bool m_reductive = false;
     [SerializeField]
     public float m_orginalReducedValue;
+
+    internal const int m_statRoundedDecimals = 2;
 
     public RPGLevel m_RPGLevel;
     public RPGLevel m_lastSeenRPGLevel;
@@ -166,7 +168,7 @@ public class CharacterStat
         m_attributeEffectiveValue = (m_value) * m_scale;
         //m_equipmentEffectiveValue = m_equipmentAddedValue * m_scale;
         //m_effectiveValue = m_equipmentEffectiveValue + m_attributeEffectiveValue;
-        m_totalValue = m_value + m_equipmentAddedValue + m_parentAddedValue;
+        m_totalValue = m_value  + m_parentAddedValue;
         m_finalValue = (m_totalValue)* m_scale + m_postAddedValue;
         if (m_reductive)
         {

@@ -33,7 +33,7 @@ public class ActivatedAbilityPanel : MonoBehaviour
         m_equipmentAbilityRef = a_ability;
         m_titleText.text = a_ability.GetName();
         m_descriptionText.text = a_ability.GetAbilityDescription();
-        m_coolDownText.text = a_ability.m_cooldown.ToString();
+        m_coolDownText.text = a_ability.m_maxCooldown.ToString();
     }
 
     internal void Refresh()

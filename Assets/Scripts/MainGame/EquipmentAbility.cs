@@ -41,6 +41,8 @@ public class EquipmentAbility
 
     public enum eAffix
     {
+        //Base
+        Speedy,
         //-Armour-
         Iron,
         //-Projectile-
@@ -49,6 +51,7 @@ public class EquipmentAbility
     }
 
     static string[] m_affixDescriptions = {
+        "Speedy: -1 Cooldown.",
         "Iron: 50% stronger armour.",
         "Bounce Power Up: Everytime this projectile bounces it doubles in power."
      };
@@ -91,6 +94,10 @@ public class EquipmentAbility
             m_parentEquipment.m_maxHealth *= 1.5f;
             m_parentEquipment.m_health = m_parentEquipment.m_maxHealth;
         }
+        if (HasAffix(eAffix.Speedy))
+        {
+            m_maxCooldown--;
+        }
     }
 
     private void RollAffixes(Equipment.eRarityTier a_rarity)
@@ -111,6 +118,12 @@ public class EquipmentAbility
                 break;
             default:
                 break;
+        }
+
+        //Activate ability affixes
+        if (!m_passive)
+        {
+            potentialAffixes.Add(eAffix.Speedy);
         }
 
         int affixsNeeded = (int)a_rarity;
