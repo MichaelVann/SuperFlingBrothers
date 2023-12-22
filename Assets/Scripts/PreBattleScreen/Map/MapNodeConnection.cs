@@ -165,6 +165,7 @@ public class MapNodeConnection : MonoBehaviour
         //Sort the battles by their difficulty, low to high
         m_representedTownConnection.m_battles.Sort(TownConnection.BattleDifficultySortComparisonHighToLow);
 
+        int nodesSpawned = 0;
 
         for (int i = 0; i < m_representedTownConnection.m_battles.Count; i++)
         {
@@ -261,6 +262,7 @@ public class MapNodeConnection : MonoBehaviour
                 {
                     Destroy(debugPoints[d]);
                 }
+                Debug.Log(nodesSpawned++);
             }
         }
     }

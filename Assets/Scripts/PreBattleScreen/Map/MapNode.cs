@@ -13,6 +13,10 @@ public class MapNode : MonoBehaviour
     public TextMeshPro m_text;
     public List<MapNodeConnection> m_connectionList;
     bool m_playersResidingTown;
+    [SerializeField] SpriteRenderer m_spriteRenderer;
+    [SerializeField] Sprite m_virusLymphNodeSprite;
+
+    float m_pulseTimer = 0;
 
     public void AddConnection(MapNodeConnection a_mapConnection) { m_connectionList.Add(a_mapConnection); }
 
@@ -22,6 +26,10 @@ public class MapNode : MonoBehaviour
     {
         m_townRef = a_town;
         m_overrun = m_townRef.m_overrun;
+        if (m_overrun)
+        {
+            m_spriteRenderer.sprite = m_virusLymphNodeSprite;
+        }
     }
 
     public void Awake()
@@ -42,11 +50,11 @@ public class MapNode : MonoBehaviour
         }
         if (m_playersResidingTown)
         {
-            GetComponent<SpriteRenderer>().color = Color.white;
+            //m_spriteRenderer.color = Color.white;
         }
         else
         {
-            GetComponent<SpriteRenderer>().color = m_overrun ? Color.green : Color.red;
+            //m_spriteRenderer.color = m_overrun ? Color.green : Color.red;
         }
         //m_name = "Town";
         //m_text.text = m_name;
@@ -54,12 +62,20 @@ public class MapNode : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    { 
+    {
+
+        m_pulseTimer += m_overrun ? Time.deltaTime * 2f : Time.deltaTime;
+        float exponent = 0.5f;
+        float pulseMod = m_pulseTimer % 1f;
+        float sinPulse = Mathf.Sin(pulseMod*Mathf.PI);
+        float effectDomain = 0.2f;
+        float scale = (1f-effectDomain) + effectDomain * (1f - Mathf.Pow(sinPulse, exponent));
+        m_spriteRenderer.gameObject.transform.localScale = new Vector3(1f,1f,1f) * scale;
     }
 
     public void Refresh()
     {
-        GetComponent<SpriteRenderer>().color = m_overrun ? Color.green : Color.red;
+        //m_spriteRenderer.color = m_overrun ? Color.green : Color.red;
         for (int i = 0; i < m_connectionList.Count; i++)
         {
             m_connectionList[i].Refresh();

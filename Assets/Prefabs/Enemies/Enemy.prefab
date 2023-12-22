@@ -93,6 +93,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8941072592501488302}
+  - component: {fileID: 4771363837818368412}
   m_Layer: 0
   m_Name: FlingDirectionIndicator
   m_TagString: Untagged
@@ -116,6 +117,19 @@ Transform:
   - {fileID: 1268781018084431464}
   m_Father: {fileID: 5599424530306179847}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4771363837818368412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2718715789481639171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04eba89c8cca55a4a9d1f0e6586ea534, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_arrowRef: {fileID: 5507451219460858817}
 --- !u!1 &5507451219460858817
 GameObject:
   m_ObjectHideFlags: 0

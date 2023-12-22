@@ -13,7 +13,7 @@ public class CharacterInfoReadout : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_gameHandlerRef = FindObjectOfType<GameHandler>();
+        m_gameHandlerRef = GameHandler.m_staticAutoRef;// FindObjectOfType<GameHandler>();
         InitialiseStatReadouts();
     }
 
@@ -21,7 +21,8 @@ public class CharacterInfoReadout : MonoBehaviour
     {
         if (!m_gameHandlerRef)
         {
-            m_gameHandlerRef = FindObjectOfType<GameHandler>();
+            m_gameHandlerRef = GameHandler.m_staticAutoRef;
+            //m_gameHandlerRef = FindObjectOfType<GameHandler>();
         }
         InitialiseStatReadouts();
     }

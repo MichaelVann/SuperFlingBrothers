@@ -17,7 +17,7 @@ public class GameHandler : MonoBehaviour
     internal static GameHandler m_staticAutoRef;
 
     public const int MAIN_VERSION_NUMBER = 27;
-    public const int SUB_VERSION_NUMBER = 3;
+    public const int SUB_VERSION_NUMBER = 4;
 
     static internal bool DEBUG_MODE = true;
 
@@ -73,7 +73,7 @@ public class GameHandler : MonoBehaviour
 
     //Current Battle
     internal BattleNode m_attemptedBattleNode;
-    internal int m_battleDifficulty = 2;
+    internal int m_battleDifficulty = 3;
     internal int m_maxEnemyDifficulty; //Set from humanbody
 
     //Last Game
