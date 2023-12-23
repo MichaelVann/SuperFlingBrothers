@@ -45,7 +45,7 @@ public class Player : Damageable
     bool m_firstTimeShieldSetup = true;
 
     public GameObject m_armorSegmentPrefab;
-    GameObject[] m_armorSegments;
+    ArmorSegment[] m_armorSegments;
     float m_armorSegmentOffset = 0.13f;
 
     //Audio
@@ -139,7 +139,7 @@ public class Player : Damageable
 
     void SetUpArmorSegments()
     {
-        m_armorSegments = new GameObject[m_playerCellRef.m_equippedEquipment.Length];
+        m_armorSegments = new ArmorSegment[m_playerCellRef.m_equippedEquipment.Length];
         for (int i = 0; i < m_playerCellRef.m_equippedEquipment.Length; i++)
         {
             if (m_playerCellRef.m_equippedEquipment[i] != null)
@@ -165,9 +165,8 @@ public class Player : Damageable
                 spawnPos.z = transform.position.z;
                 spawnPos *= m_armorSegmentOffset;
                 spawnPos += transform.position;
-                m_armorSegments[i] = Instantiate(m_armorSegmentPrefab, spawnPos, spawnRot, transform);
-                ArmorSegment armorSegment = m_armorSegments[i].GetComponent<ArmorSegment>();
-                armorSegment.AssignEquipment(m_playerCellRef.m_equippedEquipment[i]);
+                m_armorSegments[i] = Instantiate(m_armorSegmentPrefab, spawnPos, spawnRot, transform).GetComponent<ArmorSegment>();
+                m_armorSegments[i].AssignEquipment(m_playerCellRef.m_equippedEquipment[i]);
             }
         }
         RefreshArmorSegments();
@@ -179,8 +178,7 @@ public class Player : Damageable
         {
             if (m_armorSegments[i] != null)
             {
-                float healthScale = m_playerCellRef.m_equippedEquipment[i].m_health / m_playerCellRef.m_equippedEquipment[i].m_maxHealth;
-                m_armorSegments[i].GetComponent<SpriteRenderer>().color = new Color(1f, healthScale, healthScale);
+                m_armorSegments[i].RefreshFromHealth();
             }
         }
     }

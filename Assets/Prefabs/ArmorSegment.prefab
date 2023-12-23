@@ -70,15 +70,100 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1285533023
-  m_SortingLayer: 1
-  m_SortingOrder: 2
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 12
   m_Sprite: {fileID: 21300000, guid: 8018cb0efbc23d244bedfc79e9ada97a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 5.24, y: 2.64}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!1 &2623278085989474701
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4572110896181317304}
+  - component: {fileID: 5360715974166061646}
+  m_Layer: 0
+  m_Name: Icon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4572110896181317304
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2623278085989474701}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.063, z: 2}
+  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8349630759485703743}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &5360715974166061646
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2623278085989474701}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 12
+  m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6,
+    type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -116,6 +201,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3211378117175093633}
+  - {fileID: 4572110896181317304}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5786491608105277043
@@ -182,12 +268,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bbbdad5ee6eeab4dac11a39af1d86cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_baseSpriteRenderer: {fileID: 5786491608105277043}
   m_equipmentSymbols:
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 21300000, guid: 05a884ff593ac8e4e8635446fb9465da, type: 3}
-  - {fileID: 21300000, guid: 7134c1f0bb3cf4a239cd41d444f01995, type: 3}
-  - {fileID: 21300000, guid: e35ee61e6c0b34ba0a31838527dc97ab, type: 3}
+  - {fileID: 21300000, guid: 0ce1fbe6101d15342bd88495176da03f, type: 3}
+  - {fileID: 21300000, guid: 61654b6177f2d7a4f926a3d39fa1199a, type: 3}
+  - {fileID: 21300000, guid: 4be7d95f372a9014d92cefba6ee43214, type: 3}
+  - {fileID: 21300000, guid: 0ab17bee68122a649b3041af7e16819b, type: 3}
+  - {fileID: 21300000, guid: e82d28bc6ca35c941a0af1c4e9d5feaa, type: 3}
   m_segmentOutlineRefs:
   - {fileID: 21300000, guid: 7d7abc2863dec2e4784bb8c823528a44, type: 3}
   - {fileID: 21300000, guid: 91f6eacaee536eb4e9027c3a7b0aa725, type: 3}
@@ -197,4 +285,4 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   m_outlineSpriteRenderer: {fileID: 296794937073443371}
-  m_symbolSpriteRenderer: {fileID: 0}
+  m_symbolSpriteRenderer: {fileID: 5360715974166061646}

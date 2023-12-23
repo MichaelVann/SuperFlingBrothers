@@ -2326,6 +2326,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 135
       objectReference: {fileID: 0}
+    - target: {fileID: 5206122419861886897, guid: 3f46ac13f8d944549ba8f48edd138f06,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6705012138894039784, guid: 3f46ac13f8d944549ba8f48edd138f06,
         type: 3}
       propertyPath: m_Name
@@ -9365,6 +9370,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5360715974166061646, guid: 549e379fa02aba8418b4d65e37454361,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5360715974166061646, guid: 549e379fa02aba8418b4d65e37454361,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1254617887
+      objectReference: {fileID: 0}
     - target: {fileID: 5786491608105277043, guid: 549e379fa02aba8418b4d65e37454361,
         type: 3}
       propertyPath: m_SortingLayer
@@ -10802,6 +10817,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5360715974166061646, guid: 549e379fa02aba8418b4d65e37454361,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5360715974166061646, guid: 549e379fa02aba8418b4d65e37454361,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1254617887
+      objectReference: {fileID: 0}
     - target: {fileID: 5786491608105277043, guid: 549e379fa02aba8418b4d65e37454361,
         type: 3}
       propertyPath: m_SortingLayer
@@ -11324,6 +11349,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5360715974166061646, guid: 549e379fa02aba8418b4d65e37454361,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5360715974166061646, guid: 549e379fa02aba8418b4d65e37454361,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1254617887
       objectReference: {fileID: 0}
     - target: {fileID: 5786491608105277043, guid: 549e379fa02aba8418b4d65e37454361,
         type: 3}
@@ -11960,6 +11995,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -45
       objectReference: {fileID: 0}
+    - target: {fileID: 5206122419861886897, guid: 3f46ac13f8d944549ba8f48edd138f06,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6705012138894039784, guid: 3f46ac13f8d944549ba8f48edd138f06,
         type: 3}
       propertyPath: m_Name
@@ -12514,6 +12554,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5360715974166061646, guid: 549e379fa02aba8418b4d65e37454361,
+        type: 3}
+      propertyPath: m_SortingLayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5360715974166061646, guid: 549e379fa02aba8418b4d65e37454361,
+        type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1254617887
+      objectReference: {fileID: 0}
     - target: {fileID: 5786491608105277043, guid: 549e379fa02aba8418b4d65e37454361,
         type: 3}
       propertyPath: m_SortingLayer
@@ -12755,6 +12805,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 225
+      objectReference: {fileID: 0}
+    - target: {fileID: 5206122419861886897, guid: 3f46ac13f8d944549ba8f48edd138f06,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6705012138894039784, guid: 3f46ac13f8d944549ba8f48edd138f06,
         type: 3}
@@ -47119,6 +47174,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 5206122419861886897, guid: 3f46ac13f8d944549ba8f48edd138f06,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6705012138894039784, guid: 3f46ac13f8d944549ba8f48edd138f06,
         type: 3}

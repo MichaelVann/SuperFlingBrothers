@@ -13,7 +13,7 @@ public class EquipmentPanel : MonoBehaviour
     public Equipment m_equipmentRef;
 
     public TextMeshProUGUI m_abilityTypeText;
-    public TextMeshProUGUI m_healthText;
+    [SerializeField] EquipmentHealthReadout m_healthReadout;
     public TextMeshProUGUI m_rarityTextRef;
     [SerializeField] TextMeshProUGUI m_affixTextRef;
     public Text m_goldValueTextRef;
@@ -23,7 +23,7 @@ public class EquipmentPanel : MonoBehaviour
 
     //public Text m_costTextRef;
     //public GameObject m_levelDisplayRef;
-    public EquipmentPortrait m_equipmentPortrait;
+    public ArmorSegment m_armorSegmentRef;
     public EquipmentInteractButton m_equipButtonRef;
     public Text m_equipButtonTextRef;
     public Button m_sellButtonRef;
@@ -51,8 +51,7 @@ public class EquipmentPanel : MonoBehaviour
 
         m_abilityTypeText.text = m_equipmentRef.m_activeAbility.GetName();
         m_abilityTypeText.color = m_equipmentRef.m_rarity.color;
-        m_healthText.text = VLib.RoundToDecimalPlaces(m_equipmentRef.m_health,1) + "/" + VLib.RoundToDecimalPlaces(m_equipmentRef.m_maxHealth,1);
-        m_healthText.color = VLib.RatioToColorRGB(m_equipmentRef.m_health / m_equipmentRef.m_maxHealth);
+        m_healthReadout.SetHealth(m_equipmentRef.m_health, m_equipmentRef.m_maxHealth);
         m_rarityTextRef.text = m_equipmentRef.m_rarity.name;
         m_rarityTextRef.color = m_equipmentRef.m_rarity.color;
         if (m_equipmentRef.m_name != "")
@@ -87,7 +86,7 @@ public class EquipmentPanel : MonoBehaviour
         //m_abilityTextRef.text = m_equipmentRef.m_activeAbility.GetName();
 
         SetEquipButtonStatus();
-        m_equipmentPortrait.SetEquipmentRef(m_equipmentRef);
+        m_armorSegmentRef.AssignEquipment(m_equipmentRef);
         m_newEquipmentNotifierRef.SetActive(m_equipmentRef.m_newToPlayer);
     }
 

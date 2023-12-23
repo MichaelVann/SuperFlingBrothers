@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class EquipmentSlotUI : MonoBehaviour
 {
@@ -12,8 +13,9 @@ public class EquipmentSlotUI : MonoBehaviour
     public ArmorSegment m_armorSegment;
     [SerializeField] GameObject m_portraitEmptyText;
     public TextMeshProUGUI m_itemValueTextRef;
-    public TextMeshProUGUI m_healthText;
+    [SerializeField] EquipmentHealthReadout m_equipmentHealthReadoutRef;
     [SerializeField] internal GameObject m_selectedOutline;
+    float m_selectedPulseTimer = 0;
 
     int m_index = -1;
     Equipment m_equipmentRef;
@@ -68,7 +70,7 @@ public class EquipmentSlotUI : MonoBehaviour
 
             m_abilityTextRef.text = m_equipmentRef.m_activeAbility.GetName();
             m_itemValueTextRef.text = "" + m_equipmentRef.GetSellValue();
-            m_healthText.color = VLib.RatioToColorRGB(m_equipmentRef.m_health / m_equipmentRef.m_maxHealth);
+            m_equipmentHealthReadoutRef.SetHealth(m_equipmentRef.m_health, m_equipmentRef.m_maxHealth);
 
             m_nameText.text = m_equipmentRef.m_rarity.name;
             if (m_equipmentRef.m_name != "")
@@ -95,8 +97,9 @@ public class EquipmentSlotUI : MonoBehaviour
             m_itemValueTextRef.text = "0";
             m_affixesTextRef.text = "Equip an equipment to see it's stats.";
             m_affixesTextRef.color = new Color(0.8f, 0.8f, 0.8f);
+            m_equipmentHealthReadoutRef.SetHealth(0, 0);
+
         }
-        m_healthText.text = valid ? m_equipmentRef.m_health.ToString("f1") + "/" + m_equipmentRef.m_maxHealth.ToString("f1") : "";
         
         m_armorSegment.gameObject.SetActive(valid);
         m_portraitEmptyText.SetActive(!valid);
@@ -106,5 +109,11 @@ public class EquipmentSlotUI : MonoBehaviour
     void Update()
     {
         //Refresh();
+        if (m_selectedOutline.gameObject.activeSelf)
+        {
+            m_selectedPulseTimer += Time.deltaTime;
+            float scale = 1f + (Mathf.Sin(m_selectedPulseTimer*Mathf.PI) + 1f)* 0.01f;
+            m_selectedOutline.transform.localScale = new Vector3(scale, scale, 1f);
+        }
     }
 }

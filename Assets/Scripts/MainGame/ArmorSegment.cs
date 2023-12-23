@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class ArmorSegment : MonoBehaviour
 {
+    [SerializeField] SpriteRenderer m_baseSpriteRenderer;
     public Sprite[] m_equipmentSymbols = new Sprite[(int)EquipmentAbility.eAbilityType.Count];
     public Sprite[] m_segmentOutlineRefs = new Sprite[(int)Equipment.eRarityTier.Count];
 
@@ -29,11 +30,18 @@ public class ArmorSegment : MonoBehaviour
         
     }
 
+    internal void RefreshFromHealth()
+    {
+        float healthScale = m_equipment.m_health / m_equipment.m_maxHealth;
+        m_baseSpriteRenderer.color = new Color(1f, healthScale, healthScale);
+    }
+
     internal void AssignEquipment(Equipment a_equipment)
     {
         m_equipment = a_equipment;
         m_outlineSpriteRenderer.sprite = m_segmentOutlineRefs[(int)a_equipment.m_rarity.tier];
-        //m_symbolSpriteRenderer.sprite = m_equipmentSymbols[(int)a_equipment.m_activeAbility.m_abilityType];
+        m_symbolSpriteRenderer.sprite = m_equipmentSymbols[(int)a_equipment.m_activeAbility.m_abilityType];
+        RefreshFromHealth();
     }
 
 }
