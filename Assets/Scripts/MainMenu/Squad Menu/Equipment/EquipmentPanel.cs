@@ -23,7 +23,6 @@ public class EquipmentPanel : MonoBehaviour
 
     //public Text m_costTextRef;
     //public GameObject m_levelDisplayRef;
-    public TextMeshProUGUI m_levelTextRef;
     public EquipmentPortrait m_equipmentPortrait;
     public EquipmentInteractButton m_equipButtonRef;
     public Text m_equipButtonTextRef;
@@ -42,7 +41,7 @@ public class EquipmentPanel : MonoBehaviour
         m_equipmentRef = a_equipment;
 
 
-        m_equipButtonRef.Init(m_gameHandlerRef, a_equipmentScreenHandler.m_squadOverviewHandlerRef, m_equipmentRef);
+        m_equipButtonRef.Init(m_gameHandlerRef, a_equipmentScreenHandler, m_equipmentRef);
     }
 
     public void Refresh()
@@ -83,11 +82,7 @@ public class EquipmentPanel : MonoBehaviour
         }
 
 
-        Equipment openedEquipment = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_equipmentInventoryHandlerRef.m_squadOverviewHandlerRef.m_openedEquipmentSlotId];
-
-
         //m_costTextRef.text = "" + m_upgradeRef.m_cost;
-        m_levelTextRef.text = "" + m_equipmentRef.m_level;
         m_goldValueTextRef.text = "" + m_equipmentRef.GetSellValue();
         //m_abilityTextRef.text = m_equipmentRef.m_activeAbility.GetName();
 

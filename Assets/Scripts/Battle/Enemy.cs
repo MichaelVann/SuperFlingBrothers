@@ -303,7 +303,7 @@ public class Enemy : Damageable
             if (damageDealt > 0)
             {
                 EquipmentAbility activeAbility = oppPlayer.FindActiveEquipmentAbility();
-                if (activeAbility != null && activeAbility.m_abilityType == EquipmentAbility.eAbilityType.Counter)
+                if (activeAbility != null && activeAbility.m_abilityType == EquipmentAbility.eAbilityType.Parry)
                 {
                     activeAbility.Expend();
 

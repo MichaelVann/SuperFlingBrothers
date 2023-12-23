@@ -35,7 +35,7 @@ public class EquipmentAbility
         Bullet,
         Shield,
         Snare,
-        Counter,
+        Parry,
         Count
     }
 
@@ -186,7 +186,7 @@ public class EquipmentAbility
                 m_maxCooldown = 3;
                 break;
 
-            case eAbilityType.Counter:
+            case eAbilityType.Parry:
                 m_passive = false;
                 m_maxCooldown = 4;
 
@@ -215,7 +215,7 @@ public class EquipmentAbility
             string name = "";
             if(i > 0)
             {
-                name = " ";
+                name = ", ";
             }
             name += VLib.GetEnumName(m_affixes[i]);
             name = name.FirstLetterToUpperCaseOrConvertNullToEmptyString();
@@ -233,9 +233,11 @@ public class EquipmentAbility
                 description = "Extra Turn: Gives the user an extra turn on collision with the enemy.";
 
                 break;
+
             case eAbilityType.Bullet:
                 description = "Bullet: Shoots out a damaging projectile in the direction of movement.";
                 break;
+
             case eAbilityType.Shield:
                 description = "Shield: Protects the user from a limited amount of damage, and recharges overtime.";
                 break;
@@ -243,6 +245,11 @@ public class EquipmentAbility
             case eAbilityType.Snare:
                 description = "Snare: Snares an enemy in place, stunning them.";
                 break;
+
+            case eAbilityType.Parry:
+                description = "Parry: Parrys the next enemy attack received this turn.";
+                break;
+
             case eAbilityType.Count:
                 break;
             default:

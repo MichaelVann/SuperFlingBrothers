@@ -9,14 +9,14 @@ public class SquadOverviewHandler : MonoBehaviour
     GameHandler m_gameHandlerRef;
     public GameObject m_playerStatueRef;
     public TextMeshProUGUI m_xCellNameText;
-    public int m_openedEquipmentSlotId = -1;
 
-    public GameObject[] m_newEquipmentNotifiers;
-    public Text[] m_newEquipmentNotifierTexts;
+    public GameObject m_newEquipmentNotifier;
+    public Text m_newEquipmentNotifierText;
 
     public GameObject m_inventoryPanelRef;
 
-    public EquipmentSlotUI[] m_equipmentSlotUIRefs;
+    [SerializeField] ArmorSegment[] m_armorSegmentsRef;
+    [SerializeField] GameObject[] m_armorSegmentSlotRefs;
 
     [SerializeField] GameObject m_confirmationBoxPrefab;
 
@@ -62,45 +62,39 @@ public class SquadOverviewHandler : MonoBehaviour
     void RefreshNewEquipmentNotifiers()
     {
         int newEquipmentCount = m_gameHandlerRef.m_lastGameStats.m_equipmentCollectedLastGame;
-        for (int i = 0; i < m_newEquipmentNotifiers.Length; i++)
-        {
-            if (m_newEquipmentNotifiers[i] != null)
-            {
-                m_newEquipmentNotifiers[i].SetActive(newEquipmentCount > 0);
-            }
-            if (m_newEquipmentNotifierTexts[i] != null)
-            {
-                m_newEquipmentNotifierTexts[i].text = newEquipmentCount.ToString();
-            }
-        }
+        m_newEquipmentNotifier.SetActive(newEquipmentCount > 0);
+        m_newEquipmentNotifierText.text = newEquipmentCount.ToString();
     }
 
 
-    public void SetInventoryPanelStatus(bool a_open, int a_slotId = -1)
+    public void SetInventoryPanelStatus(bool a_open)
     {
-        m_openedEquipmentSlotId = a_slotId;
         m_inventoryPanelRef.SetActive(a_open);
         this.gameObject.SetActive(!a_open);
     }
 
-    internal void SetEquipStatus(Equipment a_equipment)
-    {
-        m_gameHandlerRef.m_xCellSquad.m_playerXCell.EquipEquipment(a_equipment, m_openedEquipmentSlotId);
-        RefreshEquipmentSlots();
-    }
-
     public void RefreshEquipmentSlots()
     {
-        for (int i = 0; i < m_equipmentSlotUIRefs.Length; i++)
+        for (int i = 0; i < m_armorSegmentsRef.Length; i++)
         {
-            m_equipmentSlotUIRefs[i].SetEquipmentRef(m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i]);
-            m_equipmentSlotUIRefs[i].Refresh();
+            Equipment equipment = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i];
+            if (equipment != null)
+            {
+                m_armorSegmentsRef[i].AssignEquipment(equipment);
+                m_armorSegmentsRef[i].gameObject.SetActive(true);
+                m_armorSegmentSlotRefs[i].gameObject.SetActive(false);
+            }
+            else
+            {
+                m_armorSegmentsRef[i].gameObject.SetActive(false);
+                m_armorSegmentSlotRefs[i].gameObject.SetActive(true);
+            }
         }
     }
 
-    public void OpenEquipmentSlot(int a_id)
+    public void OpenEquipmentInventory()
     {
-        SetInventoryPanelStatus(true, a_id);
+        SetInventoryPanelStatus(true);
     }
 
     public void CloseInventoryPanel()

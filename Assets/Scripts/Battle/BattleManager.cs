@@ -222,7 +222,7 @@ public class BattleManager : MonoBehaviour
         {
             if (m_activeAbilities[i] != null)
             {
-                if (m_activeAbilities[i].m_abilityType == EquipmentAbility.eAbilityType.Counter && m_activeAbilities[i].m_engaged)
+                if (m_activeAbilities[i].m_abilityType == EquipmentAbility.eAbilityType.Parry && m_activeAbilities[i].m_engaged)
                 {
                     m_activeAbilities[i].Expend();
                 }
@@ -263,7 +263,7 @@ public class BattleManager : MonoBehaviour
                             case EquipmentAbility.eAbilityType.Snare:
                                 abil.m_engaged = !abil.m_engaged;
                                 break;
-                            case EquipmentAbility.eAbilityType.Counter:
+                            case EquipmentAbility.eAbilityType.Parry:
                                 abil.m_engaged = !abil.m_engaged;
                                 break;
                             case EquipmentAbility.eAbilityType.Count:

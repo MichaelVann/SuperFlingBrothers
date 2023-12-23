@@ -31,8 +31,6 @@ public class Equipment
     [SerializeField]
     public int m_equippedSlotId = -1;
     [SerializeField]
-    public int m_level = 0;
-    [SerializeField]
     public Rarity m_rarity;
     [SerializeField]
     public string m_name;
@@ -56,27 +54,22 @@ public class Equipment
 
     internal int GetSellValue() {return (int)(m_goldValue * m_scrapValueRatio + m_goldValue * (1f- m_scrapValueRatio) * m_health/m_maxHealth);}
 
-    static int GetAllocatablePoints(int a_level, eRarityTier a_tier)
+    static int GetAllocatablePoints(eRarityTier a_tier)
     {
-        int points = 10 + (int)((float)(a_level) * 2f);
+        int points = 10;
         points = (int)(points * Mathf.Pow(1.25f, (float)a_tier));
         return(points);
     }
 
-    int GetAllocatablePoints()
+    internal static int GetNominalValue(eRarityTier a_tier)
     {
-        return GetAllocatablePoints(m_level, m_rarity.tier);
-    }
-
-    internal static int GetNominalValue(int a_level, eRarityTier a_tier)
-    {
-        int value = GetAllocatablePoints(a_level, a_tier);
+        int value = GetAllocatablePoints(a_tier);
         return value;
     }
 
     internal int GetNominalValue()
     {
-        return GetNominalValue(m_level,m_rarity.tier);
+        return GetNominalValue(m_rarity.tier);
     }
 
     internal int GetRepairCost()
@@ -91,11 +84,12 @@ public class Equipment
     }
     internal bool IsBroken() { return m_health <= 0; }
 
-    public Equipment(int a_level)
+    //For some weird reason, having this as a no argument default constructor causes it to be called on any reference to it, as if it were a struct, and then unity complains about using Random.Range() at serialisation
+    public Equipment(int a_test)
     {
         m_health = m_maxHealth;
         m_rarity = new Rarity();
-        Roll(a_level);
+        Roll(a_test);
     }
 
     public void Copy(Equipment a_equipment)
@@ -169,10 +163,9 @@ public class Equipment
         m_rarity.name = m_rarity.tier.ToString();
     }
 
-    private void Roll(int a_level)
+    private void Roll(int a_test)
     {
         m_name = "";
-        m_level = a_level;
 
         //Repetitively attempt to uptier the rarity
         while (UnityEngine.Random.Range(0f,1f) <= 0.25f && m_rarity.tier < eRarityTier.Count-1)
@@ -182,8 +175,6 @@ public class Equipment
         UpdateRarityTier();
 
         m_activeAbility = new EquipmentAbility(this);
-
-        int points = GetAllocatablePoints();
 
         m_goldValue = GetNominalValue();
     }

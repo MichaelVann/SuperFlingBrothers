@@ -146,7 +146,7 @@ public class GameHandler : MonoBehaviour
 
     internal int GetGeneratedEquipmentLevel(bool a_junk) { return (int)(m_xCellSquad.m_statHandler.m_RPGLevel.m_level * (a_junk ? m_junkEquipmentLevelScale : 1f)); }
 
-    internal int GetJunkEquipmentCost() { return  Equipment.GetNominalValue(GetGeneratedEquipmentLevel(true), Equipment.eRarityTier.Magic); }
+    internal int GetJunkEquipmentCost() { return  Equipment.GetNominalValue(Equipment.eRarityTier.Magic); }
 
     internal bool CanAffordJunkEquipment() { return m_cash >= GetJunkEquipmentCost(); }
 
@@ -249,7 +249,7 @@ public class GameHandler : MonoBehaviour
         m_equipmentInventory = new List<Equipment>();
         for (int i = 0; i < m_startingEquipment; i++)
         {
-            m_equipmentInventory.Add(new Equipment(0));
+            m_equipmentInventory.Add(new Equipment(-1));
         }
     }
 
@@ -298,7 +298,7 @@ public class GameHandler : MonoBehaviour
     {
         float equipmentScale = a_junk ? 0.5f : 1.0f;
         float equipmentLevel = equipmentScale * m_xCellSquad.m_statHandler.m_RPGLevel.m_level;
-        Equipment generatedEquipment = new Equipment((int)equipmentLevel);
+        Equipment generatedEquipment = new Equipment(-1);
         return generatedEquipment;
     }
 
@@ -446,7 +446,7 @@ public class GameHandler : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.H))
         {
-            PickUpEquipment(new Equipment(m_xCellSquad.m_playerXCell.m_statHandler.m_RPGLevel.m_level));
+            PickUpEquipment(new Equipment(-1));
         }
         if (Input.GetKeyUp(KeyCode.R))
         {

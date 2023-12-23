@@ -6,15 +6,12 @@ using UnityEngine.UI;
 
 public class EquipmentDigest : MonoBehaviour
 {
-    public Text m_levelText;
-    public Text m_nameText;
     public TextMeshProUGUI m_affixText;
-    public EquipmentPortrait m_portraitRef;
     public TextMeshProUGUI m_abilityNameRef;
-    public Text m_itemValueTextRef;
-    public EquipmentInventoryHandler m_equipmentInventoryHandler;
+    public EquipmentInventoryHandler m_equipmentInventoryHandlerRef;
     public EquipmentInteractButton m_interactButtonRef;
     [SerializeField] GameObject m_toOverviewButtonRef;
+    [SerializeField] EquipmentSlotUI m_slotUIRef;
 
     GameHandler m_gameHandlerRef;
 
@@ -35,18 +32,18 @@ public class EquipmentDigest : MonoBehaviour
         {
             m_gameHandlerRef = FindObjectOfType<GameHandler>();
         }
-        if (m_equipmentInventoryHandler == null)
+        if (m_equipmentInventoryHandlerRef == null)
         {
-            m_equipmentInventoryHandler = FindObjectOfType<EquipmentInventoryHandler>();
+            m_equipmentInventoryHandlerRef = FindObjectOfType<EquipmentInventoryHandler>();
         }
-        if (m_equipmentInventoryHandler != null)
+        if (m_equipmentInventoryHandlerRef != null)
         {
             linkedToSquadScreen = true;
         }
 
         if (linkedToSquadScreen)
         {
-            m_interactButtonRef.Init(m_gameHandlerRef, m_equipmentInventoryHandler.m_squadOverviewHandlerRef, m_equipmentRef);
+            m_interactButtonRef.Init(m_gameHandlerRef, m_equipmentInventoryHandlerRef, m_equipmentRef);
             m_interactButtonRef.SetEquipButtonStatus();
             m_interactButtonRef.gameObject.SetActive(true);
             m_toOverviewButtonRef.SetActive(false);
@@ -61,30 +58,19 @@ public class EquipmentDigest : MonoBehaviour
 
         if (m_equipmentRef != null)
         {
-            m_portraitRef.SetEquipmentRef(m_equipmentRef);
-
-            m_abilityNameRef.text = m_equipmentRef.m_activeAbility.GetName();
-            m_itemValueTextRef.text = "" + m_equipmentRef.GetSellValue();
+            m_slotUIRef.Init(-1, m_equipmentRef);
         }
-        else
-        {
-            m_itemValueTextRef.text = "0";
-        }
+        m_slotUIRef.Refresh();
 
-        m_levelText.text = valid ? "Level: " + m_equipmentRef.m_level : "";
-        m_nameText.text = valid ? m_equipmentRef.m_name : "";
-        m_nameText.color = valid ? m_equipmentRef.m_rarity.color : Color.white;
-
-        m_portraitRef.gameObject.SetActive(valid);
         m_affixText.text = "";
         m_affixText.text += m_equipmentRef.m_activeAbility.GetAbilityDescription() + '\n';
     }
 
     public void Close()
     {
-        if (m_equipmentInventoryHandler)
+        if (m_equipmentInventoryHandlerRef)
         {
-            m_equipmentInventoryHandler.SetEquipmentDigestStatus(false);
+            m_equipmentInventoryHandlerRef.SetEquipmentDigestStatus(false);
         }
         else
         {
@@ -100,7 +86,7 @@ public class EquipmentDigest : MonoBehaviour
         }
         else
         {
-            m_equipmentInventoryHandler.SetEquipStatus(m_equipmentRef);
+            m_equipmentInventoryHandlerRef.SetEquipStatus(m_equipmentRef);
         }
         Refresh();
         Close();
