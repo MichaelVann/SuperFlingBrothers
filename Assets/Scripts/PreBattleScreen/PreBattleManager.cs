@@ -35,7 +35,7 @@ public class PreBattleManager : MonoBehaviour
             ConfirmationBox lostConfirmationBox = Instantiate(m_confirmationBoxPrefab,m_menuCanvasRef.transform).GetComponent<ConfirmationBox>();
             lostConfirmationBox.SetToAcknowledgeOnlyMode();
             lostConfirmationBox.SetMessageText(m_gameHandlerRef.m_humanBody.GetHumansName() + " has succumbed to the infection.");
-            lostConfirmationBox.m_confirmationResponseDelegate = new ConfirmationBox.ConfirmationResponseDelegate(LoseGame);
+            lostConfirmationBox.SetConfirmationResponseDelegate(new ConfirmationBox.ConfirmationResponseDelegate(LoseGame));
         }
         if (m_gameHandlerRef.m_lastGameStats.m_frontLineResultsPending)
         {

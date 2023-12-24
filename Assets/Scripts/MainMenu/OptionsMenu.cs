@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -78,6 +79,20 @@ public class OptionsMenu : MonoBehaviour
             //confirmationBox.m_confirmationResponseDelegate = new ConfirmationBox.ConfirmationResponseDelegate(SellAllUnequippedEquipment);
         }
         Refresh();
+    }
+
+    public void ResetButtonPressed()
+    {
+        ConfirmationBox confirmationBox = Instantiate(m_confirmationBoxPrefab, transform).GetComponent<ConfirmationBox>();
+        confirmationBox.SetMessageText("This will delete your save and reset the current game. Are you sure?");
+        confirmationBox.SetConfirmationResponseDelegate(ResetGame);
+    }
+
+    public void ResetGame()
+    {
+        File.Delete(Application.persistentDataPath + "/Data.txt");
+        File.Delete(Application.persistentDataPath + "/Data2.txt");
+        m_gameHandlerRef.ResetRoguelike();
     }
 
     internal void Refresh()

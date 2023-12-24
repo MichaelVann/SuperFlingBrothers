@@ -17,7 +17,7 @@ public class GameHandler : MonoBehaviour
     internal static GameHandler m_staticAutoRef;
 
     public const int MAIN_VERSION_NUMBER = 28;
-    public const int SUB_VERSION_NUMBER = 5;
+    public const int SUB_VERSION_NUMBER = 8;
 
 
     // -- BALANCE VARIABLES --
@@ -204,7 +204,7 @@ public class GameHandler : MonoBehaviour
         dialogBox.AddDialogs(a_dialogs);
     }
 
-    void ResetRoguelike()
+    internal void ResetRoguelike()
     {
         m_cash = 0f;
         m_xCellSquad = new XCellSquad();

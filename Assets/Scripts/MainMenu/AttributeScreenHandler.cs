@@ -40,6 +40,6 @@ public class AttributeScreenHandler : MonoBehaviour
     {
         ConfirmationBox confirmationBox = Instantiate(m_confirmationBoxPrefab, m_popUpCanvasRef.transform).GetComponent<ConfirmationBox>();
         confirmationBox.SetMessageText("Are you sure you want to respecialise?");
-        confirmationBox.m_confirmationResponseDelegate = new ConfirmationBox.ConfirmationResponseDelegate(Respec);
+        confirmationBox.SetConfirmationResponseDelegate(new ConfirmationBox.ConfirmationResponseDelegate(Respec));
     }
 }

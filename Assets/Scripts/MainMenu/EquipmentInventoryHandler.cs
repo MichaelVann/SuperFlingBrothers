@@ -198,7 +198,7 @@ public class EquipmentInventoryHandler : MonoBehaviour
     {
         ConfirmationBox confirmationBox = Instantiate(m_confirmationBoxPrefab, m_popUpCanvasRef.transform).GetComponent<ConfirmationBox>();
         confirmationBox.SetMessageText("Are you sure you want to sell all items?");
-        confirmationBox.m_confirmationResponseDelegate = new ConfirmationBox.ConfirmationResponseDelegate(SellAllUnequippedEquipment);
+        confirmationBox.SetConfirmationResponseDelegate(new ConfirmationBox.ConfirmationResponseDelegate(SellAllUnequippedEquipment));
     }
 
     void SellAllUnequippedEquipment()

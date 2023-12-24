@@ -7,10 +7,11 @@ public class ConfirmationBox : MonoBehaviour
 {
     public TextMeshProUGUI m_messageText;
     internal delegate void ConfirmationResponseDelegate();
-    internal ConfirmationResponseDelegate m_confirmationResponseDelegate;
+    ConfirmationResponseDelegate m_confirmationResponseDelegate;
 
     public GameObject m_cancelButtonRef;
     public TextMeshProUGUI m_confirmButtonTextRef;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +23,11 @@ public class ConfirmationBox : MonoBehaviour
     void Update()
     {
         
+    }
+
+    internal void SetConfirmationResponseDelegate(ConfirmationResponseDelegate a_delegate)
+    {
+        m_confirmationResponseDelegate = a_delegate;
     }
 
     internal void SetMessageText(string a_string)

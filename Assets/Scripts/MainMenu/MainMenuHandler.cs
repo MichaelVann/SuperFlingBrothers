@@ -6,10 +6,9 @@ using UnityEngine.SceneManagement;
 public class MainMenuHandler : MonoBehaviour
 {
     GameHandler m_gameHandlerRef;
-    GameObject m_titleMenuRef;
-    GameObject m_characterMenuRef;
-    GameObject m_upgradeMenuRef;
-    GameObject m_stockMenuRef;
+
+    [SerializeField] Canvas m_toolTipCanvas;
+    [SerializeField] GameObject m_confirmationBoxPrefab;
 
     public List<GameObject> m_menuList;
 
@@ -37,5 +36,17 @@ public class MainMenuHandler : MonoBehaviour
         {
             m_menuList[i].SetActive(a_index == i);
         }
+    }
+
+    public void ConcedeButtonPressed()
+    {
+        ConfirmationBox confirmationBox = Instantiate(m_confirmationBoxPrefab, m_toolTipCanvas.transform).GetComponent<ConfirmationBox>();
+        confirmationBox.SetMessageText("This will abandon your current run, and begin a new one. Are you sure?");
+        confirmationBox.SetConfirmationResponseDelegate(ConcedeGame);
+    }
+
+    void ConcedeGame()
+    {
+        m_gameHandlerRef.LoseRougelike();
     }
 }

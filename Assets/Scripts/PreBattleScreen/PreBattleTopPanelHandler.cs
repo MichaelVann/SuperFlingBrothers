@@ -12,7 +12,7 @@ public class PreBattleTopPanelHandler : MonoBehaviour
     void Start()
     {
         GameHandler gameHandler = FindObjectOfType<GameHandler>();
-        m_personsNameText.text = gameHandler.m_humanBody.GetHumansName();
+        m_personsNameText.text = "Patient: " + gameHandler.m_humanBody.GetHumansName();
         m_battlesEnteredText.text = "Day: " + gameHandler.m_humanBody.m_battlesCompleted;
         m_battlesAvailableText.text = "Available Battles: " + gameHandler.m_humanBody.m_availableBattles;
     }
