@@ -16,7 +16,7 @@ PlayerSettings:
   productName: SuperFlingBrothers
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
-  m_SplashScreenBackgroundColor: {r: 0.9433962, g: 0, b: 0.2358495, a: 1}
+  m_SplashScreenBackgroundColor: {r: 0.17254902, g: 0.20784314, b: 0.22352941, a: 1}
   m_ShowUnitySplashScreen: 1
   m_ShowUnitySplashLogo: 1
   m_SplashScreenOverlayOpacity: 1
@@ -40,7 +40,7 @@ PlayerSettings:
     width: 1
     height: 1
   m_SplashScreenLogos:
-  - logo: {fileID: 21300000, guid: 732d798b6e5f50b41b7867efe2a0698d, type: 3}
+  - logo: {fileID: 21300000, guid: 9cf08a86086271349bc8bb5d3ed2fb54, type: 3}
     duration: 2
   m_VirtualRealitySplashScreen: {fileID: 0}
   m_HolographicTrackingLossScreen: {fileID: 0}
@@ -137,7 +137,7 @@ PlayerSettings:
   vulkanEnableLateAcquireNextImage: 0
   vulkanEnableCommandBufferRecycling: 1
   loadStoreDebugModeEnabled: 0
-  bundleVersion: 22.7
+  bundleVersion: 28.4
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0

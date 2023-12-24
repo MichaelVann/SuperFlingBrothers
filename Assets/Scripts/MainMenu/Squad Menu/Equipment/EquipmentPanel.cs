@@ -16,7 +16,7 @@ public class EquipmentPanel : MonoBehaviour
     [SerializeField] EquipmentHealthReadout m_healthReadout;
     public TextMeshProUGUI m_rarityTextRef;
     [SerializeField] TextMeshProUGUI m_affixTextRef;
-    public Text m_goldValueTextRef;
+    [SerializeField] TextMeshProUGUI m_goldValueTextRef;
     public Image m_outline;
 
     public GameObject m_newEquipmentNotifierRef;
@@ -25,7 +25,6 @@ public class EquipmentPanel : MonoBehaviour
     //public GameObject m_levelDisplayRef;
     public ArmorSegment m_armorSegmentRef;
     public EquipmentInteractButton m_equipButtonRef;
-    public Text m_equipButtonTextRef;
     public Button m_sellButtonRef;
     //public Image m_outlineRef;
 

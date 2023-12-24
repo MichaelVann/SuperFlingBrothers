@@ -15,6 +15,9 @@ public class UpgradeUINode : MonoBehaviour
     [SerializeField] Sprite[] m_possibleIconRefs;
     [SerializeField] Sprite m_lockIconRef;
     [SerializeField] Button m_buttonRef;
+    [SerializeField] Image m_tickCrossRef;
+    [SerializeField] Sprite m_tickSpriteRef;
+    [SerializeField] Sprite m_crossSpriteRef;
 
     internal void SetNameText(string a_name) { m_nameText.text = a_name;}
     internal void SetAvailableSpace(float a_space) { m_availableSpace = a_space;}
@@ -60,6 +63,19 @@ public class UpgradeUINode : MonoBehaviour
 
         m_backdropRef.color = nodeColor;
         m_buttonRef.interactable = interactable;
+
+        if (m_upgradeItemRef.m_owned)
+        {
+            m_tickCrossRef.sprite = m_upgradeItemRef.m_toggled ? m_tickSpriteRef : m_crossSpriteRef;
+            m_tickCrossRef.color = m_upgradeItemRef.m_toggled ? Color.green : Color.red;
+            m_tickCrossRef.gameObject.SetActive(true);
+        }
+        else
+        {
+            m_tickCrossRef.gameObject.SetActive(false);
+        }
+
+        
     }
 
     // Update is called once per frame

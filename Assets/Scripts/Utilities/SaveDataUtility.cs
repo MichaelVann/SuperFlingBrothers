@@ -20,6 +20,7 @@ public class SaveDataUtility
             public int level;
 
             public bool unlocked;
+            public bool toggled;
         }
         public List<UpgradeData> upgrades;
     }
@@ -123,6 +124,7 @@ public class SaveDataUtility
             upgradeData.level = upgradeItem.m_level;
             upgradeData.unlocked = upgradeItem.m_unlocked;
             upgradeData.owned = upgradeItem.m_owned;
+            upgradeData.toggled = upgradeItem.m_toggled;
             m_saveData.upgradeTreeData.upgrades.Add(upgradeData);
         }
     }

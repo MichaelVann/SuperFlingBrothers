@@ -10,7 +10,7 @@ public class UpgradeTree
 
     // Start is called before the first frame update
 
-    internal bool HasUpgrade(UpgradeItem.UpgradeId a_upgradeId) { return m_upgradeItemList[(int)a_upgradeId].m_owned; }
+    internal bool HasUpgrade(UpgradeItem.UpgradeId a_upgradeId) { return m_upgradeItemList[(int)a_upgradeId].IsEnabled(); }
 
     internal UpgradeTree()
     {

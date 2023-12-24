@@ -19,6 +19,7 @@ public class UpgradeItem
     public int m_maxLevel = 10;
 
     public bool m_unlocked;
+    internal bool m_toggled = true;
 
     internal UpgradeItem m_precursorUpgrade;
     internal List<UpgradeItem> m_upgradeChildren;
@@ -47,6 +48,10 @@ public class UpgradeItem
     public void SetMaxLevel(int a_value) { m_maxLevel = a_value; m_hasLevels = true; }
 
     internal void SetID(UpgradeId a_ID) { m_ID = a_ID; }
+
+    internal void SetToggled(bool a_value) { m_toggled = a_value; }
+
+    internal bool IsEnabled() { return m_toggled && m_owned; }
 
     internal void AddChildUpgrade(UpgradeItem a_child)
     {

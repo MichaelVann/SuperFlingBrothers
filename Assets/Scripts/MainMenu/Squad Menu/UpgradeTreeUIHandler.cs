@@ -69,6 +69,11 @@ public class UpgradeTreeUIHandler : MonoBehaviour
         m_upgradeNodePanelRef.gameObject.SetActive(true);
     }
 
+    public void CloseUpgradeNodePanel()
+    {
+        m_upgradeNodePanelRef.gameObject.SetActive(false);
+    }
+
     public void AttemptToPurchaseUpgrade(UpgradeItem a_upgradeItemRef)
     {
         m_upgradeTreeRef.AttemptToBuyUpgrade(a_upgradeItemRef);
@@ -237,5 +242,4 @@ public class UpgradeTreeUIHandler : MonoBehaviour
         m_selectedUpgradeNode = a_node;
         OpenUpgradeNodePanel(a_node);
     }
-
 }

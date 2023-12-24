@@ -19,6 +19,9 @@ public class UpgradeNodeReadout : MonoBehaviour
     [SerializeField] TextMeshProUGUI m_purchaseButtonTextRef;
     [SerializeField] GameObject m_coinIconRef;
 
+    [SerializeField] GameObject m_toggleButtonRef;
+    [SerializeField] GameObject m_tickRef;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -60,15 +63,18 @@ public class UpgradeNodeReadout : MonoBehaviour
             {
                 m_purchaseButtonRef.interactable = true;
                 m_purchaseButtonImageRef.color = Color.white;
+                m_purchaseButtonTextRef.color = Color.red;
             }
             else
             {
                 m_purchaseButtonRef.interactable = false;
                 m_purchaseButtonImageRef.color = Color.grey;
+                m_purchaseButtonTextRef.color = Color.white;
+
             }
+            m_purchaseButtonTextRef.text = "Purchase";
             m_costTextRef.text = m_upgradeItemRef.m_cost.ToString();
             m_purchaseButtonTextRef.alignment = TextAlignmentOptions.Left;
-            m_purchaseButtonTextRef.text = "Purchase";
             m_coinIconRef.SetActive(true);
         }
         else
@@ -97,6 +103,16 @@ public class UpgradeNodeReadout : MonoBehaviour
             m_levelTextRef.gameObject.SetActive(false);
         }
         UpdatePurchaseButton();
+
+        m_toggleButtonRef.SetActive(m_upgradeItemRef.m_owned);
+        m_tickRef.SetActive(m_upgradeItemRef.m_toggled);
+    }
+
+    public void Toggle()
+    {
+        m_upgradeItemRef.m_toggled = !m_upgradeItemRef.m_toggled;
+        m_upgradeTreeUIHandlerRef.Refresh();
+        Refresh();
     }
 
     public void Purchase()
