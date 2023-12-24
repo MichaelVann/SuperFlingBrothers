@@ -26,6 +26,7 @@ public class StatIncreaser : MonoBehaviour
     public void AttemptIncrease()
     {
         m_gameHandlerRef.m_xCellSquad.AttemptToIncreaseStat(m_statIndex);
+        GameHandler.AutoSaveCheck();
     }
 
     // Update is called once per frame

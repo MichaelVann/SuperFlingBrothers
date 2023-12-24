@@ -33,6 +33,14 @@ public class SquadScreenHandler : MonoBehaviour
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_inited = true;
         OpenSquadOverview();
+        List<string> testStrings = new List<string>();
+        testStrings.Add("Hello World!");
+        testStrings.Add("This concludes my test. Thanks for your time. Really appreciate it to be honest. Catchya around, maybe.");
+        if (m_gameHandlerRef.m_firstTimeSquadOverview)
+        {
+            m_gameHandlerRef.CreateDialogBox(GameHandler.m_speakerCharacterName,testStrings);
+            m_gameHandlerRef.m_firstTimeSquadOverview = false;
+        }
     }
 
     // Update is called once per frame

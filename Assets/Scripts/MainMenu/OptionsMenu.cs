@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ public class OptionsMenu : MonoBehaviour
     public Text m_xpRewardTextRef;
     public Text m_resolutionTextRef;
     public Text m_safeAreaTextRef;
+    [SerializeField] TextMeshProUGUI m_saveLocationTextRef;
     public UICheckBox m_muteCheckBox;
     public UICheckBox m_musicCheckBox;
     public UICheckBox m_soundEffectCheckBox;
@@ -32,38 +34,25 @@ public class OptionsMenu : MonoBehaviour
 
     }
 
-    public void OnXPRewardSliderChange()
-    {
-        GameHandler.GAME_enemyXPRewardScale = m_xpRewardScaleSlider.value;
-        m_xpRewardTextRef.text = "" + m_xpRewardScaleSlider.value;
-    }
-
-    void OnXPRequirementSliderChange()
-    {
-
-    }
-
-    void OnLevelUPBaseSliderChange()
-    {
-
-    }
-
     public void OnVolumeSliderChanged()
     {
         m_gameHandlerRef.m_audioHandlerRef.m_masterVolume = m_volumeSlider.value;
         m_gameHandlerRef.m_audioHandlerRef.Refresh();
+        GameHandler.AutoSaveCheck();
     }
 
     public void OnSoundEffectsSliderChanged()
     {
         m_gameHandlerRef.m_audioHandlerRef.m_soundEffectsVolume = m_soundFXVolumeSlider.value;
         m_gameHandlerRef.m_audioHandlerRef.Refresh();
+        GameHandler.AutoSaveCheck();
     }
 
     public void OnMusicSliderChanged()
     {
         m_gameHandlerRef.m_audioHandlerRef.m_musicVolume = m_musicVolumeSlider.value;
         m_gameHandlerRef.m_audioHandlerRef.Refresh();
+        GameHandler.AutoSaveCheck();
     }
 
     void LoadAudioSliderValues()
@@ -100,26 +89,35 @@ public class OptionsMenu : MonoBehaviour
         LoadAudioSliderValues();
         m_gameHandlerRef.m_audioHandlerRef.Refresh();
 
-        m_resolutionTextRef.text = "Resolution: " + Screen.width + " x " + Screen.height;
-        m_safeAreaTextRef.text = "Safe Area: " + Screen.safeArea.width + " x " + Screen.safeArea.height;
+        //m_resolutionTextRef.text = "Resolution: " + Screen.width + " x " + Screen.height;
+        //m_safeAreaTextRef.text = "Safe Area: " + Screen.safeArea.width + " x " + Screen.safeArea.height;
+        //m_saveLocationTextRef.text = "Save Location: " + Application.persistentDataPath;
     }
 
     public void ToggleMuted()
     {
         m_gameHandlerRef.m_audioHandlerRef.ToggleMuted();
         Refresh();
+        GameHandler.AutoSaveCheck();
     }
 
     public void ToggleMusic()
     {
         m_gameHandlerRef.m_audioHandlerRef.ToggleMusic();
         Refresh();
+        GameHandler.AutoSaveCheck();
     }
 
     public void ToggleSoundEffects()
     {
         m_gameHandlerRef.m_audioHandlerRef.ToggleSoundEffects();
         Refresh();
+        GameHandler.AutoSaveCheck();
+    }
+
+    public void OnClose()
+    {
+        GameHandler.AutoSaveCheck();
     }
 
 }

@@ -33,6 +33,7 @@ public class AttributeScreenHandler : MonoBehaviour
         m_gameHandlerRef.AttemptToRespec();
         m_reSpecButtonTextRef.text = "Respec \n" + m_gameHandlerRef.m_xCellSquad.m_statHandler.m_reSpecCost + " DNA";
         m_reSpecButtonRef.interactable = m_gameHandlerRef.m_xCellSquad.m_statHandler.m_reSpecCost <= m_gameHandlerRef.GetCurrentCash();
+        GameHandler.AutoSaveCheck();
     }
 
     public void AskToRespec()

@@ -90,12 +90,19 @@ public class SaveDataUtility
     }
 
     [Serializable]
+    struct FirstTimeDialogsPresentedData
+    {
+        public bool firstTimeSquadOverviewPresented;
+    }
+
+    [Serializable]
     struct SaveData
     {
         public UpgradeTreeData upgradeTreeData;
         public HumanBodyData humanBodyData;
         public AudioData audioData;
         public HighScoreListData highScoreListData;
+        public FirstTimeDialogsPresentedData firstTimeDialogsPresentedData;
     }
     [SerializeField]
     SaveData m_saveData;
@@ -268,12 +275,23 @@ public class SaveDataUtility
         }
     }
 
+    void SaveFirstTimeDialogsPresented()
+    {
+        m_saveData.firstTimeDialogsPresentedData.firstTimeSquadOverviewPresented = m_gameHandlerRef.m_firstTimeSquadOverview;
+    }
+
+    void LoadFirstTimeDialogsPresented()
+    {
+        m_gameHandlerRef.m_firstTimeSquadOverview = m_saveData.firstTimeDialogsPresentedData.firstTimeSquadOverviewPresented;
+    }
+
     internal void Save()
     {
         SaveUpgradeTree();
         SaveHumanBody();
         SaveAudioData();
         SaveHighscores();
+        SaveFirstTimeDialogsPresented();
         string path = GetSaveDataPath();
         string json = JsonUtility.ToJson(m_saveData);
         File.WriteAllText(path, json);
@@ -291,6 +309,7 @@ public class SaveDataUtility
             LoadHumanBody();
             LoadAudioData();
             LoadHighscores();
+            LoadFirstTimeDialogsPresented();
             retVal = true;
         }
         else

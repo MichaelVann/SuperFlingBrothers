@@ -49,7 +49,11 @@ MonoBehaviour:
   m_audioHandlerRef: {fileID: 5766548397634567605}
   m_sceneFadeImageRef: {fileID: 268414004633277010}
   m_sceneFadeCanvasRef: {fileID: 2551137344319274558}
+  m_dialogBoxPrefab: {fileID: 1457810866133208450, guid: b04fdafe6a00a1948b2c5db7e1cfd3e3,
+    type: 3}
   m_equipmentInventory: []
+  m_explosionTestPrefab: {fileID: 8455903170808272189, guid: f8ee19bbdc25e794f8fe806bc920ce5b,
+    type: 3}
   references:
     version: 2
     RefIds: []
@@ -65,7 +69,7 @@ GameObject:
   - component: {fileID: 5650091720058340460}
   - component: {fileID: 268414004633277010}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Scene Fade Sheet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -185,7 +189,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0

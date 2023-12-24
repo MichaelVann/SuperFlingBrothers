@@ -118,7 +118,7 @@ public class BattleManager : MonoBehaviour
     public eEndGameType m_endGameType;
 
     public float m_score = 0f;
-    List<Equipment> m_equipmentCollected;
+    internal List<Equipment> m_equipmentCollected;
     public float m_xpEarned = 0f;
 
     public int m_enemyCount = 0;
@@ -411,10 +411,7 @@ public class BattleManager : MonoBehaviour
     
     void SetupDebug()
     {
-        m_debugText.gameObject.SetActive(GameHandler.DEBUG_MODE);
-        if (GameHandler.DEBUG_MODE)
-        {
-        }
+
     }
 
     void SpawnWallTriangles()
@@ -793,7 +790,6 @@ public class BattleManager : MonoBehaviour
         {
             UpdateGameEnding();
         }
-        m_debugText.text = "" + Time.timeScale;
 
     }
 }

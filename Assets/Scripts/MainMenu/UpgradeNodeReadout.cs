@@ -113,11 +113,13 @@ public class UpgradeNodeReadout : MonoBehaviour
         m_upgradeItemRef.m_toggled = !m_upgradeItemRef.m_toggled;
         m_upgradeTreeUIHandlerRef.Refresh();
         Refresh();
+        GameHandler.AutoSaveCheck();
     }
 
     public void Purchase()
     {
         m_upgradeTreeUIHandlerRef.AttemptToPurchaseUpgrade(m_upgradeItemRef);
         Refresh();
+        GameHandler.AutoSaveCheck();
     }
 }

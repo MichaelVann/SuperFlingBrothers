@@ -58,7 +58,6 @@ public class EquipmentInventoryHandler : MonoBehaviour
         }
     }
 
-
     private void OnEnable()
     {
         if (!m_initialised)
@@ -114,6 +113,7 @@ public class EquipmentInventoryHandler : MonoBehaviour
 
         m_inspectEquipmentSlotButtonRef.interactable = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_openedEquipmentSlotId] != null;
         m_unequipEquipmentSlotButtonRef.interactable = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_openedEquipmentSlotId] != null;
+        GameHandler.AutoSaveCheck();
     }
 
     void RefreshTopPanel()

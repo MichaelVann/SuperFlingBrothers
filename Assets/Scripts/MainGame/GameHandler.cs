@@ -17,9 +17,8 @@ public class GameHandler : MonoBehaviour
     internal static GameHandler m_staticAutoRef;
 
     public const int MAIN_VERSION_NUMBER = 28;
-    public const int SUB_VERSION_NUMBER = 4;
+    public const int SUB_VERSION_NUMBER = 5;
 
-    static internal bool DEBUG_MODE = true;
 
     // -- BALANCE VARIABLES --
 
@@ -47,6 +46,7 @@ public class GameHandler : MonoBehaviour
 
     // -- END OF BALANCE --
 
+    //Scene
     public enum eScene
     {
         mainMenu,
@@ -61,6 +61,12 @@ public class GameHandler : MonoBehaviour
     bool m_sceneFadingOut;
     const float m_sceneFadeDuration = 0.35f;
 
+    // Dialogue
+    internal const string m_speakerCharacterName = "Sergeant Geras";
+    [SerializeField] GameObject m_dialogBoxPrefab;
+    internal bool m_firstTimeSquadOverview = true;
+
+    //GAME
     private float m_cash;
     
     //Player
@@ -121,8 +127,8 @@ public class GameHandler : MonoBehaviour
     }
     SaveData m_saveData;
     //SaveDataUtility m_saveDataUtility;
-    const bool m_autoLoadDataOnLaunch = false;
-    const bool m_autoSaving = false;
+    const bool m_autoLoadDataOnLaunch = true;
+    internal const bool m_autoSaving = true;
 
     //Highscores
     internal struct Highscore
@@ -136,6 +142,8 @@ public class GameHandler : MonoBehaviour
         internal int score;
     }
     internal List<Highscore> m_highscoreList;
+
+    [SerializeField] GameObject m_explosionTestPrefab;
 
     internal float GetBattleDifficultyBonus()
     {
@@ -161,7 +169,7 @@ public class GameHandler : MonoBehaviour
 
     public void SetLastGameResult(eEndGameType a_value) { m_lastGameStats.m_lastGameResult = a_value; }
 
-    public void ChangeCash(float a_change) { m_cash += a_change; }
+    public void ChangeCash(float a_change) { m_cash += a_change; AutoSaveCheck(); }
 
     public void SetSelectedBattle(BattleNode a_battleNode) { m_attemptedBattleNode = a_battleNode; }
 
@@ -187,6 +195,13 @@ public class GameHandler : MonoBehaviour
             Application.targetFrameRate = (int)Screen.currentResolution.refreshRateRatio.value;
         }
         m_highscoreList = new List<Highscore>();
+    }
+
+    internal void CreateDialogBox(string a_speakerName, List<string> a_dialogs)
+    {
+        DialogBox dialogBox = Instantiate(m_dialogBoxPrefab, m_sceneFadeCanvasRef.transform).GetComponentInChildren<DialogBox>();
+        dialogBox.Init(a_speakerName);
+        dialogBox.AddDialogs(a_dialogs);
     }
 
     void ResetRoguelike()
@@ -510,7 +525,6 @@ public class GameHandler : MonoBehaviour
         File.WriteAllText(path, json);
         SaveDataUtility saveDataUtility =  new SaveDataUtility(this);
         saveDataUtility.Save();
-        
     }
 
     public bool LoadGame()
@@ -566,5 +580,19 @@ public class GameHandler : MonoBehaviour
             retVal = false;
         }
         return retVal;
+    }
+
+    static internal void AutoSaveCheck()
+    {
+        if (m_autoSaving)
+        {
+            m_staticAutoRef.SaveGame();
+            //ParticleSystem test = Instantiate(m_staticAutoRef.m_explosionTestPrefab).GetComponent<ParticleSystem>();
+        }
+    }
+
+    void OnApplicationQuit()
+    {
+        SaveGame();
     }
 }

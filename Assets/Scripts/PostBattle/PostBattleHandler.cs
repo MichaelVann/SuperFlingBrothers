@@ -78,6 +78,7 @@ public class PostBattleHandler : MonoBehaviour
         m_equipmentCollectedText.text = "" + m_gameHandlerRef.m_lastGameStats.m_equipmentCollectedLastGame;
         m_gameHandlerRef.UnEquipDestroyedEquipment();
         m_gameHandlerRef.m_audioHandlerRef.PlayMenuMusic();
+        GameHandler.AutoSaveCheck();
     }
 
     // Update is called once per frame

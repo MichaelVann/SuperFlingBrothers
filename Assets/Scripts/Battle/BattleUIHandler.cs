@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,7 +10,8 @@ public class BattleUIHandler : MonoBehaviour
     GameHandler m_gameHandlerRef;
 
     [SerializeField] XpBarHandler m_xpBarHandlerRef;
-    [SerializeField] Text m_scoreText;
+    [SerializeField] TextMeshProUGUI m_scoreText;
+    [SerializeField] TextMeshProUGUI m_equipmentCollectedText;
 
     public bool m_gameOver = false;
     public GameObject m_endingText;
@@ -100,7 +102,8 @@ public class BattleUIHandler : MonoBehaviour
 
     void Update()
     {
-        m_scoreText.text = "" + m_battleManagerRef.m_score;
+        m_scoreText.text = "<color=white>DNA Collected: </color>" + m_battleManagerRef.m_score;
+        m_equipmentCollectedText.text = "<color=white> Equipment Collected: </color>" + m_battleManagerRef.m_equipmentCollected.Count;
 
         if (m_gameOver)
         {
