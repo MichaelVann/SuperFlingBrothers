@@ -32,6 +32,7 @@ public class MapNodeConnection : MonoBehaviour
     Vector3 m_frontEndPos;
 
     public Material m_roadMaterial;
+    [SerializeField] Material m_frontLineMaterial;
 
     public TextMeshPro m_winningPercentText;
 
@@ -388,7 +389,7 @@ public class MapNodeConnection : MonoBehaviour
 
     internal void CreateFrontLine(Vector3 a_endPos)
     {
-        CreateLine(transform.position, a_endPos, Color.green, Color.green);
+        CreateLine(transform.position, a_endPos, Color.green, Color.green, m_frontLineMaterial);
 
         Vector3 frontDirection = a_endPos - transform.position;
         m_frontLinePoints[m_frontLinesCreatedCount] = a_endPos;// - frontDirection.normalized * 0.1f;
@@ -399,7 +400,7 @@ public class MapNodeConnection : MonoBehaviour
 
         offsetVector *= m_lineRendererRef.GetComponent<LineRenderer>().startWidth;
 
-        CreateLine(transform.position - offsetVector, a_endPos - offsetVector, Color.red, Color.red);
+        CreateLine(a_endPos - offsetVector, transform.position - offsetVector, Color.red, Color.red, m_frontLineMaterial);
     }
 
     void ClearUpLines()

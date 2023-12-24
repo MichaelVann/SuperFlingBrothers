@@ -57,6 +57,7 @@ MonoBehaviour:
   m_nodeGameObjectList: []
   m_isaFront: 0
   m_roadMaterial: {fileID: 2100000, guid: 124cc43cae7057940bc0ddb1c2bfffbe, type: 2}
+  m_frontLineMaterial: {fileID: 2100000, guid: c891246896df05d4d8dd86d45cd9081d, type: 2}
   m_winningPercentText: {fileID: 8724973508564736077}
 --- !u!61 &1999369917837639265
 BoxCollider2D:
