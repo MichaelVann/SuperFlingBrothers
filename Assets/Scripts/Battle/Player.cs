@@ -126,15 +126,17 @@ public class Player : Damageable
     {
         List<EquipmentAbility> shieldAbilities = FindEquipmentAbilities(EquipmentAbility.eAbilityType.Shield);
 
-        bool shieldOwned = shieldAbilities.Count > 0;
-        if (shieldOwned)
+        m_shield.enabled = shieldAbilities.Count > 0;
+        if (m_shield.enabled)
         {
             SetUpShield(shieldAbilities);
+            m_battleManagerRef.RefreshUIShieldBar();
         }
-        m_shieldSpriteRenderer.gameObject.SetActive(shieldOwned);
-        m_shieldBarRef.gameObject.SetActive(shieldOwned);
+
+        m_shieldSpriteRenderer.gameObject.SetActive(m_shield.enabled);
+        m_shieldBarRef.gameObject.SetActive(m_shield.enabled);
         m_shieldBarRef.SetMaxProgressValue(m_shield.capacity);
-        m_battleManagerRef.RefreshUIShieldBar();
+        m_battleManagerRef.m_shieldBarRef.gameObject.SetActive(m_shield.enabled);
     }
 
     void SetUpArmorSegments()

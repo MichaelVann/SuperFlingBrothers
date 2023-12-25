@@ -23,6 +23,21 @@ public class TitleScreenHandler : MonoBehaviour
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         m_versionNumberText.text = "Version " + GameHandler.MAIN_VERSION_NUMBER + "." + GameHandler.SUB_VERSION_NUMBER;
         RefreshHighscoreTable();
+        CreateFirstTimeDialog();
+
+    }
+
+    void CreateFirstTimeDialog()
+    {
+        List<string> testStrings = new List<string>();
+        testStrings.Add("Hello World! Welcome to Probiotic!");
+        testStrings.Add("This is the early testing verion of the game, with many poorly explained elements, poorly balanced gameplay, and likely many bugs. Please enjoy what exists so far for as long as you like, and get in touch with any feedback you have.");
+        testStrings.Add("Good luck, and thank you for checking out the game. Much love.");
+        if (m_gameHandlerRef.m_firstTimeSquadOverview)
+        {
+            m_gameHandlerRef.CreateDialogBox(GameHandler.m_speakerCharacterName, testStrings);
+            m_gameHandlerRef.m_firstTimeSquadOverview = false;
+        }
     }
 
     void RefreshHighscoreTable()

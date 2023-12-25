@@ -19,12 +19,13 @@ public class DialogBox : MonoBehaviour
     bool m_writingText = false;
 
     float m_printScreen = 1f;
-    const float m_characterPrintTime = 0.05f;
+    const float m_characterPrintTime = 0.03f;
 
     List<string> m_dialogList;
 
     float m_flashStrength = 0f;
     const float m_baseSpeakerColorScale = 0.5f;
+    const float m_flashDecayMultiplier = 0.99f;
 
     internal void AddDialog(string a_string) { m_dialogList.Add(a_string); m_descriptionString = m_dialogList[0]; } 
 
@@ -79,7 +80,7 @@ public class DialogBox : MonoBehaviour
         {
             m_printing = false;
         }
-        m_flashStrength *= 0.995f;
+        m_flashStrength *= m_flashDecayMultiplier;
         float colorScale = m_baseSpeakerColorScale + (1f- m_baseSpeakerColorScale) * m_flashStrength;
         m_speakerImageRef.color = new Color(colorScale, colorScale, colorScale,1f);
     }

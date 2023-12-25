@@ -560,7 +560,7 @@ PrefabInstance:
     - target: {fileID: 883158034051108437, guid: 2358226b6c4c6744eb6e2dd1597116b8,
         type: 3}
       propertyPath: m_Name
-      value: Ability Button Slot (3)
+      value: Ability Button Slot (2)
       objectReference: {fileID: 0}
     - target: {fileID: 4518778029364208262, guid: 2358226b6c4c6744eb6e2dd1597116b8,
         type: 3}
@@ -1997,7 +1997,7 @@ PrefabInstance:
     - target: {fileID: 4818983614724397938, guid: 2eeca16652b58a1458d7025c898f83b9,
         type: 3}
       propertyPath: m_direction
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4951310731436643575, guid: 2eeca16652b58a1458d7025c898f83b9,
         type: 3}
@@ -4596,8 +4596,8 @@ RectTransform:
   m_Children:
   - {fileID: 1996189723142035105}
   - {fileID: 1527582542}
-  - {fileID: 1839815815}
   - {fileID: 60758968}
+  - {fileID: 1839815815}
   m_Father: {fileID: 1093093179}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -5069,7 +5069,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1121498662
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7856,7 +7856,7 @@ PrefabInstance:
     - target: {fileID: 883158034051108437, guid: 2358226b6c4c6744eb6e2dd1597116b8,
         type: 3}
       propertyPath: m_Name
-      value: Ability Button Slot (2)
+      value: Ability Button Slot (3)
       objectReference: {fileID: 0}
     - target: {fileID: 4518778029364208262, guid: 2358226b6c4c6744eb6e2dd1597116b8,
         type: 3}
@@ -8171,7 +8171,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1958141039
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8941,8 +8941,8 @@ MonoBehaviour:
   m_abilityButtonSlots:
   - {fileID: 1996189723142035104}
   - {fileID: 1051635462}
-  - {fileID: 351239195}
   - {fileID: 470853701}
+  - {fileID: 351239195}
   m_activatedAbilityPanel: {fileID: 1958141041}
 --- !u!114 &2053396457
 MonoBehaviour:
@@ -9021,9 +9021,6 @@ MonoBehaviour:
   m_xpEarned: 0
   m_enemyCount: 0
   m_pocketDamage: 2
-  references:
-    version: 2
-    RefIds: []
 --- !u!1001 &2069806715
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9130,7 +9127,7 @@ PrefabInstance:
     - target: {fileID: 4818983614724397938, guid: 2eeca16652b58a1458d7025c898f83b9,
         type: 3}
       propertyPath: m_direction
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4951310731436643575, guid: 2eeca16652b58a1458d7025c898f83b9,
         type: 3}

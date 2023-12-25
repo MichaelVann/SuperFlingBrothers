@@ -8,8 +8,7 @@ using UnityEngine;
 [Serializable]
 public class EquipmentAbility
 {
-
-    public Equipment m_parentEquipment;
+    internal Equipment m_parentEquipment;
     //public bool m_enabled = false;
     public int m_cooldown;
     public int m_maxCooldown;

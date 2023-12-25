@@ -97,6 +97,15 @@ public class Equipment
 
     }
 
+    internal void ResetAbilitysParent()
+    {
+        if (m_activeAbility != null)
+        {
+            m_activeAbility.m_parentEquipment = this;
+        }
+    }
+
+
     internal float Damage(float a_damage)
     {
         float excessDamage = 0f;

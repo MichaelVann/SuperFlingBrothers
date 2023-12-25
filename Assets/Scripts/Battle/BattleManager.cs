@@ -319,7 +319,7 @@ public class BattleManager : MonoBehaviour
             if (m_activeAbilities[i] != null)
             {
                 EquipmentAbility abil = m_activeAbilities[i];
-                if (abil.m_abilityType == a_abilityType)
+                if (abil.m_abilityType == a_abilityType && !abil.m_parentEquipment.IsBroken())
                 {
                     abilities.Add(abil);
                 }

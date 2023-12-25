@@ -62,7 +62,7 @@ public class GameHandler : MonoBehaviour
     const float m_sceneFadeDuration = 0.35f;
 
     // Dialogue
-    internal const string m_speakerCharacterName = "Sergeant Geras";
+    internal const string m_speakerCharacterName = "Micky";// Sergeant Geras";
     [SerializeField] GameObject m_dialogBoxPrefab;
     internal bool m_firstTimeSquadOverview = true;
 
@@ -185,7 +185,7 @@ public class GameHandler : MonoBehaviour
         m_staticAutoRef = this;
         DontDestroyOnLoad(gameObject);
         //m_saveDataUtility = new SaveDataUtility(this);
-        ResetRoguelike();
+        ResetGame();
         if (m_autoLoadDataOnLaunch)
         {
             LoadGame();
@@ -194,7 +194,6 @@ public class GameHandler : MonoBehaviour
         {
             Application.targetFrameRate = (int)Screen.currentResolution.refreshRateRatio.value;
         }
-        m_highscoreList = new List<Highscore>();
     }
 
     internal void CreateDialogBox(string a_speakerName, List<string> a_dialogs)
@@ -207,6 +206,7 @@ public class GameHandler : MonoBehaviour
     internal void ResetRoguelike()
     {
         m_cash = 0f;
+        m_squadRenameNotificationPending = false;
         m_xCellSquad = new XCellSquad();
         m_xCellSquad.Init();
         m_stockHandler = new StockHandler(this);
@@ -235,6 +235,13 @@ public class GameHandler : MonoBehaviour
             SaveGame();
         }
         TransitionScene(eScene.mainMenu);
+    }
+
+    internal void ResetGame()
+    {
+        ResetRoguelike();
+        m_highscoreList = new List<Highscore>();
+        m_firstTimeSquadOverview = true;
     }
 
     void SetupLastGameStats()
@@ -563,6 +570,7 @@ public class GameHandler : MonoBehaviour
             for (int i = 0; i < m_saveData.equipmentList.Count; i++)
             {
                 m_equipmentInventory.Add(m_saveData.equipmentList[i]);
+                m_saveData.equipmentList[i].ResetAbilitysParent();
                 if (m_equipmentInventory[i].m_equipped)
                 {
                     m_xCellSquad.m_playerXCell.m_equippedEquipment[m_equipmentInventory[i].m_equippedSlotId] = m_equipmentInventory[i];
@@ -589,10 +597,5 @@ public class GameHandler : MonoBehaviour
             m_staticAutoRef.SaveGame();
             //ParticleSystem test = Instantiate(m_staticAutoRef.m_explosionTestPrefab).GetComponent<ParticleSystem>();
         }
-    }
-
-    void OnApplicationQuit()
-    {
-        SaveGame();
     }
 }

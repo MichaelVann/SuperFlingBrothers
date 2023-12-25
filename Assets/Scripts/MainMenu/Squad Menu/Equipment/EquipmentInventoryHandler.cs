@@ -111,8 +111,7 @@ public class EquipmentInventoryHandler : MonoBehaviour
         //Reset scroll bar to top
         m_inventoryView.verticalNormalizedPosition = 1;
 
-        m_inspectEquipmentSlotButtonRef.interactable = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_openedEquipmentSlotId] != null;
-        m_unequipEquipmentSlotButtonRef.interactable = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_openedEquipmentSlotId] != null;
+
         GameHandler.AutoSaveCheck();
     }
 
@@ -130,6 +129,8 @@ public class EquipmentInventoryHandler : MonoBehaviour
         {
             m_inventoryEquipmentSlotUIRefs[i].m_selectedOutline.SetActive(i == m_openedEquipmentSlotId);
         }
+        m_inspectEquipmentSlotButtonRef.interactable = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_openedEquipmentSlotId] != null;
+        m_unequipEquipmentSlotButtonRef.interactable = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_openedEquipmentSlotId] != null;
     }
 
     public void SelectEquipmentSlot(int a_selectedSlot)

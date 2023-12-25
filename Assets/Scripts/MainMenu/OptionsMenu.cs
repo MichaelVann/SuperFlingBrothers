@@ -92,7 +92,8 @@ public class OptionsMenu : MonoBehaviour
     {
         File.Delete(Application.persistentDataPath + "/Data.txt");
         File.Delete(Application.persistentDataPath + "/Data2.txt");
-        m_gameHandlerRef.ResetRoguelike();
+        m_gameHandlerRef.ResetGame();
+        m_gameHandlerRef.TransitionScene(GameHandler.eScene.mainMenu);
     }
 
     internal void Refresh()
