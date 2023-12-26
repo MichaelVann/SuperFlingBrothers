@@ -347,11 +347,18 @@ public class Enemy : Damageable
     {
         if (m_visionConeRef.activeSelf && m_playerRef)
         {
-            Vector3 deltaVec = (m_playerRef.transform.position - transform.position).normalized;
-            float angle = VLib.Vector2ToEulerAngle(deltaVec);
-            m_visionConeRef.transform.eulerAngles = new Vector3(0f, 0f,angle);
-            float deltaMag = (m_playerRef.transform.position - transform.position).magnitude;
-            m_visionConeRef.transform.localScale = new Vector3(m_visionConeRef.transform.localScale.x, deltaMag / 1.6f, 1f);
+            if (m_battleManagerRef.m_endingGame)
+            {
+                m_visionConeRef.SetActive(false);
+            }
+            else
+            {
+                Vector3 deltaVec = (m_playerRef.transform.position - transform.position).normalized;
+                float angle = VLib.Vector2ToEulerAngle(deltaVec);
+                m_visionConeRef.transform.eulerAngles = new Vector3(0f, 0f, angle);
+                float deltaMag = (m_playerRef.transform.position - transform.position).magnitude;
+                m_visionConeRef.transform.localScale = new Vector3(m_visionConeRef.transform.localScale.x, deltaMag / 1.6f, 1f);
+            }
         }
     }
 

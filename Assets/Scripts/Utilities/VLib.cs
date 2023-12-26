@@ -196,7 +196,7 @@ public static class VLib
         Color returnColor = Color.white;
 
         float redRatio = Mathf.Clamp(2f - (2f * a_ratio), 0f, 1f);
-        float greenRatio = Mathf.Clamp(5f * (a_ratio) - 1.5f, 0f, 1f);
+        float greenRatio = Mathf.Clamp(2f*a_ratio, 0f, 1f);
         returnColor = new Color(redRatio, greenRatio, 0f);
         return returnColor;
     }

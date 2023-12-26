@@ -58,6 +58,9 @@ public class AbilityButton : MonoBehaviour
                 m_affixText.text = "DESTROYED";
                 m_disabled = true;
                 m_equipmentRef.m_activeAbility.m_engaged = false;
+                m_cooldownCountTextRef.gameObject.SetActive(false);
+                m_cooldownIconRef.gameObject.SetActive(false);
+                m_cooldownReadyTextRef.SetActive(false);
             }
             //Else if the equipment has an ability
             else if (m_equipmentRef.m_activeAbility != null)

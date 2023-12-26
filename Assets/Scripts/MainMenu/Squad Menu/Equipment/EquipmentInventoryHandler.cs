@@ -115,10 +115,22 @@ public class EquipmentInventoryHandler : MonoBehaviour
         GameHandler.AutoSaveCheck();
     }
 
+    void FindFirstEmptyEquipmentSlot()
+    {
+        for (int i = 0; i < m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment.Length; i++)
+        {
+            if (m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i] == null)
+            {
+                m_openedEquipmentSlotId = i;
+                break;
+            }
+        }
+    }
+
     void RefreshTopPanel()
     {
         SetTopPanelEquipmentRefs();
-
+        FindFirstEmptyEquipmentSlot();
         Equipment selectedEquipment = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_openedEquipmentSlotId];
 
         for (int i = 0; i < m_equipmentItemPanels.Count; i++)

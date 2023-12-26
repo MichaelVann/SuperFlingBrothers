@@ -111,7 +111,7 @@ public class EquipmentSlotUI : MonoBehaviour
         //Refresh();
         if (m_selectedOutline.gameObject.activeSelf)
         {
-            m_selectedPulseTimer += Time.deltaTime;
+            m_selectedPulseTimer += 2f*Time.deltaTime;
             float scale = 1f + (Mathf.Sin(m_selectedPulseTimer*Mathf.PI) + 1f)* 0.01f;
             m_selectedOutline.transform.localScale = new Vector3(scale, scale, 1f);
         }

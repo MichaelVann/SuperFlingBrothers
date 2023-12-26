@@ -10969,6 +10969,7 @@ MonoBehaviour:
   - {fileID: 612889185}
   m_confirmationBoxPrefab: {fileID: 5677177792671639612, guid: a28dd334b0130e742bdf568ce2c9e0e5,
     type: 3}
+  m_popUpCanvasTransform: {fileID: 854675492}
 --- !u!1001 &458174937
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -26608,7 +26609,7 @@ PrefabInstance:
     - target: {fileID: 7518784722064382228, guid: b52ce8c5f12fd3f49be061102832ad4a,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -943.25
+      value: -943.25006
       objectReference: {fileID: 0}
     - target: {fileID: 7518784722064382228, guid: b52ce8c5f12fd3f49be061102832ad4a,
         type: 3}
@@ -48867,7 +48868,7 @@ PrefabInstance:
     - target: {fileID: 7518784722064382228, guid: b52ce8c5f12fd3f49be061102832ad4a,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -188.65001
+      value: -188.65002
       objectReference: {fileID: 0}
     - target: {fileID: 7518784722064382228, guid: b52ce8c5f12fd3f49be061102832ad4a,
         type: 3}
