@@ -16,8 +16,8 @@ public class GameHandler : MonoBehaviour
 {
     internal static GameHandler m_staticAutoRef;
 
-    public const int MAIN_VERSION_NUMBER = 28;
-    public const int SUB_VERSION_NUMBER = 9;
+    public const int MAIN_VERSION_NUMBER = 29;
+    public const int SUB_VERSION_NUMBER = 1;
 
 
     // -- BALANCE VARIABLES --
