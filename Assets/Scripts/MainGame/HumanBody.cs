@@ -260,7 +260,7 @@ public class HumanBody
         {
             float warFrontChange = GameHandler.PRE_BATTLE_WarfrontChange;
             activeFronts[i].ChangeWarfrontBalance(warFrontChange);
-            if (m_gameHandlerRef.m_attemptedBattleNode.m_owningConnection == activeFronts[i])
+            if (m_gameHandlerRef.m_attemptedBattleNode != null && m_gameHandlerRef.m_attemptedBattleNode.m_owningConnection == activeFronts[i])
             {
                 m_gameHandlerRef.m_lastGameStats.m_lastFrontLineEnemyEffect = warFrontChange;
             }

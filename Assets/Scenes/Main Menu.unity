@@ -41283,7 +41283,6 @@ MonoBehaviour:
     type: 3}
   m_popUpCanvasRef: {fileID: 2113509961}
   m_inventoryView: {fileID: 1905488663}
-  m_openedEquipmentSlotId: -1
 --- !u!1 &1964562379
 GameObject:
   m_ObjectHideFlags: 0

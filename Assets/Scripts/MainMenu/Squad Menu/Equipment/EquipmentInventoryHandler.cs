@@ -30,7 +30,7 @@ public class EquipmentInventoryHandler : MonoBehaviour
     List<EquipmentPanel> m_equipmentItemPanels;
 
     [SerializeField] private ScrollRect m_inventoryView;
-    public int m_openedEquipmentSlotId = -1;
+    internal int m_openedEquipmentSlotId = 0;
 
     bool m_initialised = false;
 
@@ -54,7 +54,7 @@ public class EquipmentInventoryHandler : MonoBehaviour
             m_gameHandlerRef = FindObjectOfType<GameHandler>();
             InstantiateEquipmentInventory();
             m_initialised = true;
-            SelectEquipmentSlot(0);
+            SelectFirstEmptyEquipmentSlot();
         }
     }
 
@@ -64,6 +64,7 @@ public class EquipmentInventoryHandler : MonoBehaviour
         {
             Init();
         }
+        SelectFirstEmptyEquipmentSlot();
         Refresh();
     }
 
@@ -115,7 +116,7 @@ public class EquipmentInventoryHandler : MonoBehaviour
         GameHandler.AutoSaveCheck();
     }
 
-    void FindFirstEmptyEquipmentSlot()
+    void SelectFirstEmptyEquipmentSlot()
     {
         for (int i = 0; i < m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment.Length; i++)
         {
@@ -130,7 +131,6 @@ public class EquipmentInventoryHandler : MonoBehaviour
     void RefreshTopPanel()
     {
         SetTopPanelEquipmentRefs();
-        FindFirstEmptyEquipmentSlot();
         Equipment selectedEquipment = m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_openedEquipmentSlotId];
 
         for (int i = 0; i < m_equipmentItemPanels.Count; i++)
@@ -167,7 +167,7 @@ public class EquipmentInventoryHandler : MonoBehaviour
             closingInventory = true;
         }
         m_gameHandlerRef.m_xCellSquad.m_playerXCell.EquipEquipment(a_equipment, m_openedEquipmentSlotId);
-
+        SelectFirstEmptyEquipmentSlot();
         Refresh();
         
         if (closingInventory)

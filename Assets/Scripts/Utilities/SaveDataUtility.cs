@@ -103,6 +103,7 @@ public class SaveDataUtility
         public AudioData audioData;
         public HighScoreListData highScoreListData;
         public FirstTimeDialogsPresentedData firstTimeDialogsPresentedData;
+        public bool squadRenameNotificationPending;
     }
     [SerializeField]
     SaveData m_saveData;
@@ -292,6 +293,7 @@ public class SaveDataUtility
         SaveAudioData();
         SaveHighscores();
         SaveFirstTimeDialogsPresented();
+        m_saveData.squadRenameNotificationPending = m_gameHandlerRef.m_squadRenameNotificationPending;
         string path = GetSaveDataPath();
         string json = JsonUtility.ToJson(m_saveData);
         File.WriteAllText(path, json);
@@ -310,6 +312,7 @@ public class SaveDataUtility
             LoadAudioData();
             LoadHighscores();
             LoadFirstTimeDialogsPresented();
+            m_gameHandlerRef.m_squadRenameNotificationPending = m_saveData.squadRenameNotificationPending;
             retVal = true;
         }
         else

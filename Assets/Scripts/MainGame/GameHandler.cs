@@ -17,7 +17,7 @@ public class GameHandler : MonoBehaviour
     internal static GameHandler m_staticAutoRef;
 
     public const int MAIN_VERSION_NUMBER = 29;
-    public const int SUB_VERSION_NUMBER = 1;
+    public const int SUB_VERSION_NUMBER = 2;
 
 
     // -- BALANCE VARIABLES --
@@ -359,7 +359,9 @@ public class GameHandler : MonoBehaviour
         {
             if (m_xCellSquad.m_playerXCell.m_equippedEquipment[i] != null && m_xCellSquad.m_playerXCell.m_equippedEquipment[i].IsBroken())
             {
+                Equipment equipment = m_xCellSquad.m_playerXCell.m_equippedEquipment[i];
                 m_xCellSquad.m_playerXCell.EquipEquipment(m_xCellSquad.m_playerXCell.m_equippedEquipment[i], i);
+                m_equipmentInventory.Remove(equipment);
             }
         }
     }
@@ -413,6 +415,19 @@ public class GameHandler : MonoBehaviour
 
             m_humanBody.m_battlesCompleted++;
             m_humanBody.Refresh();
+
+            for (int i = 0; i < m_xCellSquad.m_playerXCell.m_equippedEquipment.Length; i++)
+            {
+                Equipment equipment = m_xCellSquad.m_playerXCell.m_equippedEquipment[i];
+                if (equipment != null)
+                {
+                    if (!equipment.IsBroken())
+                    {
+                        equipment.Repair();
+                    }
+                }
+            }
+            UnEquipDestroyedEquipment();
             m_xCellSquad.Refresh();
         }
     }

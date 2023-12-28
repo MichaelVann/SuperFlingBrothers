@@ -63,7 +63,6 @@ public class XCell
                     }
                 }
             }
-
         }
         else
         {
@@ -92,15 +91,12 @@ public class XCell
 
     public void UpdateStats()
     {
-
-
         for (int i = 0; i < m_equippedEquipment.Length; i++)
         {
             if (m_equippedEquipment[i] == null)
             {
                 continue;
             }
-
         }
 
         for (int i = 0; i < m_statHandler.m_stats.Length; i++)

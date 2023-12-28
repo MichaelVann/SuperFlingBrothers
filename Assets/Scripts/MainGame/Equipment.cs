@@ -37,7 +37,7 @@ public class Equipment
     [SerializeField]
     public int m_goldValue = 0;
     const float m_scrapValueRatio = 0.1f;
-    const float m_repairEfficacy = 0.95f;
+    const float m_repairEfficiency = 0.6f;
 
     const float m_valueScale = 0.1f;
 
@@ -120,8 +120,13 @@ public class Equipment
 
     internal void Repair()
     {
-        m_maxHealth *= m_repairEfficacy;
-        m_health = m_maxHealth;
+        if (m_health < m_maxHealth)
+        {
+            float damagedAmount = m_maxHealth - m_health;
+            float repairedHealth = damagedAmount * m_repairEfficiency;
+            m_maxHealth = repairedHealth + m_health;
+            m_health = m_maxHealth;
+        }
     }
 
     public void SetEquipStatus(bool a_equipped, int a_equippedSlot)
