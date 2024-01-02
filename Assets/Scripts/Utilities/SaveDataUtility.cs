@@ -104,6 +104,7 @@ public class SaveDataUtility
         public HighScoreListData highScoreListData;
         public FirstTimeDialogsPresentedData firstTimeDialogsPresentedData;
         public bool squadRenameNotificationPending;
+        public bool squadPrestigeNamed;
     }
     [SerializeField]
     SaveData m_saveData;
@@ -294,6 +295,7 @@ public class SaveDataUtility
         SaveHighscores();
         SaveFirstTimeDialogsPresented();
         m_saveData.squadRenameNotificationPending = m_gameHandlerRef.m_squadRenameNotificationPending;
+        m_saveData.squadPrestigeNamed = m_gameHandlerRef.m_xCellSquad.m_prestigeNamed;
         string path = GetSaveDataPath();
         string json = JsonUtility.ToJson(m_saveData);
         File.WriteAllText(path, json);
@@ -313,6 +315,8 @@ public class SaveDataUtility
             LoadHighscores();
             LoadFirstTimeDialogsPresented();
             m_gameHandlerRef.m_squadRenameNotificationPending = m_saveData.squadRenameNotificationPending;
+            m_gameHandlerRef.m_xCellSquad.m_prestigeNamed = m_saveData.squadPrestigeNamed;
+
             retVal = true;
         }
         else

@@ -486,6 +486,8 @@ public class Enemy : Damageable
         m_flingPieIndicatorRef.SetPieFillAmount(m_flingTimer / m_flingTimerMax);
         Vector3 playerPos = m_playerRef.transform.position;
         RunFlingTimer();
+        float flingTimerPercentage = m_flingTimer / m_flingTimerMax;
+        SetShakeAmount(m_flingShake * Mathf.Pow(flingTimerPercentage,4f));
     }
 
     //AI

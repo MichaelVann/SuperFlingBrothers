@@ -11,13 +11,13 @@ public class Player : Damageable
     Camera m_cameraRef;
     public GameObject m_velocityIndicatorRef;
 
+    //Flinging
     bool m_flinging = false;
     Vector3 m_originalFlingPos;
     const float m_maxFlingLength = 1f;
     const float m_minFlingLength = 0f;//0.15f;
     const int m_flingDexterityXP = 7;
     const int m_abilityUsageDexterityXP = 10;
-
     LineRenderer m_flingLine;
 
     bool invertedTime = false;
@@ -257,6 +257,7 @@ public class Player : Damageable
                     m_flinging = true;
                 }
             }
+            SetShakeAmount(0f);
         }
         else
         {
@@ -268,7 +269,7 @@ public class Player : Damageable
             }
             m_flingLine.enabled = true;
             Vector3 worldMousePoint = m_cameraRef.ScreenToWorldPoint(Input.mousePosition);
-
+            SetShakeAmount(m_flingShake);
 
             if (worldMousePoint.y >= m_battleManagerRef.m_upperLowerFlingPositionBounds || worldMousePoint.y <= -m_battleManagerRef.m_upperLowerFlingPositionBounds)
             {

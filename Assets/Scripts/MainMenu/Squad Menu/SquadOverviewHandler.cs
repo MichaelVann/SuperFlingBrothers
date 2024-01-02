@@ -52,6 +52,7 @@ public class SquadOverviewHandler : MonoBehaviour
             ConfirmationBox confirmationBox = Instantiate(m_confirmationBoxPrefab, m_popUpCanvasTransform).GetComponent<ConfirmationBox>();
             confirmationBox.SetMessageText("Congratulations, due to your success your team has begun to be refered to as <color=red>" + m_gameHandlerRef.m_xCellSquad.m_name + "</color>.");
             confirmationBox.SetToAcknowledgeOnlyMode();
+            m_gameHandlerRef.SaveGame();
         }
     }
 

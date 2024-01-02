@@ -14,6 +14,8 @@ public class ZoomExpandComponent : MonoBehaviour
     internal delegate void FinishZoomDelegate();
     internal FinishZoomDelegate m_finishZoomDelegate;
 
+    internal void SetFinishDelegate(FinishZoomDelegate a_delegate) {m_finishZoomDelegate = a_delegate; }
+
     // Start is called before the first frame update
     void Start()
     {

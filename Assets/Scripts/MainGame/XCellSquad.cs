@@ -109,7 +109,7 @@ public class XCellSquad
 
     internal void Refresh()
     {
-        if (!m_prestigeNamed && m_statHandler.m_RPGLevel.m_level > m_prestigeNameLevel)
+        if (!m_prestigeNamed && m_statHandler.m_RPGLevel.m_level >= m_prestigeNameLevel)
         {
             GenerateTeamName();
             m_prestigeNamed = true;

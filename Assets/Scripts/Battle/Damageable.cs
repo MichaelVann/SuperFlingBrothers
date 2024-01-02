@@ -64,6 +64,7 @@ public class Damageable : BaseObject
     float m_secondFlingTimerMax = 0.09f;
     Vector3 m_storedFlingVector;
     float m_storedFlingStrength = 0f;
+    protected const float m_flingShake = 0.02f;
 
     float m_pocketFlingStrength = GameHandler.DAMAGEABLE_PocketFlingStrength;
 

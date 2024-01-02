@@ -35,7 +35,8 @@ public class DialogBox : MonoBehaviour
     void Start()
     {
         ZoomExpandComponent closingZoom = gameObject.AddComponent<ZoomExpandComponent>();
-        closingZoom.SetUp(0f, 1f, 0.3f, 2f, Open);
+        closingZoom.SetUp();
+        closingZoom.SetFinishDelegate(Open);
     }
 
     internal void Init(string a_speakerName)
@@ -52,6 +53,7 @@ public class DialogBox : MonoBehaviour
         {
             AddDialog(a_dialogs[i]);
         }
+        AssignDescription();
     }
 
     void RefreshPrintTimer()
@@ -67,8 +69,8 @@ public class DialogBox : MonoBehaviour
             if (m_printTimer.Update())
             {
                 m_charactersShown++;
-                m_descriptionTextRef.text = m_descriptionString.Substring(0, m_charactersShown);
-
+                m_descriptionTextRef.maxVisibleCharacters = m_charactersShown;
+                
                 if (m_descriptionTextRef.text[m_descriptionTextRef.text.Length - 1] != ' ')
                 {
                     m_flashStrength = 1f;
@@ -85,14 +87,23 @@ public class DialogBox : MonoBehaviour
         m_speakerImageRef.color = new Color(colorScale, colorScale, colorScale,1f);
     }
 
+    void AssignDescription()
+    {
+        m_descriptionString = m_dialogList[0];
+        m_descriptionTextRef.text = m_descriptionString;
+
+        m_charactersShown = 0;
+        m_descriptionTextRef.maxVisibleCharacters = m_charactersShown;
+
+        RefreshPrintTimer();
+    }
+
     void ProgressDialog()
     {
         if (m_dialogList.Count > 1)
         {
             m_dialogList.RemoveAt(0);
-            m_descriptionString = m_dialogList[0];
-            m_charactersShown = 0;
-            RefreshPrintTimer();
+            AssignDescription();
         }
         else
         {
