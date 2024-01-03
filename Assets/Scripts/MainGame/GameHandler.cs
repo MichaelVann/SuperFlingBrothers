@@ -17,7 +17,7 @@ public class GameHandler : MonoBehaviour
     internal static GameHandler m_staticAutoRef;
 
     public const int MAIN_VERSION_NUMBER = 29;
-    public const int SUB_VERSION_NUMBER = 3;
+    public const int SUB_VERSION_NUMBER = 4;
 
 
     // -- BALANCE VARIABLES --
@@ -56,15 +56,20 @@ public class GameHandler : MonoBehaviour
     } eScene m_currentScene;
     eScene m_queuedScene;
     [SerializeField] Image m_sceneFadeImageRef;
-    [SerializeField] Canvas m_sceneFadeCanvasRef;
+    [SerializeField] internal Canvas m_sceneFadeCanvasRef;
     vTimer m_sceneFadeTimer;
     bool m_sceneFadingOut;
     const float m_sceneFadeDuration = 0.35f;
 
     // Dialogue
+
+    internal TutorialManager m_tutorialManager;
+
     internal const string m_speakerCharacterName = "Micky";// Sergeant Geras";
     [SerializeField] GameObject m_dialogBoxPrefab;
-    internal bool m_firstTimeSquadOverview = true;
+    [SerializeField] Canvas m_dialogCanvasRef;
+    [SerializeField] GameObject m_tutorialTaskPrefab;
+    [SerializeField] Canvas m_tutorialTaskCanvasRef;
 
     //GAME
     private float m_cash;
@@ -196,11 +201,13 @@ public class GameHandler : MonoBehaviour
         }
     }
 
-    internal void CreateDialogBox(string a_speakerName, List<string> a_dialogs)
+    void InitialiseTutorials()
     {
-        DialogBox dialogBox = Instantiate(m_dialogBoxPrefab, m_sceneFadeCanvasRef.transform).GetComponentInChildren<DialogBox>();
-        dialogBox.Init(a_speakerName);
-        dialogBox.AddDialogs(a_dialogs);
+        if (m_tutorialManager != null)
+        {
+            m_tutorialManager.CleanUp();
+        }
+        m_tutorialManager = new TutorialManager(this, m_dialogBoxPrefab, m_tutorialTaskPrefab, m_dialogCanvasRef.gameObject, m_tutorialTaskCanvasRef.gameObject);
     }
 
     internal void ResetRoguelike()
@@ -241,7 +248,7 @@ public class GameHandler : MonoBehaviour
     {
         ResetRoguelike();
         m_highscoreList = new List<Highscore>();
-        m_firstTimeSquadOverview = true;
+        InitialiseTutorials();
     }
 
     void SetupLastGameStats()

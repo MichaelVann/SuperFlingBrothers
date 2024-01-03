@@ -90,9 +90,10 @@ public class SaveDataUtility
     }
 
     [Serializable]
-    struct FirstTimeDialogsPresentedData
+    struct TutorialData
     {
-        public bool firstTimeSquadOverviewPresented;
+        public TutorialManager.eTutorial currentTutorial;
+        public bool[] messagesPlayed;
     }
 
     [Serializable]
@@ -102,7 +103,7 @@ public class SaveDataUtility
         public HumanBodyData humanBodyData;
         public AudioData audioData;
         public HighScoreListData highScoreListData;
-        public FirstTimeDialogsPresentedData firstTimeDialogsPresentedData;
+        public TutorialData tutorialData;
         public bool squadRenameNotificationPending;
         public bool squadPrestigeNamed;
     }
@@ -277,14 +278,16 @@ public class SaveDataUtility
         }
     }
 
-    void SaveFirstTimeDialogsPresented()
+    void SaveTutorialData()
     {
-        m_saveData.firstTimeDialogsPresentedData.firstTimeSquadOverviewPresented = m_gameHandlerRef.m_firstTimeSquadOverview;
+        m_saveData.tutorialData.currentTutorial = m_gameHandlerRef.m_tutorialManager.m_currentTutorial;
+        m_saveData.tutorialData.messagesPlayed = m_gameHandlerRef.m_tutorialManager.m_messagesPlayed;
     }
 
-    void LoadFirstTimeDialogsPresented()
+    void LoadTutorialData()
     {
-        m_gameHandlerRef.m_firstTimeSquadOverview = m_saveData.firstTimeDialogsPresentedData.firstTimeSquadOverviewPresented;
+        m_gameHandlerRef.m_tutorialManager.m_currentTutorial = m_saveData.tutorialData.currentTutorial;
+        m_gameHandlerRef.m_tutorialManager.m_messagesPlayed = m_saveData.tutorialData.messagesPlayed;
     }
 
     internal void Save()
@@ -293,7 +296,7 @@ public class SaveDataUtility
         SaveHumanBody();
         SaveAudioData();
         SaveHighscores();
-        SaveFirstTimeDialogsPresented();
+        SaveTutorialData();
         m_saveData.squadRenameNotificationPending = m_gameHandlerRef.m_squadRenameNotificationPending;
         m_saveData.squadPrestigeNamed = m_gameHandlerRef.m_xCellSquad.m_prestigeNamed;
         string path = GetSaveDataPath();
@@ -313,7 +316,7 @@ public class SaveDataUtility
             LoadHumanBody();
             LoadAudioData();
             LoadHighscores();
-            LoadFirstTimeDialogsPresented();
+            LoadTutorialData();
             m_gameHandlerRef.m_squadRenameNotificationPending = m_saveData.squadRenameNotificationPending;
             m_gameHandlerRef.m_xCellSquad.m_prestigeNamed = m_saveData.squadPrestigeNamed;
 

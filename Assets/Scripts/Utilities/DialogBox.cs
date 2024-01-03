@@ -27,6 +27,10 @@ public class DialogBox : MonoBehaviour
     const float m_baseSpeakerColorScale = 0.5f;
     const float m_flashDecayMultiplier = 0.99f;
 
+    ZoomExpandComponent m_closingZoom;
+    internal delegate void OnCloseDelegate();
+    internal OnCloseDelegate m_onCloseDelegate;
+
     internal void AddDialog(string a_string) { m_dialogList.Add(a_string); m_descriptionString = m_dialogList[0]; } 
 
     internal void SetPrintSpeed(float a_printSpeed) { m_printScreen = a_printSpeed; RefreshPrintTimer(); }
@@ -35,13 +39,14 @@ public class DialogBox : MonoBehaviour
     void Start()
     {
         ZoomExpandComponent closingZoom = gameObject.AddComponent<ZoomExpandComponent>();
-        closingZoom.SetUp();
+        closingZoom.Init();
         closingZoom.SetFinishDelegate(Open);
     }
 
-    internal void Init(string a_speakerName)
+    internal void Init(string a_speakerName, OnCloseDelegate a_onCloseDelegate = null)
     {
         m_speakerNameTextRef.text = a_speakerName;
+        m_onCloseDelegate = a_onCloseDelegate;
         m_dialogList = new List<string>();
         m_descriptionString = "";
         RefreshPrintTimer();
@@ -105,10 +110,10 @@ public class DialogBox : MonoBehaviour
             m_dialogList.RemoveAt(0);
             AssignDescription();
         }
-        else
+        else if (m_closingZoom == null)
         {
-            ZoomExpandComponent closingZoom = gameObject.AddComponent<ZoomExpandComponent>();
-            closingZoom.SetUp(1f,0f,0.3f,2f, Close);
+            m_closingZoom = gameObject.AddComponent<ZoomExpandComponent>();
+            m_closingZoom.Init(1f,0f,0.3f,2f, Close);
         }
     }
 
@@ -131,6 +136,10 @@ public class DialogBox : MonoBehaviour
 
     void Close()
     {
+        if (m_onCloseDelegate != null)
+        {
+            m_onCloseDelegate.Invoke();
+        }
         Destroy(m_parentObject);
     }
 }

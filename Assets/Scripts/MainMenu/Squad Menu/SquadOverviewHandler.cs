@@ -46,13 +46,19 @@ public class SquadOverviewHandler : MonoBehaviour
             RefreshEquipmentSlots();
             RefreshNewEquipmentNotifiers();
         }
-        if (m_gameHandlerRef != null && m_gameHandlerRef.m_squadRenameNotificationPending)
+        if (m_gameHandlerRef != null)
         {
-            m_gameHandlerRef.m_squadRenameNotificationPending = false;
-            ConfirmationBox confirmationBox = Instantiate(m_confirmationBoxPrefab, m_popUpCanvasTransform).GetComponent<ConfirmationBox>();
-            confirmationBox.SetMessageText("Congratulations, due to your success your team has begun to be refered to as <color=red>" + m_gameHandlerRef.m_xCellSquad.m_name + "</color>.");
-            confirmationBox.SetToAcknowledgeOnlyMode();
-            m_gameHandlerRef.SaveGame();
+            if (m_gameHandlerRef.m_squadRenameNotificationPending)
+            {
+                m_gameHandlerRef.m_squadRenameNotificationPending = false;
+                ConfirmationBox confirmationBox = Instantiate(m_confirmationBoxPrefab, m_popUpCanvasTransform).GetComponent<ConfirmationBox>();
+                confirmationBox.SetMessageText("Congratulations, due to your success your team has begun to be refered to as <color=red>" + m_gameHandlerRef.m_xCellSquad.m_name + "</color>.");
+                confirmationBox.SetToAcknowledgeOnlyMode();
+                m_gameHandlerRef.SaveGame();
+            }
+
+            m_gameHandlerRef.m_tutorialManager.ProgressIfOnSpecificTutorial(TutorialManager.eTutorial.FindSquadOverview);
+            m_gameHandlerRef.m_tutorialManager.AttemptToSpawnMessage(TutorialManager.eMessage.SquadOverview);
         }
     }
 
@@ -68,7 +74,6 @@ public class SquadOverviewHandler : MonoBehaviour
         m_newEquipmentNotifier.SetActive(newEquipmentCount > 0);
         m_newEquipmentNotifierText.text = newEquipmentCount.ToString();
     }
-
 
     public void SetInventoryPanelStatus(bool a_open)
     {

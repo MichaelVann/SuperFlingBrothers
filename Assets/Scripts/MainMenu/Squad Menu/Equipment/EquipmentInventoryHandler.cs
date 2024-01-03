@@ -66,6 +66,8 @@ public class EquipmentInventoryHandler : MonoBehaviour
         }
         SelectFirstEmptyEquipmentSlot();
         Refresh();
+        m_gameHandlerRef.m_tutorialManager.ProgressIfOnSpecificTutorial(TutorialManager.eTutorial.FindInventory);
+        m_gameHandlerRef.m_tutorialManager.AttemptToSpawnMessage(TutorialManager.eMessage.Inventory);
     }
 
     void InstantiateEquipmentInventory()
@@ -159,17 +161,19 @@ public class EquipmentInventoryHandler : MonoBehaviour
             m_inventoryEquipmentSlotUIRefs[i].Refresh();
         }
     }
+
     public void SetEquipStatus(Equipment a_equipment)
     {
         bool closingInventory = false;
         if (!a_equipment.m_equipped)
         {
             closingInventory = true;
+            m_gameHandlerRef.m_tutorialManager.ProgressIfOnSpecificTutorial(TutorialManager.eTutorial.EquipEquipment);
         }
         m_gameHandlerRef.m_xCellSquad.m_playerXCell.EquipEquipment(a_equipment, m_openedEquipmentSlotId);
         SelectFirstEmptyEquipmentSlot();
         Refresh();
-        
+
         if (closingInventory)
         {
             //m_squadOverviewHandlerRef.CloseInventoryPanel();

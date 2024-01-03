@@ -14,30 +14,39 @@ public class TitleScreenHandler : MonoBehaviour
     [SerializeField] GameObject m_highScoreContentRef;
     [SerializeField] GameObject m_highscorePrefab;
     [SerializeField] GameObject m_noHighscoresTextRef;
+    [SerializeField] Button m_playButtonRef;
     List<UIHighScore> m_highScoreList;
+
+    bool m_inited = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        m_highScoreList = new List<UIHighScore>();
-        m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_versionNumberText.text = "Version " + GameHandler.MAIN_VERSION_NUMBER + "." + GameHandler.SUB_VERSION_NUMBER;
-        RefreshHighscoreTable();
-        CreateFirstTimeDialog();
-
+        Init();
     }
 
-    void CreateFirstTimeDialog()
+    void Init()
     {
-        List<string> testStrings = new List<string>();
-        testStrings.Add("Hello World! Welcome to Probiotic!");
-        testStrings.Add("This is the early testing verion of the game, with many poorly explained elements, poorly balanced gameplay, and likely many bugs. Please enjoy what exists so far for as long as you like, and get in touch with any feedback you have.");
-        testStrings.Add("Good luck, and thank you for checking out the game. Much love.");
-        if (m_gameHandlerRef.m_firstTimeSquadOverview)
+        if (!m_inited)
         {
-            m_gameHandlerRef.CreateDialogBox(GameHandler.m_speakerCharacterName, testStrings);
-            m_gameHandlerRef.m_firstTimeSquadOverview = false;
+            m_highScoreList = new List<UIHighScore>();
+            m_gameHandlerRef = FindObjectOfType<GameHandler>();
+            m_versionNumberText.text = "Version " + GameHandler.MAIN_VERSION_NUMBER + "." + GameHandler.SUB_VERSION_NUMBER;
+            RefreshHighscoreTable();
+            CreateFirstTimeDialogs();
+            m_inited = true;
         }
+    }
+
+    private void OnEnable()
+    {
+        Init();
+        m_playButtonRef.interactable = m_gameHandlerRef.m_tutorialManager.IsTutorialCompleted();
+    }
+
+    void CreateFirstTimeDialogs()
+    {
+        m_gameHandlerRef.m_tutorialManager.AttemptToSpawnMessage(TutorialManager.eMessage.StartUp);
     }
 
     void RefreshHighscoreTable()

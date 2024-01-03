@@ -21,7 +21,7 @@ public class UIScalingBox : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        m_container.AddComponent<ZoomExpandComponent>().SetUp(0f,1f,0.3f, 2f);
+        m_container.AddComponent<ZoomExpandComponent>().Init(0f,1f,0.3f, 2f);
     }
 
     // Update is called once per frame
@@ -52,6 +52,6 @@ public class UIScalingBox : MonoBehaviour
 
     public void Close()
     {
-        m_container.AddComponent<ZoomExpandComponent>().SetUp(1f, 0f, 0.3f, 2f, Exit);
+        m_container.AddComponent<ZoomExpandComponent>().Init(1f, 0f, 0.3f, 2f, Exit);
     }
 }
