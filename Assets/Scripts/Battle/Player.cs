@@ -167,7 +167,7 @@ public class Player : Damageable
                 spawnPos.z = transform.position.z;
                 spawnPos *= m_armorSegmentOffset;
                 spawnPos += transform.position;
-                m_armorSegments[i] = Instantiate(m_armorSegmentPrefab, spawnPos, spawnRot, transform).GetComponent<ArmorSegment>();
+                m_armorSegments[i] = Instantiate(m_armorSegmentPrefab, spawnPos, spawnRot, m_spriteRenderer.transform).GetComponent<ArmorSegment>();
                 m_armorSegments[i].AssignEquipment(m_playerCellRef.m_equippedEquipment[i]);
             }
         }

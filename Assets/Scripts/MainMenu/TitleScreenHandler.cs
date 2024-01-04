@@ -46,7 +46,11 @@ public class TitleScreenHandler : MonoBehaviour
 
     void CreateFirstTimeDialogs()
     {
-        m_gameHandlerRef.m_tutorialManager.AttemptToSpawnMessage(TutorialManager.eMessage.StartUp);
+        bool messagePlayed = m_gameHandlerRef.m_tutorialManager.AttemptToSpawnMessage(TutorialManager.eMessage.StartUp);
+        if (!messagePlayed) 
+        {
+            m_gameHandlerRef.m_tutorialManager.SpawnTutorial();
+        }
     }
 
     void RefreshHighscoreTable()

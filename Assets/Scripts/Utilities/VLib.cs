@@ -145,6 +145,11 @@ public static class VLib
         return angle;
     }
 
+    public static float Vector3ToEulerAngle(Vector3 a_vector3)
+    {
+        return Vector2ToEulerAngle(a_vector3.ToVector2());
+    }
+
     public static int SafeMod(int a_value, int a_mod)
     {
         return (a_value % a_mod + a_mod) % a_mod;

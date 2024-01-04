@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.VersionControl;
 using UnityEngine;
-using static TutorialManager;
 
 public class TutorialManager
 {
@@ -37,12 +35,15 @@ public class TutorialManager
         return retVal;
     }
 
-    internal void AttemptToSpawnMessage(eMessage a_message)
+    internal bool AttemptToSpawnMessage(eMessage a_message)
     {
+        bool messagePlayed = false;
         if (!m_messagesPlayed[(int)a_message])
         {
             PlayMessage(a_message);
+            messagePlayed = true;
         }
+        return messagePlayed;
     }
 
     internal void ProgressIfOnSpecificTutorial(eTutorial a_tutorial)

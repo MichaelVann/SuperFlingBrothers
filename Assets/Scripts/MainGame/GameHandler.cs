@@ -17,7 +17,7 @@ public class GameHandler : MonoBehaviour
     internal static GameHandler m_staticAutoRef;
 
     public const int MAIN_VERSION_NUMBER = 29;
-    public const int SUB_VERSION_NUMBER = 4;
+    public const int SUB_VERSION_NUMBER = 5;
 
 
     // -- BALANCE VARIABLES --
@@ -150,6 +150,14 @@ public class GameHandler : MonoBehaviour
 
     [SerializeField] GameObject m_explosionTestPrefab;
 
+    [SerializeField] Image m_scanLinesRef;
+    internal struct GameOptions
+    {
+        internal int scanLineSetting;
+    }
+    internal GameOptions m_gameOptions;
+
+
     internal float GetBattleDifficultyBonus()
     {
         float bonusMult = Mathf.Pow(1.022f, m_battleDifficulty);
@@ -189,6 +197,7 @@ public class GameHandler : MonoBehaviour
     {
         m_staticAutoRef = this;
         DontDestroyOnLoad(gameObject);
+        InitGameOptions();
         //m_saveDataUtility = new SaveDataUtility(this);
         ResetGame();
         if (m_autoLoadDataOnLaunch)
@@ -201,6 +210,34 @@ public class GameHandler : MonoBehaviour
         }
     }
 
+    void InitGameOptions()
+    {
+        m_gameOptions = new GameOptions();
+        m_gameOptions.scanLineSetting = 2;
+    }
+
+    internal void SetScanLines(int a_setting)
+    {
+        m_gameOptions.scanLineSetting = a_setting;
+        RefreshScanLines();
+    }
+
+    void RefreshScanLines()
+    {
+        switch (m_gameOptions.scanLineSetting)
+        {
+            case 1:
+                m_scanLinesRef.pixelsPerUnitMultiplier = 1f;
+                break;
+            case 2:
+                m_scanLinesRef.pixelsPerUnitMultiplier = 0.5f;
+                break;
+            default:
+                break;
+        }
+        m_scanLinesRef.gameObject.SetActive(m_gameOptions.scanLineSetting != 0);
+    }
+
     void InitialiseTutorials()
     {
         if (m_tutorialManager != null)
@@ -209,7 +246,7 @@ public class GameHandler : MonoBehaviour
         }
         m_tutorialManager = new TutorialManager(this, m_dialogBoxPrefab, m_tutorialTaskPrefab, m_dialogCanvasRef.gameObject, m_tutorialTaskCanvasRef.gameObject);
     }
-
+     
     internal void ResetRoguelike()
     {
         m_cash = 0f;
@@ -609,6 +646,7 @@ public class GameHandler : MonoBehaviour
         {
             retVal = false;
         }
+        RefreshScanLines();
         return retVal;
     }
 

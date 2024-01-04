@@ -17,7 +17,7 @@ public class Projectile : MonoBehaviour
     EquipmentAbility m_parentAbility;
     bool m_friendly = true;
     bool m_stunning = false;
-    float m_minimumVelocity = 0.5f;
+    float m_minimumVelocity = 1f;
     public GameObject m_explosionPrefab;
 
     public GameObject m_temporarySpritePrefab;

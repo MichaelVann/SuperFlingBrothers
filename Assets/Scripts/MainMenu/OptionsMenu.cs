@@ -13,18 +13,34 @@ public class OptionsMenu : MonoBehaviour
     public Text m_resolutionTextRef;
     public Text m_safeAreaTextRef;
     [SerializeField] TextMeshProUGUI m_saveLocationTextRef;
-    public UICheckBox m_muteCheckBox;
-    public UICheckBox m_musicCheckBox;
-    public UICheckBox m_soundEffectCheckBox;
 
     public GameObject m_confirmationBoxPrefab;
 
+    public enum eOptionsMenu
+    {
+        Sound,
+        Game
+    }
+    eOptionsMenu m_currentOptionsMenu;
+
+    [SerializeField] Image[] m_optionButtonIcons;
+
+    //Audio
+    [SerializeField] GameObject m_soundOptionsMenuRef;
+    [SerializeField] UICheckBox m_muteCheckBox;
+    [SerializeField] UICheckBox m_musicCheckBox;
+    [SerializeField] UICheckBox m_soundEffectCheckBox;
     [SerializeField] Slider m_volumeSlider;
     [SerializeField] Slider m_soundFXVolumeSlider;
     [SerializeField] Slider m_musicVolumeSlider;
 
+    //Game
+    [SerializeField] GameObject m_gameOptionsMenuRef;
+    [SerializeField] Slider m_scanLinesSlider;
+
     void Start()
     {
+        OpenOptionsMenu(eOptionsMenu.Sound);
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
         Refresh();
     }
@@ -53,6 +69,12 @@ public class OptionsMenu : MonoBehaviour
     {
         m_gameHandlerRef.m_audioHandlerRef.m_musicVolume = m_musicVolumeSlider.value;
         m_gameHandlerRef.m_audioHandlerRef.Refresh();
+        GameHandler.AutoSaveCheck();
+    }
+
+    public void OnScanLineSliderChanged()
+    {
+        m_gameHandlerRef.SetScanLines((int)m_scanLinesSlider.value);
         GameHandler.AutoSaveCheck();
     }
 
@@ -101,7 +123,7 @@ public class OptionsMenu : MonoBehaviour
         m_muteCheckBox.SetToggled(!m_gameHandlerRef.m_audioHandlerRef.m_muted);
         m_musicCheckBox.SetToggled(m_gameHandlerRef.m_audioHandlerRef.m_musicEnabled);
         m_soundEffectCheckBox.SetToggled(m_gameHandlerRef.m_audioHandlerRef.m_soundEffectsEnabled);
-
+        m_scanLinesSlider.value = m_gameHandlerRef.m_gameOptions.scanLineSetting;
         LoadAudioSliderValues();
         m_gameHandlerRef.m_audioHandlerRef.Refresh();
 
@@ -134,6 +156,29 @@ public class OptionsMenu : MonoBehaviour
     public void OnClose()
     {
         GameHandler.AutoSaveCheck();
+    }
+
+    void OpenOptionsMenu(eOptionsMenu a_optionsMenu)
+    {
+        m_currentOptionsMenu = a_optionsMenu;
+
+        m_soundOptionsMenuRef.SetActive(a_optionsMenu == eOptionsMenu.Sound);
+        m_gameOptionsMenuRef.SetActive(a_optionsMenu == eOptionsMenu.Game);
+        for (int i = 0; i < m_optionButtonIcons.Length; i++)
+        {
+            bool selected = (i == (int)a_optionsMenu);
+            m_optionButtonIcons[i].color = selected ? Color.red : Color.grey;
+        }
+    }
+
+    public void OpenSoundOptionsMenu()
+    {
+        OpenOptionsMenu(eOptionsMenu.Sound);
+    }
+
+    public void OpenGameOptionsMenu()
+    {
+        OpenOptionsMenu(eOptionsMenu.Game);
     }
 
 }

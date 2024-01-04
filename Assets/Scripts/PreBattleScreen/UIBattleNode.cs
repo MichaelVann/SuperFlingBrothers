@@ -20,6 +20,7 @@ public class UIBattleNode : MonoBehaviour
 
     public GameObject m_selectionRingRef;
     public GameObject m_lockIconRef;
+    [SerializeField] GameObject m_sheenRef;
     public GameObject m_shadowRef;
 
     //Bobbing Effect
@@ -58,6 +59,7 @@ public class UIBattleNode : MonoBehaviour
         m_shadowStartingPostion =  m_shadowRef.transform.position;
         m_shadowStartingDirection = m_shadowRef.transform.localPosition.normalized;
         m_lockIconRef.SetActive(!m_enabled);
+        m_sheenRef.SetActive(m_enabled);
         SetNodeDifficultyColor();
     }
 

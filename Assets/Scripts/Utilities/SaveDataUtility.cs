@@ -97,6 +97,12 @@ public class SaveDataUtility
     }
 
     [Serializable]
+    struct GameSettingsData
+    {
+        public int scanLineSetting;
+    }
+
+    [Serializable]
     struct SaveData
     {
         public UpgradeTreeData upgradeTreeData;
@@ -104,6 +110,7 @@ public class SaveDataUtility
         public AudioData audioData;
         public HighScoreListData highScoreListData;
         public TutorialData tutorialData;
+        public GameSettingsData gameSettingsData;
         public bool squadRenameNotificationPending;
         public bool squadPrestigeNamed;
     }
@@ -226,7 +233,6 @@ public class SaveDataUtility
                 connection.m_warfrontBalance = connectionData.warfrontBalance;
             }
         }
-        
     }
 
     void SaveAudioData()
@@ -290,6 +296,16 @@ public class SaveDataUtility
         m_gameHandlerRef.m_tutorialManager.m_messagesPlayed = m_saveData.tutorialData.messagesPlayed;
     }
 
+    void SaveGameSettings()
+    {
+        m_saveData.gameSettingsData.scanLineSetting = m_gameHandlerRef.m_gameOptions.scanLineSetting;
+    }
+
+    void LoadGameSettings()
+    {
+        m_gameHandlerRef.m_gameOptions.scanLineSetting = m_saveData.gameSettingsData.scanLineSetting;
+    }
+
     internal void Save()
     {
         SaveUpgradeTree();
@@ -297,6 +313,7 @@ public class SaveDataUtility
         SaveAudioData();
         SaveHighscores();
         SaveTutorialData();
+        SaveGameSettings();
         m_saveData.squadRenameNotificationPending = m_gameHandlerRef.m_squadRenameNotificationPending;
         m_saveData.squadPrestigeNamed = m_gameHandlerRef.m_xCellSquad.m_prestigeNamed;
         string path = GetSaveDataPath();
@@ -317,6 +334,7 @@ public class SaveDataUtility
             LoadAudioData();
             LoadHighscores();
             LoadTutorialData();
+            LoadGameSettings();
             m_gameHandlerRef.m_squadRenameNotificationPending = m_saveData.squadRenameNotificationPending;
             m_gameHandlerRef.m_xCellSquad.m_prestigeNamed = m_saveData.squadPrestigeNamed;
 
