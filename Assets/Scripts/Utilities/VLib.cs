@@ -493,4 +493,51 @@ public static class VLib
         return output;
     }
 
+    internal static int CharToInt(char a_char)
+    {
+        int result = a_char - '0';
+        return result;
+    }
+
+    internal static int StringToInt(string a_string)
+    {
+        int result = 0;
+        int powerOfTen = 0;
+        for (int i = a_string.Length-1; i >= 0; i--)
+        {
+            result += (int)(CharToInt(a_string[i]) * Math.Pow(10, powerOfTen));
+            powerOfTen++;
+        }
+        return result;
+    }
+
+    internal static int[] GetApplicationVersionNumbers()
+    {
+        int[] versionNumbers = new int[2];
+        //versionNumbers[0] = int.Parse(Application.version);
+        string versionString = Application.version;
+        int tenPower = 0;
+        for (int i = versionString.Length-1; i >= 0; i--)
+        {
+            if (versionString[i] == '.')
+            {
+                versionNumbers[0] = StringToInt(versionString.Substring(0, i));
+                break;
+            }
+        }
+
+
+        int substringIndex = -1;
+        for (int i = 0; i < versionString.Length; i++)
+        {
+            if (versionString[i] == '.')
+            {
+                substringIndex = i + 1;
+                break;
+            }
+        }
+        versionNumbers[1] = StringToInt(versionString.Substring(substringIndex));
+        return versionNumbers;
+    }
+
 }

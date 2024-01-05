@@ -12,7 +12,8 @@ public enum eEndGameType
 {
     retreat,
     win,
-    lose
+    lose,
+    Count
 }
 
 public class BattleManager : MonoBehaviour
@@ -67,6 +68,9 @@ public class BattleManager : MonoBehaviour
     internal List<Enemy> m_enemies;
     internal int[] m_enemyTypeCounts;
 
+    //Nucleus
+    [SerializeField]Nucleus m_nucleusRef;
+
     //Player Spawn Intro
     bool m_introActive = true;
     public GameObject m_playerSpawnPoint;
@@ -115,7 +119,7 @@ public class BattleManager : MonoBehaviour
     public float m_gameEndSlowdownFactor = 0.25f;
     public float m_gameEndTimer = 0f;
     public const float m_maxGameEndTimer = 0.55f;
-    public eEndGameType m_endGameType;
+    public eEndGameType m_endGameType = eEndGameType.Count;
 
     public float m_score = 0f;
     internal List<Equipment> m_equipmentCollected;
@@ -229,6 +233,7 @@ public class BattleManager : MonoBehaviour
                 m_activeAbilities[i].CoolDown();
             }
         }
+        m_nucleusRef.Tick();
         SetFrozen(true);
     }
 
@@ -663,6 +668,12 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    internal void RemoveEnemy(Enemy a_enemy)
+    {
+        ChangeEnemyCount(-1, a_enemy.m_enemyType);
+        m_enemies.Remove(a_enemy);
+    }
+
     internal void Retreat()
     {
         StartEndingGame(eEndGameType.retreat);
@@ -723,6 +734,16 @@ public class BattleManager : MonoBehaviour
                 m_equipmentCollected.Clear();
             }
         }
+    }
+
+    internal void NucleusExplodes()
+    {
+        StartEndingGame(eEndGameType.lose);
+        //while (m_enemies.Count > 0) 
+        //{
+        //    m_enemies[0].Die();
+        //}
+        //m_player.Die();
     }
 
     void UpdateIntro()

@@ -21,10 +21,14 @@ public class Damageable : BaseObject
     public GameObject m_explosionPrefab;
     public GameObject m_collisionSparkPrefab;
 
+    //Damage Text
     public GameObject m_risingFadingTextPrefab;
     protected float m_damageTextYOffset = 0.2f;
+    protected float m_damageTextOriginalScale = 1f;
     protected Color m_damageTextColor = Color.yellow;
     protected Color m_healTextColor = Color.green;
+
+    protected float m_deathExplosionScale = 1f;
 
     static Func<int, Collision2D> CollisionFuncPTR = null;
 
@@ -64,7 +68,7 @@ public class Damageable : BaseObject
     float m_secondFlingTimerMax = 0.09f;
     Vector3 m_storedFlingVector;
     float m_storedFlingStrength = 0f;
-    protected const float m_flingShake = 0.02f;
+    protected const float m_flingShake = 0.03f;
 
     float m_pocketFlingStrength = GameHandler.DAMAGEABLE_PocketFlingStrength;
 
@@ -94,7 +98,7 @@ public class Damageable : BaseObject
         m_statHandler.Init(false);
         m_originalColor = m_spriteRenderer.color;
         m_rigidBody.mass = m_originalMass = GameHandler.DAMAGEABLE_DefaultMass;
-        m_damageFlashOverrideTimer = new vTimer(m_damageFlashTimerMax,false);
+        m_damageFlashOverrideTimer = new vTimer(m_damageFlashTimerMax,false, true, true, true);
         m_defaultMaterialRef = m_spriteRenderer.material;
         UpdateLocalStatsFromStatHandler();
         m_originalConstraints = m_rigidBody.constraints;
@@ -204,11 +208,11 @@ public class Damageable : BaseObject
         //text.SetGravityAffected(true);
         //text.SetTextContent(a_string);
         //text.SetOriginalColor(a_color);
-        text.SetOriginalScale(1f);
+        text.SetOriginalScale(m_damageTextOriginalScale);
         text.SetUp(valueString, firstcolor, secondColor);
     }
 
-    private void ChangeHealth(float a_change)
+    protected virtual void ChangeHealth(float a_change)
     {
         //If the game is ending, disable damage
         if (m_battleManagerRef.m_endingGame)
@@ -292,7 +296,8 @@ public class Damageable : BaseObject
 
     public virtual void Die()
     {
-        Instantiate(m_explosionPrefab, transform.position, new Quaternion());
+        GameObject explosion = Instantiate(m_explosionPrefab, transform.position, new Quaternion());
+        explosion.transform.localScale *= m_deathExplosionScale;
         Destroy(gameObject);
         m_musicPlayerRef.PlayExplosionSound();
     }

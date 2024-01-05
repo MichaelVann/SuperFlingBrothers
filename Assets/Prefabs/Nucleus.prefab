@@ -349,6 +349,9 @@ MonoBehaviour:
   m_bloodSplatterTemplate: {fileID: 0}
   m_bloodColor: {r: 0, g: 0, b: 0, a: 0}
   m_puffOfSmokeTemplate: {fileID: 0}
+  m_turnsLeftText: {fileID: 0}
+  m_shockwavePrefab: {fileID: 8460863068567715906, guid: f146b50a8c1b83c46b7213267cf6c842,
+    type: 3}
 --- !u!1001 &1528747289635460575
 PrefabInstance:
   m_ObjectHideFlags: 0

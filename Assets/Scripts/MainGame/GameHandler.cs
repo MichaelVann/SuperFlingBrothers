@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using static GameHandler;
@@ -16,8 +17,8 @@ public class GameHandler : MonoBehaviour
 {
     internal static GameHandler m_staticAutoRef;
 
-    public const int MAIN_VERSION_NUMBER = 29;
-    public const int SUB_VERSION_NUMBER = 5;
+    static internal int MAIN_VERSION_NUMBER;
+    static internal int SUB_VERSION_NUMBER;
 
 
     // -- BALANCE VARIABLES --
@@ -29,6 +30,7 @@ public class GameHandler : MonoBehaviour
     static internal float BATTLE_SkillXPScale = 2f;
     static internal float BATTLE_EnemyEquipmentDropChanceScale = 0.5f;
     internal const int    BATTLE_EnemySpawnPointCount = 19;
+    internal const int BATTLE_NucleusTicks = 10;
 
     static internal float PRE_BATTLE_WarfrontChange = -0.17f; //Default is -0.17f
     //Damageables
@@ -145,6 +147,7 @@ public class GameHandler : MonoBehaviour
         }
         internal string name;
         internal int score;
+        internal const int maxScores = 8;
     }
     internal List<Highscore> m_highscoreList;
 
@@ -196,6 +199,9 @@ public class GameHandler : MonoBehaviour
     void Awake()
     {
         m_staticAutoRef = this;
+        int[] versionNumbers = VLib.GetApplicationVersionNumbers();
+        MAIN_VERSION_NUMBER = versionNumbers[0];
+        SUB_VERSION_NUMBER = versionNumbers[1];
         DontDestroyOnLoad(gameObject);
         InitGameOptions();
         //m_saveDataUtility = new SaveDataUtility(this);
@@ -221,7 +227,7 @@ public class GameHandler : MonoBehaviour
         m_gameOptions.scanLineSetting = a_setting;
         RefreshScanLines();
     }
-
+    
     void RefreshScanLines()
     {
         switch (m_gameOptions.scanLineSetting)
@@ -269,9 +275,9 @@ public class GameHandler : MonoBehaviour
         m_highscoreList.Insert(0,new Highscore(m_xCellSquad.m_name, m_humanBody.m_battlesCompleted));
         m_highscoreList.Sort(HighscoreComparison);
         
-        if (m_highscoreList.Count > 9)
+        if (m_highscoreList.Count > Highscore.maxScores)
         {
-            m_highscoreList.RemoveAt(9);
+            m_highscoreList.RemoveAt(Highscore.maxScores);
         }
         ResetRoguelike();
         if (m_autoSaving)
@@ -348,7 +354,7 @@ public class GameHandler : MonoBehaviour
         return returnVal * -1;
     }
 
-    int HighscoreComparison(Highscore a_first,  Highscore a_second)
+    static internal int HighscoreComparison(Highscore a_first,  Highscore a_second)
     {
         int returnVal = a_second.score - a_first.score;
 

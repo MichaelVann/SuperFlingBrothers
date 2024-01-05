@@ -16,7 +16,7 @@ public class TitleScreenHandler : MonoBehaviour
     [SerializeField] GameObject m_noHighscoresTextRef;
     [SerializeField] Button m_playButtonRef;
     List<UIHighScore> m_highScoreList;
-
+    [SerializeField] UIHighScore m_currentRunHighScore;
     bool m_inited = false;
 
     // Start is called before the first frame update
@@ -61,12 +61,20 @@ public class TitleScreenHandler : MonoBehaviour
         }
         m_highScoreList.Clear();
 
-        m_noHighscoresTextRef.SetActive(m_gameHandlerRef.m_highscoreList.Count == 0);
+        m_noHighscoresTextRef.SetActive(false);// m_gameHandlerRef.m_highscoreList.Count == 0);
 
+        List<GameHandler.Highscore> copiedHighScoreList = new List<GameHandler.Highscore>();
         for (int i = 0; i < m_gameHandlerRef.m_highscoreList.Count; i++)
         {
+            copiedHighScoreList.Add(m_gameHandlerRef.m_highscoreList[i]);
+        }
+        copiedHighScoreList.Add(new GameHandler.Highscore(m_gameHandlerRef.m_xCellSquad.m_name, m_gameHandlerRef.m_humanBody.m_battlesCompleted));
+        copiedHighScoreList.Sort(GameHandler.HighscoreComparison);
+
+        for (int i = 0; i < copiedHighScoreList.Count; i++)
+        {
             m_highScoreList.Add(Instantiate(m_highscorePrefab, m_highScoreContentRef.transform).GetComponent<UIHighScore>());
-            m_highScoreList[i].Init((i + 1), m_gameHandlerRef.m_highscoreList[i].name, m_gameHandlerRef.m_highscoreList[i].score);
+            m_highScoreList[i].Init((i + 1), copiedHighScoreList[i].name, copiedHighScoreList[i].score, copiedHighScoreList[i].name == m_gameHandlerRef.m_xCellSquad.m_name);
         }
     }
 

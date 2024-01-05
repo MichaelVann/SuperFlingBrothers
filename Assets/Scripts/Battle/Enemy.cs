@@ -439,8 +439,7 @@ public class Enemy : Damageable
 
         SpawnXpText();
 
-        m_battleManagerRef.ChangeEnemyCount(-1, m_enemyType);
-
+        m_battleManagerRef.RemoveEnemy(this);
         SpawnDeathLoot();
 
         base.Die();
@@ -487,7 +486,7 @@ public class Enemy : Damageable
         Vector3 playerPos = m_playerRef.transform.position;
         RunFlingTimer();
         float flingTimerPercentage = m_flingTimer / m_flingTimerMax;
-        SetShakeAmount(m_flingShake * Mathf.Pow(flingTimerPercentage,4f));
+        SetShakeAmount(m_flingShake * Mathf.Pow(flingTimerPercentage,5f));
     }
 
     //AI

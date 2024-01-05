@@ -20,10 +20,15 @@ public class UIHighScore : MonoBehaviour
         
     }
 
-    internal void Init(int a_rank, string a_squadName, int a_score)
+    internal void Init(int a_rank, string a_squadName, int a_score, bool a_currentScore)
     {
         m_rankTextRef.text = "#" + a_rank;
         m_squadNameTextRef.text = "" + a_squadName;
-        m_daysCountTextRef.text = "<color=red>" + a_score + "</color>days";
+        m_daysCountTextRef.text = "<color=red>" + a_score + "</color> days";
+
+        if (a_currentScore)
+        {
+            m_squadNameTextRef.text = "<color=green><u>" + a_squadName + "</u></color>";
+        }
     }
 }

@@ -269,7 +269,6 @@ public class Player : Damageable
             }
             m_flingLine.enabled = true;
             Vector3 worldMousePoint = m_cameraRef.ScreenToWorldPoint(Input.mousePosition);
-            SetShakeAmount(m_flingShake);
 
             if (worldMousePoint.y >= m_battleManagerRef.m_upperLowerFlingPositionBounds || worldMousePoint.y <= -m_battleManagerRef.m_upperLowerFlingPositionBounds)
             {
@@ -285,6 +284,7 @@ public class Player : Damageable
             {
                 m_validFling = false;
             }
+            SetShakeAmount(m_flingShake * (deltaMousePos.magnitude/m_maxFlingLength));
 
             Vector3[] linePositions = new Vector3[2];
 
@@ -318,7 +318,7 @@ public class Player : Damageable
 
     public override void Die()
     {
-        if (!m_battleManagerRef.m_endingGame)
+        if (!m_battleManagerRef.m_endingGame || m_battleManagerRef.m_endGameType == eEndGameType.lose)
         {
             base.Die();
             m_battleManagerRef.StartEndingGame(eEndGameType.lose);
