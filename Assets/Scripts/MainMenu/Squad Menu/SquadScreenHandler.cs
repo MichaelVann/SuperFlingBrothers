@@ -24,6 +24,8 @@ public class SquadScreenHandler : MonoBehaviour
     [SerializeField] GameObject m_skillsScreen;
     [SerializeField] GameObject m_storeScreen;
     [SerializeField] NavigationBar m_navigationBarRef;
+    [SerializeField] GameObject m_storeLevelLockRef;
+    [SerializeField] TextMeshProUGUI m_storeLevelLockTextRef;
 
     private bool m_inited = false;
 
@@ -42,6 +44,9 @@ public class SquadScreenHandler : MonoBehaviour
         //    m_gameHandlerRef.CreateDialogBox(GameHandler.m_speakerCharacterName,testStrings);
         //    m_gameHandlerRef.m_firstTimeSquadOverview = false;
         //}
+        bool upgradesUnlocked = m_gameHandlerRef.m_xCellSquad.IsUpgradesScreenUnlocked();
+        m_storeLevelLockRef.SetActive(!upgradesUnlocked);
+        m_storeLevelLockTextRef.text = "Level " + XCellSquad.m_upgradesUnlockLevel;
     }
 
     // Update is called once per frame
@@ -68,7 +73,6 @@ public class SquadScreenHandler : MonoBehaviour
             m_equipmentAllocationNotifierTextRef.text = newEquipmentCount.ToString();
         }
     }
-
 
     void CloseAllScreens()
     {

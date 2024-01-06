@@ -95,7 +95,7 @@ public class UpgradeNodeReadout : MonoBehaviour
         m_descriptionTextRef.text = m_upgradeItemRef.m_description;
         if (m_upgradeItemRef.m_hasLevels)
         {
-            m_levelTextRef.text = "LVL " + m_upgradeItemRef.m_level.ToString();
+            m_levelTextRef.text = "LVL " + m_upgradeItemRef.m_level.ToString() + "/" + m_upgradeItemRef.m_maxLevel.ToString();
             m_levelTextRef.gameObject.SetActive(true);
         }
         else

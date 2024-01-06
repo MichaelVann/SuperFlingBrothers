@@ -18,6 +18,9 @@ public class XCellSquad
     const int m_prestigeNameLevel = 10;
     internal bool m_prestigeNamed = false;
 
+    //Unlocks
+    internal const int m_upgradesUnlockLevel = 5;
+
 
     static string[] m_teamNamePrefixes =
     {
@@ -61,6 +64,8 @@ public class XCellSquad
     {
 
     }
+
+    internal bool IsUpgradesScreenUnlocked() { return m_statHandler.m_RPGLevel.m_level >= m_upgradesUnlockLevel; }
 
     public void Init()
     {

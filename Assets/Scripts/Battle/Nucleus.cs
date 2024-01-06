@@ -8,8 +8,9 @@ public class Nucleus : Damageable
 {
     [SerializeField] TextMeshProUGUI m_turnsLeftText;
     [SerializeField] GameObject m_shockwavePrefab;
+    const float m_defaultHealth = 1000f;
 
-    float GetTickDamage() {return m_maxHealth / GameHandler.BATTLE_NucleusTicks; }
+    float GetTickDamage() {return m_defaultHealth / GameHandler.BATTLE_NucleusTicks; }
 
     public override void Awake()
     {
@@ -23,7 +24,9 @@ public class Nucleus : Damageable
     {
         base.Start();
         m_gameHandlerRef = FindObjectOfType<GameHandler>();
-        m_statHandler.m_stats[(int)eCharacterStatType.constitution].m_finalValue = 1000f;
+        int healthUpgradeLevel = m_gameHandlerRef.m_upgradeTree.GetUpgradeLevel(UpgradeItem.UpgradeId.nucleusHealthUpgrade);
+        float healthUpgradeFactor = 1f + healthUpgradeLevel * 0.1f;
+        m_statHandler.m_stats[(int)eCharacterStatType.constitution].m_finalValue = m_defaultHealth * healthUpgradeFactor;
         UpdateLocalStatsFromStatHandler();
         if (m_healthBarRef) { m_healthBarRef.SetProgressValue(m_health); }
         m_damageTextOriginalScale = 2f;

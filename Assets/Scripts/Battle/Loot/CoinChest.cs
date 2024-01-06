@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CoinChest : Loot
+public class CoinChest : Damageable
 {
     [SerializeField] GameObject m_coinPrefab;
     [SerializeField] GameObject m_popParticlesPrefab;
     internal int m_coinCount = 4;
-    
+    float m_shake = 0f;
+    const float m_shakeDecay = 0.98f;
     // Start is called before the first frame update
     override public void Start()
     {
@@ -15,12 +16,15 @@ public class CoinChest : Loot
     }
 
     // Update is called once per frame
-    override public void Update()
+     public override void Update()
     {
         //if (m_battleManagerRef.m_endingGame && m_battleManagerRef.m_endGameType == eEndGameType.win)
         //{
         //    PopChest(true);
         //}
+        SetShakeAmount(m_shake);
+        m_shake *= m_shakeDecay;
+        base.Update();
     }
 
     public void Init(int a_coinCount)
@@ -36,11 +40,18 @@ public class CoinChest : Loot
         Destroy(gameObject);
     }
 
-    public override void OnTriggerEnter2D(Collider2D a_collider)
+    public override void OnCollisionEnter2D (Collision2D a_collider)
     {
         if (a_collider.gameObject.GetComponent<Player>())
         {
-            PopChest(false);
+            base.OnCollisionEnter2D(a_collider);
+            m_shake = 0.03f;
         }
+    }
+
+    public override void Die()
+    {
+        PopChest(false);
+        Destroy(gameObject);
     }
 }

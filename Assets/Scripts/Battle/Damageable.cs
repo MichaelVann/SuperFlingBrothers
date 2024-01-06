@@ -384,7 +384,6 @@ public class Damageable : BaseObject
         m_lastMomentumMagnitude = m_rigidBody.velocity.magnitude * m_rigidBody.mass;
         SecondFlingUpdate();
 
-
         DamageFlashOverrideUpdate();
         float eulerAnglesForShadow = transform.eulerAngles.z + GameHandler.BATTLE_ShadowAngle;
         float x = Mathf.Sin(eulerAnglesForShadow * Mathf.PI / 180f) / transform.localScale.x;

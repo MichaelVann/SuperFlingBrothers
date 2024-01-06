@@ -16,7 +16,7 @@ public class UpgradeItem
     public bool m_owned = false;
     public bool m_hasLevels = false;
     public int m_level = 0;
-    public int m_maxLevel = 10;
+    public int m_maxLevel = 0;
 
     public bool m_unlocked;
     internal bool m_toggled = true;
@@ -30,6 +30,7 @@ public class UpgradeItem
         enemyVector,
         comboHits,
         battleScouting,
+        nucleusHealthUpgrade,
         Count
     }
     public UpgradeId m_ID;
@@ -78,6 +79,7 @@ public class UpgradeItem
         if (a_maxLevel > 0)
         {
             SetMaxLevel(a_maxLevel);
+            m_hasLevels = true;
         }
         Refresh();
     }

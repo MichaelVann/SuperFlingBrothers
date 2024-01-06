@@ -10,7 +10,11 @@ public class UpgradeTree
 
     // Start is called before the first frame update
 
-    internal bool HasUpgrade(UpgradeItem.UpgradeId a_upgradeId) { return m_upgradeItemList[(int)a_upgradeId].IsEnabled(); }
+    internal UpgradeItem GetUpgrade(UpgradeItem.UpgradeId a_upgradeId) { return m_upgradeItemList[(int)a_upgradeId]; }
+
+    internal bool HasUpgrade(UpgradeItem.UpgradeId a_upgradeId) { return GetUpgrade(a_upgradeId).IsEnabled(); }
+
+    internal int GetUpgradeLevel(UpgradeItem.UpgradeId a_upgradeId) { return GetUpgrade(a_upgradeId).m_level; }
 
     internal UpgradeTree()
     {
@@ -32,6 +36,7 @@ public class UpgradeTree
             UpgradeItem comboHits = NewUpgrade(UpgradeItem.UpgradeId.comboHits, "Combo Hits", 100, 0, enemyVector, "Adds 10% extra damage on each hit per turn.");
 
         UpgradeItem battleScouting = NewUpgrade(UpgradeItem.UpgradeId.battleScouting, "Battle Scouting", 50, 0, null, "Reveals the environmental effects of each battle.");
+        UpgradeItem nucleusHealthUpgrade = NewUpgrade(UpgradeId.nucleusHealthUpgrade, "Nucleus Health", 100, 5, null, "Increases the Nucleus health by 10% per level.");
         //UpgradeItem test1 = NewUpgrade(UpgradeItem.UpgradeId.battleScouting, "Test1", 50, 0, playerVector, "Reveals the environmental effects of each battle.");
         //UpgradeItem test2 = NewUpgrade(UpgradeItem.UpgradeId.battleScouting, "Test2", 50, 0, battleScouting, "Reveals the environmental effects of each battle.");
         //UpgradeItem test3 = NewUpgrade(UpgradeItem.UpgradeId.battleScouting, "Test3", 50, 0, battleScouting, "Reveals the environmental effects of each battle.");

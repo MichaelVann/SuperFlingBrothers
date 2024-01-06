@@ -42,9 +42,10 @@ public class AbilityButton : MonoBehaviour
 
     public void Disable()
     {
-        m_buttonRef.interactable = false;
-        m_affixText.text = "DESTROYED";
-        m_disabled = true;
+        //m_buttonRef.interactable = false;
+        //m_panelImageRef.color = Color.red;
+        //m_affixText.text = "DESTROYED";
+        //m_disabled = true;
     }
 
     public void Refresh()
@@ -56,6 +57,7 @@ public class AbilityButton : MonoBehaviour
             {
                 m_buttonRef.interactable = false;
                 m_affixText.text = "DESTROYED";
+                m_panelImageRef.color = Color.red;
                 m_disabled = true;
                 m_equipmentRef.m_activeAbility.m_engaged = false;
                 m_cooldownCountTextRef.gameObject.SetActive(false);

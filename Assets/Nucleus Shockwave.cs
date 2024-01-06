@@ -32,4 +32,13 @@ public class Shockwave : MonoBehaviour
             oppDamageable.Die();
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D a_other)
+    {
+        Damageable oppDamageable = a_other.gameObject.GetComponent<Damageable>();
+        if (oppDamageable != null)
+        {
+            oppDamageable.Die();
+        }
+    }
 }
