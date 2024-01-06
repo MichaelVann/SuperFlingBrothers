@@ -19,6 +19,7 @@ public class vTimer
     internal void SetTimer(float a_timer) {m_timer = a_timer; }
     public float GetTimer() { return m_timer; }
 
+    internal void SetUsingUnscaledDeltaTime(bool a_using) { m_usingUnscaledDeltaTime = a_using; }
     public float GetCompletionPercentage() { return m_timer / m_timerMax; }
     public float GetTimerMax() { return m_timerMax; }
 

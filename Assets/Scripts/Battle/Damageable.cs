@@ -68,7 +68,7 @@ public class Damageable : BaseObject
     float m_secondFlingTimerMax = 0.09f;
     Vector3 m_storedFlingVector;
     float m_storedFlingStrength = 0f;
-    protected const float m_flingShake = 0.03f;
+    protected const float m_flingShake = 0.01f;
 
     float m_pocketFlingStrength = GameHandler.DAMAGEABLE_PocketFlingStrength;
 
@@ -84,6 +84,13 @@ public class Damageable : BaseObject
     bool m_damageFlashOverrideRunning = false;
     vTimer m_damageFlashOverrideTimer;
     float m_damageFlashTimerMax = 0.1f;
+
+    //Shake
+    float m_addedShake = 0f;
+    const float m_damageShakeMax = 0.025f;
+    float m_damageShake = 0f;
+    float m_damageShakeDecay = 0.98f;
+
 
     protected Material m_defaultMaterialRef;
 
@@ -112,6 +119,11 @@ public class Damageable : BaseObject
         {
             m_shieldBarRef.SetHealthColoring(false);
         }
+    }
+
+    protected override void SetShakeAmount(float a_shakeAmount)
+    {
+        m_addedShake = a_shakeAmount;
     }
 
     void UpdateRotationToFollowVelocity()
@@ -258,6 +270,7 @@ public class Damageable : BaseObject
     {
         ChangeHealth(-a_damage);
         Bleed(a_damage/m_maxHealth);
+        m_damageShake = m_damageShakeMax;
     }
 
     public void Heal(float a_healing)
@@ -377,6 +390,21 @@ public class Damageable : BaseObject
         }
     }
 
+    void ShakeUpdate()
+    {
+        m_damageShake *= m_damageShakeDecay;
+        float shake = Mathf.Max(m_addedShake, m_damageShake);
+        base.SetShakeAmount(shake);
+    }
+
+    void PositionShadow()
+    {
+        float eulerAnglesForShadow = transform.eulerAngles.z + GameHandler.BATTLE_ShadowAngle;
+        float x = Mathf.Sin(eulerAnglesForShadow * Mathf.PI / 180f) / transform.localScale.x;
+        float y = Mathf.Cos(eulerAnglesForShadow * Mathf.PI / 180f) / transform.localScale.y;
+        m_shadowRef.transform.localPosition = new Vector3(x, y) * BattleManager.m_shadowDistance;
+    }
+
     public override void Update()
     {
         base.Update();
@@ -385,10 +413,8 @@ public class Damageable : BaseObject
         SecondFlingUpdate();
 
         DamageFlashOverrideUpdate();
-        float eulerAnglesForShadow = transform.eulerAngles.z + GameHandler.BATTLE_ShadowAngle;
-        float x = Mathf.Sin(eulerAnglesForShadow * Mathf.PI / 180f) / transform.localScale.x;
-        float y = Mathf.Cos(eulerAnglesForShadow * Mathf.PI / 180f) / transform.localScale.y;
-        m_shadowRef.transform.localPosition = new Vector3(x, y) * BattleManager.m_shadowDistance;
+        ShakeUpdate();
+        PositionShadow();
 
         if (m_rotateToAlignToVelocity)
         {

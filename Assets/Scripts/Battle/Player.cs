@@ -361,8 +361,8 @@ public class Player : Damageable
                     m_comboHit *= m_comboHitExponent;
                 }
             }
-
         }
+
         else if (retreatZone)
         {
             if (!m_battleManagerRef.m_endingGame)

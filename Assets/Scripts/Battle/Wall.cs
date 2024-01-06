@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Wall : MonoBehaviour
 {
-    public GameObject m_wallCrackTemplate;
+    [SerializeField] GameObject m_wallCrackTemplate;
+    [SerializeField] GameObject m_wallCrackContainerRef;
     public enum WallDirection
     {
         Left,
@@ -49,7 +50,8 @@ public class Wall : MonoBehaviour
                     break;
             }
 
-            GameObject crack = Instantiate<GameObject>(m_wallCrackTemplate, a_collision.contacts[0].point, Quaternion.AngleAxis(angle, Vector3.forward));
+            GameObject crack = Instantiate(m_wallCrackTemplate, a_collision.contacts[0].point, Quaternion.AngleAxis(angle, Vector3.forward));
+            crack.transform.parent = m_wallCrackContainerRef.transform;
             float scale = a_collision.relativeVelocity.magnitude;
             crack.transform.localScale *= scale/3f;
         }

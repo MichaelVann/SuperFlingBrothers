@@ -11,7 +11,7 @@ public class BaseObject : MonoBehaviour
     Vector3 m_shakeOffset = Vector3.zero;
     float m_shakeDecay = 0.9f;
 
-    protected void SetShakeAmount(float a_shakeAmount) { m_shakeAmount = a_shakeAmount; }
+    protected virtual void SetShakeAmount(float a_shakeAmount) { m_shakeAmount = a_shakeAmount; }
 
     public virtual void Awake()
     {

@@ -357,7 +357,7 @@ public class Enemy : Damageable
                 float angle = VLib.Vector2ToEulerAngle(deltaVec);
                 m_visionConeRef.transform.eulerAngles = new Vector3(0f, 0f, angle);
                 float deltaMag = (m_playerRef.transform.position - transform.position).magnitude;
-                m_visionConeRef.transform.localScale = new Vector3(m_visionConeRef.transform.localScale.x, deltaMag / 1.6f, 1f);
+                m_visionConeRef.transform.localScale = new Vector3(m_visionConeRef.transform.localScale.x, deltaMag * 0.10f, 1f);
             }
         }
     }
@@ -417,11 +417,6 @@ public class Enemy : Damageable
             equipmentDrops++;
         }
         SpawnLoot(m_equipmentDropPrefab, equipmentDrops);
-
-        if (UnityEngine.Random.Range(0f, 1f) < 0.1f)
-        {
-            Instantiate<GameObject>(m_equipmentDropPrefab, transform.position, new Quaternion());
-        }
     }
 
     public override void Die()

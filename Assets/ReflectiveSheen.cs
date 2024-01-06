@@ -15,6 +15,7 @@ public class ReflectiveSheen : MonoBehaviour
     {
         float totalRunTime = m_pauseTime + m_runTime;
         m_timer = new vTimer(totalRunTime);
+        m_timer.SetUsingUnscaledDeltaTime(true);
         m_timer.SetTimer(VLib.vRandom(0f, totalRunTime));
     }
 
