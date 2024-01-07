@@ -70,7 +70,7 @@ public class EquipmentSlotUI : MonoBehaviour
 
             m_abilityTextRef.text = m_equipmentRef.m_activeAbility.GetName();
             m_itemValueTextRef.text = "" + m_equipmentRef.GetSellValue();
-            m_equipmentHealthReadoutRef.SetHealth(m_equipmentRef.m_health, m_equipmentRef.m_maxHealth);
+            m_equipmentHealthReadoutRef.SetEquipmentRef(m_equipmentRef);
 
             m_nameText.text = m_equipmentRef.m_rarity.name;
             if (m_equipmentRef.m_name != "")
@@ -97,7 +97,7 @@ public class EquipmentSlotUI : MonoBehaviour
             m_itemValueTextRef.text = "0";
             m_affixesTextRef.text = "Equip an equipment to see it's stats.";
             m_affixesTextRef.color = new Color(0.8f, 0.8f, 0.8f);
-            m_equipmentHealthReadoutRef.SetHealth(0, 0);
+            m_equipmentHealthReadoutRef.SetEquipmentRef(null);
 
         }
         

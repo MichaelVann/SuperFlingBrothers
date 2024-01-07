@@ -599,6 +599,7 @@ MonoBehaviour:
     m_goldValue: 0
     m_health: 0
     m_maxHealth: 0
+    m_originalMaxHealth: 0
     m_activeAbility:
       rid: -2
   m_abilityTypeText: {fileID: 3804010437991140661}
@@ -2385,16 +2386,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5890711132284807753, guid: 9153bc86d8470254c8c449088aa2a701,
         type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 129.175
-      objectReference: {fileID: 0}
-    - target: {fileID: 5890711132284807753, guid: 9153bc86d8470254c8c449088aa2a701,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 40.9
-      objectReference: {fileID: 0}
-    - target: {fileID: 5890711132284807753, guid: 9153bc86d8470254c8c449088aa2a701,
-        type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -2436,7 +2427,7 @@ PrefabInstance:
     - target: {fileID: 5890711132284807753, guid: 9153bc86d8470254c8c449088aa2a701,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -74
+      value: -79.8
       objectReference: {fileID: 0}
     - target: {fileID: 5890711132284807753, guid: 9153bc86d8470254c8c449088aa2a701,
         type: 3}

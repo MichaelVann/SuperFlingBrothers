@@ -26,6 +26,7 @@ public class ZoomExpandComponent : MonoBehaviour
     {
         if (m_timer.Update())
         {
+            ApplyScale();
             if (m_finishZoomDelegate != null)
             {
                 m_finishZoomDelegate.Invoke();
@@ -49,7 +50,8 @@ public class ZoomExpandComponent : MonoBehaviour
         m_zoomTime = a_zoomTime;
         m_exponent = a_exponent;
         m_finishZoomDelegate = a_finishZoomDelegate;
-        m_timer = new vTimer(m_zoomTime, true);
+        m_timer = new vTimer(m_zoomTime, true, true, false, true);
+        //m_timer.SetUsingUnscaledDeltaTime(true);
         ApplyScale();
     }
 }

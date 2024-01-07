@@ -50,7 +50,7 @@ public class EquipmentPanel : MonoBehaviour
 
         m_abilityTypeText.text = m_equipmentRef.m_activeAbility.GetName();
         m_abilityTypeText.color = m_equipmentRef.m_rarity.color;
-        m_healthReadout.SetHealth(m_equipmentRef.m_health, m_equipmentRef.m_maxHealth);
+        m_healthReadout.SetEquipmentRef(m_equipmentRef);
         m_rarityTextRef.text = m_equipmentRef.m_rarity.name;
         m_rarityTextRef.color = m_equipmentRef.m_rarity.color;
         if (m_equipmentRef.m_name != "")

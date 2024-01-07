@@ -37,8 +37,8 @@ public class CoinChest : Damageable
     void PopChest(bool a_instantDispersal)
     {
         Loot.SpawnLoot(m_battleManagerRef, m_coinPrefab, 0.3f, transform.position, m_coinCount, a_instantDispersal);
-        int equipmentDrops = 0;
-        while (VLib.vRandom(0f, 1f) > m_equipmentDropChance)
+        int equipmentDrops = 1;
+        if (VLib.vRandom(0f, 1f) > m_equipmentDropChance)
         {
             equipmentDrops++;
         }

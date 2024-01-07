@@ -271,6 +271,7 @@ public class Damageable : BaseObject
         ChangeHealth(-a_damage);
         Bleed(a_damage/m_maxHealth);
         m_damageShake = m_damageShakeMax;
+        m_musicPlayerRef.PlayDamageSound();
     }
 
     public void Heal(float a_healing)
@@ -288,10 +289,8 @@ public class Damageable : BaseObject
         if (m_bloodSplatterTemplate != null)
         {
             GameObject blood = Instantiate(m_bloodSplatterTemplate, transform.position, new Quaternion());
-            m_musicPlayerRef.PlayDamageSound();
             blood.GetComponent<SpriteRenderer>().color = m_bloodColor;
             blood.transform.localScale *= a_bleedAmount * 1f;
-            
         }
     }
 

@@ -64,7 +64,6 @@ public class GameHandler : MonoBehaviour
     const float m_sceneFadeDuration = 0.35f;
 
     // Dialogue
-
     internal TutorialManager m_tutorialManager;
 
     internal const string m_speakerCharacterName = "Micky";// Sergeant Geras";
@@ -133,6 +132,7 @@ public class GameHandler : MonoBehaviour
         public string bodyLastName;
     }
     SaveData m_saveData;
+    string m_saveFileName = "/Data.txt";
     //SaveDataUtility m_saveDataUtility;
     const bool m_autoLoadDataOnLaunch = true;
     internal const bool m_autoSaving = true;
@@ -292,6 +292,13 @@ public class GameHandler : MonoBehaviour
         ResetRoguelike();
         m_highscoreList = new List<Highscore>();
         InitialiseTutorials();
+    }
+
+    internal void HardResetGame()
+    {
+        File.Delete(Application.persistentDataPath + m_saveFileName);
+        File.Delete(Application.persistentDataPath + SaveDataUtility.m_saveFileName);
+        ResetGame();
     }
 
     void SetupLastGameStats()
@@ -592,7 +599,7 @@ public class GameHandler : MonoBehaviour
         m_saveData.bodyFirstName = m_humanBody.m_firstName;
         m_saveData.bodyLastName = m_humanBody.m_lastName;
 
-        string path = Application.persistentDataPath + "/Data.txt";
+        string path = Application.persistentDataPath + m_saveFileName;
         string json = JsonUtility.ToJson(m_saveData);
         File.WriteAllText(path, json);
         SaveDataUtility saveDataUtility =  new SaveDataUtility(this);
@@ -603,55 +610,58 @@ public class GameHandler : MonoBehaviour
     {
         bool retVal = true;
 
-        string path = Application.persistentDataPath + "/Data.txt";
-        if (File.Exists(path))
-        {
-            string loadedString = File.ReadAllText(path);
-            m_saveData = JsonUtility.FromJson<SaveData>(loadedString);
-            m_cash = m_saveData.cash;
-            m_xCellSquad = m_saveData.xCellTeam;
-            //m_humanBody = m_saveData.humanBody;
-            m_humanBody.m_gameHandlerRef = this;
-            //m_playerStatHandler = m_saveData.statHandler;
-            for (int i = 0; i < m_stockHandler.m_stockList.Count; i++)
-            {
-                m_stockHandler.m_stockList[i].CopyValues(m_saveData.stockList[i]);
-            }
-            //m_humanBody.m_firstName = m_saveData.bodyFirstName;
-            //m_humanBody.m_lastName = m_saveData.bodyLastName;
-
-            //for (int i = 0; i < m_upgrades.Length; i++)
-            //{
-            //    m_upgrades[i].Copy(m_saveData.upgrades[i]);
-            //}
-
-            for (int i = 0; i < m_xCellSquad.m_playerXCell.m_equippedEquipment.Length; i++)
-            {
-                m_xCellSquad.m_playerXCell.m_equippedEquipment[i] = null;
-            }
-
-            m_equipmentInventory = new List<Equipment>();
-
-            for (int i = 0; i < m_saveData.equipmentList.Count; i++)
-            {
-                m_equipmentInventory.Add(m_saveData.equipmentList[i]);
-                m_saveData.equipmentList[i].ResetAbilitysParent();
-                if (m_equipmentInventory[i].m_equipped)
-                {
-                    m_xCellSquad.m_playerXCell.m_equippedEquipment[m_equipmentInventory[i].m_equippedSlotId] = m_equipmentInventory[i];
-                }
-            }
-        }
-        else
-        {
-            retVal = false;
-        }
-        
         SaveDataUtility saveDataUtility = new SaveDataUtility(this);
         if (!saveDataUtility.Load())
         {
             retVal = false;
         }
+        else
+        {
+            string path = Application.persistentDataPath + m_saveFileName;
+            if (File.Exists(path))
+            {
+                string loadedString = File.ReadAllText(path);
+                m_saveData = JsonUtility.FromJson<SaveData>(loadedString);
+                m_cash = m_saveData.cash;
+                m_xCellSquad = m_saveData.xCellTeam;
+                //m_humanBody = m_saveData.humanBody;
+                m_humanBody.m_gameHandlerRef = this;
+                //m_playerStatHandler = m_saveData.statHandler;
+                for (int i = 0; i < m_stockHandler.m_stockList.Count; i++)
+                {
+                    m_stockHandler.m_stockList[i].CopyValues(m_saveData.stockList[i]);
+                }
+                //m_humanBody.m_firstName = m_saveData.bodyFirstName;
+                //m_humanBody.m_lastName = m_saveData.bodyLastName;
+
+                //for (int i = 0; i < m_upgrades.Length; i++)
+                //{
+                //    m_upgrades[i].Copy(m_saveData.upgrades[i]);
+                //}
+
+                for (int i = 0; i < m_xCellSquad.m_playerXCell.m_equippedEquipment.Length; i++)
+                {
+                    m_xCellSquad.m_playerXCell.m_equippedEquipment[i] = null;
+                }
+
+                m_equipmentInventory = new List<Equipment>();
+
+                for (int i = 0; i < m_saveData.equipmentList.Count; i++)
+                {
+                    m_equipmentInventory.Add(m_saveData.equipmentList[i]);
+                    m_saveData.equipmentList[i].ResetAbilitysParent();
+                    if (m_equipmentInventory[i].m_equipped)
+                    {
+                        m_xCellSquad.m_playerXCell.m_equippedEquipment[m_equipmentInventory[i].m_equippedSlotId] = m_equipmentInventory[i];
+                    }
+                }
+            }
+            else
+            {
+                retVal = false;
+            }
+        }
+
         RefreshScanLines();
         return retVal;
     }

@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class SaveDataUtility
 {
-    const string m_saveFileName = "Data2.txt";
+    internal const string m_saveFileName = "DataToo.txt";
 
     [Serializable]
     struct UpgradeTreeData
@@ -105,6 +105,8 @@ public class SaveDataUtility
     [Serializable]
     struct SaveData
     {
+        public int mainVersion;
+        public int subVersion;
         public UpgradeTreeData upgradeTreeData;
         public HumanBodyData humanBodyData;
         public AudioData audioData;
@@ -316,9 +318,21 @@ public class SaveDataUtility
         SaveGameSettings();
         m_saveData.squadRenameNotificationPending = m_gameHandlerRef.m_squadRenameNotificationPending;
         m_saveData.squadPrestigeNamed = m_gameHandlerRef.m_xCellSquad.m_prestigeNamed;
+
+        m_saveData.mainVersion = GameHandler.MAIN_VERSION_NUMBER;
+        m_saveData.subVersion = GameHandler.SUB_VERSION_NUMBER;
+
         string path = GetSaveDataPath();
         string json = JsonUtility.ToJson(m_saveData);
         File.WriteAllText(path, json);
+    }
+
+    bool SaveFileVersionCheck()
+    {
+        bool result = m_saveData.mainVersion >= GameHandler.MAIN_VERSION_NUMBER;
+        result &= m_saveData.subVersion >= GameHandler.SUB_VERSION_NUMBER;
+
+        return result;
     }
 
     internal bool Load()
@@ -329,16 +343,19 @@ public class SaveDataUtility
         {
             string loadedString = File.ReadAllText(path);
             m_saveData = JsonUtility.FromJson<SaveData>(loadedString);
-            LoadUpgradeTree();
-            LoadHumanBody();
-            LoadAudioData();
-            LoadHighscores();
-            LoadTutorialData();
-            LoadGameSettings();
-            m_gameHandlerRef.m_squadRenameNotificationPending = m_saveData.squadRenameNotificationPending;
-            m_gameHandlerRef.m_xCellSquad.m_prestigeNamed = m_saveData.squadPrestigeNamed;
+            if (SaveFileVersionCheck())
+            {
+                LoadUpgradeTree();
+                LoadHumanBody();
+                LoadAudioData();
+                LoadHighscores();
+                LoadTutorialData();
+                LoadGameSettings();
+                m_gameHandlerRef.m_squadRenameNotificationPending = m_saveData.squadRenameNotificationPending;
+                m_gameHandlerRef.m_xCellSquad.m_prestigeNamed = m_saveData.squadPrestigeNamed;
 
-            retVal = true;
+                retVal = true;
+            }
         }
         else
         {

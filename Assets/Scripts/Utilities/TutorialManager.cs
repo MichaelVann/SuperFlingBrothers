@@ -25,6 +25,7 @@ public class TutorialManager
         StartUp = 0,
         SquadOverview,
         Inventory,
+        FirstTimeBattle,
         Count
     }
     internal bool[] m_messagesPlayed;
@@ -35,12 +36,13 @@ public class TutorialManager
         return retVal;
     }
 
-    internal bool AttemptToSpawnMessage(eMessage a_message)
+    internal bool AttemptToSpawnMessage(eMessage a_message, DialogBox.OnCloseDelegate a_onCloseDelegate = null)
     {
+        
         bool messagePlayed = false;
         if (!m_messagesPlayed[(int)a_message])
         {
-            PlayMessage(a_message);
+            PlayMessage(a_message, a_onCloseDelegate);
             messagePlayed = true;
         }
         return messagePlayed;
@@ -63,10 +65,9 @@ public class TutorialManager
         }
     }
 
-    void PlayMessage(eMessage a_messageIndex)
+    void PlayMessage(eMessage a_messageIndex, DialogBox.OnCloseDelegate a_onCloseDelegate = null)
     {
         List<string> dialogStrings = new List<string>();
-        DialogBox.OnCloseDelegate onCloseDelegate = null;
         switch (a_messageIndex)
         {
             case eMessage.StartUp:
@@ -77,7 +78,7 @@ public class TutorialManager
                     "I'll now kickstart you through a quick set of simple tasks to bring you up to speed on the game.",
                     "Good luck, and thank you for checking out the game. Much love."
                 };
-                onCloseDelegate = SpawnTutorial;
+                a_onCloseDelegate = SpawnTutorial;
                 break;
             case eMessage.SquadOverview:
                 dialogStrings = new List<string>
@@ -94,13 +95,24 @@ public class TutorialManager
                     "Here you can view your available equipment and equip it to one of four available slots. Each bit of equipment provides either a passive or active ability, which can be used against the scourge."
                 };
                 break;
+            case eMessage.FirstTimeBattle:
+                string humansName = m_gameHandlerRef.m_humanBody.m_firstName;
+                dialogStrings = new List<string>
+                {
+                    "Alright <color=#00FFFF>" + m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_name + "</color>,\n" + "Here's your mandatory advice for your first engagement. Listen closely.",
+                    "Your goal for this deployment is to <color=#FFD700>survive</color>. Forget about gathering the <color=#D2B48C>caches</color>, forget about protecting the <color=#FFAAFF>nucleus</color>, and FORGET about killing the <color=green>enemy</color>. I can't stand watching FNGs kill themselves for wasted glory.",
+                    "If you remember anything remember this: \nKeep an eye on the countdown in the middle of the nucleus. Once that hits <color=yellow>0</color> it will <color=red><i>EXPLODE</color></i>, killing you and everything else in this " + humansName + " forsaken cell.",
+                    "Make sure you get back through the <color=yellow>escape hatch</color>, the glowing space at the top, before that runs out.",
+                    "Good luck, and " + humansName + " speed. Please, make it back, something about this war seems different."
+                };
+                break;
             case eMessage.Count:
                 break;
             default:
                 break;
         }
         m_messagesPlayed[(int)a_messageIndex] = true;
-        CreateTutorialDialog(GameHandler.m_speakerCharacterName, dialogStrings, onCloseDelegate);
+        CreateTutorialDialog(GameHandler.m_speakerCharacterName, dialogStrings, a_onCloseDelegate);
     }
 
     // Start is called before the first frame update

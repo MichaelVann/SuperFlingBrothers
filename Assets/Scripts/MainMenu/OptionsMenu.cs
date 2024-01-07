@@ -111,10 +111,8 @@ public class OptionsMenu : MonoBehaviour
     }
 
     public void ResetGame()
-    {
-        File.Delete(Application.persistentDataPath + "/Data.txt");
-        File.Delete(Application.persistentDataPath + "/Data2.txt");
-        m_gameHandlerRef.ResetGame();
+    { 
+        m_gameHandlerRef.HardResetGame();
         m_gameHandlerRef.TransitionScene(GameHandler.eScene.mainMenu);
     }
 

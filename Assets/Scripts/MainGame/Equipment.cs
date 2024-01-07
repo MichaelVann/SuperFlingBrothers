@@ -45,12 +45,18 @@ public class Equipment
     public float m_health;
     [SerializeField]
     public float m_maxHealth = 60f;
+    [SerializeField]
+    internal float m_originalMaxHealth;
 
     internal bool m_newToPlayer = true;
 
 
     [SerializeReference]
     public EquipmentAbility m_activeAbility;
+
+    internal void SetMaxHealth(float a_value) { m_originalMaxHealth = m_maxHealth = m_health = a_value; }
+
+    internal float GetMaxHealthRatioToOriginal() { return m_maxHealth / m_originalMaxHealth; }
 
     internal int GetSellValue() {return (int)(m_goldValue * m_scrapValueRatio + m_goldValue * (1f- m_scrapValueRatio) * m_health/m_maxHealth);}
 
@@ -87,7 +93,7 @@ public class Equipment
     //For some weird reason, having this as a no argument default constructor causes it to be called on any reference to it, as if it were a struct, and then unity complains about using Random.Range() at serialisation
     public Equipment(int a_test)
     {
-        m_health = m_maxHealth;
+        m_health = m_originalMaxHealth = m_maxHealth;
         m_rarity = new Rarity();
         Roll(a_test);
     }

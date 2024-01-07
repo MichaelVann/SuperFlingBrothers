@@ -78,6 +78,9 @@ public class BattleManager : MonoBehaviour
     float m_playerSlideLerp = 0f;
     float m_playerSlideTime = 1f;
 
+    //Dialog
+    bool m_dialogRunning = false;
+
     //Hit Slowdown
     internal bool m_hitSlowDownActive = false;
     float m_hitTimeSlowdownRate = 0.03f;
@@ -147,7 +150,6 @@ public class BattleManager : MonoBehaviour
 
     public void ChangeScore(float a_change) { SetScore(m_score + a_change); }
     public void PickUpEquipment(Equipment a_equipment) {m_equipmentCollected.Add(a_equipment);}
-    public void ChangeXp(float a_change) { m_xpEarned += a_change; }
     public void ChangeInvaderStrength(int a_change) { m_invaderStrengthChange += a_change; }
 
     void Awake()
@@ -203,6 +205,13 @@ public class BattleManager : MonoBehaviour
             float colourScale = 0.12f;
             m_wallSpriteRenderers[i].color = m_timeFrozen ? Color.yellow : Color.red;// new Color(colourScale, colourScale, colourScale);
         }
+    }
+
+    public void ChangeXp(float a_change)
+    { 
+        m_xpEarned += a_change;
+        m_gameHandlerRef.m_xCellSquad.m_statHandler.m_RPGLevel.ChangeXP(a_change);
+        m_gameHandlerRef.m_lastGameStats.m_xpEarnedLastGame += a_change;
     }
 
     public void SetFrozen(bool a_frozen)
@@ -751,11 +760,25 @@ public class BattleManager : MonoBehaviour
         m_playerSlideLerp += Time.deltaTime;
         if (m_playerSlideLerp >= m_playerSlideTime)
         {
-            m_playerSlideLerp = m_playerSlideTime;
-            m_introActive = false;
-            SetFrozen(true);
+            FinishIntro();
         }
         m_player.gameObject.transform.position = VLib.SigmoidLerp(m_playerSpawnPoint.transform.position, m_playerSlidePoint.transform.position, m_playerSlideLerp);
+    }
+
+    void FinishIntro()
+    {
+        m_playerSlideLerp = m_playerSlideTime;
+        m_introActive = false;
+        if (m_gameHandlerRef.m_tutorialManager.AttemptToSpawnMessage(TutorialManager.eMessage.FirstTimeBattle, IntroDialogFinished))
+        {
+            m_dialogRunning = true;
+        }
+        SetFrozen(true);
+    }
+
+    void IntroDialogFinished()
+    {
+        m_dialogRunning = false;
     }
 
     void UpdateBattle()
@@ -803,7 +826,7 @@ public class BattleManager : MonoBehaviour
         {
             UpdateIntro();
         }
-        else if (!m_endingGame)
+        else if (!m_endingGame && !m_dialogRunning)
         {
             UpdateBattle();
         }

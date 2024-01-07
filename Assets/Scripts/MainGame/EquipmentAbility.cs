@@ -90,8 +90,7 @@ public class EquipmentAbility
     {
         if (HasAffix(eAffix.Iron))
         {
-            m_parentEquipment.m_maxHealth *= 1.5f;
-            m_parentEquipment.m_health = m_parentEquipment.m_maxHealth;
+            m_parentEquipment.SetMaxHealth(m_parentEquipment.m_maxHealth * 1.5f);
         }
         if (HasAffix(eAffix.Speedy))
         {
@@ -162,8 +161,7 @@ public class EquipmentAbility
         {
             case eAbilityType.Armour:
                 m_passive = true;
-                m_parentEquipment.m_maxHealth *= 1.5f;
-                m_parentEquipment.m_health = m_parentEquipment.m_maxHealth;
+                m_parentEquipment.SetMaxHealth(m_parentEquipment.m_maxHealth * 1.5f);
                 break;
             case eAbilityType.ExtraTurn:
                 m_passive = false;
