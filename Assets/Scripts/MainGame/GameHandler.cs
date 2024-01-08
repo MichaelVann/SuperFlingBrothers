@@ -73,7 +73,7 @@ public class GameHandler : MonoBehaviour
     [SerializeField] Canvas m_tutorialTaskCanvasRef;
 
     //GAME
-    private float m_cash;
+    internal float m_cash;
     
     //Player
     internal XCellSquad m_xCellSquad;
@@ -116,23 +116,8 @@ public class GameHandler : MonoBehaviour
     const int m_startingEquipment = 1;
     public List<Equipment> m_equipmentInventory;
 
-    StockHandler m_stockHandler;
+    internal StockHandler m_stockHandler;
 
-    [Serializable]
-    struct SaveData
-    {
-        public float cash;
-        public XCellSquad xCellTeam;
-        public XCell xCell;
-        //public HumanBody humanBody;
-        public List<Stock> stockList;
-        public UpgradeItem[] upgrades;
-        public List<Equipment> equipmentList;
-        public string bodyFirstName;
-        public string bodyLastName;
-    }
-    SaveData m_saveData;
-    string m_saveFileName = "/Data.txt";
     //SaveDataUtility m_saveDataUtility;
     const bool m_autoLoadDataOnLaunch = true;
     internal const bool m_autoSaving = true;
@@ -296,7 +281,6 @@ public class GameHandler : MonoBehaviour
 
     internal void HardResetGame()
     {
-        File.Delete(Application.persistentDataPath + m_saveFileName);
         File.Delete(Application.persistentDataPath + SaveDataUtility.m_saveFileName);
         ResetGame();
     }
@@ -589,78 +573,14 @@ public class GameHandler : MonoBehaviour
 
     public void SaveGame()
     {
-        m_saveData.cash = m_cash;
-        m_saveData.xCellTeam = m_xCellSquad;
-        //m_saveData.humanBody = m_humanBody;
-        //m_saveData.statHandler.Copy(m_playerStatHandler);
-        m_saveData.stockList = m_stockHandler.m_stockList;
-        //m_saveData.upgrades = m_upgrades;
-        m_saveData.equipmentList = m_equipmentInventory;
-        m_saveData.bodyFirstName = m_humanBody.m_firstName;
-        m_saveData.bodyLastName = m_humanBody.m_lastName;
-
-        string path = Application.persistentDataPath + m_saveFileName;
-        string json = JsonUtility.ToJson(m_saveData);
-        File.WriteAllText(path, json);
         SaveDataUtility saveDataUtility =  new SaveDataUtility(this);
         saveDataUtility.Save();
     }
 
     public bool LoadGame()
     {
-        bool retVal = true;
-
         SaveDataUtility saveDataUtility = new SaveDataUtility(this);
-        if (!saveDataUtility.Load())
-        {
-            retVal = false;
-        }
-        else
-        {
-            string path = Application.persistentDataPath + m_saveFileName;
-            if (File.Exists(path))
-            {
-                string loadedString = File.ReadAllText(path);
-                m_saveData = JsonUtility.FromJson<SaveData>(loadedString);
-                m_cash = m_saveData.cash;
-                m_xCellSquad = m_saveData.xCellTeam;
-                //m_humanBody = m_saveData.humanBody;
-                m_humanBody.m_gameHandlerRef = this;
-                //m_playerStatHandler = m_saveData.statHandler;
-                for (int i = 0; i < m_stockHandler.m_stockList.Count; i++)
-                {
-                    m_stockHandler.m_stockList[i].CopyValues(m_saveData.stockList[i]);
-                }
-                //m_humanBody.m_firstName = m_saveData.bodyFirstName;
-                //m_humanBody.m_lastName = m_saveData.bodyLastName;
-
-                //for (int i = 0; i < m_upgrades.Length; i++)
-                //{
-                //    m_upgrades[i].Copy(m_saveData.upgrades[i]);
-                //}
-
-                for (int i = 0; i < m_xCellSquad.m_playerXCell.m_equippedEquipment.Length; i++)
-                {
-                    m_xCellSquad.m_playerXCell.m_equippedEquipment[i] = null;
-                }
-
-                m_equipmentInventory = new List<Equipment>();
-
-                for (int i = 0; i < m_saveData.equipmentList.Count; i++)
-                {
-                    m_equipmentInventory.Add(m_saveData.equipmentList[i]);
-                    m_saveData.equipmentList[i].ResetAbilitysParent();
-                    if (m_equipmentInventory[i].m_equipped)
-                    {
-                        m_xCellSquad.m_playerXCell.m_equippedEquipment[m_equipmentInventory[i].m_equippedSlotId] = m_equipmentInventory[i];
-                    }
-                }
-            }
-            else
-            {
-                retVal = false;
-            }
-        }
+        bool retVal = saveDataUtility.Load();
 
         RefreshScanLines();
         return retVal;

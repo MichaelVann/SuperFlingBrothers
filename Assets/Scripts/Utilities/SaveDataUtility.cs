@@ -103,6 +103,17 @@ public class SaveDataUtility
     }
 
     [Serializable]
+    struct CoreData
+    {
+        public float cash;
+        public XCellSquad xCellTeam;
+        public XCell xCell;
+        public List<Stock> stockList;
+        public UpgradeItem[] upgrades;
+        public List<Equipment> equipmentList;
+    }
+
+    [Serializable]
     struct SaveData
     {
         public int mainVersion;
@@ -113,6 +124,7 @@ public class SaveDataUtility
         public HighScoreListData highScoreListData;
         public TutorialData tutorialData;
         public GameSettingsData gameSettingsData;
+        public CoreData coreData;
         public bool squadRenameNotificationPending;
         public bool squadPrestigeNamed;
     }
@@ -212,6 +224,7 @@ public class SaveDataUtility
         m_gameHandlerRef.m_humanBody.m_playerResidingTown = m_gameHandlerRef.m_humanBody.FindTownByName(m_saveData.humanBodyData.residingTownName);
         m_gameHandlerRef.m_humanBody.m_battlesCompleted = m_saveData.humanBodyData.battlesCompleted;
         m_gameHandlerRef.m_humanBody.m_lost = m_saveData.humanBodyData.lost;
+        m_gameHandlerRef.m_humanBody.m_gameHandlerRef = m_gameHandlerRef;
 
         //Towns
         for (int i = 0; i < m_saveData.humanBodyData.towns.Count; i++)
@@ -308,6 +321,46 @@ public class SaveDataUtility
         m_gameHandlerRef.m_gameOptions.scanLineSetting = m_saveData.gameSettingsData.scanLineSetting;
     }
 
+    void SaveCoreData()
+    {
+        m_saveData.coreData.cash = m_gameHandlerRef.m_cash;
+        m_saveData.coreData.xCellTeam = m_gameHandlerRef.m_xCellSquad;
+        m_saveData.coreData.stockList = m_gameHandlerRef.m_stockHandler.m_stockList;
+        m_saveData.coreData.equipmentList = m_gameHandlerRef.m_equipmentInventory;
+    }
+
+    void LoadCoreData()
+    {
+        m_gameHandlerRef.m_cash = m_saveData.coreData.cash;
+        m_gameHandlerRef.m_xCellSquad = m_saveData.coreData.xCellTeam;
+        m_gameHandlerRef.m_stockHandler.m_stockList = m_saveData.coreData.stockList;
+        m_gameHandlerRef.m_equipmentInventory = m_saveData.coreData.equipmentList;
+
+        //m_playerStatHandler = m_saveData.statHandler;
+        for (int i = 0; i < m_gameHandlerRef.m_stockHandler.m_stockList.Count; i++)
+        {
+            m_gameHandlerRef.m_stockHandler.m_stockList[i].CopyValues(m_saveData.coreData.stockList[i]);
+        }
+
+        for (int i = 0; i < m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment.Length; i++)
+        {
+            m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[i] = null;
+        }
+
+        m_gameHandlerRef.m_equipmentInventory = new List<Equipment>();
+
+        for (int i = 0; i < m_saveData.coreData.equipmentList.Count; i++)
+        {
+            m_gameHandlerRef.m_equipmentInventory.Add(m_saveData.coreData.equipmentList[i]);
+            m_saveData.coreData.equipmentList[i].ResetAbilitysParent();
+            if (m_gameHandlerRef.m_equipmentInventory[i].m_equipped)
+            {
+                m_gameHandlerRef.m_xCellSquad.m_playerXCell.m_equippedEquipment[m_gameHandlerRef.m_equipmentInventory[i].m_equippedSlotId] = m_gameHandlerRef.m_equipmentInventory[i];
+            }
+        }
+
+    }
+
     internal void Save()
     {
         SaveUpgradeTree();
@@ -316,6 +369,7 @@ public class SaveDataUtility
         SaveHighscores();
         SaveTutorialData();
         SaveGameSettings();
+        SaveCoreData();
         m_saveData.squadRenameNotificationPending = m_gameHandlerRef.m_squadRenameNotificationPending;
         m_saveData.squadPrestigeNamed = m_gameHandlerRef.m_xCellSquad.m_prestigeNamed;
 
@@ -351,6 +405,7 @@ public class SaveDataUtility
                 LoadHighscores();
                 LoadTutorialData();
                 LoadGameSettings();
+                LoadCoreData();
                 m_gameHandlerRef.m_squadRenameNotificationPending = m_saveData.squadRenameNotificationPending;
                 m_gameHandlerRef.m_xCellSquad.m_prestigeNamed = m_saveData.squadPrestigeNamed;
 
