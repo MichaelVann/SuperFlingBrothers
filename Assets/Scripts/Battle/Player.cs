@@ -249,7 +249,7 @@ public class Player : Damageable
         {
             m_flingLine.enabled = false;
 
-            if (m_battleManagerRef.m_timeFrozen && Input.GetMouseButton(0))
+            if (m_battleManagerRef.IsGamePlaying() && m_battleManagerRef.m_timeFrozen && Input.GetMouseButton(0))
             {
                 m_originalFlingPos = m_cameraRef.ScreenToWorldPoint(Input.mousePosition);
                 if (m_originalFlingPos.y < m_battleManagerRef.m_upperLowerFlingPositionBounds && m_originalFlingPos.y > -m_battleManagerRef.m_upperLowerFlingPositionBounds)

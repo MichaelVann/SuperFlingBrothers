@@ -148,6 +148,13 @@ public class BattleManager : MonoBehaviour
 
     public void SetScore(float a_value) { m_score = Mathf.Round(a_value*100f)/100f; }
 
+    internal bool IsGamePlaying()
+    {
+        bool result = true;
+        result &= !m_dialogRunning;
+        return result;
+    }
+
     public void ChangeScore(float a_change) { SetScore(m_score + a_change); }
     public void PickUpEquipment(Equipment a_equipment) {m_equipmentCollected.Add(a_equipment);}
     public void ChangeInvaderStrength(int a_change) { m_invaderStrengthChange += a_change; }

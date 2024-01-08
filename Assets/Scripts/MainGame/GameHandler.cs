@@ -30,7 +30,7 @@ public class GameHandler : MonoBehaviour
     static internal float BATTLE_SkillXPScale = 2f;
     static internal float BATTLE_EnemyEquipmentDropChanceScale = 0.5f;
     internal const int    BATTLE_EnemySpawnPointCount = 19;
-    internal const int BATTLE_NucleusTicks = 10;
+    internal const int BATTLE_NucleusTicks = 13;
 
     static internal float PRE_BATTLE_WarfrontChange = -0.17f; //Default is -0.17f
     //Damageables
