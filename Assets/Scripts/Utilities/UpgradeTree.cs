@@ -32,10 +32,12 @@ public class UpgradeTree
     void SetupUpgrades()
     {
         UpgradeItem playerVector = NewUpgrade(UpgradeItem.UpgradeId.playerVector, "Player Vector", 20, 0, null, "Shows the direction of player movement.");
-          UpgradeItem enemyVector = NewUpgrade(UpgradeItem.UpgradeId.enemyVector, "Enemy Vectors", 30, 0, playerVector, "Shows the direction of all enemies movement.");
-            UpgradeItem comboHits = NewUpgrade(UpgradeItem.UpgradeId.comboHits, "Combo Hits", 100, 0, enemyVector, "Adds 10% extra damage on each hit per turn.");
+        UpgradeItem enemyVector = NewUpgrade(UpgradeItem.UpgradeId.enemyVector, "Enemy Vectors", 30, 0, playerVector, "Shows the direction of all enemies movement.");
+        UpgradeItem flingPrediction = NewUpgrade(UpgradeItem.UpgradeId.flingPredictor, "Fling Prediction", 50, 0, enemyVector, "Gives an indication of the fling direction.");
+        UpgradeItem comboHits = NewUpgrade(UpgradeItem.UpgradeId.comboHits, "Combo Hits", 100, 0, flingPrediction, "Adds 10% extra damage on each hit per turn.");
 
         UpgradeItem battleScouting = NewUpgrade(UpgradeItem.UpgradeId.battleScouting, "Battle Scouting", 50, 0, null, "Reveals the environmental effects of each battle.");
+
         UpgradeItem nucleusHealthUpgrade = NewUpgrade(UpgradeId.nucleusHealthUpgrade, "Nucleus Health", 100, 5, null, "Increases the Nucleus health by 10% per level.");
         //UpgradeItem test1 = NewUpgrade(UpgradeItem.UpgradeId.battleScouting, "Test1", 50, 0, playerVector, "Reveals the environmental effects of each battle.");
         //UpgradeItem test2 = NewUpgrade(UpgradeItem.UpgradeId.battleScouting, "Test2", 50, 0, battleScouting, "Reveals the environmental effects of each battle.");

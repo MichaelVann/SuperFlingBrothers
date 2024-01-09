@@ -12,6 +12,7 @@ public class UpgradeNodeReadout : MonoBehaviour
     [SerializeField] TextMeshProUGUI m_titleTextRef;
     [SerializeField] TextMeshProUGUI m_descriptionTextRef;
     [SerializeField] TextMeshProUGUI m_costTextRef;
+    [SerializeField] GameObject m_levelDisplayRef;
     [SerializeField] TextMeshProUGUI m_levelTextRef;
 
     [SerializeField] Button m_purchaseButtonRef;
@@ -96,11 +97,11 @@ public class UpgradeNodeReadout : MonoBehaviour
         if (m_upgradeItemRef.m_hasLevels)
         {
             m_levelTextRef.text = "LVL " + m_upgradeItemRef.m_level.ToString() + "/" + m_upgradeItemRef.m_maxLevel.ToString();
-            m_levelTextRef.gameObject.SetActive(true);
+            m_levelDisplayRef.SetActive(true);
         }
         else
         {
-            m_levelTextRef.gameObject.SetActive(false);
+            m_levelDisplayRef.SetActive(false);
         }
         UpdatePurchaseButton();
 

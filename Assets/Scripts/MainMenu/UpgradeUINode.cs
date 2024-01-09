@@ -19,6 +19,9 @@ public class UpgradeUINode : MonoBehaviour
     [SerializeField] Sprite m_tickSpriteRef;
     [SerializeField] Sprite m_crossSpriteRef;
 
+    [SerializeField] GameObject m_levelIndicator;
+    [SerializeField] TextMeshProUGUI m_levelText;
+
     internal void SetNameText(string a_name) { m_nameText.text = a_name;}
     internal void SetAvailableSpace(float a_space) { m_availableSpace = a_space;}
 
@@ -44,38 +47,43 @@ public class UpgradeUINode : MonoBehaviour
 
         if (m_upgradeItemRef.m_owned)
         {
-            nodeColor = Color.yellow;
-        }
-        else if (!m_upgradeItemRef.m_unlocked)
-        {
-            m_iconRef.sprite = m_lockIconRef;
-            interactable = false;
-            nodeColor = Color.gray;
-        }
-        else if (m_upgradeItemRef.m_cost > GameHandler.m_staticAutoRef.GetCurrentCash())
-        {
-            nodeColor = Color.gray;
-        }
-        else
-        {
-            nodeColor = Color.white;
-        }
-
-        m_backdropRef.color = nodeColor;
-        m_buttonRef.interactable = interactable;
-
-        if (m_upgradeItemRef.m_owned)
-        {
+            nodeColor = VLib.COLOR_yellow;
             m_tickCrossRef.sprite = m_upgradeItemRef.m_toggled ? m_tickSpriteRef : m_crossSpriteRef;
             m_tickCrossRef.color = m_upgradeItemRef.m_toggled ? Color.green : Color.red;
             m_tickCrossRef.gameObject.SetActive(true);
         }
         else
         {
+            if (!m_upgradeItemRef.m_unlocked)
+            {
+                m_iconRef.sprite = m_lockIconRef;
+                interactable = false;
+                nodeColor = Color.gray;
+            }
+            else if (m_upgradeItemRef.m_cost > GameHandler.m_staticAutoRef.GetCurrentCash())
+            {
+                nodeColor = Color.gray;
+            }
+            else
+            {
+                nodeColor = Color.white;
+            }
             m_tickCrossRef.gameObject.SetActive(false);
+
         }
 
-        
+        if (m_upgradeItemRef.m_hasLevels)
+        {
+            m_levelIndicator.SetActive(true);
+            m_levelText.text = m_upgradeItemRef.m_level + "/" + m_upgradeItemRef.m_maxLevel;
+        }
+        else
+        {
+            m_levelIndicator.SetActive(false);
+        }
+
+        m_backdropRef.color = nodeColor;
+        m_buttonRef.interactable = interactable;
     }
 
     // Update is called once per frame

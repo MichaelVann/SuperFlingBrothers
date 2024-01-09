@@ -28,6 +28,7 @@ public class UpgradeItem
     {
         playerVector,
         enemyVector,
+        flingPredictor,
         comboHits,
         battleScouting,
         nucleusHealthUpgrade,

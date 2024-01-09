@@ -19,6 +19,7 @@ public class Player : Damageable
     const int m_flingDexterityXP = 7;
     const int m_abilityUsageDexterityXP = 10;
     LineRenderer m_flingLine;
+    LineRenderer m_flingPredictionLine;
 
     bool invertedTime = false;
 
@@ -55,11 +56,7 @@ public class Player : Damageable
     public override void Awake()
     {
         base.Awake();
-        m_flingLine = GetComponent<LineRenderer>();
-        m_flingLine.startColor = Color.red;
-        m_flingLine.endColor = Color.white;
-        m_flingLine.startWidth = 0.05f;
-        m_flingLine.endWidth = 0.02f;
+        SetUpFlingLines();
         m_cameraRef = FindObjectOfType<Camera>();
         m_playerCellRef = m_gameHandlerRef.m_xCellSquad.m_playerXCell;
         //m_rotateToAlignToVelocity = true;
@@ -84,6 +81,23 @@ public class Player : Damageable
     bool HasUpgrade(UpgradeItem.UpgradeId a_upgradeID)
     {
         return m_gameHandlerRef.m_upgradeTree.HasUpgrade(a_upgradeID);
+    }
+
+    void SetUpFlingLines()
+    {
+        m_flingLine = GetComponent<LineRenderer>();
+        m_flingLine.startColor = Color.red;
+        m_flingLine.endColor = Color.white;
+        m_flingLine.startWidth = 0.05f;
+        m_flingLine.endWidth = 0.02f;
+
+        GameObject flingPredictionLineObject = Instantiate(new GameObject(),transform);
+        m_flingPredictionLine = flingPredictionLineObject.AddComponent<LineRenderer>();
+        m_flingPredictionLine.material = m_flingLine.material;
+        m_flingPredictionLine.startColor = Color.white;
+        m_flingPredictionLine.endColor = new Color(1f,1f,1f,0f);
+        m_flingPredictionLine.startWidth = 0.05f;
+        m_flingPredictionLine.endWidth = 0.02f;
     }
 
     void SetUpUpgrades()
@@ -242,12 +256,25 @@ public class Player : Damageable
         //m_battleManagerRef.m_uiHandlerRef.DeactivateAbility();
     }
 
+    void SetFlingLinePositions(Vector3 a_deltaMousePos)
+    {
+        Vector3[] linePositions = new Vector3[2];
+
+        linePositions[0] = transform.position;
+        linePositions[1] = transform.position - a_deltaMousePos;
+        m_flingLine.SetPositions(linePositions);
+
+        linePositions[1] = transform.position + a_deltaMousePos * 2f;
+        m_flingPredictionLine.SetPositions(linePositions);
+    }
+
     void HandleFlinging()
     {
         m_invalidFlingCross.enabled = false;
         if (!m_flinging)
         {
             m_flingLine.enabled = false;
+            m_flingPredictionLine.enabled = false;
 
             if (m_battleManagerRef.IsGamePlaying() && m_battleManagerRef.m_timeFrozen && Input.GetMouseButton(0))
             {
@@ -268,6 +295,10 @@ public class Player : Damageable
                 return;
             }
             m_flingLine.enabled = true;
+            if (m_gameHandlerRef.m_upgradeTree.HasUpgrade(UpgradeItem.UpgradeId.flingPredictor))
+            {
+                m_flingPredictionLine.enabled = true;
+            }
             Vector3 worldMousePoint = m_cameraRef.ScreenToWorldPoint(Input.mousePosition);
 
             if (worldMousePoint.y >= m_battleManagerRef.m_upperLowerFlingPositionBounds || worldMousePoint.y <= -m_battleManagerRef.m_upperLowerFlingPositionBounds)
@@ -286,20 +317,13 @@ public class Player : Damageable
             }
             SetShakeAmount(m_flingShake * (deltaMousePos.magnitude/m_maxFlingLength));
 
-            Vector3[] linePositions = new Vector3[2];
-
-            linePositions[0] = transform.position;
-            linePositions[1] = transform.position - deltaMousePos;
-
+            SetFlingLinePositions(deltaMousePos);
 
             if (!m_validFling)
             {
                 m_invalidFlingCross.gameObject.transform.position = new Vector3(worldMousePoint.x, worldMousePoint.y);
             }
             m_invalidFlingCross.enabled = !m_validFling;
-
-
-            m_flingLine.SetPositions(linePositions);
             
             //If the release point is outside the map, cancel the shot
             if (!Input.GetMouseButton(0))
