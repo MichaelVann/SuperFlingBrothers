@@ -103,7 +103,7 @@ public class TutorialManager
                     "Your goal for this deployment is to <color=#FFD700>survive</color>. Forget about gathering the <color=#D2B48C>caches</color>, forget about protecting the <color=#FFAAFF>nucleus</color>, and FORGET about killing the <color=green>enemy</color>. I can't stand watching FNGs kill themselves for wasted glory.",
                     "If you remember anything remember this: \nKeep an eye on the countdown in the middle of the nucleus. Once that hits <color=yellow>0</color> it will <color=red><i>EXPLODE</color></i>, killing you and everything else in this " + humansName + " forsaken cell.",
                     "Make sure you get back through the <color=yellow>escape hatch</color>, the glowing space at the top, before that runs out.",
-                    "Good luck, and " + humansName + " speed. Please, make it back, something about this war seems different."
+                    "Good luck, and " + humansName + "'s speed. Please, make it back, something about this war seems different."
                 };
                 break;
             case eMessage.Count:

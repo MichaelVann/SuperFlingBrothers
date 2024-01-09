@@ -489,7 +489,7 @@ public class Player : Damageable
 
     void DestroyArmorSegment(int a_id)
     {
-        Destroy(m_armorSegments[a_id]);
+        Destroy(m_armorSegments[a_id].gameObject);
         m_armorSegments[a_id] = null;
         SetupEquipmentShield();
     }
