@@ -145,9 +145,19 @@ public static class VLib
         return angle;
     }
 
+    public static Vector3 Vector2ToEulerAngles(Vector2 a_vector2)
+    {
+        return new Vector3(0f, 0f, Vector2ToEulerAngle(a_vector2));
+    }
+
     public static float Vector3ToEulerAngle(Vector3 a_vector3)
     {
         return Vector2ToEulerAngle(a_vector3.ToVector2());
+    }
+
+    public static Vector3 Vector3ToEulerAngles(Vector3 a_vector3)
+    {
+        return Vector2ToEulerAngles(a_vector3.ToVector2());
     }
 
     public static int SafeMod(int a_value, int a_mod)
@@ -540,4 +550,35 @@ public static class VLib
         return versionNumbers;
     }
 
+    static internal void DrawSpriteBetween2Points(SpriteRenderer a_spriteRenderer, Vector3 a_pointA, Vector3 a_pointB)
+    {
+        float textureHeight = a_spriteRenderer.sprite.texture.height;
+        float pixelsPerUnit = a_spriteRenderer.sprite.pixelsPerUnit;
+
+        Vector3 distanceVector = a_pointB - a_pointA;
+
+        float desiredHeight = distanceVector.magnitude * pixelsPerUnit / textureHeight;
+        float currentHeight = a_spriteRenderer.bounds.size.y;
+        float scale = desiredHeight / currentHeight;
+
+        a_spriteRenderer.transform.position = a_pointA + distanceVector / 2f;
+        a_spriteRenderer.transform.eulerAngles = new Vector3(0f, 0f, VLib.Vector3ToEulerAngle(distanceVector));
+        a_spriteRenderer.transform.localScale = new Vector3(a_spriteRenderer.transform.localScale.x, desiredHeight,a_spriteRenderer.transform.localScale.z);
+    }
+
+    static internal void DrawTilingSpriteBetween2Points(SpriteRenderer a_spriteRenderer, Vector3 a_pointA, Vector3 a_pointB)
+    {
+        float textureHeight = a_spriteRenderer.sprite.texture.height;
+        float pixelsPerUnit = a_spriteRenderer.sprite.pixelsPerUnit;
+
+        Vector3 distanceVector = a_pointB - a_pointA;
+        float distance = distanceVector.magnitude;
+        float desiredHeight = distanceVector.magnitude / a_spriteRenderer.transform.localScale.y;
+        float currentHeight = a_spriteRenderer.bounds.size.y;
+        float scale = desiredHeight / currentHeight;
+
+        a_spriteRenderer.transform.position = a_pointA + distanceVector / 2f;
+        a_spriteRenderer.transform.eulerAngles = new Vector3(0f, 0f, VLib.Vector3ToEulerAngle(distanceVector));
+        a_spriteRenderer.size = new Vector2(a_spriteRenderer.size.x, desiredHeight);
+    }
 }

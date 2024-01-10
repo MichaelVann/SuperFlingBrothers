@@ -18,6 +18,8 @@ public class Player : Damageable
     const float m_minFlingLength = 0f;//0.15f;
     const int m_flingDexterityXP = 7;
     const int m_abilityUsageDexterityXP = 10;
+    [SerializeField] SpriteRenderer m_flingLineCaretRef;
+    [SerializeField] SpriteRenderer m_flingLineBackingRef;
     LineRenderer m_flingLine;
     LineRenderer m_flingPredictionLine;
 
@@ -85,11 +87,12 @@ public class Player : Damageable
 
     void SetUpFlingLines()
     {
+
         m_flingLine = GetComponent<LineRenderer>();
         m_flingLine.startColor = Color.red;
         m_flingLine.endColor = Color.white;
-        m_flingLine.startWidth = 0.05f;
-        m_flingLine.endWidth = 0.02f;
+        //m_flingLine.startWidth = 0.15f;
+        //m_flingLine.endWidth = 0.05f;
 
         GameObject flingPredictionLineObject = Instantiate(new GameObject(),transform);
         m_flingPredictionLine = flingPredictionLineObject.AddComponent<LineRenderer>();
@@ -256,9 +259,19 @@ public class Player : Damageable
         //m_battleManagerRef.m_uiHandlerRef.DeactivateAbility();
     }
 
-    void SetFlingLinePositions(Vector3 a_deltaMousePos)
+    void UpdateFlingLinePositionsAndColors(Vector3 a_deltaMousePos, float a_flingStrengthRatio)
     {
+        Color lineColor = VLib.RatioToColorRGB(1f - a_flingStrengthRatio);
+        //VLib.DrawTilingSpriteBetween2Points(m_flingLineRef, transform.position, transform.position - a_deltaMousePos);
+        //m_flingLineRef.color = lineColor;   
+        m_flingLineCaretRef.color = lineColor;
+
         Vector3[] linePositions = new Vector3[2];
+
+        float lineEndOpacity = 0.5f;
+
+        m_flingLine.startColor = lineColor;
+        m_flingLine.endColor = new Color(lineColor.r, lineColor.g, lineColor.b, lineEndOpacity);
 
         linePositions[0] = transform.position;
         linePositions[1] = transform.position - a_deltaMousePos;
@@ -266,14 +279,26 @@ public class Player : Damageable
 
         linePositions[1] = transform.position + a_deltaMousePos * 2f;
         m_flingPredictionLine.SetPositions(linePositions);
+        m_flingLineCaretRef.transform.eulerAngles = VLib.Vector3ToEulerAngles(a_deltaMousePos);
+
+        VLib.DrawTilingSpriteBetween2Points(m_flingLineBackingRef, transform.position, transform.position - a_deltaMousePos);
+        m_flingLineBackingRef.color = new Color(lineColor.r, lineColor.g, lineColor.b, 0.3f);
+    }
+
+    void SetFlingLineVisiblity(bool a_value)
+    {
+        m_flingLine.enabled = a_value;
+        m_flingLineCaretRef.gameObject.SetActive(a_value);
+        m_flingLineBackingRef.gameObject.SetActive(a_value);
     }
 
     void HandleFlinging()
     {
         m_invalidFlingCross.enabled = false;
+        //m_flingLineRef.gameObject.SetActive(m_flinging);
+        SetFlingLineVisiblity(m_flinging);
         if (!m_flinging)
         {
-            m_flingLine.enabled = false;
             m_flingPredictionLine.enabled = false;
 
             if (m_battleManagerRef.IsGamePlaying() && m_battleManagerRef.m_timeFrozen && Input.GetMouseButton(0))
@@ -294,7 +319,7 @@ public class Player : Damageable
                 m_flinging = false;
                 return;
             }
-            m_flingLine.enabled = true;
+
             if (m_gameHandlerRef.m_upgradeTree.HasUpgrade(UpgradeItem.UpgradeId.flingPredictor))
             {
                 m_flingPredictionLine.enabled = true;
@@ -317,7 +342,9 @@ public class Player : Damageable
             }
             SetShakeAmount(m_flingShake * (deltaMousePos.magnitude/m_maxFlingLength));
 
-            SetFlingLinePositions(deltaMousePos);
+            float flingStrengthRatio = deltaMousePos.magnitude / m_maxFlingLength;
+
+            UpdateFlingLinePositionsAndColors(deltaMousePos, flingStrengthRatio);
 
             if (!m_validFling)
             {
